@@ -1,0 +1,28 @@
+{
+  "name": "bosnia-lens",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "start:backend": "cd backend && npm run dev",
+    "start:frontend": "cd frontend && npm run dev",
+    "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "install:all": "npm install --workspaces"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goran1010/bosnia-lens.git"
+  },
+  "keywords": [],
+  "author": "Goran Jović",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/goran1010/bosnia-lens/issues"
+  },
+  "homepage": "https://github.com/goran1010/bosnia-lens#readme",
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

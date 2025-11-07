@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+/* Base styles using @layer base to override default styles */
+/* @layer base {
+  label {
+    @apply text-2xl text-cyan-500;
+  }
+} */
+
+/* Component styles using @layer components to create new components using existing tailwind styles */
+/* @layer components {
+    .btn-primary {
+        @apply px-4 py-2 bg-blue-500 text-white rounded;
+    }
+} */
+
+/* Utility styles using @layer utilities for creating new classes from vanilla css */
+/* @layer utilities {
+    .custom-underline {
+        text-decoration-thickness: 2px;
+    }
+} */
