@@ -1,41 +1,35 @@
 # Bosnia Lens
 
-A free, open-source project providing structured public data about **Bosnia and Herzegovina** - cities, municipalities, postal codes, holidays, universities, and more.
+A free, open-source project providing structured public data about Bosnia and Herzegovina through a REST API and web interface. Access comprehensive information about cities, municipalities, postal codes, holidays, universities, and more - making Bosnian public data open, searchable, and developer-friendly.
 
-Access the data via:
+## Getting Started
 
-- **Web Interface** (React + Tailwind)
-- **REST API** (Node.js + Express + PostgreSQL + Prisma)
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-## Project Overview
+### Prerequisites
 
-The goal is to make Bosnian public data **open, searchable, and developer-friendly** - similar to global open data portals, but focused on Bosnia and Herzegovina.
+Before running this project, you need to have the following installed:
 
-The initial focus is on building a **REST API backend** and a **React frontend** to provide easy access to this data.
+- Node.js (v18 or higher)
+- PostgreSQL database server
+- npm or yarn package manager
 
-For the MVP the data focus will be on the cities, municipalities, postal codes, and holidays.
+```bash
+node --version
+npm --version
+psql --version
+```
 
-Following that, the plan is to expand the dataset and to focus on the universities and their courses/programs.
+### Installing
 
-Lastly, the goal is to build a community around the project to help keep the data up to date and accurate.
+A step by step series of examples that tell you how to get a development environment running
 
-This project aims to:
-
-- Centralize public datasets (cities, postal codes, universities, etc.)
-- Provide a public REST API
-- Offer a searchable and visual web frontend
-- Encourage community collaboration and contributions to keep the data up to date
-
-## Setup & Development
-
-### 1. Clone the repository
+Clone the repository:
 
 ```bash
 git clone https://github.com/goran1010/bosnia-lens.git
 cd bosnia-lens
 ```
-
-### 2. Install dependencies
 
 Install all dependencies for both backend and frontend:
 
@@ -43,73 +37,91 @@ Install all dependencies for both backend and frontend:
 npm run install:all
 ```
 
-### 3. Environment variables
-
-Create /backend/.env:
+Set up environment variables by creating `/backend/.env`:
 
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/bosnia-lens"
+TEST_DATABASE_URL="postgresql://user:password@localhost:5432/test-bosnia-lens"
+SECRET="your-jwt-secret-key"
 ```
 
-### 4. Setup database
+Initialize the database and run migrations:
 
 ```bash
 cd backend
 npx prisma migrate dev
 ```
 
-### 5. Run development servers
+End with running the development servers:
 
 ```bash
-# To run both dev servers (front end and back end) concurrently, in the root directory of the monorepo:
+# Run both frontend and backend concurrently
 npm run dev
 ```
 
-Or, to run only front-end or back-end dev servers separately:
+You should now be able to access the API at `http://localhost:3000` and the web interface at `http://localhost:5173`.
+
+## Running the tests
+
+Explain how to run the automated tests for this system
+
+### Break down into end to end tests
+
+Backend tests use Jest and Supertest to test API endpoints:
 
 ```bash
-# Backend only dev server
-npm run start:backend
+cd backend
+npm run test
 ```
+
+### And coding style tests
+
+Frontend tests use Vitest and React Testing Library:
 
 ```bash
-# Frontend only dev server
-npm run start:frontend
+cd frontend
+npm run test
 ```
 
-## Roadmap
+## Deployment
 
-### Phase 1 – MVP
+The project is designed to be deployed with:
 
-- [x] Setup monorepo (backend + frontend)
-- [ ] Add cities endpoint
-- [ ] Add postal codes endpoint
-- [ ] Add holidays endpoint
-- [ ] Very basic front end with city search
-- [ ] Deploy on Netlify / Koyeb
+- **Backend**: Any Node.js hosting service (Railway, Render, Heroku)
+- **Frontend**: Static hosting (Netlify, Vercel)
+- **Database**: PostgreSQL (Supabase, PlanetScale, or self-hosted)
 
-### Phase 2 – Data Expansion
+Configure production environment variables and run build commands for each service.
 
-- [ ] Add universities endpoint
-- [ ] Enable JSON export
-- [ ] Add search and filters
-- [ ] Add universities' courses and programs
-- [ ] Improve frontend UI/UX
+## Built With
 
-### Phase 3 – Community & Visualization
-
-- [ ] Auth for contributors/admins
-- [ ] Data submission dashboard
+- [Express.js](https://expressjs.com/) - The web framework for the REST API
+- [React](https://reactjs.org/) - Frontend library for building the user interface
+- [Vite](https://vitejs.dev/) - Build tool and development server
+- [Prisma](https://www.prisma.io/) - Database ORM and migration tool
+- [PostgreSQL](https://www.postgresql.org/) - Database system
+- [Tailwind CSS](https://tailwindcss.com/) - CSS framework for styling
 
 ## Contributing
 
-Check out the CONTRIBUTING.md for guidelines on how to contribute data, code, or documentation.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us. We welcome contributions of data, code improvements, documentation, and bug reports.
+
+## Versioning
+
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/goran1010/bosnia-lens/tags).
+
+## Authors
+
+- **Goran Jović** - _Initial work_ - [@goran1010](https://github.com/goran1010)
+
+See also the list of [contributors](https://github.com/goran1010/bosnia-lens/contributors) who participated in this project.
 
 ## License
 
-This project is released under the MIT License.
-All data used will be public domain or properly attributed to its original source.
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details. All data used will be public domain or properly attributed to its original source.
 
-## Contact
+## Acknowledgments
 
-Created and maintained by @goran1010
+- Inspired by global open data initiatives
+- Thanks to the open-source community for tools and libraries
+- Special recognition to contributors helping maintain accurate data about Bosnia and Herzegovina
