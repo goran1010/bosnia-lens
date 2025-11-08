@@ -114,10 +114,6 @@ Configure production environment variables and run build commands for each servi
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us. We welcome contributions of data, code improvements, documentation, and bug reports.
 
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/goran1010/bosnia-lens/tags).
-
 ## Authors
 
 - **Goran Jović** - _Initial work_ - [@goran1010](https://github.com/goran1010)
