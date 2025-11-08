@@ -2,6 +2,14 @@
 
 A free, open-source project providing structured public data about **Bosnia and Herzegovina** - cities, municipalities, postal codes, holidays, universities, and more.
 
+The initial focus is on building a **REST API backend** and a **React frontend** to provide easy access to this data.
+
+For the MVP the data focus will be on the cities, municipalities, postal codes, and holidays.
+
+Following that, the plan is to expand the dataset and to focus on the universities and their courses/programs.
+
+Lastly, the goal is to build a community around the project to help keep the data up to date and accurate.
+
 Access the data via:
 
 - **Web Interface** (React + Tailwind)
