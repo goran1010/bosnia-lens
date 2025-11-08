@@ -37,12 +37,20 @@ Install all dependencies for both backend and frontend:
 npm run install:all
 ```
 
-Set up environment variables by creating `/backend/.env`:
+Set up environment variables by copying the example files and editing them:
+
+**Backend environment variables** - Copy `/backend/.env.example` to `/backend/.env`:
 
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/bosnia-lens"
 TEST_DATABASE_URL="postgresql://user:password@localhost:5432/test-bosnia-lens"
 SECRET="your-jwt-secret-key"
+```
+
+**Frontend environment variables** (optional) - Copy `/frontend/.env.example` to `/frontend/.env`:
+
+```env
+VITE_BACKEND_URL="http://localhost:3000"
 ```
 
 Initialize the database and run migrations:
