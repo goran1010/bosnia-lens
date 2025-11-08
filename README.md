@@ -18,60 +18,62 @@ This project aims to:
 - Offer a searchable and visual web frontend
 - Encourage community collaboration and contributions keeping the data up to date
 
-### Setup & Development
+## Setup & Development
 
-#### 1. Clone the repository
-
-````bash
-git clone https://github.com/<your-username>/open-bosnia-data-portal.git
-cd open-bosnia-data-portal
-
-#### 2. Install dependencies
-Install at root, then inside backend and frontend folders:
+### 1. Clone the repository
 
 ```bash
-npm install
-cd backend && npm install
-cd ../frontend && npm install
-````
+git clone https://github.com/goran1010/bosnia-lens.git
+cd bosnia-lens
+```
 
-#### 3. Environment variables
+### 2. Install dependencies
+
+Install all dependencies for both backend and frontend:
+
+```bash
+npm run install:all
+```
+
+### 3. Environment variables
 
 Create /backend/.env:
 
 ```env
-DATABASE_URL="postgresql://user:password@localhost:5432/openbosnia"
+DATABASE_URL="postgresql://user:password@localhost:5432/bosnia-lens"
 ```
 
-#### 4. Setup database
+### 4. Setup database
 
 ```bash
 cd backend
 npx prisma migrate dev
 ```
 
-```bash
-cd backend
-npx prisma migrate dev
-```
-
-#### 5. Run development servers
+### 5. Run development servers
 
 ```bash
-# Backend
-cd backend
-npm run dev
-
-# Frontend
-cd ../frontend
+# To run both dev servers (front end and back end) concurrently, in the root directory of the monorepo:
 npm run dev
 ```
 
-### Contributing
+Or, to run only front-end or back-end dev servers separately:
+
+```bash
+# Backend only dev server
+npm run start:backend
+```
+
+```bash
+# Frontend only dev server
+npm run start:frontend
+```
+
+## Contributing
 
 Check out the CONTRIBUTING.md for guidelines on how to contribute data, code, or documentation.
 
-### Roadmap
+## Roadmap
 
 Phase 1 – MVP
 Setup monorepo (backend + frontend)
@@ -87,7 +89,7 @@ Deploy on Vercel / Render
 Phase 2 – Data Expansion
 Add holidays and universities
 
-Enable CSV/JSON export
+Enable JSON export
 
 Add search and filters
 
@@ -98,11 +100,11 @@ Map integration (Leaflet)
 
 Data submission dashboard
 
-### License
+## License
 
 This project is released under the MIT License.
 All data used will be public domain or properly attributed to its original source.
 
-### Contact
+## Contact
 
 Created and maintained by @goran1010
