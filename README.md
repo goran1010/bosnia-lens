@@ -1,4 +1,4 @@
-# Open Bosnia Data Portal
+# Bosnia Lens
 
 A free, open-source project providing structured public data about **Bosnia and Herzegovina** - cities, municipalities, postal codes, holidays, universities, and more.
 
@@ -16,7 +16,7 @@ This project aims to:
 - Centralize public datasets (cities, postal codes, universities, etc.)
 - Provide a public REST API
 - Offer a searchable and visual web frontend
-- Encourage community collaboration and contributions keeping the data up to date
+- Encourage community collaboration and contributions to keep the data up to date
 
 ## Setup & Development
 
@@ -69,36 +69,33 @@ npm run start:backend
 npm run start:frontend
 ```
 
+## Roadmap
+
+### Phase 1 – MVP
+
+- [x] Setup monorepo (backend + frontend)
+- [ ] Add cities endpoint
+- [ ] Add postal codes endpoint
+- [ ] Add holidays endpoint
+- [ ] Very basic front end with city search
+- [ ] Deploy on Netlify / Koyeb
+
+### Phase 2 – Data Expansion
+
+- [ ] Add universities endpoint
+- [ ] Enable JSON export
+- [ ] Add search and filters
+- [ ] Add universities' courses and programs
+- [ ] Improve frontend UI/UX
+
+### Phase 3 – Community & Visualization
+
+- [ ] Auth for contributors/admins
+- [ ] Data submission dashboard
+
 ## Contributing
 
 Check out the CONTRIBUTING.md for guidelines on how to contribute data, code, or documentation.
-
-## Roadmap
-
-Phase 1 – MVP
-Setup monorepo (backend + frontend)
-
-/api/cities endpoint
-
-Add /api/postalcodes
-
-Basic frontend with city search
-
-Deploy on Vercel / Render
-
-Phase 2 – Data Expansion
-Add holidays and universities
-
-Enable JSON export
-
-Add search and filters
-
-Phase 3 – Community & Visualization
-Auth for contributors/admins
-
-Map integration (Leaflet)
-
-Data submission dashboard
 
 ## License
 
