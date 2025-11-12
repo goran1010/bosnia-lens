@@ -5,14 +5,34 @@ export default function Navbar() {
     <nav>
       <ul
         className="
-        flex w-full p-4 bg-gray-200
-        justify-center gap-8"
+        flex w-full bg-gray-200
+        justify-center"
       >
         <li>
-          <Link to="/">Home</Link>
+          <Link className="block py-3 px-2 hover:bg-gray-400" to="/">
+            Home
+          </Link>
         </li>
         <li>
-          <Link to="/postal-codes">Postal Codes</Link>
+          <Link
+            className="block py-3 px-2 hover:bg-gray-400"
+            to="/postal-codes"
+          >
+            Postal Codes
+          </Link>
+        </li>
+        <li>
+          <Link className="block py-3 px-2 hover:bg-gray-400" to="/holidays">
+            Holidays
+          </Link>
+        </li>
+        <li>
+          <Link
+            className="block py-3 px-2 hover:bg-gray-400"
+            to="/universities"
+          >
+            Universities
+          </Link>
         </li>
       </ul>
     </nav>
