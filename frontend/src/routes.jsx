@@ -2,6 +2,8 @@ import Root from "./Root";
 import ErrorPage from "./components/ErrorPage";
 import PostalCodes from "./components/PostalCodes";
 import Home from "./components/Home";
+import Universities from "./components/Universities";
+import Holidays from "./components/Holidays";
 
 const routes = [
   {
@@ -16,6 +18,14 @@ const routes = [
       {
         element: <PostalCodes />,
         path: "postal-codes",
+      },
+      {
+        element: <Holidays />,
+        path: "holidays",
+      },
+      {
+        element: <Universities />,
+        path: "universities",
       },
     ],
   },
