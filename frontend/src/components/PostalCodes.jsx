@@ -41,7 +41,7 @@ export default function PostalCodes() {
   }
 
   return (
-    <main className="flex flex-col justify-center items-center">
+    <div className="flex flex-col justify-center items-center">
       <form onSubmit={handleSubmit}>
         <label
           htmlFor="search-term"
@@ -76,6 +76,6 @@ export default function PostalCodes() {
           Get All
         </button>
       </form>
-    </main>
+    </div>
   );
 }

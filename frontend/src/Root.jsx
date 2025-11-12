@@ -1,13 +1,16 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import { Fragment } from "react";
+import Footer from "./components/Footer";
 
 function Root() {
   return (
-    <Fragment>
+    <div className="w-full h-screen flex flex-col">
       <Navbar />
-      <Outlet />
-    </Fragment>
+      <main className="flex flex-col flex-auto">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
   );
 }
 export default Root;

@@ -1,3 +1,3 @@
 export default function Home() {
-  return <main>Welcome to Bosnia Lens!</main>;
+  return <>Welcome to Bosnia Lens!</>;
 }
