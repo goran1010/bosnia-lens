@@ -1,7 +1,33 @@
+import { useState } from "react";
+const URL = import.meta.API_URL || "http://localhost:3000/postal-codes";
+
 export default function PostalCodes() {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  function handleSearch(e) {
+    setSearchTerm(e.target.value);
+  }
+
+  async function handleSubmit(e) {
+    try {
+      e.preventDefault();
+
+      const response = await fetch(`${URL}?search=${searchTerm}`);
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        console.error(result);
+      }
+      console.log(result);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return (
     <main className="flex justify-center">
-      <form action="">
+      <form onSubmit={handleSubmit}>
         <label
           htmlFor="search-term"
           className="block text-sm font-medium text-gray-700 mb-1"
@@ -10,6 +36,9 @@ export default function PostalCodes() {
         </label>
         <div className="flex">
           <input
+            autoFocus
+            value={searchTerm}
+            onChange={handleSearch}
             type="text"
             name="search-term"
             id="search-term"
