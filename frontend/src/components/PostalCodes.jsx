@@ -2,8 +2,26 @@ import { useState } from "react";
 const URL = import.meta.API_URL || "http://localhost:3000/postal-codes";
 
 export default function PostalCodes() {
+  const dummyData = [
+    {
+      municipality: "Banja",
+      postalCode: 78000,
+      entity: "Republika Srpska",
+    },
+    {
+      municipality: "Banja Luka",
+      postalCode: 78001,
+      entity: "Republika Srpska",
+    },
+    {
+      municipality: "Banja Luka",
+      postalCode: 78002,
+      entity: "Srpska",
+    },
+  ];
+
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResult, setSearchResult] = useState([]);
+  const [searchResult, setSearchResult] = useState(dummyData);
 
   function handleSearch(e) {
     setSearchTerm(e.target.value);
@@ -17,7 +35,7 @@ export default function PostalCodes() {
       const result = await response.json();
 
       if (!response.ok) {
-        console.error(result);
+        return console.error(result);
       }
       console.log(result);
       setSearchResult(result);
@@ -34,7 +52,7 @@ export default function PostalCodes() {
       const result = await response.json();
 
       if (!response.ok) {
-        console.error(result);
+        return console.error(result);
       }
       console.log(result);
       setSearchResult(result);
@@ -45,15 +63,18 @@ export default function PostalCodes() {
 
   return (
     <>
-      <section className="flex flex-col justify-center items-center">
-        <form onSubmit={handleSubmit}>
+      <section className="flex flex-col justify-center items-center gap-4 p-4">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col justify-center items-center gap-2"
+        >
           <label
             htmlFor="search-term"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
             Postal Code or Municipality
           </label>
-          <div className="flex">
+          <div className="flex gap-2">
             <input
               autoFocus
               value={searchTerm}
@@ -74,19 +95,28 @@ export default function PostalCodes() {
         <form onSubmit={handleGetAll}>
           <button
             type="submit"
-            className="bg-green-600 text-white p-2 rounded-md hover:bg-green-700 hover:cursor-pointer active:scale-98"
+            className="bg-yellow-600 text-white p-2 rounded-md hover:bg-yellow-700 hover:cursor-pointer active:scale-98"
           >
-            Get All
+            Get All Postal Codes and Municipalities
           </button>
         </form>
       </section>
       <section className="flex flex-col justify-center items-center">
         <h2>Postal codes & municipalities</h2>
-        <div>
-          {searchResult.map((result) => {
-            return result;
-          })}
-        </div>
+        <ul className="flex flex-col border">
+          {searchResult &&
+            searchResult.map((result) => {
+              return (
+                <li
+                  className="flex flex-1 justify-between items-center"
+                  key={result.postalCode}
+                >
+                  <div>{result.municipality}</div>
+                  <div>{result.postalCode}</div> <div>{result.entity}</div>
+                </li>
+              );
+            })}
+        </ul>
       </section>
     </>
   );
