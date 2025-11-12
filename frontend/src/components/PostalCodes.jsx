@@ -13,7 +13,22 @@ export default function PostalCodes() {
       e.preventDefault();
 
       const response = await fetch(`${URL}?search=${searchTerm}`);
+      const result = await response.json();
 
+      if (!response.ok) {
+        console.error(result);
+      }
+      console.log(result);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function handleGetAll(e) {
+    try {
+      e.preventDefault();
+
+      const response = await fetch(`${URL}`);
       const result = await response.json();
 
       if (!response.ok) {
@@ -26,7 +41,7 @@ export default function PostalCodes() {
   }
 
   return (
-    <main className="flex justify-center">
+    <main className="flex flex-col justify-center items-center">
       <form onSubmit={handleSubmit}>
         <label
           htmlFor="search-term"
@@ -52,6 +67,14 @@ export default function PostalCodes() {
             Search
           </button>
         </div>
+      </form>
+      <form onSubmit={handleGetAll}>
+        <button
+          type="submit"
+          className="bg-green-600 text-white p-2 rounded-md hover:bg-green-700 hover:cursor-pointer active:scale-98"
+        >
+          Get All
+        </button>
       </form>
     </main>
   );
