@@ -1,15 +1,11 @@
 {
   "name": "bosnia-lens",
   "private": true,
-  "workspaces": [
-    "backend",
-    "frontend"
-  ],
   "scripts": {
-    "dev:backend": "npm --workspace backend run dev",
-    "dev:frontend": "npm --workspace frontend run dev",
-    "dev:all": "concurrently \"npm --workspace backend run dev\" \"npm --workspace frontend run dev\"",
-    "install:all": "npm install --workspaces"
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:all": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install"
   },
   "repository": {
     "type": "git",
