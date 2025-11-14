@@ -6,9 +6,9 @@
     "frontend"
   ],
   "scripts": {
-    "start:backend": "cd backend && npm run dev",
-    "start:frontend": "cd frontend && npm run dev",
-    "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "dev:backend": "npm --workspace backend run dev",
+    "dev:frontend": "npm --workspace frontend run dev",
+    "dev:all": "concurrently \"npm --workspace backend run dev\" \"npm --workspace frontend run dev\"",
     "install:all": "npm install --workspaces"
   },
   "repository": {
