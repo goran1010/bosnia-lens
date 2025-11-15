@@ -1,0 +1,75 @@
+name: 💡 Feature request
+description: Suggest an idea for this project
+title: "[FEATURE]: <Short description of your feature>"
+labels: ["feature"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to suggest a feature! Please fill out these fields so your request can be reviewed properly.
+
+        If you have any questions or are unsure about anything, don't hesitate to ask!
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      description: Please confirm the following
+      options:
+        - label: This is not a duplicate of an existing issue (please check our [open issues list](https://github.com/goran1010/bosnia-lens/issues))
+          required: true
+        - label: I have read and understand the [Contributing Guidelines](https://github.com/goran1010/bosnia-lens/blob/main/CONTRIBUTING.md)
+          required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Is your feature request related to a problem? Please describe
+      description: A clear and concise description of what the problem is
+      placeholder: ex. "I'm always frustrated when I can't filter postal codes by entity..."
+    validations:
+      required: false
+  - type: textarea
+    id: solution
+    attributes:
+      label: Describe the solution you'd like
+      description: A clear and concise description of what you want to happen
+      placeholder: ex. "Add a dropdown filter to select Federation, Republika Srpska, or Brčko District"
+    validations:
+      required: true
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which part of the project does this feature affect?
+      multiple: true
+      options:
+        - Backend / API
+        - Frontend / UI
+        - Database / Data
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature?
+      options:
+        - Low - Nice to have
+        - Medium - Would improve user experience
+        - High - Critical for project goals
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Add any other context, screenshots, or mockups about the feature request here
+      placeholder: Screenshots, links to similar implementations, etc.
+    validations:
+      required: false
+
+  - type: input
+    id: discord
+    attributes:
+      label: (Optional) Discord/Contact Name
+      description: Optionally provide your contact info to help coordinate if needed
+      placeholder: ex. username#1234
+    validations:
+      required: false
