@@ -1,0 +1,104 @@
+name: 📊 Data contribution
+description: Submit new data or report data issues for Bosnia and Herzegovina
+title: "[DATA]: <Short description of your data contribution>"
+labels: ["data"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for contributing data to improve this project! Please fill out these fields so your contribution can be reviewed properly.
+
+        If you have any questions or are unsure about anything, don't hesitate to ask!
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      description: Please confirm the following
+      options:
+        - label: This is not a duplicate of an existing issue (please check our [open issues list](https://github.com/goran1010/bosnia-lens/issues))
+          required: true
+        - label: I have read and understand the [Contributing Guidelines](https://github.com/goran1010/bosnia-lens/blob/main/CONTRIBUTING.md)
+          required: true
+
+  - type: dropdown
+    id: contribution-type
+    attributes:
+      label: Type of data contribution
+      description: What type of data contribution is this?
+      options:
+        - New dataset (cities, postal codes, holidays, etc.)
+        - Data correction/update
+    validations:
+      required: true
+
+  - type: input
+    id: dataset-type
+    attributes:
+      label: Dataset type
+      description: What type of dataset is this?
+      placeholder: ex. cities, postal codes, universities, holidays
+    validations:
+      required: true
+
+  - type: textarea
+    id: source
+    attributes:
+      label: Source
+      description: Where did this data come from? Please provide links to the sources
+      placeholder: "ex. Official postal service website: https://example.com/data"
+    validations:
+      required: true
+
+  - type: input
+    id: data-format
+    attributes:
+      label: Data format
+      description: What format is the data in?
+      placeholder: ex. CSV, JSON, Excel, SQL
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: verification
+    attributes:
+      label: Verification
+      description: Please verify the following
+      options:
+        - label: This data is from a reliable/official source
+          required: true
+        - label: I have the right to contribute this data (public domain or properly licensed)
+          required: true
+
+  - type: dropdown
+    id: geographic-scope
+    attributes:
+      label: Geographic scope
+      description: Which geographic area does this data cover?
+      multiple: true
+      options:
+        - Federation of Bosnia and Herzegovina
+        - Republika Srpska
+        - Brčko District
+        - All of Bosnia and Herzegovina
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Add any other context about the data here
+      placeholder: Related datasets, known limitations, update frequency, etc.
+    validations:
+      required: false
+
+  - type: input
+    id: discord
+    attributes:
+      label: (Optional) Discord/Contact Name
+      description: Optionally provide your contact info to help coordinate if needed
+      placeholder: ex. username#1234
+    validations:
+      required: false
