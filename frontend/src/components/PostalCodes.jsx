@@ -2,26 +2,8 @@ import { useState } from "react";
 const URL = import.meta.API_URL || "http://localhost:3000/postal-codes";
 
 export default function PostalCodes() {
-  const dummyData = [
-    {
-      municipality: "Banja",
-      postalCode: 78000,
-      entity: "Republika Srpska",
-    },
-    {
-      municipality: "Banja Luka",
-      postalCode: 78001,
-      entity: "Republika Srpska",
-    },
-    {
-      municipality: "Banja Luka",
-      postalCode: 78002,
-      entity: "Srpska",
-    },
-  ];
-
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResult, setSearchResult] = useState(dummyData);
+  const [searchResult, setSearchResult] = useState([]);
 
   function handleSearch(e) {
     setSearchTerm(e.target.value);
@@ -31,7 +13,7 @@ export default function PostalCodes() {
     try {
       e.preventDefault();
 
-      const response = await fetch(`${URL}?search=${searchTerm}`);
+      const response = await fetch(`${URL}/${searchTerm}`);
       const result = await response.json();
 
       if (!response.ok) {
