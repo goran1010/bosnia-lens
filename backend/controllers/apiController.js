@@ -24,14 +24,15 @@ export function getPostalCodeByCode(req, res) {
 
   const postalCodeData = [
     { code: 71000, place: "Sarajevo" },
+    { code: 71001, place: "Sarajevo" },
     { code: 78000, place: "Banja Luka" },
   ];
 
-  let result = null;
+  let result = [];
   if (typeof searchTerm === "number") {
-    result = postalCodeData.find((item) => item.code === searchTerm);
+    result.push(postalCodeData.find((item) => item.code === searchTerm));
   } else {
-    result = postalCodeData.find(
+    result = postalCodeData.filter(
       (item) => normalizeName(item.place) === searchTerm,
     );
   }
