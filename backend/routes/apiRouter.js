@@ -1,7 +1,10 @@
 import { Router } from "express";
 const apiRouter = Router();
-import apiController from "../controllers/apiController.js";
+import * as apiController from "../controllers/apiController.js";
 
-apiRouter.get("/", apiController);
+apiRouter.get("/status", apiController.status);
+
+apiRouter.get("/postal-codes/:searchTerm", apiController.getPostalCodeByCode);
+apiRouter.get("/postal-codes", apiController.getPostalCodes);
 
 export default apiRouter;
