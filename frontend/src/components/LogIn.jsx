@@ -18,7 +18,7 @@ export default function LogIn() {
     try {
       e.preventDefault();
 
-      const response = await fetch(`${currentUrl}/login`, {
+      const response = await fetch(`${currentUrl}/users/login`, {
         mode: "cors",
         method: "POST",
         credentials: "include",
