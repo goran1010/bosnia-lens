@@ -14,8 +14,10 @@ const assetsPath = path.join(import.meta.dirname, "public");
 app.use(express.static(assetsPath));
 
 import apiRouter from "./routes/apiRouter.js";
+import authRouter from "./routes/authRouter.js";
 
-app.use("/api", apiRouter);
+app.use("/api/v1/", apiRouter);
+app.use("/auth", authRouter);
 
 app.use((req, res) => {
   res.status(404).json("No resource found");
