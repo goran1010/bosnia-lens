@@ -1,5 +1,7 @@
 import bcrypt from "bcryptjs";
 import prisma from "../db/prisma.js";
+import jwt from "jsonwebtoken";
+const SECRET = process.env.SECRET;
 
 export async function signup(req, res) {
   try {
@@ -38,18 +40,23 @@ export async function signup(req, res) {
 export async function login(req, res) {
   const { username, password } = req.body;
 
-  const userExists = await prisma.user.findUnique({
+  const user = await prisma.user.findUnique({
     where: { username },
   });
 
-  if (!userExists) {
+  if (!user) {
     return res.status(400).json({ error: "Invalid username or password" });
   }
 
-  const passwordMatch = bcrypt.compareSync(password, userExists.password);
+  const passwordMatch = bcrypt.compareSync(password, user.password);
   if (!passwordMatch) {
     return res.status(400).json({ error: "Invalid username or password" });
   }
 
+  const token = jwt.sign({ id: user.id, username: user.username }, SECRET, {
+    expiresIn: "15m",
+  });
+
+  res.setHeader("Authorization", `Bearer ${token}`);
   res.json({ message: `User ${username} logged in successfully` });
 }
