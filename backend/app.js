@@ -15,9 +15,11 @@ app.use(express.static(assetsPath));
 
 import apiRouter from "./routes/apiRouter.js";
 import authRouter from "./routes/authRouter.js";
+import usersRouter from "./routes/usersRouter.js";
 
 app.use("/api/v1/", apiRouter);
 app.use("/auth", authRouter);
+app.use("/users", usersRouter);
 
 app.use((req, res) => {
   res.status(404).json("No resource found");
