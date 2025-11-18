@@ -5,6 +5,7 @@ import Home from "./components/Home";
 import Universities from "./components/Universities";
 import Holidays from "./components/Holidays";
 import LogIn from "./components/LogIn";
+import SignUp from "./components/SignUp";
 
 const routes = [
   {
@@ -31,6 +32,10 @@ const routes = [
       {
         element: <LogIn />,
         path: "login",
+      },
+      {
+        element: <SignUp />,
+        path: "signup",
       },
     ],
   },
