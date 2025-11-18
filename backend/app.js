@@ -2,8 +2,16 @@ import express from "express";
 const app = express();
 import "dotenv/config";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
-app.use(cors());
+app.use(cookieParser());
+
+app.use(
+  cors({
+    origin: process.env.URL,
+    credentials: true,
+  }),
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -14,8 +22,12 @@ const assetsPath = path.join(import.meta.dirname, "public");
 app.use(express.static(assetsPath));
 
 import apiRouter from "./routes/apiRouter.js";
+import authRouter from "./routes/authRouter.js";
+import usersRouter from "./routes/usersRouter.js";
 
-app.use("/api", apiRouter);
+app.use("/api/v1/", apiRouter);
+app.use("/auth", authRouter);
+app.use("/users", usersRouter);
 
 app.use((req, res) => {
   res.status(404).json("No resource found");
