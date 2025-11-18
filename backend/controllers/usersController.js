@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import prisma from "../db/prisma.js";
 import jwt from "jsonwebtoken";
-const SECRET = process.env.SECRET;
+const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 
 export async function signup(req, res) {
   try {
@@ -53,10 +53,26 @@ export async function login(req, res) {
     return res.status(400).json({ error: "Invalid username or password" });
   }
 
-  const token = jwt.sign({ id: user.id, username: user.username }, SECRET, {
-    expiresIn: "15m",
+  const accessToken = jwt.sign(
+    { id: user.id, username: user.username },
+    ACCESS_TOKEN_SECRET,
+    {
+      expiresIn: "15m",
+    },
+  );
+
+  const refreshToken = jwt.sign(
+    { id: user.id, username: user.username },
+    process.env.REFRESH_TOKEN_SECRET,
+    { expiresIn: "30d" },
+  );
+
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 30 * 24 * 60 * 60 * 1000,
   });
 
-  res.setHeader("Authorization", `Bearer ${token}`);
-  res.json({ message: `User ${username} logged in successfully` });
+  res.json({ message: `User ${username} logged in successfully`, accessToken });
 }
