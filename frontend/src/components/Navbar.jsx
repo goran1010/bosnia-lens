@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function Navbar() {
   return (
-    <nav>
+    <nav className="relative">
       <ul
         className="
         flex w-full bg-gray-200
@@ -35,6 +35,14 @@ export default function Navbar() {
           </Link>
         </li>
       </ul>
+      <div>
+        <Link
+          className="block absolute top-0 right-0 py-3 px-2 hover:bg-gray-400"
+          to="/login"
+        >
+          Log In
+        </Link>
+      </div>
     </nav>
   );
 }
