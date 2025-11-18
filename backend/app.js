@@ -3,7 +3,12 @@ const app = express();
 import "dotenv/config";
 import cors from "cors";
 
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.URL,
+    credentials: true,
+  }),
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
