@@ -1,9 +1,18 @@
 import { Router } from "express";
 const usersRouter = Router();
 import * as usersController from "../controllers/usersController.js";
+import * as validation from "../auth/validation.js";
 
-usersRouter.post("/signup", usersController.signup);
-usersRouter.post("/login", usersController.login);
+usersRouter.post(
+  "/signup",
+  validation.signupValidationRules,
+  usersController.signup,
+);
+usersRouter.post(
+  "/login",
+  validation.loginValidationRules,
+  usersController.login,
+);
 usersRouter.post("/refresh-token", usersController.refreshToken);
 usersRouter.post("/logout", usersController.logout);
 
