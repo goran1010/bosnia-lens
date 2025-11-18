@@ -15,6 +15,10 @@ export function getPostalCodes(req, res) {
 export function getPostalCodeByCode(req, res) {
   let { searchTerm } = req.params;
 
+  if (!searchTerm || searchTerm.trim() === "") {
+    return res.status(400).json({ error: "Search term is required" });
+  }
+
   const numericSearchTerm = Number(searchTerm);
   if (!Number.isNaN(numericSearchTerm) && numericSearchTerm > 0) {
     searchTerm = numericSearchTerm;
@@ -30,14 +34,15 @@ export function getPostalCodeByCode(req, res) {
 
   let result = [];
   if (typeof searchTerm === "number") {
-    result.push(postalCodeData.find((item) => item.code === searchTerm));
+    const found = postalCodeData.find((item) => item.code === searchTerm);
+    if (found) result.push(found);
   } else {
     result = postalCodeData.filter(
       (item) => normalizeName(item.place) === searchTerm,
     );
   }
 
-  if (result) {
+  if (result.length > 0) {
     res.json(result);
   } else {
     res.status(404).json({ error: "Postal code not found" });
