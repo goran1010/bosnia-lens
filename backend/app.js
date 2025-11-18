@@ -2,6 +2,9 @@ import express from "express";
 const app = express();
 import "dotenv/config";
 import cors from "cors";
+import cookieParser from "cookie-parser";
+
+app.use(cookieParser());
 
 app.use(
   cors({

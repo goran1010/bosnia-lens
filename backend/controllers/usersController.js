@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import prisma from "../db/prisma.js";
 import jwt from "jsonwebtoken";
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
+const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 
 export async function signup(req, res) {
   try {
@@ -57,13 +58,13 @@ export async function login(req, res) {
     { id: user.id, username: user.username },
     ACCESS_TOKEN_SECRET,
     {
-      expiresIn: "15m",
+      expiresIn: "2m",
     },
   );
 
   const refreshToken = jwt.sign(
     { id: user.id, username: user.username },
-    process.env.REFRESH_TOKEN_SECRET,
+    REFRESH_TOKEN_SECRET,
     { expiresIn: "30d" },
   );
 
@@ -92,7 +93,7 @@ export function refreshToken(req, res) {
     return res.status(401).json({ error: "No refresh token provided" });
   }
 
-  jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, decodedToken) => {
+  jwt.verify(token, REFRESH_TOKEN_SECRET, (err, decodedToken) => {
     if (err) {
       return res.status(403).json({ error: "Invalid refresh token" });
     }
