@@ -76,3 +76,33 @@ export async function login(req, res) {
 
   res.json({ message: `User ${username} logged in successfully`, accessToken });
 }
+
+export function logout(req, res) {
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+  });
+  res.json({ message: "User logged out successfully" });
+}
+
+export function refreshToken(req, res) {
+  const token = req.cookies.refreshToken;
+  if (!token) {
+    return res.status(401).json({ error: "No refresh token provided" });
+  }
+
+  jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, decodedToken) => {
+    if (err) {
+      return res.status(403).json({ error: "Invalid refresh token" });
+    }
+
+    const accessToken = jwt.sign(
+      { id: decodedToken.id, username: decodedToken.username },
+      ACCESS_TOKEN_SECRET,
+      { expiresIn: "15m" },
+    );
+
+    res.json({ accessToken });
+  });
+}
