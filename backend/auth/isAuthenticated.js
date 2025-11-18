@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-const SECRET = process.env.SECRET;
+const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 
 export default function isAuthenticated(req, res, next) {
   const authHeader = req.headers["authorization"];
@@ -8,7 +8,7 @@ export default function isAuthenticated(req, res, next) {
     return res.status(401).json({ errors: [{ msg: "Need to be logged in" }] });
   }
 
-  jwt.verify(token, SECRET, (err, token) => {
+  jwt.verify(token, ACCESS_TOKEN_SECRET, (err, token) => {
     if (err) {
       return res
         .status(403)
