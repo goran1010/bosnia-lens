@@ -4,6 +4,7 @@ import PostalCodes from "./components/PostalCodes";
 import Home from "./components/Home";
 import Universities from "./components/Universities";
 import Holidays from "./components/Holidays";
+import LogIn from "./components/LogIn";
 
 const routes = [
   {
@@ -26,6 +27,10 @@ const routes = [
       {
         element: <Universities />,
         path: "universities",
+      },
+      {
+        element: <LogIn />,
+        path: "login",
       },
     ],
   },
