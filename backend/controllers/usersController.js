@@ -35,10 +35,21 @@ export async function signup(req, res) {
   }
 }
 
-export function login(req, res) {
+export async function login(req, res) {
   const { username, password } = req.body;
-  console.log(`Signing up user: ${username}`);
-  console.log(`Password: ${password}`);
-  // Here you would normally add logic to authenticate the user
+
+  const userExists = await prisma.user.findUnique({
+    where: { username },
+  });
+
+  if (!userExists) {
+    return res.status(400).json({ error: "Invalid username or password" });
+  }
+
+  const passwordMatch = bcrypt.compareSync(password, userExists.password);
+  if (!passwordMatch) {
+    return res.status(400).json({ error: "Invalid username or password" });
+  }
+
   res.json({ message: `User ${username} logged in successfully` });
 }
