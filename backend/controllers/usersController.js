@@ -1,8 +1,13 @@
 import bcrypt from "bcryptjs";
 import prisma from "../db/prisma.js";
 import jwt from "jsonwebtoken";
+
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
+
+if (!ACCESS_TOKEN_SECRET || !REFRESH_TOKEN_SECRET) {
+  throw new Error("Missing required environment variables: ACCESS_TOKEN_SECRET or REFRESH_TOKEN_SECRET");
+}
 
 export async function signup(req, res) {
   try {

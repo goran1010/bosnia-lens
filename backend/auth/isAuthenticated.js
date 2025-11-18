@@ -2,6 +2,10 @@ import jwt from "jsonwebtoken";
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 
 export default function isAuthenticated(req, res, next) {
+  if (!ACCESS_TOKEN_SECRET) {
+    return res.status(500).json({ errors: [{ msg: "Server configuration error" }] });
+  }
+
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   if (!token) {
