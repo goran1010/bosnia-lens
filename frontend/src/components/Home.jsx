@@ -25,8 +25,8 @@ export default function Home() {
 
   return (
     <>
-      <header>
-        <h1>Bosnia Lens</h1>
+      <header className="flex flex-col items-center">
+        <h1 className="font-bold">Bosnia Lens</h1>
         <article>
           <p>
             A free, open-source project providing structured public data about
@@ -40,7 +40,7 @@ export default function Home() {
           </p>
         </article>
         <article>
-          <h2>Data we're looking to provide includes:</h2>
+          <h2 className="font-bold">Data we're looking to provide includes:</h2>
           <ul>
             <li>Cities and municipalities</li>
             <li>Postal codes</li> <li>Holidays and observances</li>
@@ -48,13 +48,18 @@ export default function Home() {
           </ul>
         </article>
       </header>
-      <section>
+      <section className="flex flex-col items-center">
         <div className="flex">
           {weatherForecast.slice(0, 6).map((day) => {
             return (
-              <div key={day.datetime} className="flex flex-col">
+              <div
+                key={day.datetime}
+                className="flex flex-col w-25 items-center"
+              >
                 <div>{getDayInWeek(day.datetime)}</div>
-                <img src={day.iconURL} alt="" width="50px" />
+                <div className="flex flex-col items-center justify-center w-15 h-15">
+                  <img src={day.iconURL} alt="" />
+                </div>
                 <div className="flex flex-col">
                   <div>min: {day.tempmin}</div>
                   <div>max: {day.tempmax}</div>
@@ -64,9 +69,9 @@ export default function Home() {
           })}
         </div>
       </section>
-      <section>
-        <article>
-          <h2>Tools</h2>
+      <section className="flex flex-col items-center">
+        <article className="flex flex-col items-center">
+          <h2 className="font-bold">Tools</h2>
           <ul>
             <li>
               <strong>Built With Express.js</strong> - The web framework for the
@@ -90,41 +95,45 @@ export default function Home() {
             </li>
           </ul>
         </article>
-        <article>
-          <h2>Contributing</h2>
-          <article>
-            <p>
-              Please read{" "}
-              <a href="https://github.com/goran1010/bosnia-lens/blob/main/CONTRIBUTING.md">
-                CONTRIBUTING.md
-              </a>{" "}
-              for details on our code of conduct, and the process for submitting
-              pull requests to us.
-            </p>
-            <p>
-              We welcome contributions of data, code improvements,
-              documentation, and bug reports.
-            </p>
-            <p>
-              Read our Github{" "}
-              <a href="https://github.com/goran1010/bosnia-lens/blob/main/README.md">
-                README.md
-              </a>{" "}
-              to more information about the project.
-            </p>
+        <div className="flex">
+          <article className="flex flex-col items-center">
+            <h2 className="font-bold">Contributing</h2>
+            <article>
+              <p>
+                Please read{" "}
+                <a href="https://github.com/goran1010/bosnia-lens/blob/main/CONTRIBUTING.md">
+                  CONTRIBUTING.md
+                </a>{" "}
+                for details on our code of conduct, and the process for
+                submitting pull requests to us.
+              </p>
+              <p>
+                We welcome contributions of data, code improvements,
+                documentation, and bug reports.
+              </p>
+              <p>
+                Read our Github{" "}
+                <a href="https://github.com/goran1010/bosnia-lens/blob/main/README.md">
+                  README.md
+                </a>{" "}
+                to more information about the project.
+              </p>
+            </article>
           </article>
-        </article>
-        <article>
-          <h2>Acknowledgments</h2>
-          <article>
-            <p>Inspired by global open data initiatives.</p>
-            <p>Thanks to the open-source community for tools and libraries.</p>
-            <p>
-              Special recognition to contributors helping maintain accurate data
-              about Bosnia and Herzegovina.
-            </p>
+          <article className="flex flex-col items-center">
+            <h2 className="font-bold">Acknowledgments</h2>
+            <article>
+              <p>Inspired by global open data initiatives.</p>
+              <p>
+                Thanks to the open-source community for tools and libraries.
+              </p>
+              <p>
+                Special recognition to contributors helping maintain accurate
+                data about Bosnia and Herzegovina.
+              </p>
+            </article>
           </article>
-        </article>
+        </div>
       </section>
     </>
   );
