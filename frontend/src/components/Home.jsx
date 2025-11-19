@@ -1,31 +1,26 @@
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [weatherSearch, setWeatherSearch] = useState("Bosnia");
-  const [weatherForecast, setWeatherForecast] = useState({});
-
-  function handleWeatherInput(event) {
-    setWeatherSearch(event.target.input);
-  }
+  const [weatherForecast, setWeatherForecast] = useState([]);
+  const URL = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/bosnia?unitGroup=metric&include=current&key=RK9QGT68LJC4A8CZLA785FREP&contentType=json`;
 
   useEffect(() => {
     async function getWeather() {
-      if (weatherSearch) {
-        return setWeatherSearch("Bosnia");
-      }
-      const response = await fetch(
-        `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${weatherSearch}?unitGroup=metric&include=current&key=RK9QGT68LJC4A8CZLA785FREP&contentType=json`,
-        { mode: "cors" }
-      );
+      const response = await fetch(URL, { mode: "cors" });
       if (!response.ok) {
         return console.log(response);
       }
       const data = await response.json();
-      console.log(data);
-      setWeatherForecast(data);
+      console.log(data.days);
+      for (let day of data.days) {
+        const URL = `https://raw.githubusercontent.com/visualcrossing/WeatherIcons/58c79610addf3d4d91471abbb95b05e96fb43019/SVG/1st%20Set%20-%20Color/${day.icon}.svg`;
+        day.iconURL = URL;
+      }
+      console.log(data.days);
+      setWeatherForecast(data.days);
     }
     getWeather();
-  }, [weatherSearch]);
+  }, [URL]);
 
   return (
     <>
@@ -53,20 +48,18 @@ export default function Home() {
         </article>
       </header>
       <section>
-        <form>
-          <div>
-            <label htmlFor="search-weather">Weather location: </label>
-            <input
-              value={weatherSearch}
-              onChange={handleWeatherInput}
-              type="text"
-              id="search-weather"
-              name="search-weather"
-              autoFocus
-              className="block border border-gray-300 rounded-md p-2"
-            />
-          </div>
-        </form>
+        <div>
+          {weatherForecast.slice(0, 6).map((day) => {
+            return (
+              <div key={day.datetime} className="flex">
+                <div>{day.datetime}</div>
+                <div>{day.tempmin}</div>
+                <div>{day.tempmax}</div>
+                <div>{day.precip}</div>
+              </div>
+            );
+          })}
+        </div>
       </section>
       <section>
         <article>
