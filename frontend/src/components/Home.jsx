@@ -1,3 +1,135 @@
+import { useEffect, useState } from "react";
+
 export default function Home() {
-  return <>Welcome to Bosnia Lens!</>;
+  const [weatherSearch, setWeatherSearch] = useState("Bosnia");
+  const [weatherForecast, setWeatherForecast] = useState({});
+
+  function handleWeatherInput(event) {
+    setWeatherSearch(event.target.input);
+  }
+
+  useEffect(() => {
+    async function getWeather() {
+      if (weatherSearch) {
+        return setWeatherSearch("Bosnia");
+      }
+      const response = await fetch(
+        `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${weatherSearch}?unitGroup=metric&include=current&key=RK9QGT68LJC4A8CZLA785FREP&contentType=json`,
+        { mode: "cors" }
+      );
+      if (!response.ok) {
+        return console.log(response);
+      }
+      const data = await response.json();
+      console.log(data);
+      setWeatherForecast(data);
+    }
+    getWeather();
+  }, [weatherSearch]);
+
+  return (
+    <>
+      <header>
+        <h1>Bosnia Lens</h1>
+        <article>
+          <p>
+            A free, open-source project providing structured public data about
+            Bosnia and Herzegovina through a REST API and web interface.
+          </p>
+          <p>
+            Access comprehensive information about cities, municipalities,
+            postal codes, holidays, universities (and their programs), and more
+            - making Bosnian public data open, searchable, and
+            developer-friendly.
+          </p>
+        </article>
+        <article>
+          <h2>Data we're looking to provide includes:</h2>
+          <ul>
+            <li>Cities and municipalities</li>
+            <li>Postal codes</li> <li>Holidays and observances</li>
+            <li>Universities and their programs</li>
+          </ul>
+        </article>
+      </header>
+      <section>
+        <form>
+          <div>
+            <label htmlFor="search-weather">Weather location: </label>
+            <input
+              value={weatherSearch}
+              onChange={handleWeatherInput}
+              type="text"
+              id="search-weather"
+              name="search-weather"
+              autoFocus
+              className="block border border-gray-300 rounded-md p-2"
+            />
+          </div>
+        </form>
+      </section>
+      <section>
+        <article>
+          <h2>Tools</h2>
+          <ul>
+            <li>
+              <strong>Built With Express.js</strong> - The web framework for the
+              REST API
+            </li>
+            <li>
+              <strong>React</strong> - Frontend library for building the user
+              interface
+            </li>
+            <li>
+              <strong>Vite</strong> - Build tool and development server
+            </li>
+            <li>
+              <strong>Prisma</strong> - Database ORM and migration tool
+            </li>
+            <li>
+              <strong>PostgreSQL</strong> - Database system
+            </li>
+            <li>
+              <strong>Tailwind CSS</strong> - CSS framework for styling
+            </li>
+          </ul>
+        </article>
+        <article>
+          <h2>Contributing</h2>
+          <article>
+            <p>
+              Please read{" "}
+              <a href="https://github.com/goran1010/bosnia-lens/blob/main/CONTRIBUTING.md">
+                CONTRIBUTING.md
+              </a>{" "}
+              for details on our code of conduct, and the process for submitting
+              pull requests to us.
+            </p>
+            <p>
+              We welcome contributions of data, code improvements,
+              documentation, and bug reports.
+            </p>
+            <p>
+              Read our Github{" "}
+              <a href="https://github.com/goran1010/bosnia-lens/blob/main/README.md">
+                README.md
+              </a>{" "}
+              to more information about the project.
+            </p>
+          </article>
+        </article>
+        <article>
+          <h2>Acknowledgments</h2>
+          <article>
+            <p>Inspired by global open data initiatives.</p>
+            <p>Thanks to the open-source community for tools and libraries.</p>
+            <p>
+              Special recognition to contributors helping maintain accurate data
+              about Bosnia and Herzegovina.
+            </p>
+          </article>
+        </article>
+      </section>
+    </>
+  );
 }
