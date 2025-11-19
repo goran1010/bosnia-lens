@@ -54,7 +54,7 @@ export default function Home() {
             return (
               <div
                 key={day.datetime}
-                className="flex flex-col w-25 items-center"
+                className="flex flex-col min-w-21 items-center"
               >
                 <div>{getDayInWeek(day.datetime)}</div>
                 <div className="flex flex-col items-center justify-center w-15 h-15">

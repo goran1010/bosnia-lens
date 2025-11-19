@@ -16,7 +16,7 @@ body {
 
 /* Base styles using @layer base to override default styles */
 @layer base {
-  a {
+  main a {
     @apply hover:underline text-blue-600;
   }
 }
