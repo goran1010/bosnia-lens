@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import getDayInWeek from "../utils/getDayInWeek";
 
 export default function Home() {
   const [weatherForecast, setWeatherForecast] = useState([]);
@@ -52,12 +53,11 @@ export default function Home() {
           {weatherForecast.slice(0, 6).map((day) => {
             return (
               <div key={day.datetime} className="flex flex-col">
-                <div>{new Date(day.datetime).toLocaleDateString()}</div>
+                <div>{getDayInWeek(day.datetime)}</div>
                 <img src={day.iconURL} alt="" width="50px" />
-                <div className="flex">
-                  <div>{day.tempmin}</div>
-                  <div>{day.tempmax}</div>
-                  <div>{day.precip}</div>
+                <div className="flex flex-col">
+                  <div>min: {day.tempmin}</div>
+                  <div>max: {day.tempmax}</div>
                 </div>
               </div>
             );
