@@ -56,6 +56,7 @@ export default function Home() {
                 <div>{day.tempmin}</div>
                 <div>{day.tempmax}</div>
                 <div>{day.precip}</div>
+                <img src={day.iconURL} alt="" width="35px" />
               </div>
             );
           })}
