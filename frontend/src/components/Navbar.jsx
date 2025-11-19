@@ -3,6 +3,14 @@ import { Link } from "react-router-dom";
 export default function Navbar() {
   return (
     <nav className="relative">
+      <div>
+        <Link
+          className="block absolute top-0 left-0 py-3 px-2 hover:bg-gray-400 font-bold"
+          to="/"
+        >
+          Bosnia Lens
+        </Link>
+      </div>
       <ul
         className="
         flex w-full bg-gray-200
