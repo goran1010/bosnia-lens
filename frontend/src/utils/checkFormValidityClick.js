@@ -12,7 +12,7 @@ export default function checkFormValidityClick(
     usernameInput.current.reportValidity();
   } else usernameInput.current.setCustomValidity("");
 
-  if (emailInput.current.value.trim().length < 6) {
+  if (emailInput.current.value.trim().length < 3) {
     emailInput.current.setCustomValidity(
       "Email must have at least 3 characters"
     );

@@ -15,17 +15,10 @@ export default function checkFormValidity(
   }
 
   if (currentInput === "email") {
-    if (emailInput.current.value.trim().length < 6) {
+    if (emailInput.current.value.trim().length < 3) {
       emailInput.current.setCustomValidity(
         "Email must have at least 3 characters"
       );
-      emailInput.current.reportValidity();
-    } else emailInput.current.setCustomValidity("");
-  }
-
-  if (currentInput === "email") {
-    if (emailInput.current.value.includes("@")) {
-      emailInput.current.setCustomValidity("Email must have an @ character");
       emailInput.current.reportValidity();
     } else emailInput.current.setCustomValidity("");
   }
