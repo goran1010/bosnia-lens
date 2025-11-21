@@ -18,7 +18,7 @@ describe("GET /check-auth", () => {
     expect(response.body).toEqual(notLoggedInResponse);
   });
 
-  test("responds with status 403 and Expired session token in if not logged in", async () => {
+  test("responds with status 403 and Expired session token in if log in expired", async () => {
     const notLoggedInResponse = {
       errors: [
         {

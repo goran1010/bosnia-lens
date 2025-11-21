@@ -140,7 +140,7 @@ describe("POST /login", () => {
     expect(response.body).toEqual(responseData);
   });
 
-  test("responds with Invalid username or password for wrong input", async () => {
+  test("responds with User test_user logged in successfully for correct input", async () => {
     const createUserData = {
       username: "test_user",
       password: "123123",
