@@ -19,6 +19,9 @@ body {
   main a {
     @apply hover:underline text-blue-600;
   }
+  input {
+    @apply block w-full border border-gray-300 rounded-md p-2 focus:outline-2 focus:border invalid:border-red-500 invalid:focus:outline-red-500;
+  }
 }
 
 /* Component styles using @layer components to create new components using existing tailwind styles */

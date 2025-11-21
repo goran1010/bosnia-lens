@@ -1,5 +1,7 @@
-import { Link, useNavigate, useOutletContext } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useRef } from "react";
+import checkLoginFormValidity from "../utils/checkLoginFormValidity";
+import checkLoginFormClickValidity from "../utils/checkLoginFormClickValidity";
 const currentUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
 export default function LogIn() {
@@ -8,7 +10,12 @@ export default function LogIn() {
     username: "",
     password: "",
   });
+
+  const usernameInput = useRef();
+  const passwordInput = useRef();
+
   function handleInputFields(e) {
+    checkLoginFormValidity(e.target.name, usernameInput, passwordInput);
     setInputFields({ ...inputFields, [e.target.name]: e.target.value });
   }
 
@@ -56,11 +63,11 @@ export default function LogIn() {
             </label>
             <input
               value={inputFields.username}
+              ref={usernameInput}
               onChange={handleInputFields}
               type="text"
               name="username"
               id="username"
-              className="block w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
           <div>
@@ -71,16 +78,19 @@ export default function LogIn() {
               Password
             </label>
             <input
+              ref={passwordInput}
               value={inputFields.password}
               onChange={handleInputFields}
               type="password"
               name="password"
               id="password"
-              className="block w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
           <div>
             <button
+              onClick={() =>
+                checkLoginFormClickValidity(usernameInput, passwordInput)
+              }
               type="submit"
               className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 hover:cursor-pointer active:scale-98"
             >
