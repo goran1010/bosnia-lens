@@ -1,11 +1,15 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import checkPostalCodesValidity from "../utils/checkPostalCodesValidity";
 const URL = import.meta.API_URL || "http://localhost:3000/postal-codes";
 
 export default function PostalCodes() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResult, setSearchResult] = useState([]);
 
+  const searchInput = useRef();
+
   function handleSearch(e) {
+    checkPostalCodesValidity(searchInput);
     setSearchTerm(e.target.value);
   }
 
@@ -58,16 +62,19 @@ export default function PostalCodes() {
           </label>
           <div className="flex gap-2">
             <input
+              ref={searchInput}
               autoFocus
               value={searchTerm}
               onChange={handleSearch}
               type="text"
               name="search-term"
               id="search-term"
-              className="block border border-gray-300 rounded-md p-2"
             />
             <button
               type="submit"
+              onClick={() => {
+                checkPostalCodesValidity(searchInput);
+              }}
               className="bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 hover:cursor-pointer active:scale-98"
             >
               Search
