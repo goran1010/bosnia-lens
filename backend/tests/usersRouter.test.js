@@ -118,3 +118,48 @@ describe("POST /signup", () => {
     expect(response.body).toEqual(responseData);
   });
 });
+
+describe("POST /login", () => {
+  test("responds with Invalid username or password for wrong input", async () => {
+    await prisma.user.create({
+      data: { username: "test_user", password: "123123" },
+    });
+
+    const responseData = { error: "Invalid username or password" };
+
+    const requestData = {
+      username: "test",
+      password: "123123",
+      confirmPassword: "123123",
+    };
+    const response = await request(app).post("/users/login").send(requestData);
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual(responseData);
+  });
+
+  test("responds with Invalid username or password for wrong input", async () => {
+    const createUserData = {
+      username: "test_user",
+      password: "123123",
+      confirmPassword: "123123",
+    };
+    await request(app).post("/users/signup").send(createUserData);
+
+    const responseData = {
+      message: `User test_user logged in successfully`,
+      accessToken: "randomstring",
+    };
+
+    const requestData = {
+      username: "test_user",
+      password: "123123",
+    };
+    const response = await request(app).post("/users/login").send(requestData);
+
+    expect(response.status).toBe(200);
+    expect(response.body.message).toEqual(responseData.message);
+
+    expect(response.body).toHaveProperty("accessToken");
+  });
+});
