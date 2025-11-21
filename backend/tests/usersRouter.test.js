@@ -163,3 +163,41 @@ describe("POST /login", () => {
     expect(response.body).toHaveProperty("accessToken");
   });
 });
+
+describe("POST /logout", () => {
+  test("responds User logged out successfully", async () => {
+    const response = await request(app).post("/users/logout");
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ message: "User logged out successfully" });
+  });
+});
+
+describe("POST //refresh-token", () => {
+  test("responds with status 401 and message if no refresh token given", async () => {
+    const response = await request(app).post("/users/refresh-token");
+
+    expect(response.status).toBe(401);
+    expect(response.body).toEqual({ error: "No refresh token provided" });
+  });
+
+  test("responds with status 403 and message if invalid refresh token", async () => {
+    const response = await request
+      .agent(app)
+      .post("/users/refresh-token")
+      .set("Cookie", ["refreshToken=123"]);
+
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({ error: "Invalid refresh token" });
+  });
+
+  // test("responds with status 200 and accessToken if valid refresh token", async () => {
+  //   const response = await request
+  //     .agent(app)
+  //     .post("/users/refresh-token")
+  //     .set("Cookie", ["refreshToken=123"]);
+
+  //   expect(response.status).toBe(200);
+  //   expect(response.body).toHaveProperty("accessToken");
+  // });
+});
