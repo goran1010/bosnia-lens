@@ -1,6 +1,8 @@
 import request from "supertest";
 import app from "../app.js";
 import prisma from "../db/prisma.js";
+import jwt from "jsonwebtoken";
+const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 
 beforeEach(async () => {
   await prisma.user.deleteMany();
@@ -191,13 +193,19 @@ describe("POST //refresh-token", () => {
     expect(response.body).toEqual({ error: "Invalid refresh token" });
   });
 
-  // test("responds with status 200 and accessToken if valid refresh token", async () => {
-  //   const response = await request
-  //     .agent(app)
-  //     .post("/users/refresh-token")
-  //     .set("Cookie", ["refreshToken=123"]);
+  test("responds with status 200 and accessToken if valid refresh token", async () => {
+    const refreshToken = jwt.sign(
+      { id: 1, username: "test_user" },
+      REFRESH_TOKEN_SECRET,
+      { expiresIn: "30d" },
+    );
 
-  //   expect(response.status).toBe(200);
-  //   expect(response.body).toHaveProperty("accessToken");
-  // });
+    const response = await request
+      .agent(app)
+      .post("/users/refresh-token")
+      .set("Cookie", [`refreshToken=${refreshToken}`]);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("accessToken");
+  });
 });
