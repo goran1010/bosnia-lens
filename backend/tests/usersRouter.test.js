@@ -30,6 +30,52 @@ describe("POST /signup", () => {
     expect(response.body).toEqual(responseData);
   });
 
+  test("responds with status 400 and message for incorrect form input", async () => {
+    const responseData = {
+      errors: [
+        {
+          type: "field",
+          value: "123",
+          msg: "Password must be at least 6 characters long",
+          path: "password",
+          location: "body",
+        },
+      ],
+    };
+    const requestData = {
+      username: "test_user",
+      password: "123",
+      confirmPassword: "123",
+    };
+    const response = await request(app).post("/users/signup").send(requestData);
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual(responseData);
+  });
+
+  test("responds with status 400 and message for incorrect form input", async () => {
+    const responseData = {
+      errors: [
+        {
+          type: "field",
+          value: "123456789",
+          msg: "Passwords do not match",
+          path: "confirmPassword",
+          location: "body",
+        },
+      ],
+    };
+    const requestData = {
+      username: "test_user",
+      password: "123456",
+      confirmPassword: "123456789",
+    };
+    const response = await request(app).post("/users/signup").send(requestData);
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual(responseData);
+  });
+
   test("successfully create a user and returns status 201 and message", async () => {
     const responseData = { message: `User test_user signed up successfully` };
 
