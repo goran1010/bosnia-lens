@@ -135,9 +135,8 @@ export default function SignUp() {
           </div>
           <div>
             <button
-              onClick={(e) =>
+              onClick={() =>
                 checkFormValidityClick(
-                  e.target.name,
                   usernameInput,
                   passwordInput,
                   confirmPasswordInput,

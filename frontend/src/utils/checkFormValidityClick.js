@@ -1,5 +1,4 @@
 export default function checkFormValidityClick(
-  currentInput,
   usernameInput,
   passwordInput,
   confirmPasswordInput,
