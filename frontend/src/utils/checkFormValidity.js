@@ -2,7 +2,8 @@ export default function checkFormValidity(
   currentInput,
   usernameInput,
   passwordInput,
-  confirmPasswordInput
+  confirmPasswordInput,
+  emailInput
 ) {
   if (currentInput === "username") {
     if (usernameInput.current.value.trim().length < 6) {
@@ -11,6 +12,22 @@ export default function checkFormValidity(
       );
       usernameInput.current.reportValidity();
     } else usernameInput.current.setCustomValidity("");
+  }
+
+  if (currentInput === "email") {
+    if (emailInput.current.value.trim().length < 6) {
+      emailInput.current.setCustomValidity(
+        "Email must have at least 3 characters"
+      );
+      emailInput.current.reportValidity();
+    } else emailInput.current.setCustomValidity("");
+  }
+
+  if (currentInput === "email") {
+    if (emailInput.current.value.includes("@")) {
+      emailInput.current.setCustomValidity("Email must have an @ character");
+      emailInput.current.reportValidity();
+    } else emailInput.current.setCustomValidity("");
   }
 
   if (currentInput === "password") {

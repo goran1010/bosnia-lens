@@ -2,12 +2,14 @@ import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import checkFormValidity from "../utils/checkFormValidity";
+import checkFormValidityClick from "../utils/checkFormValidityClick";
 const currentUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 export default function SignUp() {
   const usernameInput = useRef();
   const passwordInput = useRef();
   const confirmPasswordInput = useRef();
+  const emailInput = useRef();
 
   const [inputFields, setInputFields] = useState({
     username: "",
@@ -20,7 +22,8 @@ export default function SignUp() {
       e.target.name,
       usernameInput,
       passwordInput,
-      confirmPasswordInput
+      confirmPasswordInput,
+      emailInput
     );
 
     setInputFields({ ...inputFields, [e.target.name]: e.target.value });
@@ -75,8 +78,6 @@ export default function SignUp() {
             </label>
             <input
               ref={usernameInput}
-              min={6}
-              required
               value={inputFields.username}
               onChange={handleInputFields}
               type="text"
@@ -92,7 +93,7 @@ export default function SignUp() {
               Email
             </label>
             <input
-              required
+              ref={emailInput}
               value={inputFields.email}
               onChange={handleInputFields}
               type="email"
@@ -109,8 +110,6 @@ export default function SignUp() {
             </label>
             <input
               ref={passwordInput}
-              min={6}
-              required
               value={inputFields.password}
               onChange={handleInputFields}
               type="password"
@@ -127,7 +126,6 @@ export default function SignUp() {
             </label>
             <input
               ref={confirmPasswordInput}
-              required
               value={inputFields["confirm-password"]}
               onChange={handleInputFields}
               type="password"
@@ -137,6 +135,15 @@ export default function SignUp() {
           </div>
           <div>
             <button
+              onClick={(e) =>
+                checkFormValidityClick(
+                  e.target.name,
+                  usernameInput,
+                  passwordInput,
+                  confirmPasswordInput,
+                  emailInput
+                )
+              }
               type="submit"
               className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 hover:cursor-pointer active:scale-98"
             >
