@@ -1,8 +1,14 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import checkFormValidity from "../utils/checkFormValidity";
+const currentUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 export default function SignUp() {
+  const usernameInput = useRef();
+  const passwordInput = useRef();
+  const confirmPasswordInput = useRef();
+
   const [inputFields, setInputFields] = useState({
     username: "",
     email: "",
@@ -10,16 +16,21 @@ export default function SignUp() {
     ["confirm-password"]: "",
   });
   function handleInputFields(e) {
+    checkFormValidity(
+      e.target.name,
+      usernameInput,
+      passwordInput,
+      confirmPasswordInput
+    );
+
     setInputFields({ ...inputFields, [e.target.name]: e.target.value });
   }
 
   const navigator = useNavigate();
 
-  async function handleSubmit(e) {
+  async function handleSubmit(event) {
     try {
-      const currentUrl =
-        import.meta.env.VITE_API_URL || "http://localhost:3000";
-      e.preventDefault();
+      event.preventDefault();
 
       const response = await fetch(`${currentUrl}/users/signup`, {
         mode: "cors",
@@ -63,12 +74,14 @@ export default function SignUp() {
               Username
             </label>
             <input
+              ref={usernameInput}
+              min={6}
+              required
               value={inputFields.username}
               onChange={handleInputFields}
               type="text"
               name="username"
               id="username"
-              className="block w-full border border-gray-300 rounded-md p-2"
             />
           </div>
           <div>
@@ -79,12 +92,12 @@ export default function SignUp() {
               Email
             </label>
             <input
+              required
               value={inputFields.email}
               onChange={handleInputFields}
               type="email"
               name="email"
               id="email"
-              className="block w-full border border-gray-300 rounded-md p-2"
             />
           </div>
           <div>
@@ -95,12 +108,14 @@ export default function SignUp() {
               Password
             </label>
             <input
+              ref={passwordInput}
+              min={6}
+              required
               value={inputFields.password}
               onChange={handleInputFields}
               type="password"
               name="password"
               id="password"
-              className="block w-full border border-gray-300 rounded-md p-2"
             />
           </div>
           <div>
@@ -111,12 +126,13 @@ export default function SignUp() {
               Confirm Password
             </label>
             <input
-              value={inputFields.confirmPassword}
+              ref={confirmPasswordInput}
+              required
+              value={inputFields["confirm-password"]}
               onChange={handleInputFields}
               type="password"
               name="confirm-password"
               id="confirm-password"
-              className="block w-full border border-gray-300 rounded-md p-2"
             />
           </div>
           <div>
