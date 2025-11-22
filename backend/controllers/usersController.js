@@ -90,11 +90,7 @@ export async function login(req, res) {
 }
 
 export function logout(req, res) {
-  res.clearCookie("refreshToken", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-  });
+  res.clearCookie("refreshToken");
   res.json({ message: "User logged out successfully" });
 }
 

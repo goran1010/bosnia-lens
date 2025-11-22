@@ -11,6 +11,7 @@ export default function Navbar() {
       const response = await fetch(`${URL}/users/logout`, {
         mode: "cors",
         method: "POST",
+        credentials: "include",
       });
       const data = await response.json();
       if (!response.ok) {
