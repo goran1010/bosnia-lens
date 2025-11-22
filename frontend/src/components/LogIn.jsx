@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState, useRef } from "react";
 import checkLoginFormValidity from "../utils/checkLoginFormValidity";
 import checkLoginFormClickValidity from "../utils/checkLoginFormClickValidity";
-const currentUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+const URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
 export default function LogIn() {
   //   const { setUser } = useOutletContext();
@@ -25,7 +25,7 @@ export default function LogIn() {
     try {
       e.preventDefault();
 
-      const response = await fetch(`${currentUrl}/users/login`, {
+      const response = await fetch(`${URL}/users/login`, {
         mode: "cors",
         method: "POST",
         credentials: "include",
@@ -39,11 +39,13 @@ export default function LogIn() {
       });
       const data = await response.json();
       if (!response.ok) {
-        return console.log(data);
+        // eslint-disable-next-line no-console
+        return console.error(data);
       }
       //   setUser(data);
       navigate("/");
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error(err);
     }
   }

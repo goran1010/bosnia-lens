@@ -3,6 +3,6 @@ const authRouter = Router();
 import * as authController from "../controllers/authController.js";
 import isAuthenticated from "../auth/isAuthenticated.js";
 
-authRouter.get("/check-auth", isAuthenticated, authController.checkAuth);
+authRouter.get("/me", isAuthenticated, authController.me);
 
 export default authRouter;

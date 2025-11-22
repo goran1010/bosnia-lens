@@ -9,15 +9,14 @@ export default function Home() {
     async function getWeather() {
       const response = await fetch(URL, { mode: "cors" });
       if (!response.ok) {
-        return console.log(response);
+        // eslint-disable-next-line no-console
+        return console.error(response);
       }
       const data = await response.json();
-      console.log(data.days);
       for (let day of data.days) {
         const URL = `https://raw.githubusercontent.com/visualcrossing/WeatherIcons/58c79610addf3d4d91471abbb95b05e96fb43019/SVG/1st%20Set%20-%20Color/${day.icon}.svg`;
         day.iconURL = URL;
       }
-      console.log(data.days);
       setWeatherForecast(data.days);
     }
     getWeather();
