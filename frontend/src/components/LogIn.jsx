@@ -1,11 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import checkLoginFormValidity from "../utils/checkLoginFormValidity";
 import checkLoginFormClickValidity from "../utils/checkLoginFormClickValidity";
+import UserDataContext from "../utils/UserDataContext";
 const URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
 export default function LogIn() {
-  //   const { setUser } = useOutletContext();
+  const { setUserData } = useContext(UserDataContext);
   const [inputFields, setInputFields] = useState({
     username: "",
     password: "",
@@ -42,7 +43,7 @@ export default function LogIn() {
         // eslint-disable-next-line no-console
         return console.error(data);
       }
-      //   setUser(data);
+      setUserData(data);
       navigate("/");
     } catch (err) {
       // eslint-disable-next-line no-console
