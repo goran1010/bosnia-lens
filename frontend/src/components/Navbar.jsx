@@ -1,6 +1,31 @@
 import { Link } from "react-router-dom";
+import UserDataContext from "../utils/UserDataContext";
+import { useContext } from "react";
+const URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
 export default function Navbar() {
+  const { userData, setUserData } = useContext(UserDataContext);
+
+  async function handleLogout() {
+    try {
+      const response = await fetch(`${URL}/users/logout`, {
+        mode: "cors",
+        method: "POST",
+        credentials: "include",
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        // eslint-disable-next-line no-console
+        console.error(data);
+      }
+      console.log(data);
+      setUserData(null);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+    }
+  }
+
   return (
     <nav className="relative min-w-130">
       <div>
@@ -43,14 +68,23 @@ export default function Navbar() {
           </Link>
         </li>
       </ul>
-      <div>
-        <Link
-          className="block absolute top-0 right-0 py-3 px-2 hover:bg-gray-400"
-          to="/login"
+      {!userData ? (
+        <div>
+          <Link
+            className="block absolute top-0 right-0 py-3 px-2 hover:bg-gray-400"
+            to="/login"
+          >
+            Log In
+          </Link>
+        </div>
+      ) : (
+        <li
+          className="block absolute top-0 right-0 py-3 px-2 hover:bg-gray-400 cursor-pointer"
+          onClick={handleLogout}
         >
-          Log In
-        </Link>
-      </div>
+          Log out
+        </li>
+      )}
     </nav>
   );
 }

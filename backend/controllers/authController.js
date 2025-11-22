@@ -1,3 +1,3 @@
-export function checkAuth(req, res) {
-  res.json({ authenticated: true });
+export function me(req, res) {
+  res.json(req.token);
 }

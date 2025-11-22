@@ -1,11 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import checkLoginFormValidity from "../utils/checkLoginFormValidity";
 import checkLoginFormClickValidity from "../utils/checkLoginFormClickValidity";
-const currentUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+import UserDataContext from "../utils/UserDataContext";
+const URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
 export default function LogIn() {
-  //   const { setUser } = useOutletContext();
+  const { setUserData } = useContext(UserDataContext);
   const [inputFields, setInputFields] = useState({
     username: "",
     password: "",
@@ -25,7 +26,7 @@ export default function LogIn() {
     try {
       e.preventDefault();
 
-      const response = await fetch(`${currentUrl}/users/login`, {
+      const response = await fetch(`${URL}/users/login`, {
         mode: "cors",
         method: "POST",
         credentials: "include",
@@ -39,11 +40,13 @@ export default function LogIn() {
       });
       const data = await response.json();
       if (!response.ok) {
-        return console.log(data);
+        // eslint-disable-next-line no-console
+        return console.error(data);
       }
-      //   setUser(data);
+      setUserData(data);
       navigate("/");
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error(err);
     }
   }

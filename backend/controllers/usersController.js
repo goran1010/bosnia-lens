@@ -65,7 +65,7 @@ export async function login(req, res) {
     { id: user.id, username: user.username },
     ACCESS_TOKEN_SECRET,
     {
-      expiresIn: "15m",
+      expiresIn: "2m",
     },
   );
 
@@ -82,15 +82,15 @@ export async function login(req, res) {
     maxAge: 30 * 24 * 60 * 60 * 1000,
   });
 
-  res.json({ message: `User ${username} logged in successfully`, accessToken });
+  res.json({
+    message: `User ${username} logged in successfully`,
+    accessToken,
+    user,
+  });
 }
 
 export function logout(req, res) {
-  res.clearCookie("refreshToken", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-  });
+  res.clearCookie("refreshToken");
   res.json({ message: "User logged out successfully" });
 }
 
@@ -108,7 +108,7 @@ export function refreshToken(req, res) {
     const accessToken = jwt.sign(
       { id: decodedToken.id, username: decodedToken.username },
       ACCESS_TOKEN_SECRET,
-      { expiresIn: "15m" },
+      { expiresIn: "2m" },
     );
 
     res.json({ accessToken });
