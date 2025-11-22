@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import checkFormValidity from "../utils/checkFormValidity";
 import checkFormValidityClick from "../utils/checkFormValidityClick";
-const currentUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const currentUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
 export default function SignUp() {
   const usernameInput = useRef();
