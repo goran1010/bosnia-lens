@@ -65,7 +65,7 @@ export async function login(req, res) {
     { id: user.id, username: user.username },
     ACCESS_TOKEN_SECRET,
     {
-      expiresIn: "15m",
+      expiresIn: "2m",
     },
   );
 
@@ -112,7 +112,7 @@ export function refreshToken(req, res) {
     const accessToken = jwt.sign(
       { id: decodedToken.id, username: decodedToken.username },
       ACCESS_TOKEN_SECRET,
-      { expiresIn: "15m" },
+      { expiresIn: "2m" },
     );
 
     res.json({ accessToken });

@@ -21,11 +21,23 @@ function Root() {
           },
         });
         const data = await response.json();
-        if (!response.ok) {
-          // eslint-disable-next-line no-console
-          return console.error(data);
-        }
         console.log(data);
+        if (!response.ok) {
+          const response = await fetch(`${URL}/users/refresh-token`, {
+            mode: "cors",
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          if (!response.ok) {
+            // eslint-disable-next-line no-console
+            return console.error(response);
+          }
+          const data = await response.json();
+          setUserData({ ...userData, accessToken: data.accessToken });
+        }
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err);
