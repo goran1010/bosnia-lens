@@ -34,14 +34,12 @@ function Root() {
             },
           });
           if (!response.ok) {
-            // eslint-disable-next-line no-console
             return console.error(response);
           }
           const data = await response.json();
           setUserData({ ...userData, accessToken: data.accessToken });
         }
       } catch (err) {
-        // eslint-disable-next-line no-console
         console.error(err);
       }
     }

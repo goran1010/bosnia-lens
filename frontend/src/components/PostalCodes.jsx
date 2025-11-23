@@ -23,7 +23,6 @@ export default function PostalCodes() {
       if (!response.ok) {
         return console.error(result);
       }
-      console.log(result);
       setSearchResult(result);
     } catch (err) {
       console.error(err);
@@ -40,7 +39,6 @@ export default function PostalCodes() {
       if (!response.ok) {
         return console.error(result);
       }
-      console.log(result);
       setSearchResult(result);
     } catch (err) {
       console.error(err);

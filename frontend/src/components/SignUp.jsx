@@ -57,16 +57,12 @@ export default function SignUp() {
         ...message,
         "Registration successful! Please check your email to confirm your account.",
       ]);
-      // eslint-disable-next-line no-console
-      console.log(data);
       if (!response.ok) {
-        // eslint-disable-next-line no-console
         return console.error(data);
       }
 
       navigator("/login");
     } catch (err) {
-      // eslint-disable-next-line no-console
       console.error(err);
     }
   }

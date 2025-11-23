@@ -41,13 +41,11 @@ export default function LogIn() {
       });
       const data = await response.json();
       if (!response.ok) {
-        // eslint-disable-next-line no-console
         return console.error(data);
       }
       setUserData(data);
       navigate("/");
     } catch (err) {
-      // eslint-disable-next-line no-console
       console.error(err);
     }
   }
