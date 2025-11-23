@@ -52,14 +52,11 @@ export default function SignUp() {
           confirmPassword: inputFields["confirm-password"],
         }),
       });
-      const data = await response.json();
-      setMessage([
-        ...message,
-        "Registration successful! Please check your email to confirm your account.",
-      ]);
+      const result = await response.json();
       if (!response.ok) {
-        return console.error(data);
+        return console.error(result.error, result.details);
       }
+      setMessage([...message, result.message]);
 
       navigator("/login");
     } catch (err) {

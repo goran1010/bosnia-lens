@@ -39,11 +39,11 @@ export default function LogIn() {
           password: inputFields.password,
         }),
       });
-      const data = await response.json();
+      const result = await response.json();
       if (!response.ok) {
-        return console.error(data);
+        return console.error(result.error, result.details);
       }
-      setUserData(data);
+      setUserData(result.data);
       navigate("/");
     } catch (err) {
       console.error(err);

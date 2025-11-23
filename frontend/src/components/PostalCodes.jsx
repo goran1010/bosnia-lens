@@ -21,9 +21,9 @@ export default function PostalCodes() {
       const result = await response.json();
 
       if (!response.ok) {
-        return console.error(result);
+        return console.error(result.error, result.details);
       }
-      setSearchResult(result);
+      setSearchResult(result.data);
     } catch (err) {
       console.error(err);
     }
@@ -37,9 +37,9 @@ export default function PostalCodes() {
       const result = await response.json();
 
       if (!response.ok) {
-        return console.error(result);
+        return console.error(result.error, result.details);
       }
-      setSearchResult(result);
+      setSearchResult(result.data);
     } catch (err) {
       console.error(err);
     }
