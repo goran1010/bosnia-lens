@@ -9,7 +9,7 @@ usersRouter.post(
   usersController.signup,
 );
 
-usersRouter.post("/confirm/:token", usersController.confirmEmail);
+usersRouter.get("/confirm/:token", usersController.confirmEmail);
 
 usersRouter.post(
   "/login",
