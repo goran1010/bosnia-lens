@@ -63,7 +63,13 @@ export async function signup(req, res) {
   }
 }
 
-export async function confirmEmail(req, res) {}
+export async function confirmEmail(req, res) {
+  const { token } = req.params;
+  console.log("Confirming token:", token);
+  res.send(
+    "<h1>Email Confirmed!</h1><main><p>Your account has been activated.</p><a href=/login>Log in</a></main>",
+  );
+}
 
 export async function login(req, res) {
   const { username, password } = req.body;
