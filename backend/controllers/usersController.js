@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import prisma from "../db/prisma.js";
 import jwt from "jsonwebtoken";
+import sendConfirmationEmail from "../email/confirmationEmail.js";
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
@@ -13,7 +14,7 @@ if (!ACCESS_TOKEN_SECRET || !REFRESH_TOKEN_SECRET) {
 
 export async function signup(req, res) {
   try {
-    const { username, password } = req.body;
+    const { username, email, password } = req.body;
     const hashedPassword = bcrypt.hashSync(password, 10);
 
     const userExists = await prisma.user.findUnique({
@@ -24,20 +25,37 @@ export async function signup(req, res) {
       return res.status(400).json({ error: "Username already taken" });
     }
 
-    const user = await prisma.user.create({
-      data: {
-        username,
-        password: hashedPassword,
-      },
-    });
+    const confirmationToken = Math.random().toString(36).substring(7);
+    const confirmationLink = `${req.protocol}://${req.get("host")}/api/confirm/${confirmationToken}`;
 
-    if (!user) {
-      return res.status(400).json({ error: "User could not be created" });
+    const result = await sendConfirmationEmail(
+      email,
+      username,
+      confirmationLink,
+    );
+
+    if (result.success) {
+      const user = await prisma.user.create({
+        data: {
+          username,
+          password: hashedPassword,
+        },
+      });
+
+      if (!user) {
+        return res.status(400).json({ error: "User could not be created" });
+      }
+
+      res.json({
+        message: "Registration successful! Check your email.",
+        emailSent: true,
+      });
+    } else {
+      res.status(500).json({
+        message: "Failed to send confirmation email.",
+        error: result.error,
+      });
     }
-
-    res
-      .status(201)
-      .json({ message: `User ${username} signed up successfully` });
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);

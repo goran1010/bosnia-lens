@@ -3,14 +3,14 @@ import { Resend } from "resend";
 const resend = new Resend("re_RWsJifay_PtYJwGbSXhkZ1C6fWH4k8pYr");
 
 export default async function sendConfirmationEmail(
-  to,
+  userEmail,
   userName,
   confirmationLink,
 ) {
   try {
     const data = await resend.emails.send({
-      from: "Bosnia Lens <onboarding@resend.dev>", // Use your verified domain
-      to: [to],
+      from: "Bosnia Lens <onboarding@resend.dev>",
+      to: [userEmail],
       subject: "Confirm Your Email Address",
       html: `
         <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: 0 auto;">
