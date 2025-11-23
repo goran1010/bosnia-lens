@@ -71,8 +71,8 @@ export default function SignUp() {
   }
 
   return (
-    <main className="relative min-h-full flex items-center justify-center bg-gray-50 ">
-      <div className="w-full max-w-md p-6 flex flex-col gap-3">
+    <div className=" min-h-full flex items-center justify-center bg-gray-50 ">
+      <div className=" relative w-full max-w-md p-6 flex flex-col gap-3">
         <div>
           <h1 className="text-5xl mb-8 text-center font-bold text-gray-900">
             Create your account
@@ -172,10 +172,10 @@ export default function SignUp() {
             page.
           </p>
         </div>
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2">
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full">
           {loading && <Spinner />}
         </div>
       </div>
-    </main>
+    </div>
   );
 }
