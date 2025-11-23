@@ -1,10 +1,13 @@
 import { useState, useRef } from "react";
 import checkPostalCodesValidity from "../utils/checkPostalCodesValidity";
-const URL = import.meta.API_URL || "http://localhost:3000/postal-codes";
+import Spinner from "@goran1010/spinner";
+
+const URL = import.meta.VITE_BACKEND_URL;
 
 export default function PostalCodes() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResult, setSearchResult] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const searchInput = useRef();
 
@@ -15,9 +18,10 @@ export default function PostalCodes() {
 
   async function handleSubmit(e) {
     try {
+      setLoading(true);
       e.preventDefault();
 
-      const response = await fetch(`${URL}/${searchTerm}`);
+      const response = await fetch(`${URL}/api/v1/postal-codes/${searchTerm}`);
       const result = await response.json();
 
       if (!response.ok) {
@@ -26,14 +30,19 @@ export default function PostalCodes() {
       setSearchResult(result.data);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   }
 
   async function handleGetAll(e) {
     try {
+      setLoading(true);
       e.preventDefault();
 
-      const response = await fetch(`${URL}`);
+      const response = await fetch(`${URL}/api/v1/postal-codes`, {
+        mode: "cors",
+      });
       const result = await response.json();
 
       if (!response.ok) {
@@ -42,6 +51,8 @@ export default function PostalCodes() {
       setSearchResult(result.data);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -88,6 +99,7 @@ export default function PostalCodes() {
           </button>
         </form>
       </section>
+      <div>{loading && <Spinner />}</div>
       <section className="flex flex-col justify-center items-center">
         <h2>Postal codes & municipalities</h2>
         <ul className="flex flex-col border">
