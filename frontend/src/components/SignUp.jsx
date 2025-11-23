@@ -50,12 +50,15 @@ export default function SignUp() {
         }),
       });
       const data = await response.json();
+      console.log(data);
       if (!response.ok) {
+        // eslint-disable-next-line no-console
         return console.error(data);
       }
 
       navigator("/login");
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error(err);
     }
   }

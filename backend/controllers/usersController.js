@@ -38,6 +38,7 @@ export async function signup(req, res) {
       const user = await prisma.user.create({
         data: {
           username,
+          email,
           password: hashedPassword,
         },
       });
@@ -46,16 +47,15 @@ export async function signup(req, res) {
         return res.status(400).json({ error: "User could not be created" });
       }
 
-      res.json({
+      return res.json({
         message: "Registration successful! Check your email.",
         emailSent: true,
       });
-    } else {
-      res.status(500).json({
-        message: "Failed to send confirmation email.",
-        error: result.error,
-      });
     }
+    res.status(500).json({
+      message: "Failed to send confirmation email.",
+      error: result.error,
+    });
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
