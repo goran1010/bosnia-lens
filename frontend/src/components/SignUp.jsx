@@ -4,9 +4,12 @@ import { useNavigate } from "react-router-dom";
 import checkFormValidity from "../utils/checkFormValidity";
 import checkFormValidityClick from "../utils/checkFormValidityClick";
 import UserDataContext from "../utils/UserDataContext";
+import Spinner from "@goran1010/spinner";
 const currentUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
 export default function SignUp() {
+  const [loading, setLoading] = useState(false);
+
   const usernameInput = useRef();
   const passwordInput = useRef();
   const confirmPasswordInput = useRef();
@@ -36,6 +39,7 @@ export default function SignUp() {
 
   async function handleSubmit(event) {
     try {
+      setLoading(true);
       event.preventDefault();
 
       const response = await fetch(`${currentUrl}/users/signup`, {
@@ -61,11 +65,13 @@ export default function SignUp() {
       navigator("/login");
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
-    <main className="min-h-full flex items-center justify-center bg-gray-50 ">
+    <main className="relative min-h-full flex items-center justify-center bg-gray-50 ">
       <div className="w-full max-w-md p-6 flex flex-col gap-3">
         <div>
           <h1 className="text-5xl mb-8 text-center font-bold text-gray-900">
@@ -165,6 +171,9 @@ export default function SignUp() {
             </Link>{" "}
             page.
           </p>
+        </div>
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2">
+          {loading && <Spinner />}
         </div>
       </div>
     </main>
