@@ -3,10 +3,12 @@ import { useState, useRef, useContext } from "react";
 import checkLoginFormValidity from "../utils/checkLoginFormValidity";
 import checkLoginFormClickValidity from "../utils/checkLoginFormClickValidity";
 import UserDataContext from "../utils/UserDataContext";
+import Spinner from "@goran1010/spinner";
 const URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
 export default function LogIn() {
   const { setUserData, message, setMessage } = useContext(UserDataContext);
+  const [loading, setLoading] = useState(false);
 
   const [inputFields, setInputFields] = useState({
     username: "",
@@ -25,6 +27,7 @@ export default function LogIn() {
 
   async function handleSubmit(e) {
     try {
+      setLoading(true);
       e.preventDefault();
 
       const response = await fetch(`${URL}/users/login`, {
@@ -39,21 +42,21 @@ export default function LogIn() {
           password: inputFields.password,
         }),
       });
-      const data = await response.json();
+      const result = await response.json();
       if (!response.ok) {
-        // eslint-disable-next-line no-console
-        return console.error(data);
+        return console.error(result.error, result.details);
       }
-      setUserData(data);
+      setUserData(result.data);
       navigate("/");
     } catch (err) {
-      // eslint-disable-next-line no-console
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   }
   return (
-    <main className="min-h-full flex items-center justify-center bg-gray-50 ">
-      <div className="w-full max-w-md p-6 flex flex-col gap-3">
+    <div className=" min-h-full flex items-center justify-center bg-gray-50 ">
+      <div className=" relative w-full max-w-md p-6 flex flex-col gap-3">
         {message.length > 0 && (
           <div className="relative">
             <div className=" p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 border border-blue-300">
@@ -142,7 +145,10 @@ export default function LogIn() {
             page.
           </p>
         </div>
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full">
+          {loading && <Spinner />}
+        </div>
       </div>
-    </main>
+    </div>
   );
 }

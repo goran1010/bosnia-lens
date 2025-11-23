@@ -1,23 +1,30 @@
 import { useEffect, useState } from "react";
 import getDayInWeek from "../utils/getDayInWeek";
+import Spinner from "@goran1010/spinner";
 
 export default function Home() {
+  const [loading, setLoading] = useState(true);
   const [weatherForecast, setWeatherForecast] = useState([]);
   const URL = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/bosnia?unitGroup=metric&include=current&key=RK9QGT68LJC4A8CZLA785FREP&contentType=json`;
 
   useEffect(() => {
     async function getWeather() {
-      const response = await fetch(URL, { mode: "cors" });
-      if (!response.ok) {
-        // eslint-disable-next-line no-console
-        return console.error(response);
+      try {
+        const response = await fetch(URL, { mode: "cors" });
+        if (!response.ok) {
+          return console.error(response);
+        }
+        const data = await response.json();
+        for (let day of data.days) {
+          const URL = `https://raw.githubusercontent.com/visualcrossing/WeatherIcons/58c79610addf3d4d91471abbb95b05e96fb43019/SVG/1st%20Set%20-%20Color/${day.icon}.svg`;
+          day.iconURL = URL;
+        }
+        setWeatherForecast(data.days);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
       }
-      const data = await response.json();
-      for (let day of data.days) {
-        const URL = `https://raw.githubusercontent.com/visualcrossing/WeatherIcons/58c79610addf3d4d91471abbb95b05e96fb43019/SVG/1st%20Set%20-%20Color/${day.icon}.svg`;
-        day.iconURL = URL;
-      }
-      setWeatherForecast(data.days);
     }
     getWeather();
   }, [URL]);
@@ -47,27 +54,31 @@ export default function Home() {
           </ul>
         </article>
       </header>
-      <section className="flex flex-col items-center">
-        <div className="flex">
-          {weatherForecast.slice(0, 6).map((day) => {
-            return (
-              <div
-                key={day.datetime}
-                className="flex flex-col min-w-21 items-center"
-              >
-                <div>{getDayInWeek(day.datetime)}</div>
-                <div className="flex flex-col items-center justify-center w-15 h-15">
-                  <img src={day.iconURL} alt="" />
+      {loading ? (
+        <Spinner />
+      ) : (
+        <section className="flex flex-col items-center">
+          <div className="flex">
+            {weatherForecast.slice(0, 6).map((day) => {
+              return (
+                <div
+                  key={day.datetime}
+                  className="flex flex-col min-w-21 items-center"
+                >
+                  <div>{getDayInWeek(day.datetime)}</div>
+                  <div className="flex flex-col items-center justify-center w-15 h-15">
+                    <img src={day.iconURL} alt="" />
+                  </div>
+                  <div className="flex flex-col">
+                    <div>min: {day.tempmin}</div>
+                    <div>max: {day.tempmax}</div>
+                  </div>
                 </div>
-                <div className="flex flex-col">
-                  <div>min: {day.tempmin}</div>
-                  <div>max: {day.tempmax}</div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
+              );
+            })}
+          </div>
+        </section>
+      )}
       <section className="flex flex-col items-center">
         <article className="flex flex-col items-center">
           <h2 className="font-bold">Tools</h2>

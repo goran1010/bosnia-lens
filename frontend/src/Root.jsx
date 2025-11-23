@@ -3,11 +3,14 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { useEffect, useState } from "react";
 import UserDataContext from "./utils/UserDataContext";
+import Spinner from "@goran1010/spinner";
+
 const URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
 function Root() {
   const [userData, setUserData] = useState(null);
   const [message, setMessage] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function checkLogin() {
@@ -21,9 +24,7 @@ function Root() {
             Authorization: "JWT " + userData?.accessToken,
           },
         });
-        const data = await response.json();
-        // eslint-disable-next-line no-console
-        console.log(data);
+        await response.json();
         if (!response.ok) {
           const response = await fetch(`${URL}/users/refresh-token`, {
             mode: "cors",
@@ -34,15 +35,18 @@ function Root() {
             },
           });
           if (!response.ok) {
-            // eslint-disable-next-line no-console
             return console.error(response);
           }
-          const data = await response.json();
-          setUserData({ ...userData, accessToken: data.accessToken });
+          const result = await response.json();
+          setUserData({
+            ...userData,
+            accessToken: result.data.accessToken,
+          });
         }
       } catch (err) {
-        // eslint-disable-next-line no-console
         console.error(err);
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -55,7 +59,7 @@ function Root() {
       <div className="h-screen flex flex-col min-w-130">
         <Navbar />
         <main className="flex flex-col flex-auto max-w-230 m-auto gap-5">
-          <Outlet />
+          {loading ? <Spinner /> : <Outlet />}
         </main>
         <Footer />
       </div>

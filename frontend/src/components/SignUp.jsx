@@ -4,9 +4,12 @@ import { useNavigate } from "react-router-dom";
 import checkFormValidity from "../utils/checkFormValidity";
 import checkFormValidityClick from "../utils/checkFormValidityClick";
 import UserDataContext from "../utils/UserDataContext";
+import Spinner from "@goran1010/spinner";
 const currentUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
 export default function SignUp() {
+  const [loading, setLoading] = useState(false);
+
   const usernameInput = useRef();
   const passwordInput = useRef();
   const confirmPasswordInput = useRef();
@@ -36,6 +39,7 @@ export default function SignUp() {
 
   async function handleSubmit(event) {
     try {
+      setLoading(true);
       event.preventDefault();
 
       const response = await fetch(`${currentUrl}/users/signup`, {
@@ -52,28 +56,23 @@ export default function SignUp() {
           confirmPassword: inputFields["confirm-password"],
         }),
       });
-      const data = await response.json();
-      setMessage([
-        ...message,
-        "Registration successful! Please check your email to confirm your account.",
-      ]);
-      // eslint-disable-next-line no-console
-      console.log(data);
+      const result = await response.json();
       if (!response.ok) {
-        // eslint-disable-next-line no-console
-        return console.error(data);
+        return console.error(result.error, result.details);
       }
+      setMessage([...message, result.message]);
 
       navigator("/login");
     } catch (err) {
-      // eslint-disable-next-line no-console
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
-    <main className="min-h-full flex items-center justify-center bg-gray-50 ">
-      <div className="w-full max-w-md p-6 flex flex-col gap-3">
+    <div className=" min-h-full flex items-center justify-center bg-gray-50 ">
+      <div className=" relative w-full max-w-md p-6 flex flex-col gap-3">
         <div>
           <h1 className="text-5xl mb-8 text-center font-bold text-gray-900">
             Create your account
@@ -173,7 +172,10 @@ export default function SignUp() {
             page.
           </p>
         </div>
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full">
+          {loading && <Spinner />}
+        </div>
       </div>
-    </main>
+    </div>
   );
 }
