@@ -8,12 +8,17 @@ usersRouter.post(
   validation.signupValidationRules,
   usersController.signup,
 );
+
+usersRouter.post("/confirm/:token", usersController.confirmEmail);
+
 usersRouter.post(
   "/login",
   validation.loginValidationRules,
   usersController.login,
 );
+
 usersRouter.post("/refresh-token", usersController.refreshToken);
+
 usersRouter.post("/logout", usersController.logout);
 
 export default usersRouter;

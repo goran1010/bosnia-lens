@@ -26,7 +26,7 @@ export async function signup(req, res) {
     }
 
     const confirmationToken = Math.random().toString(36).substring(7);
-    const confirmationLink = `${req.protocol}://${req.get("host")}/api/confirm/${confirmationToken}`;
+    const confirmationLink = `${req.protocol}://${req.get("host")}/users/confirm/${confirmationToken}`;
 
     const result = await sendConfirmationEmail(
       email,
@@ -62,6 +62,8 @@ export async function signup(req, res) {
     res.status(500).json({ error: "Internal server error" });
   }
 }
+
+export async function confirmEmail(req, res) {}
 
 export async function login(req, res) {
   const { username, password } = req.body;
