@@ -1,7 +1,7 @@
 import normalizeName from "../utils/normalizeName.js";
 
 export function status(req, res) {
-  res.json({ status: "Success", message: "Server is running" });
+  res.json({ message: "Server is running" });
 }
 
 export function getPostalCodes(req, res) {
@@ -9,7 +9,7 @@ export function getPostalCodes(req, res) {
     { code: 71000, place: "Sarajevo" },
     { code: 78000, place: "Banja Luka" },
   ];
-  res.json(postalCodes);
+  res.json({ data: postalCodes });
 }
 
 export function getPostalCodeByCode(req, res) {
@@ -43,7 +43,7 @@ export function getPostalCodeByCode(req, res) {
   }
 
   if (result.length > 0) {
-    res.json(result);
+    res.json({ data: result });
   } else {
     res.status(404).json({ error: "Postal code not found" });
   }

@@ -56,12 +56,12 @@ export async function signup(req, res) {
 
       return res.json({
         message: "Registration successful! Check your email.",
-        emailSent: true,
+        data: { emailSent: true },
       });
     }
     res.status(500).json({
-      message: "Failed to send confirmation email.",
-      error: result.error,
+      error: "Failed to send confirmation email",
+      details: result.error,
     });
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -158,8 +158,10 @@ export async function login(req, res) {
 
   res.json({
     message: `User ${username} logged in successfully`,
-    accessToken,
-    user,
+    data: {
+      accessToken,
+      user,
+    },
   });
 }
 
@@ -185,6 +187,6 @@ export function refreshToken(req, res) {
       { expiresIn: "2m" },
     );
 
-    res.json({ accessToken });
+    res.json({ data: { accessToken } });
   });
 }

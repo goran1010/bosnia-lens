@@ -30,14 +30,14 @@ app.use("/auth", authRouter);
 app.use("/users", usersRouter);
 
 app.use((req, res) => {
-  res.status(404).json("No resource found");
+  res.status(404).json({ error: "No resource found" });
 });
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   // eslint-disable-next-line no-console
   console.error(err);
-  res.status(500).json(err.message || "Error 500: Internal Server Error");
+  res.status(500).json({ error: err.message || "Internal Server Error" });
 });
 
 export default app;
