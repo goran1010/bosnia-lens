@@ -1,8 +1,9 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import checkFormValidity from "../utils/checkFormValidity";
 import checkFormValidityClick from "../utils/checkFormValidityClick";
+import UserDataContext from "../utils/UserDataContext";
 const currentUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
 export default function SignUp() {
@@ -10,6 +11,8 @@ export default function SignUp() {
   const passwordInput = useRef();
   const confirmPasswordInput = useRef();
   const emailInput = useRef();
+
+  const { setMessage, message } = useContext(UserDataContext);
 
   const [inputFields, setInputFields] = useState({
     username: "",
@@ -50,12 +53,20 @@ export default function SignUp() {
         }),
       });
       const data = await response.json();
+      setMessage([
+        ...message,
+        "Registration successful! Please check your email to confirm your account.",
+      ]);
+      // eslint-disable-next-line no-console
+      console.log(data);
       if (!response.ok) {
+        // eslint-disable-next-line no-console
         return console.error(data);
       }
 
       navigator("/login");
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error(err);
     }
   }

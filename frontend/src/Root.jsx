@@ -7,6 +7,7 @@ const URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
 function Root() {
   const [userData, setUserData] = useState(null);
+  const [message, setMessage] = useState([]);
 
   useEffect(() => {
     async function checkLogin() {
@@ -21,6 +22,7 @@ function Root() {
           },
         });
         const data = await response.json();
+        // eslint-disable-next-line no-console
         console.log(data);
         if (!response.ok) {
           const response = await fetch(`${URL}/users/refresh-token`, {
@@ -49,7 +51,7 @@ function Root() {
     [userData];
 
   return (
-    <UserDataContext value={{ userData, setUserData }}>
+    <UserDataContext value={{ userData, setUserData, message, setMessage }}>
       <div className="h-screen flex flex-col min-w-130">
         <Navbar />
         <main className="flex flex-col flex-auto max-w-230 m-auto gap-5">

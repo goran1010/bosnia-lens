@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import prisma from "../db/prisma.js";
 import jwt from "jsonwebtoken";
+import sendConfirmationEmail from "../email/confirmationEmail.js";
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
@@ -13,7 +14,7 @@ if (!ACCESS_TOKEN_SECRET || !REFRESH_TOKEN_SECRET) {
 
 export async function signup(req, res) {
   try {
-    const { username, password } = req.body;
+    const { username, email, password } = req.body;
     const hashedPassword = bcrypt.hashSync(password, 10);
 
     const userExists = await prisma.user.findUnique({
@@ -24,20 +25,89 @@ export async function signup(req, res) {
       return res.status(400).json({ error: "Username already taken" });
     }
 
-    const user = await prisma.user.create({
+    const confirmationToken = Math.random().toString(36).substring(7);
+    const tokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    const confirmationLink = `${req.protocol}://${req.get("host")}/users/confirm/${confirmationToken}`;
+
+    const result = await sendConfirmationEmail(
+      email,
+      username,
+      confirmationLink,
+    );
+
+    if (result.success) {
+      const user = await prisma.user.create({
+        data: {
+          username,
+          email,
+          password: hashedPassword,
+          token: {
+            create: {
+              token: confirmationToken,
+              expiry: tokenExpiry,
+            },
+          },
+        },
+      });
+
+      if (!user) {
+        return res.status(400).json({ error: "User could not be created" });
+      }
+
+      return res.json({
+        message: "Registration successful! Check your email.",
+        emailSent: true,
+      });
+    }
+    res.status(500).json({
+      message: "Failed to send confirmation email.",
+      error: result.error,
+    });
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+export async function confirmEmail(req, res) {
+  const { token } = req.params;
+
+  try {
+    const tokenRecord = await prisma.token.findUnique({
+      where: { token },
+      include: { user: true },
+    });
+
+    if (!tokenRecord) {
+      return res.status(400).json({ error: "Invalid confirmation token" });
+    }
+
+    if (tokenRecord.expiry < new Date()) {
+      return res.status(400).json({ error: "Confirmation token has expired" });
+    }
+
+    await prisma.user.update({
+      where: { id: tokenRecord.userId },
       data: {
-        username,
-        password: hashedPassword,
+        isEmailConfirmed: true,
       },
     });
 
-    if (!user) {
-      return res.status(400).json({ error: "User could not be created" });
-    }
+    await prisma.token.delete({
+      where: { id: tokenRecord.id },
+    });
 
-    res
-      .status(201)
-      .json({ message: `User ${username} signed up successfully` });
+    res.send(`    <html>
+      <head>
+        <title>Email Confirmed</title>
+      </head>
+      <body>
+        <h1>Your email has been confirmed!</h1>
+        <p>You can now close this window and <a href="${process.env.URL}/login">log in</a> to your account.</p>
+      </body>
+    </html>
+   `);
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
@@ -54,6 +124,10 @@ export async function login(req, res) {
 
   if (!user) {
     return res.status(400).json({ error: "Invalid username or password" });
+  }
+
+  if (user.isEmailConfirmed === false) {
+    return res.status(400).json({ error: "Email not confirmed" });
   }
 
   const passwordMatch = bcrypt.compareSync(password, user.password);

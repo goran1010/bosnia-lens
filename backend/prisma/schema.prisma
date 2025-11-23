@@ -14,8 +14,18 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(uuid())
-  username String  @unique
-  password String
-  name     String?
+  id               String  @id @default(uuid())
+  username         String  @unique
+  email            String //email not unique for testing purposes
+  isEmailConfirmed Boolean @default(false)
+  password         String
+  token            Token[]
+}
+
+model Token {
+  id     String   @id @default(uuid())
+  token  String   @unique
+  user   User     @relation(fields: [userId], references: [id])
+  userId String
+  expiry DateTime
 }
