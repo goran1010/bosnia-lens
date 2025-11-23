@@ -34,9 +34,11 @@ export default async function sendConfirmationEmail(
       `,
     });
 
+    // eslint-disable-next-line no-console
     console.log("Email sent:", data.id);
     return { success: true, messageId: data.id };
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error("Error sending email:", error);
     return { success: false, error: error.message };
   }
