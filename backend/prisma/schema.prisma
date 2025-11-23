@@ -19,7 +19,6 @@ model User {
   email            String //email not unique for testing purposes
   isEmailConfirmed Boolean @default(false)
   password         String
-  name             String?
   token            Token[]
 }
 

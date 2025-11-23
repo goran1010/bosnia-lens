@@ -117,6 +117,10 @@ export async function login(req, res) {
     return res.status(400).json({ error: "Invalid username or password" });
   }
 
+  if (user.isEmailConfirmed === false) {
+    return res.status(400).json({ error: "Email not confirmed" });
+  }
+
   const passwordMatch = bcrypt.compareSync(password, user.password);
   if (!passwordMatch) {
     return res.status(400).json({ error: "Invalid username or password" });
