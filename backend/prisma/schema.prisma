@@ -19,4 +19,13 @@ model User {
   email    String //email not unique for testing purposes
   password String
   name     String?
+  token    Token[]
+}
+
+model Token {
+  id     String   @id @default(uuid())
+  token  String   @unique
+  user   User     @relation(fields: [userId], references: [id])
+  userId String
+  expiry DateTime
 }

@@ -26,6 +26,7 @@ export async function signup(req, res) {
     }
 
     const confirmationToken = Math.random().toString(36).substring(7);
+    const tokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000);
     const confirmationLink = `${req.protocol}://${req.get("host")}/users/confirm/${confirmationToken}`;
 
     const result = await sendConfirmationEmail(

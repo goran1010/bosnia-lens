@@ -8,7 +8,7 @@ export default async function sendConfirmationEmail(
   confirmationLink,
 ) {
   try {
-    const data = await resend.emails.send({
+    const email = await resend.emails.send({
       from: "Bosnia Lens <onboarding@resend.dev>",
       to: [userEmail],
       subject: "Confirm Your Email Address",
@@ -35,8 +35,8 @@ export default async function sendConfirmationEmail(
     });
 
     // eslint-disable-next-line no-console
-    console.log("Email sent:", data.id);
-    return { success: true, messageId: data.id };
+    console.log("Email sent:", email.data);
+    return { success: true, messageId: email.data };
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error("Error sending email:", error);
