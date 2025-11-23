@@ -12,7 +12,7 @@ export default function SignUp() {
   const confirmPasswordInput = useRef();
   const emailInput = useRef();
 
-  const { setMessage } = useContext(UserDataContext);
+  const { setMessage, message } = useContext(UserDataContext);
 
   const [inputFields, setInputFields] = useState({
     username: "",
@@ -53,9 +53,11 @@ export default function SignUp() {
         }),
       });
       const data = await response.json();
-      setMessage(
-        "User created successfully. Please confirm the sign up process by clicking the link sent to your email."
-      );
+      setMessage([
+        ...message,
+        "Registration successful! Please check your email to confirm your account.",
+      ]);
+      // eslint-disable-next-line no-console
       console.log(data);
       if (!response.ok) {
         // eslint-disable-next-line no-console

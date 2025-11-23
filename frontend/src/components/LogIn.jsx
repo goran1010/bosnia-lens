@@ -54,13 +54,17 @@ export default function LogIn() {
   return (
     <main className="min-h-full flex items-center justify-center bg-gray-50 ">
       <div className="w-full max-w-md p-6 flex flex-col gap-3">
-        {message && (
+        {message.length > 0 && (
           <div className="relative">
-            <p className=" p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 border border-blue-300">
-              {message}
-            </p>
+            <div className=" p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 border border-blue-300">
+              {message.map((msg, index) => (
+                <div className="mb-1 last:mb-0" key={index}>
+                  {msg}
+                </div>
+              ))}
+            </div>
             <button
-              onClick={() => setMessage(null)}
+              onClick={() => setMessage([])}
               className="absolute top-1 right-1 text-blue-800 hover:text-blue-900"
               aria-label="Close message"
             >
