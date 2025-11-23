@@ -14,12 +14,13 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(uuid())
-  username String  @unique
-  email    String //email not unique for testing purposes
-  password String
-  name     String?
-  token    Token[]
+  id               String  @id @default(uuid())
+  username         String  @unique
+  email            String //email not unique for testing purposes
+  isEmailConfirmed Boolean @default(false)
+  password         String
+  name             String?
+  token            Token[]
 }
 
 model Token {

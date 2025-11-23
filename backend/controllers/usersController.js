@@ -41,6 +41,12 @@ export async function signup(req, res) {
           username,
           email,
           password: hashedPassword,
+          token: {
+            create: {
+              token: confirmationToken,
+              expiry: tokenExpiry,
+            },
+          },
         },
       });
 
@@ -66,10 +72,38 @@ export async function signup(req, res) {
 
 export async function confirmEmail(req, res) {
   const { token } = req.params;
-  console.log("Confirming token:", token);
-  res.send(
-    "<h1>Email Confirmed!</h1><main><p>Your account has been activated.</p><a href=/login>Log in</a></main>",
-  );
+
+  try {
+    const tokenRecord = await prisma.token.findUnique({
+      where: { token },
+      include: { user: true },
+    });
+
+    if (!tokenRecord) {
+      return res.status(400).json({ error: "Invalid confirmation token" });
+    }
+
+    if (tokenRecord.expiry < new Date()) {
+      return res.status(400).json({ error: "Confirmation token has expired" });
+    }
+
+    await prisma.user.update({
+      where: { id: tokenRecord.userId },
+      data: {
+        isEmailConfirmed: true,
+      },
+    });
+
+    await prisma.token.delete({
+      where: { id: tokenRecord.id },
+    });
+
+    res.json({ message: "Email confirmed successfully" });
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
 }
 
 export async function login(req, res) {
