@@ -1,12 +1,7 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 import { useNavigate } from "react-router-dom";
 
-export default function useSignUpForm(
-  setLoading,
-  setMessage,
-  inputFields,
-  message
-) {
+export default function useSignUpForm(setLoading, setMessage, inputFields) {
   const navigate = useNavigate();
 
   return async function handleSubmit(event) {
@@ -25,15 +20,16 @@ export default function useSignUpForm(
           username: inputFields.username,
           email: inputFields.email,
           password: inputFields.password,
-          confirmPassword: inputFields["confirm-password"],
+          "confirm-password": inputFields["confirm-password"],
         }),
       });
 
       const result = await response.json();
       if (!response.ok) {
+        setMessage([result.error, result.details]);
         return console.warn(result.error, result.details);
       }
-      setMessage([...message, result.message]);
+      setMessage([result.message]);
 
       navigate("/login");
     } catch (err) {

@@ -28,14 +28,19 @@ export default function LogIn() {
   return (
     <div className=" min-h-full flex items-center justify-center bg-gray-50 ">
       <div className=" relative w-full max-w-md p-6 flex flex-col gap-3">
-        {message.length > 0 && (
+        {message[0] && (
           <div className="relative">
             <div className=" p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 border border-blue-300">
-              {message.map((msg, index) => (
-                <div className="mb-1 last:mb-0" key={index}>
-                  {msg}
-                </div>
-              ))}
+              <div className="mb-1 last:mb-0">
+                <h2 className="text-2xl">{message[0]}</h2>
+                {message[1] && message?.length > 0 && (
+                  <p>
+                    {message[1].map((element) => {
+                      return <li>{element.msg}</li>;
+                    })}
+                  </p>
+                )}
+              </div>
             </div>
             <button
               onClick={() => setMessage([])}
@@ -56,6 +61,7 @@ export default function LogIn() {
             </button>
           </div>
         )}
+
         <h1 className="text-5xl mb-8 text-center font-bold text-gray-900">
           Please log in
         </h1>
