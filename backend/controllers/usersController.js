@@ -64,7 +64,6 @@ export async function signup(req, res) {
       details: result.error,
     });
   } catch (err) {
-    // eslint-disable-next-line no-console
     console.error(err);
     res.status(500).json({ error: "Internal server error" });
   }
@@ -109,7 +108,6 @@ export async function confirmEmail(req, res) {
     </html>
    `);
   } catch (err) {
-    // eslint-disable-next-line no-console
     console.error(err);
     res.status(500).json({ error: "Internal server error" });
   }

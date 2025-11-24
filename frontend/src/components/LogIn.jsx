@@ -1,10 +1,10 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState, useRef, useContext } from "react";
-import checkLoginFormValidity from "../utils/checkLoginFormValidity";
-import checkLoginFormClickValidity from "../utils/checkLoginFormClickValidity";
+import checkLoginFormValidity from "../utils/formValidation/checkLoginFormValidity";
+import checkLoginFormClickValidity from "../utils/formValidation/checkLoginFormClickValidity";
 import UserDataContext from "../utils/UserDataContext";
 import Spinner from "@goran1010/spinner";
-const URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+import useLogInForm from "../utils/handleForm/handleLogInForm";
 
 export default function LogIn() {
   const { setUserData, message, setMessage } = useContext(UserDataContext);
@@ -23,37 +23,8 @@ export default function LogIn() {
     setInputFields({ ...inputFields, [e.target.name]: e.target.value });
   }
 
-  const navigate = useNavigate();
+  const handleSubmit = useLogInForm(setLoading, inputFields, setUserData);
 
-  async function handleSubmit(e) {
-    try {
-      setLoading(true);
-      e.preventDefault();
-
-      const response = await fetch(`${URL}/users/login`, {
-        mode: "cors",
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: inputFields.username,
-          password: inputFields.password,
-        }),
-      });
-      const result = await response.json();
-      if (!response.ok) {
-        return console.error(result.error, result.details);
-      }
-      setUserData(result.data);
-      navigate("/");
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  }
   return (
     <div className=" min-h-full flex items-center justify-center bg-gray-50 ">
       <div className=" relative w-full max-w-md p-6 flex flex-col gap-3">

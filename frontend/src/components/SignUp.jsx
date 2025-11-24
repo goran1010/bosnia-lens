@@ -1,11 +1,10 @@
 import { useState, useRef, useContext } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import checkFormValidity from "../utils/checkFormValidity";
-import checkFormValidityClick from "../utils/checkFormValidityClick";
+import checkFormValidity from "../utils/formValidation/checkFormValidity";
+import checkFormValidityClick from "../utils/formValidation/checkFormValidityClick";
 import UserDataContext from "../utils/UserDataContext";
 import Spinner from "@goran1010/spinner";
-const currentUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+import useSignUpForm from "../utils/handleForm/handleSignUpForm";
 
 export default function SignUp() {
   const [loading, setLoading] = useState(false);
@@ -23,6 +22,14 @@ export default function SignUp() {
     password: "",
     ["confirm-password"]: "",
   });
+
+  const handleSubmit = useSignUpForm(
+    setLoading,
+    setMessage,
+    inputFields,
+    message
+  );
+
   function handleInputFields(e) {
     checkFormValidity(
       e.target.name,
@@ -33,41 +40,6 @@ export default function SignUp() {
     );
 
     setInputFields({ ...inputFields, [e.target.name]: e.target.value });
-  }
-
-  const navigator = useNavigate();
-
-  async function handleSubmit(event) {
-    try {
-      setLoading(true);
-      event.preventDefault();
-
-      const response = await fetch(`${currentUrl}/users/signup`, {
-        mode: "cors",
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: inputFields.username,
-          email: inputFields.email,
-          password: inputFields.password,
-          confirmPassword: inputFields["confirm-password"],
-        }),
-      });
-      const result = await response.json();
-      if (!response.ok) {
-        return console.error(result.error, result.details);
-      }
-      setMessage([...message, result.message]);
-
-      navigator("/login");
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
   }
 
   return (

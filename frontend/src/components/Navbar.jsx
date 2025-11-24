@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import UserDataContext from "../utils/UserDataContext";
 import { useContext } from "react";
-const URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+const URL = import.meta.env.VITE_BACKEND_URL;
 
 export default function Navbar() {
   const { userData, setUserData } = useContext(UserDataContext);
@@ -13,15 +13,14 @@ export default function Navbar() {
         method: "POST",
         credentials: "include",
       });
-      const data = await response.json();
+
+      const result = await response.json();
       if (!response.ok) {
-        // eslint-disable-next-line no-console
-        console.error(data);
+        console.warn(result.error);
       }
-      console.log(data);
+
       setUserData(null);
     } catch (err) {
-      // eslint-disable-next-line no-console
       console.error(err);
     }
   }

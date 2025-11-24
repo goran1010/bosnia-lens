@@ -1,58 +1,17 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import UserDataContext from "./utils/UserDataContext";
 import Spinner from "@goran1010/spinner";
-
-const URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+import useStatusCheck from "./customHooks/useStatusCheck.jsx";
 
 function Root() {
   const [userData, setUserData] = useState(null);
   const [message, setMessage] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function checkLogin() {
-      try {
-        const response = await fetch(`${URL}/auth/me`, {
-          mode: "cors",
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "JWT " + userData?.accessToken,
-          },
-        });
-        await response.json();
-        if (!response.ok) {
-          const response = await fetch(`${URL}/users/refresh-token`, {
-            mode: "cors",
-            method: "POST",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          if (!response.ok) {
-            return console.error(response);
-          }
-          const result = await response.json();
-          setUserData({
-            ...userData,
-            accessToken: result.data.accessToken,
-          });
-        }
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    checkLogin();
-  }),
-    [userData];
+  useStatusCheck(userData, setUserData, setLoading);
 
   return (
     <UserDataContext value={{ userData, setUserData, message, setMessage }}>
@@ -66,4 +25,5 @@ function Root() {
     </UserDataContext>
   );
 }
+
 export default Root;

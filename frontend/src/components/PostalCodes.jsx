@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import checkPostalCodesValidity from "../utils/checkPostalCodesValidity";
+import checkPostalCodesValidity from "../utils/formValidation/checkPostalCodesValidity";
 import Spinner from "@goran1010/spinner";
 
 const URL = import.meta.env.VITE_BACKEND_URL;
@@ -25,7 +25,7 @@ export default function PostalCodes() {
       const result = await response.json();
 
       if (!response.ok) {
-        return console.error(result.error, result.details);
+        return console.warn(result.error, result.details);
       }
       setSearchResult(result.data);
     } catch (err) {
@@ -46,7 +46,7 @@ export default function PostalCodes() {
       const result = await response.json();
 
       if (!response.ok) {
-        return console.error(result.error, result.details);
+        return console.warn(result.error, result.details);
       }
       setSearchResult(result.data);
     } catch (err) {
