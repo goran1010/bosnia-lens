@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import checkPostalCodesValidity from "../utils/checkPostalCodesValidity";
 import Spinner from "@goran1010/spinner";
 
-const URL = import.meta.VITE_BACKEND_URL;
+const URL = import.meta.env.VITE_BACKEND_URL;
 
 export default function PostalCodes() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -108,10 +108,10 @@ export default function PostalCodes() {
               return (
                 <li
                   className="flex flex-1 justify-between items-center"
-                  key={result.postalCode}
+                  key={result.code}
                 >
-                  <div>{result.municipality}</div>
-                  <div>{result.postalCode}</div> <div>{result.entity}</div>
+                  <div>{result.place}</div>
+                  <div>{result.code}</div> <div>{result.entity}</div>
                 </li>
               );
             })}

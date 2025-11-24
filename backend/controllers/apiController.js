@@ -7,6 +7,7 @@ export function status(req, res) {
 export function getPostalCodes(req, res) {
   const postalCodes = [
     { code: 71000, place: "Sarajevo" },
+    { code: 71001, place: "Sarajevo" },
     { code: 78000, place: "Banja Luka" },
   ];
   res.json({ data: postalCodes });
