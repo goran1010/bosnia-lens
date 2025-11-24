@@ -1,8 +1,8 @@
 import { useState, useRef, useContext } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import checkFormValidity from "../utils/checkFormValidity";
-import checkFormValidityClick from "../utils/checkFormValidityClick";
+import checkFormValidity from "../utils/formValidation/checkFormValidity";
+import checkFormValidityClick from "../utils/formValidation/checkFormValidityClick";
 import UserDataContext from "../utils/UserDataContext";
 import Spinner from "@goran1010/spinner";
 const currentUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";

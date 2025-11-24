@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import checkPostalCodesValidity from "../utils/checkPostalCodesValidity";
+import checkPostalCodesValidity from "../utils/formValidation/checkPostalCodesValidity";
 import Spinner from "@goran1010/spinner";
 
 const URL = import.meta.env.VITE_BACKEND_URL;
