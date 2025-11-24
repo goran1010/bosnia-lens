@@ -1,7 +1,12 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 import { useNavigate } from "react-router-dom";
 
-export default function useSignUpForm(setLoading, inputFields, setUserData) {
+export default function useSignUpForm(
+  setLoading,
+  inputFields,
+  setUserData,
+  setMessage
+) {
   const navigate = useNavigate();
 
   return async function handleSubmit(e) {
@@ -24,10 +29,11 @@ export default function useSignUpForm(setLoading, inputFields, setUserData) {
 
       const result = await response.json();
       if (!response.ok) {
+        setMessage([result.error, result.details]);
         return console.warn(result.error, result.details);
       }
 
-      setUserData(result.data);
+      setUserData([result.data]);
       navigate("/");
     } catch (err) {
       console.error(err);

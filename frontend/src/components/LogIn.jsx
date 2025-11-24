@@ -23,7 +23,12 @@ export default function LogIn() {
     setInputFields({ ...inputFields, [e.target.name]: e.target.value });
   }
 
-  const handleSubmit = useLogInForm(setLoading, inputFields, setUserData);
+  const handleSubmit = useLogInForm(
+    setLoading,
+    inputFields,
+    setUserData,
+    setMessage
+  );
 
   return (
     <div className=" min-h-full flex items-center justify-center bg-gray-50 ">
