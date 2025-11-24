@@ -4,7 +4,7 @@ import checkFormValidity from "../utils/formValidation/checkFormValidity";
 import checkFormValidityClick from "../utils/formValidation/checkFormValidityClick";
 import UserDataContext from "../utils/UserDataContext";
 import Spinner from "@goran1010/spinner";
-import useSignUpForm from "../utils/handleSignUpForm";
+import useSignUpForm from "../utils/handleForm/handleSignUpForm";
 
 export default function SignUp() {
   const [loading, setLoading] = useState(false);
