@@ -1,7 +1,6 @@
 import { useEffect } from "react";
-import checkStatusAccessToken from "../utils/checkLoginAccessToken.js";
-
-const currentURL = import.meta.env.VITE_BACKEND_URL;
+import checkStatusAccessToken from "../utils/checkLogin/checkLoginAccessToken.js";
+import checkStatusRefreshToken from "../utils/checkLogin/checkLoginRefreshToken.js";
 
 export default function useStatusCheck(userData, setUserData, setLoading) {
   useEffect(() => {
@@ -11,17 +10,7 @@ export default function useStatusCheck(userData, setUserData, setLoading) {
         await response.json();
 
         if (!response.ok) {
-          const refreshResponse = await fetch(
-            `${currentURL}/users/refresh-token`,
-            {
-              mode: "cors",
-              method: "POST",
-              credentials: "include",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
+          const refreshResponse = await checkStatusRefreshToken();
           const refreshResult = await refreshResponse.json();
 
           if (!refreshResponse.ok) {
@@ -29,10 +18,10 @@ export default function useStatusCheck(userData, setUserData, setLoading) {
             return;
           }
 
-          setUserData((prev) => ({
-            ...prev,
+          setUserData({
+            ...userData,
             accessToken: refreshResult.data.accessToken,
-          }));
+          });
         }
       } catch (err) {
         console.error(err);
