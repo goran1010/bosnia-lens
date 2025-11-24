@@ -19,13 +19,16 @@ export default function useStatusCheck(userData, setUserData, setLoading) {
             return console.warn(refreshResult.error);
           }
 
-          return setUserData({
-            ...userData,
+          return setUserData((prev) => ({
+            ...prev,
             accessToken: refreshResult.data.accessToken,
-          });
+          }));
         }
 
-        setUserData({ ...userData, accessToken: result.data.accessToken });
+        setUserData((prev) => ({
+          ...prev,
+          accessToken: result.data.accessToken,
+        }));
       } catch (err) {
         console.error(err);
       } finally {
@@ -34,5 +37,5 @@ export default function useStatusCheck(userData, setUserData, setLoading) {
     }
 
     checkLogin();
-  }, [userData, setLoading, setUserData]);
+  }, []);
 }
