@@ -4,7 +4,7 @@ import Footer from "./components/Footer";
 import { useState } from "react";
 import UserDataContext from "./utils/UserDataContext";
 import Spinner from "@goran1010/spinner";
-import useStatusCheck from "./hooks/useStatusCheck.jsx";
+import useStatusCheck from "./customHooks/useStatusCheck.jsx";
 
 function Root() {
   const [userData, setUserData] = useState(null);

@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import checkStatusAccessToken from "../utils/checkLoginAccessToken.js";
 
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 
@@ -6,16 +7,7 @@ export default function useStatusCheck(userData, setUserData, setLoading) {
   useEffect(() => {
     async function checkLogin() {
       try {
-        const response = await fetch(`${currentURL}/auth/me`, {
-          mode: "cors",
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `JWT ${userData?.accessToken}`,
-          },
-        });
-
+        const response = await checkStatusAccessToken(userData);
         await response.json();
 
         if (!response.ok) {
@@ -50,5 +42,5 @@ export default function useStatusCheck(userData, setUserData, setLoading) {
     }
 
     checkLogin();
-  }, [userData?.accessToken, setLoading, setUserData]);
+  }, [userData, setLoading, setUserData]);
 }
