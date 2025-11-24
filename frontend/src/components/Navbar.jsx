@@ -16,7 +16,7 @@ export default function Navbar() {
 
       const result = await response.json();
       if (!response.ok) {
-        console.error(result.error);
+        console.warn(result.error);
       }
 
       setUserData(null);
