@@ -1,12 +1,16 @@
 export default async function checkStatusRefreshToken() {
-  const currentURL = import.meta.env.VITE_BACKEND_URL;
+  try {
+    const currentURL = import.meta.env.VITE_BACKEND_URL;
 
-  await fetch(`${currentURL}/users/refresh-token`, {
-    mode: "cors",
-    method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+    return await fetch(`${currentURL}/users/refresh-token`, {
+      mode: "cors",
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (err) {
+    console.error(err);
+  }
 }

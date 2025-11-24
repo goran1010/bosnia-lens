@@ -7,22 +7,25 @@ export default function useStatusCheck(userData, setUserData, setLoading) {
     async function checkLogin() {
       try {
         const response = await checkStatusAccessToken(userData);
-        await response.json();
+        const result = await response.json();
 
         if (!response.ok) {
+          console.warn(result.error);
+
           const refreshResponse = await checkStatusRefreshToken();
           const refreshResult = await refreshResponse.json();
 
           if (!refreshResponse.ok) {
-            console.error(refreshResult.error, refreshResult.details);
-            return;
+            return console.warn(refreshResult.error);
           }
 
-          setUserData({
+          return setUserData({
             ...userData,
             accessToken: refreshResult.data.accessToken,
           });
         }
+
+        setUserData({ ...userData, accessToken: result.data.accessToken });
       } catch (err) {
         console.error(err);
       } finally {
