@@ -31,7 +31,7 @@ export const signupValidationRules = [
     .isLength({ min: 6 })
     .withMessage("Password must be at least 6 characters long"),
 
-  body("confirmPassword").custom((value, { req }) => {
+  body("confirm-password").custom((value, { req }) => {
     if (value !== req.body.password) {
       throw new Error("Passwords do not match");
     }
