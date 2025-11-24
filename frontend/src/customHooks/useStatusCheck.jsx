@@ -37,5 +37,6 @@ export default function useStatusCheck(userData, setUserData, setLoading) {
     }
 
     checkLogin();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }
