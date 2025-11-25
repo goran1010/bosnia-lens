@@ -22,8 +22,11 @@ export default function PostalCodes() {
         />
       </section>
       <div>{loading && <Spinner />}</div>
-      <MessageCard />
       <PostalCodesResult searchResult={searchResult} />
+
+      <div className="relative">
+        <MessageCard />
+      </div>
     </>
   );
 }
