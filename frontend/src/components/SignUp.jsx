@@ -132,7 +132,7 @@ export default function SignUp() {
             </button>
           </div>
         </form>
-        <div>
+        <div className="relative">
           <p className="text-center">
             Already have an account ? Go back to the{" "}
             <Link
@@ -143,9 +143,9 @@ export default function SignUp() {
             </Link>{" "}
             page.
           </p>
-        </div>
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full">
-          {loading && <Spinner />}
+          <div className="absolute left-1/2 -translate-x-1/2 h-12 bottom-0 translate-y-full">
+            {loading && <Spinner />}
+          </div>
         </div>
       </div>
     </div>

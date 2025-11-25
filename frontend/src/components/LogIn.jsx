@@ -8,15 +8,15 @@ export default function LogIn() {
   const [loading, setLoading] = useState(false);
 
   return (
-    <div className=" min-h-full flex items-center justify-center bg-gray-50 ">
-      <div className=" relative w-full max-w-md p-6 flex flex-col gap-3">
+    <div className="relative min-h-full flex items-center justify-center bg-gray-50 ">
+      <div className="w-full max-w-md p-6 flex flex-col gap-3">
         <MessageCard />
 
         <h1 className="text-5xl mb-8 text-center font-bold text-gray-900">
           Please log in
         </h1>
         <LogInForm setLoading={setLoading} />
-        <div>
+        <div className="relative">
           <p className="text-center">
             Don't have an account ? Go to the{" "}
             <Link
@@ -27,9 +27,9 @@ export default function LogIn() {
             </Link>{" "}
             page.
           </p>
-        </div>
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full">
-          {loading && <Spinner />}
+          <div className="absolute left-1/2 -translate-x-1/2 h-12 bottom-0 translate-y-full">
+            {loading && <Spinner />}
+          </div>
         </div>
       </div>
     </div>
