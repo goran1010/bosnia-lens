@@ -3,6 +3,7 @@ import Spinner from "@goran1010/spinner";
 import MessageCard from "./MessageCard";
 import SearchPostalCode from "./SearchPostalCode";
 import GetAllPostalCodes from "./GetAllPostalCodes";
+import PostalCodesResult from "./PostalCodesResult";
 
 export default function PostalCodes() {
   const [searchResult, setSearchResult] = useState([]);
@@ -20,24 +21,9 @@ export default function PostalCodes() {
           setLoading={setLoading}
         />
       </section>
-      {loading && <Spinner />}
+      <div>{loading && <Spinner />}</div>
       <MessageCard />
-      <section className="flex flex-col justify-center items-center">
-        <ul className="flex flex-col">
-          {searchResult &&
-            searchResult.map((result) => {
-              return (
-                <li
-                  className="flex flex-1 justify-between items-center"
-                  key={result.code}
-                >
-                  <div>{result.place}</div>
-                  <div>{result.code}</div> <div>{result.entity}</div>
-                </li>
-              );
-            })}
-        </ul>
-      </section>
+      <PostalCodesResult searchResult={searchResult} />
     </>
   );
 }
