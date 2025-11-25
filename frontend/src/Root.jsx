@@ -17,7 +17,7 @@ function Root() {
     <UserDataContext value={{ userData, setUserData, message, setMessage }}>
       <div className="h-screen flex flex-col min-w-130">
         <Navbar />
-        <main className="flex flex-col flex-auto max-w-230 m-auto gap-5">
+        <main className="relative flex flex-col flex-auto max-w-230 m-auto gap-5">
           {loading ? <Spinner /> : <Outlet />}
         </main>
         <Footer />
