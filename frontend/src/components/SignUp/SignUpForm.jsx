@@ -1,7 +1,7 @@
-import checkFormValidity from "../utils/formValidation/checkFormValidity";
-import checkFormValidityClick from "../utils/formValidation/checkFormValidityClick";
-import UserDataContext from "../utils/UserDataContext";
-import useSignUpForm from "../utils/handleForm/handleSignUpForm";
+import checkFormValidity from "../../utils/formValidation/checkFormValidity";
+import checkFormValidityClick from "../../utils/formValidation/checkFormValidityClick";
+import UserDataContext from "../../utils/UserDataContext";
+import useSignUpForm from "../../utils/handleForm/handleSignUpForm";
 import { useState, useRef, useContext } from "react";
 
 export default function SignUpForm({ setLoading }) {

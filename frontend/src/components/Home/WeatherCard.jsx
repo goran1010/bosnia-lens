@@ -1,4 +1,4 @@
-import getDayInWeek from "../utils/getDayInWeek";
+import getDayInWeek from "../../utils/getDayInWeek";
 
 export default function WeatherCard({ weatherForecast }) {
   return (

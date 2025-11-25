@@ -1,4 +1,4 @@
-import useWeatherCheck from "../customHooks/useWeatherCheck";
+import useWeatherCheck from "../../customHooks/useWeatherCheck.jsx";
 import { useState } from "react";
 import Spinner from "@goran1010/spinner";
 import WeatherCard from "./WeatherCard.jsx";

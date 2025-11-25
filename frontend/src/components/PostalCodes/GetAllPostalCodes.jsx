@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import UserDataContext from "../utils/UserDataContext";
+import UserDataContext from "../../utils/UserDataContext";
 
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 

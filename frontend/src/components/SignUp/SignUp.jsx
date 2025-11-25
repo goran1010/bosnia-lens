@@ -1,8 +1,8 @@
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import Spinner from "@goran1010/spinner";
-import MessageCard from "./MessageCard.jsx";
-import UserDataContext from "../utils/UserDataContext.js";
+import MessageCard from "../MessageCard.jsx";
+import UserDataContext from "../../utils/UserDataContext.js";
 import SignUpForm from "./SignUpForm.jsx";
 
 export default function SignUp() {

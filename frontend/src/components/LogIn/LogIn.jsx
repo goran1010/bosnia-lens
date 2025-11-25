@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import Spinner from "@goran1010/spinner";
-import MessageCard from "./MessageCard.jsx";
+import MessageCard from "../MessageCard.jsx";
 import LogInForm from "./LogInForm.jsx";
 
 export default function LogIn() {

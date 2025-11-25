@@ -1,9 +1,9 @@
-import checkLoginFormClickValidity from "../utils/formValidation/checkLoginFormClickValidity";
-import useLogInForm from "../utils/handleForm/handleLogInForm";
-import checkLoginFormValidity from "../utils/formValidation/checkLoginFormValidity";
+import checkLoginFormClickValidity from "../../utils/formValidation/checkLoginFormClickValidity";
+import useLogInForm from "../../utils/handleForm/handleLogInForm";
+import checkLoginFormValidity from "../../utils/formValidation/checkLoginFormValidity";
 import { useRef, useState } from "react";
 import { useContext } from "react";
-import UserDataContext from "../utils/UserDataContext";
+import UserDataContext from "../../utils/UserDataContext";
 
 export default function LogInForm({ setLoading }) {
   const { setUserData, setMessage } = useContext(UserDataContext);
