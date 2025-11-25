@@ -39,12 +39,9 @@ export default function SignUp() {
   }
 
   return (
-    <div className=" min-h-full flex items-center justify-center bg-gray-50 ">
-      <div className=" relative w-full max-w-md p-6 flex flex-col gap-3">
-        {message[0] && (
-          <MessageCard message={message} setMessage={setMessage} />
-        )}
-
+    <div className="relative min-h-full flex items-center justify-center bg-gray-50 ">
+      <MessageCard message={message} setMessage={setMessage} />
+      <div className="w-full max-w-md p-6 flex flex-col gap-3">
         <div>
           <h1 className="text-5xl mb-8 text-center font-bold text-gray-900">
             Create your account

@@ -7,7 +7,7 @@ export default function MessageCard() {
   if (message.length === 0) return null;
 
   return (
-    <div className="absolute top-0">
+    <div className="absolute top-0 w-full">
       <div className=" p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 border border-blue-300">
         <div className="mb-1 last:mb-0">
           <h2 className="text-2xl">{message[0]}</h2>
