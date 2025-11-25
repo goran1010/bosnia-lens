@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/Navbar/Navbar.jsx";
 import Footer from "./components/Footer";
 import { useState } from "react";
 import UserDataContext from "./utils/UserDataContext";
@@ -17,7 +17,7 @@ function Root() {
     <UserDataContext value={{ userData, setUserData, message, setMessage }}>
       <div className="h-screen flex flex-col min-w-130">
         <Navbar />
-        <main className="flex flex-col flex-auto max-w-230 m-auto gap-5">
+        <main className="relative flex flex-col flex-auto max-w-230 m-auto gap-5">
           {loading ? <Spinner /> : <Outlet />}
         </main>
         <Footer />

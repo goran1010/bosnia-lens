@@ -1,11 +1,11 @@
 import Root from "./Root";
 import ErrorPage from "./components/ErrorPage";
-import PostalCodes from "./components/PostalCodes";
-import Home from "./components/Home";
+import PostalCodes from "./components/PostalCodes/PostalCodes";
+import Home from "./components/Home/Home";
 import Universities from "./components/Universities";
 import Holidays from "./components/Holidays";
-import LogIn from "./components/LogIn";
-import SignUp from "./components/SignUp";
+import LogIn from "./components/LogIn/LogIn";
+import SignUp from "./components/SignUp/SignUp";
 
 const routes = [
   {
