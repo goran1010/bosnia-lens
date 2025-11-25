@@ -1,30 +1,7 @@
 import { Link } from "react-router-dom";
-import UserDataContext from "../utils/UserDataContext";
-import { useContext } from "react";
-const URL = import.meta.env.VITE_BACKEND_URL;
+import Status from "./Status";
 
 export default function Navbar() {
-  const { userData, setUserData } = useContext(UserDataContext);
-
-  async function handleLogout() {
-    try {
-      const response = await fetch(`${URL}/users/logout`, {
-        mode: "cors",
-        method: "POST",
-        credentials: "include",
-      });
-
-      const result = await response.json();
-      if (!response.ok) {
-        console.warn(result.error);
-      }
-
-      setUserData(null);
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
   return (
     <nav className="relative min-w-130">
       <div>
@@ -67,23 +44,7 @@ export default function Navbar() {
           </Link>
         </li>
       </ul>
-      {!userData ? (
-        <div>
-          <Link
-            className="block absolute top-0 right-0 py-3 px-2 hover:bg-gray-400"
-            to="/login"
-          >
-            Log In
-          </Link>
-        </div>
-      ) : (
-        <li
-          className="block absolute top-0 right-0 py-3 px-2 hover:bg-gray-400 cursor-pointer"
-          onClick={handleLogout}
-        >
-          Log out
-        </li>
-      )}
+      <Status />
     </nav>
   );
 }
