@@ -2,7 +2,14 @@
 
 A free, open-source project providing structured public data about Bosnia and Herzegovina through a REST API and web interface. Access comprehensive information about cities, municipalities, postal codes, holidays, universities (and their programs), and more - making Bosnian public data open, searchable, and developer-friendly.
 
-Data we're looking to provide includes:
+## Features
+
+- **REST API**: Access open data about Bosnia and Herzegovina
+- **User Authentication**: JWT-based authentication with email confirmation
+- **Web Interface**: React-based frontend for browsing and searching data
+- **Responsive Design**: Built with Tailwind CSS for all devices
+
+## Data Coverage
 
 - Cities and municipalities
 - Postal codes
@@ -44,17 +51,37 @@ Install all dependencies for both backend and frontend:
 npm run install:all
 ```
 
-Set up environment variables by copying the example files and editing them:
+Set up environment variables:
 
-**Backend environment variables** - Copy `/backend/.env.example` to `/backend/.env`:
+**Backend environment variables** - Create `/backend/.env` with:
 
 ```env
-DATABASE_URL="postgresql://user:password@localhost:5432/bosnia-lens"
-TEST_DATABASE_URL="postgresql://user:password@localhost:5432/test-bosnia-lens"
-SECRET="your-jwt-secret-key"
+# Database Configuration
+DATABASE_URL="postgresql://username:password@localhost:5432/bosnia_lens"
+TEST_DATABASE_URL="postgresql://username:password@localhost:5432/bosnia_lens_test"
+
+# JWT Secret Keys
+SECRET="your-jwt-secret-key-here"
+ACCESS_TOKEN_SECRET="your-access-token-secret-here"
+REFRESH_TOKEN_SECRET="your-refresh-token-secret-here"
+
+# Email Service Configuration (for confirmation emails)
+EMAIL_SERVICE="gmail"
+EMAIL_USER="your-email@example.com"
+EMAIL_PASSWORD="your-app-specific-password"
+EMAIL_FROM="Bosnia Lens <noreply@bosnialens.com>"
+
+# Application Configuration
+PORT=3000
+NODE_ENV="development"
+FRONTEND_URL="http://localhost:5173"
+URL="http://localhost:3000"
+
+# CORS Configuration
+CORS_ORIGIN="http://localhost:5173"
 ```
 
-**Frontend environment variables** (optional) - Copy `/frontend/.env.example` to `/frontend/.env`:
+**Frontend environment variables** (optional) - Create `/frontend/.env` with:
 
 ```env
 VITE_BACKEND_URL="http://localhost:3000"
@@ -71,38 +98,55 @@ End with running the development servers:
 
 ```bash
 # Run both frontend and backend concurrently
-npm run dev
+npm run dev:all
+
+# Or run individually:
+npm run dev:backend  # Backend only on http://localhost:3000
+npm run dev:frontend # Frontend only on http://localhost:5173
 ```
 
 You should now be able to access the API at `http://localhost:3000` and the web interface at `http://localhost:5173`.
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
+### Backend Tests
 
-### Break down into end to end tests
-
-Backend tests use Jest and Supertest to test API endpoints:
+Backend tests use Jest and Supertest to test API endpoints, authentication, and controllers:
 
 ```bash
+# From root directory
+npm run test:backend
+
+# Or from backend directory
 cd backend
 npm run test
 ```
 
-### And coding style tests
+### Frontend Tests
 
-Frontend tests use Vitest and React Testing Library:
+Frontend tests use Vitest and React Testing Library for unit and integration tests:
 
 ```bash
+# From root directory
+npm run test:frontend
+
+# Or from frontend directory
 cd frontend
 npm run test
+```
+
+### Run All Tests
+
+```bash
+# Run both backend and frontend tests concurrently
+npm run test:all
 ```
 
 ## Deployment
 
 The project is designed to be deployed with:
 
-- **Backend**: Any Node.js hosting service (Railway, Render, Heroku)
+- **Backend**: Any Node.js hosting service (Koyeb, Railway, Render, Heroku)
 - **Frontend**: Static hosting (Netlify, Vercel)
 - **Database**: PostgreSQL (Supabase, PlanetScale, or self-hosted)
 
@@ -110,12 +154,24 @@ Configure production environment variables and run build commands for each servi
 
 ## Built With
 
-- [Express.js](https://expressjs.com/) - The web framework for the REST API
-- [React](https://reactjs.org/) - Frontend library for building the user interface
-- [Vite](https://vitejs.dev/) - Build tool and development server
+### Backend
+
+- [Express.js](https://expressjs.com/) - Web framework for the REST API
 - [Prisma](https://www.prisma.io/) - Database ORM and migration tool
 - [PostgreSQL](https://www.postgresql.org/) - Database system
-- [Tailwind CSS](https://tailwindcss.com/) - CSS framework for styling
+- [JSON Web Tokens](https://jwt.io/) - Authentication and authorization
+- [bcryptjs](https://www.npmjs.com/package/bcryptjs) - Password hashing
+- [Express Validator](https://express-validator.github.io/) - Request validation
+- [Resend](https://resend.com/) - Email service for confirmations
+- [Jest](https://jestjs.io/) & [Supertest](https://github.com/ladjs/supertest) - Testing
+
+### Frontend
+
+- [React](https://reactjs.org/) - UI library (v19)
+- [Vite](https://vitejs.dev/) - Build tool and development server
+- [React Router](https://reactrouter.com/) - Client-side routing
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+- [Vitest](https://vitest.dev/) & [React Testing Library](https://testing-library.com/react) - Testing
 
 ## Contributing
 
