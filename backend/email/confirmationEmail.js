@@ -36,7 +36,6 @@ export default async function sendConfirmationEmail(
 
     return { success: true, messageId: email.data };
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error("Error sending email:", error);
     return { success: false, error: error.message };
   }

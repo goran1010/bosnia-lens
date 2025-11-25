@@ -66,10 +66,7 @@ ACCESS_TOKEN_SECRET="your-access-token-secret-here"
 REFRESH_TOKEN_SECRET="your-refresh-token-secret-here"
 
 # Email Service Configuration (for confirmation emails)
-EMAIL_SERVICE="gmail"
-EMAIL_USER="your-email@example.com"
-EMAIL_PASSWORD="your-app-specific-password"
-EMAIL_FROM="Bosnia Lens <noreply@bosnialens.com>"
+RESEND_API_KEY="your-resend-api-key-here"
 
 # Application Configuration
 PORT=3000
