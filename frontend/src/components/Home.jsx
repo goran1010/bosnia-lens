@@ -1,7 +1,7 @@
 import useWeatherCheck from "../customHooks/useWeatherCheck";
 import { useState } from "react";
-import getDayInWeek from "../utils/getDayInWeek";
 import Spinner from "@goran1010/spinner";
+import WeatherCard from "./WeatherCard.jsx";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -37,27 +37,7 @@ export default function Home() {
       {loading ? (
         <Spinner />
       ) : (
-        <section className="flex flex-col items-center">
-          <div className="flex">
-            {weatherForecast.slice(0, 6).map((day) => {
-              return (
-                <div
-                  key={day.datetime}
-                  className="flex flex-col min-w-21 items-center"
-                >
-                  <div>{getDayInWeek(day.datetime)}</div>
-                  <div className="flex flex-col items-center justify-center w-15 h-15">
-                    <img src={day.iconURL} alt="" />
-                  </div>
-                  <div className="flex flex-col">
-                    <div>min: {day.tempmin}</div>
-                    <div>max: {day.tempmax}</div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
+        <WeatherCard weatherForecast={weatherForecast} />
       )}
       <section className="flex flex-col items-center">
         <article className="flex flex-col items-center">
