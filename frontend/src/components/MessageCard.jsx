@@ -1,4 +1,11 @@
-export default function MessageCard({ message, setMessage }) {
+import UserDataContext from "../utils/UserDataContext";
+import { useContext } from "react";
+
+export default function MessageCard() {
+  const { message, setMessage } = useContext(UserDataContext);
+
+  if (message.length === 0) return null;
+
   return (
     <div className="relative">
       <div className=" p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 border border-blue-300">
