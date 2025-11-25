@@ -4,8 +4,8 @@ import prisma from "../db/prisma.js";
 export const signupValidationRules = [
   body("username")
     .trim()
-    .isLength({ min: 4 })
-    .withMessage("Username must be at least 4 characters long")
+    .isLength({ min: 6 })
+    .withMessage("Username must be at least 6 characters long")
     .custom(async (username) => {
       const user = await prisma.user.findUnique({ where: { username } });
       if (user) {

@@ -14,7 +14,9 @@ export default function isAuthenticated(req, res, next) {
 
   jwt.verify(token, ACCESS_TOKEN_SECRET, (err, token) => {
     if (err) {
-      return res.status(403).json({ error: "Expired session token" });
+      return res
+        .status(403)
+        .json({ error: "Incorrect or expired session token" });
     }
     req.token = token;
     next();

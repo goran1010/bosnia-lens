@@ -25,8 +25,12 @@ export async function signup(req, res) {
       return res.status(400).json({ error: "Username already taken" });
     }
 
-    const confirmationToken = Math.random().toString(36).substring(7);
-    const tokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    const confirmationToken = jwt.sign(
+      { username, email },
+      ACCESS_TOKEN_SECRET,
+      { expiresIn: "1d" },
+    );
+
     const confirmationLink = `${req.protocol}://${req.get("host")}/users/confirm/${confirmationToken}`;
 
     const result = await sendConfirmationEmail(
@@ -41,12 +45,6 @@ export async function signup(req, res) {
           username,
           email,
           password: hashedPassword,
-          token: {
-            create: {
-              token: confirmationToken,
-              expiry: tokenExpiry,
-            },
-          },
         },
       });
 
@@ -56,7 +54,6 @@ export async function signup(req, res) {
 
       return res.json({
         message: "Registration successful! Check your email.",
-        data: { emailSent: true },
       });
     }
     res.status(500).json({
@@ -73,28 +70,25 @@ export async function confirmEmail(req, res) {
   const { token } = req.params;
 
   try {
-    const tokenRecord = await prisma.token.findUnique({
-      where: { token },
-      include: { user: true },
+    const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET);
+
+    const user = await prisma.user.findUnique({
+      where: { username: decoded.username },
     });
 
-    if (!tokenRecord) {
-      return res.status(400).json({ error: "Invalid confirmation token" });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
     }
 
-    if (tokenRecord.expiry < new Date()) {
-      return res.status(400).json({ error: "Confirmation token has expired" });
+    if (user.isEmailConfirmed) {
+      return res.status(400).json({ error: "Email already confirmed" });
     }
 
     await prisma.user.update({
-      where: { id: tokenRecord.userId },
+      where: { username: decoded.username },
       data: {
         isEmailConfirmed: true,
       },
-    });
-
-    await prisma.token.delete({
-      where: { id: tokenRecord.id },
     });
 
     res.send(`    <html>
@@ -109,6 +103,9 @@ export async function confirmEmail(req, res) {
    `);
   } catch (err) {
     console.error(err);
+    if (err.name === "JsonWebTokenError" || err.name === "TokenExpiredError") {
+      return res.status(400).json({ error: "Invalid or expired token" });
+    }
     res.status(500).json({ error: "Internal server error" });
   }
 }

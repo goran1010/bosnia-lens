@@ -9,8 +9,6 @@ usersRouter.post(
   usersController.signup,
 );
 
-usersRouter.get("/confirm/:token", usersController.confirmEmail);
-
 usersRouter.post(
   "/login",
   validation.loginValidationRules,
@@ -18,6 +16,7 @@ usersRouter.post(
 );
 
 usersRouter.post("/refresh-token", usersController.refreshToken);
+usersRouter.get("/confirm/:token", usersController.confirmEmail);
 
 usersRouter.post("/logout", usersController.logout);
 
