@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import prisma from "../db/prisma.js";
 import jwt from "jsonwebtoken";
 import sendConfirmationEmail from "../email/confirmationEmail.js";
+import emailConfirmHTML from "../utils/emailConfirmHTML.js";
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
@@ -91,16 +92,7 @@ export async function confirmEmail(req, res) {
       },
     });
 
-    res.send(`    <html>
-      <head>
-        <title>Email Confirmed</title>
-      </head>
-      <body>
-        <h1>Your email has been confirmed!</h1>
-        <p>You can now close this window and <a href="${process.env.URL}/login">log in</a> to your account.</p>
-      </body>
-    </html>
-   `);
+    res.send(emailConfirmHTML());
   } catch (err) {
     console.error(err);
     if (err.name === "JsonWebTokenError" || err.name === "TokenExpiredError") {
@@ -134,7 +126,7 @@ export async function login(req, res) {
     { id: user.id, username: user.username },
     ACCESS_TOKEN_SECRET,
     {
-      expiresIn: "2m",
+      expiresIn: "30m",
     },
   );
 
@@ -155,7 +147,7 @@ export async function login(req, res) {
     message: `User ${username} logged in successfully`,
     data: {
       accessToken,
-      user,
+      user: { id: user.id, username: user.username, email: user.email },
     },
   });
 }
@@ -179,7 +171,7 @@ export function refreshToken(req, res) {
     const accessToken = jwt.sign(
       { id: decodedToken.id, username: decodedToken.username },
       ACCESS_TOKEN_SECRET,
-      { expiresIn: "2m" },
+      { expiresIn: "30m" },
     );
 
     res.json({ data: { accessToken } });
