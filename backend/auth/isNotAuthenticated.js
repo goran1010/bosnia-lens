@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 
-export default function isAuthenticated(req, res, next) {
+export default function isNotAuthenticated(req, res, next) {
   if (!ACCESS_TOKEN_SECRET) {
     return res.status(500).json({ error: "Server configuration error" });
   }
@@ -9,16 +9,13 @@ export default function isAuthenticated(req, res, next) {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   if (!token) {
-    return res.status(401).json({ error: "Need to be logged in" });
+    return next();
   }
 
-  jwt.verify(token, ACCESS_TOKEN_SECRET, (err, token) => {
+  jwt.verify(token, ACCESS_TOKEN_SECRET, (err) => {
     if (err) {
-      return res
-        .status(403)
-        .json({ error: "Incorrect or expired session token" });
+      return next();
     }
-    req.token = token;
-    next();
+    return res.status(403).json({ error: "Already logged in" });
   });
 }

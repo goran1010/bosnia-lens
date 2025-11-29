@@ -12,7 +12,7 @@ export default defineConfig([
   { files: ["**/*.{js,mjs,cjs}"], languageOptions: { globals: globals.node } },
   {
     rules: {
-      "no-console": ["warn", { allow: ["error"] }],
+      "no-console": ["warn", { allow: ["error", "warn"] }],
     },
   },
   {
