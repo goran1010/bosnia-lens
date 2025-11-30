@@ -1,6 +1,6 @@
 name: 📊 Data contribution
 description: Submit new data or report data issues for Bosnia and Herzegovina
-title: "[DATA]: <Short description of your data contribution>"
+title: "<Short description of your data contribution>"
 labels: ["data"]
 assignees: []
 body:
@@ -21,6 +21,10 @@ body:
           required: true
         - label: I have read and understand the [Contributing Guidelines](https://github.com/goran1010/bosnia-lens/blob/main/CONTRIBUTING.md)
           required: true
+        - label: This data is from a reliable source
+          required: true
+        - label: I have the right to contribute this data (public domain or properly licensed)
+          required: true
 
   - type: dropdown
     id: contribution-type
@@ -33,12 +37,15 @@ body:
     validations:
       required: true
 
-  - type: input
+  - type: dropdown
     id: dataset-type
     attributes:
       label: Dataset type
       description: What type of dataset is this?
-      placeholder: ex. cities, postal codes, universities, holidays
+      options:
+        - Cities and municipalities
+        - Postal codes
+        - Holidays and observances
     validations:
       required: true
 
@@ -51,37 +58,28 @@ body:
     validations:
       required: true
 
-  - type: input
+  - type: dropdown
     id: data-format
     attributes:
       label: Data format
       description: What format is the data in?
-      placeholder: ex. CSV, JSON, Excel, SQL
+      options:
+        - JSON
+        - CSV
+        - Excel
+        - SQL
     validations:
-      required: false
+      required: true
 
   - type: checkboxes
-    id: verification
-    attributes:
-      label: Verification
-      description: Please verify the following
-      options:
-        - label: This data is from a reliable/official source
-          required: true
-        - label: I have the right to contribute this data (public domain or properly licensed)
-          required: true
-
-  - type: dropdown
     id: geographic-scope
     attributes:
       label: Geographic scope
       description: Which geographic area does this data cover?
-      multiple: true
       options:
-        - Federation of Bosnia and Herzegovina
-        - Republika Srpska
-        - Brčko District
-        - All of Bosnia and Herzegovina
+        - label: Federation of Bosnia and Herzegovina
+        - label: Republika Srpska
+        - label: Brčko District
     validations:
       required: true
 
@@ -97,8 +95,8 @@ body:
   - type: input
     id: discord
     attributes:
-      label: (Optional) Discord/Contact Name
+      label: (Optional) Discord/Email
       description: Optionally provide your contact info to help coordinate if needed
-      placeholder: ex. username#1234
+      placeholder: ex. username#1234 or email@example.com
     validations:
       required: false
