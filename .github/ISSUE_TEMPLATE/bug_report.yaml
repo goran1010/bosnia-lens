@@ -1,6 +1,6 @@
 name: 🐛 Bug report
 description: Create a report to help us improve
-title: "[BUG]: <Short description of the bug>"
+title: "<Short description of the bug>"
 labels: ["bug"]
 assignees: []
 body:
@@ -62,16 +62,15 @@ body:
     validations:
       required: false
 
-  - type: dropdown
-    id: component
+  - type: checkboxes
+    id: environment
     attributes:
       label: Component
       description: Which part of the project is affected?
-      multiple: true
       options:
-        - Backend / API
-        - Frontend / UI
-        - Database / Data
+        - label: Backend / API
+        - label: Frontend / UI
+        - label: Database / Data
     validations:
       required: false
 
@@ -87,8 +86,8 @@ body:
   - type: input
     id: discord
     attributes:
-      label: (Optional) Discord/Contact Name
+      label: (Optional) Discord/Email
       description: Optionally provide your contact info to help coordinate if needed
-      placeholder: ex. username#1234
+      placeholder: ex. username#1234 or email@example.com
     validations:
       required: false
