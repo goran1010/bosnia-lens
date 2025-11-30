@@ -1,6 +1,6 @@
 name: 💡 Feature request
 description: Suggest an idea for this project
-title: "[FEATURE]: <Short description of your feature>"
+title: "<Short description of your feature>"
 labels: ["feature"]
 assignees: []
 body:
@@ -21,32 +21,26 @@ body:
           required: true
         - label: I have read and understand the [Contributing Guidelines](https://github.com/goran1010/bosnia-lens/blob/main/CONTRIBUTING.md)
           required: true
+
   - type: textarea
-    id: problem
+    id: feature-description
     attributes:
-      label: Is your feature request related to a problem? Please describe
-      description: A clear and concise description of what the problem is
-      placeholder: ex. "I'm always frustrated when I can't filter postal codes by entity..."
-    validations:
-      required: false
-  - type: textarea
-    id: solution
-    attributes:
-      label: Describe the solution you'd like
-      description: A clear and concise description of what you want to happen
-      placeholder: ex. "Add a dropdown filter to select Federation, Republika Srpska, or Brčko District"
+      label: Feature description
+      description: A clear and concise description of what the feature is
+      placeholder: ex. "Add a search function for postal codes in Sarajevo..."
     validations:
       required: true
-  - type: dropdown
+
+  - type: checkboxes
     id: component
     attributes:
       label: Component
       description: Which part of the project does this feature affect?
-      multiple: true
       options:
-        - Backend / API
-        - Frontend / UI
-        - Database / Data
+        - label: Backend / API
+        - label: Frontend / UI
+        - label: Database / Data
+
   - type: dropdown
     id: priority
     attributes:
@@ -56,6 +50,7 @@ body:
         - Low - Nice to have
         - Medium - Would improve user experience
         - High - Critical for project goals
+
   - type: textarea
     id: additional-context
     attributes:
@@ -68,8 +63,8 @@ body:
   - type: input
     id: discord
     attributes:
-      label: (Optional) Discord/Contact Name
+      label: (Optional) Discord/Email
       description: Optionally provide your contact info to help coordinate if needed
-      placeholder: ex. username#1234
+      placeholder: ex. username#1234 or email@example.com
     validations:
       required: false
