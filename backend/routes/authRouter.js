@@ -5,4 +5,8 @@ import isAuthenticated from "../auth/isAuthenticated.js";
 
 authRouter.get("/me", isAuthenticated, authController.me);
 
+authRouter.get("/github", authController.githubLogin);
+
+authRouter.get("/github-callback", authController.githubCallback);
+
 export default authRouter;

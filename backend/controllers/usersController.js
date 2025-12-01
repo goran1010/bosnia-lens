@@ -123,7 +123,7 @@ export async function login(req, res) {
   }
 
   const accessToken = jwt.sign(
-    { id: user.id, username: user.username },
+    { email: user.email, username: user.username },
     ACCESS_TOKEN_SECRET,
     {
       expiresIn: "30m",
@@ -131,7 +131,7 @@ export async function login(req, res) {
   );
 
   const refreshToken = jwt.sign(
-    { id: user.id, username: user.username },
+    { email: user.email, username: user.username },
     REFRESH_TOKEN_SECRET,
     { expiresIn: "30d" },
   );
@@ -147,7 +147,7 @@ export async function login(req, res) {
     message: `User ${username} logged in successfully`,
     data: {
       accessToken,
-      user: { id: user.id, username: user.username, email: user.email },
+      user: { username: user.username, email: user.email },
     },
   });
 }
@@ -169,7 +169,7 @@ export function refreshToken(req, res) {
     }
 
     const accessToken = jwt.sign(
-      { id: decodedToken.id, username: decodedToken.username },
+      { email: decodedToken.email, username: decodedToken.username },
       ACCESS_TOKEN_SECRET,
       { expiresIn: "30m" },
     );
