@@ -44,19 +44,23 @@ export async function githubCallback(req, res) {
     headers: { Authorization: `Bearer ${githubAccessToken}` },
   });
 
-  const { email } = userData.data;
+  let { email, login } = userData.data;
 
   let userExists = await prisma.user.findUnique({ where: { email } });
 
-  if (userExists && !userExists.isEmailConfirmed) {
-    userExists = await prisma.user.update({
-      where: { email: userExists.email },
-      data: { isEmailConfirmed: true },
-    });
+  if (userExists) {
+    login = userExists.username;
+
+    if (!userExists.isEmailConfirmed) {
+      await prisma.user.update({
+        where: { email: userExists.email },
+        data: { isEmailConfirmed: true },
+      });
+    }
   }
 
   const accessToken = jwt.sign(
-    { email: userExists.email, username: userExists.login },
+    { email, username: login },
     ACCESS_TOKEN_SECRET,
     {
       expiresIn: "30m",
@@ -64,7 +68,7 @@ export async function githubCallback(req, res) {
   );
 
   const refreshToken = jwt.sign(
-    { email: userExists.email, username: userExists.login },
+    { email, username: login },
     REFRESH_TOKEN_SECRET,
     { expiresIn: "30d" },
   );
@@ -77,10 +81,10 @@ export async function githubCallback(req, res) {
   });
 
   res.json({
-    message: `User ${userExists.login} logged in successfully`,
+    message: `User ${login} logged in successfully`,
     data: {
       accessToken,
-      user: { email: userExists.email, username: userExists.login },
+      user: { email, username: login },
     },
   });
 }
