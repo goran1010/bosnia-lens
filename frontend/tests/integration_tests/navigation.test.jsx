@@ -1,16 +1,26 @@
-import { test, describe, expect } from "vitest";
+import { test, describe, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import routes from "../../src/routes";
+import UserDataContext from "../../src/utils/UserDataContext";
 
-describe("Navigation Integration Tests", () => {
+vi.mock("../../src/customHooks/useWeatherCheck", () => ({
+  default: (setWeatherForecast, setLoading) => {
+    setWeatherForecast([
+      { datetime: "2025-12-08", temp: 5, iconURL: "icon.svg" },
+    ]);
+    setLoading(false);
+  },
+}));
+
+describe("Navigation when loading a route", () => {
   test("render Error Page when visiting non-existent route", () => {
     const router = createMemoryRouter(routes, {
       initialEntries: ["/non-existent-route"],
     });
     render(<RouterProvider router={router} />);
 
-    const linkElement = screen.getByText(/This is a custom 404 error page./i);
+    const linkElement = screen.getByText(/There is nothing here, sorry./i);
     expect(linkElement).toBeInTheDocument();
   });
 
@@ -24,13 +34,17 @@ describe("Navigation Integration Tests", () => {
     expect(linkElements[0]).toBeInTheDocument();
   });
 
-  test("navigate to Postal Codes page", () => {
+  test("navigate to Postal Codes page", async () => {
     const router = createMemoryRouter(routes, {
       initialEntries: ["/postal-codes"],
     });
-    render(<RouterProvider router={router} />);
+    render(
+      <UserDataContext value={{ message: [], setMessage: () => {} }}>
+        <RouterProvider router={router} />
+      </UserDataContext>
+    );
 
-    const linkElement = screen.getByText(/Postal Code or Municipality/i);
+    const linkElement = await screen.findByText(/Postal Code or Municipality/i);
     expect(linkElement).toBeInTheDocument();
   });
 
@@ -50,12 +64,12 @@ describe("Navigation Integration Tests", () => {
     });
     render(<RouterProvider router={router} />);
 
-    const linkElement = screen.getByText(/Welcome to Bosnia Lens/i);
+    const linkElement = screen.getByText(/Bosnia Lens/i);
     expect(linkElement).toBeInTheDocument();
   });
 
   test.each(["/", "/postal-codes", "/universities", "/holidays"])(
-    "render Footer on %s page",
+    "render Footer on every page",
     (route) => {
       const router = createMemoryRouter(routes, {
         initialEntries: [route],
@@ -68,7 +82,7 @@ describe("Navigation Integration Tests", () => {
   );
 
   test.each(["/", "/postal-codes", "/universities", "/holidays"])(
-    "render Navbar on %s page",
+    "render Navbar on every page",
     (route) => {
       const router = createMemoryRouter(routes, {
         initialEntries: [route],
