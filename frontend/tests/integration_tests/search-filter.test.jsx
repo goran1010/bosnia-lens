@@ -12,7 +12,9 @@ describe("Search and Filter Tests", () => {
     });
     render(<RouterProvider router={router} />);
 
-    const searchInput = screen.getByLabelText(/Postal Code or Municipality/i);
+    const searchInput = await screen.findByLabelText(
+      /Postal Code or Municipality/i
+    );
     expect(searchInput).toBeInTheDocument();
 
     await user.type(searchInput, "Sarajevo");

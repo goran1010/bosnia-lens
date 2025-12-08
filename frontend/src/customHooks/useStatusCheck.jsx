@@ -4,16 +4,22 @@ import checkStatusRefreshToken from "../utils/checkLogin/checkLoginRefreshToken.
 
 export default function useStatusCheck(userData, setUserData, setLoading) {
   useEffect(() => {
+    let isMounted = true;
+
     async function checkLogin() {
       try {
         const response = await checkStatusAccessToken(userData);
         const result = await response.json();
+
+        if (!isMounted) return;
 
         if (!response.ok) {
           console.warn(result.error);
 
           const refreshResponse = await checkStatusRefreshToken();
           const refreshResult = await refreshResponse.json();
+
+          if (!isMounted) return;
 
           if (!refreshResponse.ok) {
             return console.warn(refreshResult.error);
@@ -32,11 +38,17 @@ export default function useStatusCheck(userData, setUserData, setLoading) {
       } catch (err) {
         console.error(err);
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     }
 
     checkLogin();
+
+    return () => {
+      isMounted = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }
