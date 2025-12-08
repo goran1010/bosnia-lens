@@ -1,3 +1,7 @@
 export default function Universities() {
-  return <>Universities</>;
+  return (
+    <>
+      <h1>Universities Page</h1>
+    </>
+  );
 }
