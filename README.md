@@ -53,42 +53,31 @@ npm run install:all
 
 Set up environment variables:
 
-**Backend environment variables** - Create `/backend/.env` with:
+The repository includes example environment files for both services. Copy them and fill in real values before running the app:
 
-```env
-# Database Configuration
-DATABASE_URL="postgresql://username:password@localhost:5432/bosnia_lens"
-TEST_DATABASE_URL="postgresql://username:password@localhost:5432/bosnia_lens_test"
+- Backend: copy `backend/.env.example` to `backend/.env` and edit values (database URLs, JWT secrets, email API key, etc.).
 
-# JWT Secret Keys
-SECRET="your-jwt-secret-key-here"
-ACCESS_TOKEN_SECRET="your-access-token-secret-here"
-REFRESH_TOKEN_SECRET="your-refresh-token-secret-here"
+  ```bash
+  cp backend/.env.example backend/.env
+  # edit backend/.env
+  ```
 
-# Email Service Configuration (for confirmation emails)
-RESEND_API_KEY="your-resend-api-key-here"
+- Frontend: copy `frontend/.env.example` to `frontend/.env` and update `VITE_BACKEND_URL` if needed.
 
-# Application Configuration
-PORT=3000
-NODE_ENV="development"
-FRONTEND_URL="http://localhost:5173"
-URL="http://localhost:3000"
-
-# CORS Configuration
-CORS_ORIGIN="http://localhost:5173"
-```
-
-**Frontend environment variables** (optional) - Create `/frontend/.env` with:
-
-```env
-VITE_BACKEND_URL="http://localhost:3000"
-```
+  ```bash
+  cp frontend/.env.example frontend/.env
+  # edit frontend/.env (optional)
+  ```
 
 Initialize the database and run migrations:
 
 ```bash
 cd backend
-npx prisma migrate dev
+# run existing migrations
+npx prisma migrate deploy
+
+# generate the Prisma client
+npx prisma generate
 ```
 
 End with running the development servers:
