@@ -9,7 +9,7 @@
 Please check all items to confirm you understand the requirements. -->
 
 - [ ] I have read and followed the [CONTRIBUTING.md](../CONTRIBUTING.md) guidelines
-- [ ] The `Because` section summarizes the reason for this PR
+- [ ] The `Description` section summarizes the reason for this PR
 - [ ] The `This PR` section has a bullet point list describing the changes in this PR
 - [ ] If this PR addresses an open issue, it is linked in the `Issue` section
 
@@ -27,7 +27,7 @@ Please check the options that are relevant. -->
 - [ ] Test addition or update
 - [ ] Data contribution/update
 
-## Changes made
+## This PR
 <!--
 - List the main changes made in this PR
 - Be specific about what was added, modified, or removed
