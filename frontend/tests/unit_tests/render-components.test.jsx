@@ -1,18 +1,19 @@
 import { test, describe, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import Home from "../../src/components/Home";
+import Home from "../../src/components/Home/Home";
 import Holidays from "../../src/components/Holidays";
-import PostalCodes from "../../src/components/PostalCodes";
+import PostalCodes from "../../src/components/PostalCodes/PostalCodes";
 import Universities from "../../src/components/Universities";
 import Footer from "../../src/components/Footer";
-import Navbar from "../../src/components/Navbar";
+import Navbar from "../../src/components/Navbar/Navbar";
 import { MemoryRouter } from "react-router-dom";
 import ErrorPage from "../../src/components/ErrorPage";
+import UserDataContext from "../../src/utils/UserDataContext";
 
 describe("Render Components", () => {
   test("Home component", () => {
     render(<Home />);
-    const linkElement = screen.getByText(/Welcome to Bosnia Lens/i);
+    const linkElement = screen.getByText(/Bosnia Lens/i);
     expect(linkElement).toBeInTheDocument();
   });
 
@@ -23,7 +24,11 @@ describe("Render Components", () => {
   });
 
   test("PostalCodes component", () => {
-    render(<PostalCodes />);
+    render(
+      <UserDataContext value={{ message: [], setMessage: () => {} }}>
+        <PostalCodes />
+      </UserDataContext>
+    );
     const linkElement = screen.getByText(/Postal Code or Municipality/i);
     expect(linkElement).toBeInTheDocument();
   });
@@ -41,9 +46,12 @@ describe("Render Components", () => {
   });
 
   test("Navbar component", () => {
+    const userData = { username: "testuser", setUserData: () => {} };
     render(
       <MemoryRouter>
-        <Navbar />
+        <UserDataContext value={{ userData }}>
+          <Navbar />
+        </UserDataContext>
       </MemoryRouter>
     );
     const home = screen.getByText(/Home/i);
@@ -62,7 +70,7 @@ describe("Render Components", () => {
         <ErrorPage />
       </MemoryRouter>
     );
-    const linkElement = screen.getByText(/This is a custom 404 error page./i);
+    const linkElement = screen.getByText(/There is nothing here, sorry./i);
     expect(linkElement).toBeInTheDocument();
   });
 });
