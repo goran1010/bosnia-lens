@@ -22,10 +22,10 @@ Please check the options that are relevant. -->
 - [ ] New feature (non-breaking change which adds functionality)
 - [ ] New feature with breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] Documentation update
-- [ ] Data contribution/update
-- [ ] Performance improvement
+- [ ] Chore (maintenance or other changes that don't modify src or test files)
 - [ ] Code refactoring
 - [ ] Test addition or update
+- [ ] Data contribution/update
 
 ## Changes made
 <!--
