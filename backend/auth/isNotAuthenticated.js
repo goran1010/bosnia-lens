@@ -16,6 +16,6 @@ export default function isNotAuthenticated(req, res, next) {
     if (err) {
       return next();
     }
-    return res.status(403).json({ error: "Already logged in" });
+    return res.status(403).json({ error: "You shouldn't be logged in" });
   });
 }

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import checkStatusAccessToken from "../utils/checkLogin/checkLoginAccessToken.js";
-import checkStatusRefreshToken from "../utils/checkLogin/checkLoginRefreshToken.js";
+import checkStatusAccessToken from "../utils/checkLogin/checkStatusAccessToken.js";
+import checkStatusRefreshToken from "../utils/checkLogin/checkStatusRefreshToken.js";
 
 export default function useStatusCheck(userData, setUserData, setLoading) {
   useEffect(() => {

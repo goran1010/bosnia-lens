@@ -19,7 +19,7 @@ usersRouter.post(
   usersController.login,
 );
 
-usersRouter.post(
+usersRouter.get(
   "/refresh-token",
   isNotAuthenticated,
   usersController.refreshToken,

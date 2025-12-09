@@ -8,7 +8,7 @@ const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 
 export function me(req, res) {
-  res.json({ data: { accessToken: req.token } });
+  res.json({ message: "User is authenticated" });
 }
 
 export async function githubLogin(req, res) {
@@ -75,8 +75,8 @@ export async function githubCallback(req, res) {
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    sameSite: "none",
+    secure: true,
     maxAge: 30 * 24 * 60 * 60 * 1000,
   });
 
