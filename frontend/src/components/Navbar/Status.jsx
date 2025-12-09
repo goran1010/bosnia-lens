@@ -12,13 +12,16 @@ export default function Status() {
         mode: "cors",
         method: "POST",
         credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userData?.accessToken}`,
+        },
       });
 
       const result = await response.json();
       if (!response.ok) {
-        console.warn(result.error);
+        return console.warn(result.error);
       }
-
       setUserData(null);
     } catch (err) {
       console.error(err);
