@@ -1,10 +1,10 @@
-export default async function checkStatusRefreshToken() {
+export default async function checkStatusAccessToken() {
   try {
     const currentURL = import.meta.env.VITE_BACKEND_URL;
 
-    return await fetch(`${currentURL}/users/refresh-token`, {
+    return await fetch(`${currentURL}/auth/me`, {
       mode: "cors",
-      method: "POST",
+      method: "GET",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",

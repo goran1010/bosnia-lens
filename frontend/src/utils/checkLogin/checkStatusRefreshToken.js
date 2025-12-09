@@ -1,14 +1,13 @@
-export default async function checkStatusAccessToken(userData) {
+export default async function checkStatusRefreshToken() {
   try {
     const currentURL = import.meta.env.VITE_BACKEND_URL;
 
-    return await fetch(`${currentURL}/auth/me`, {
+    return await fetch(`${currentURL}/users/refresh-token`, {
       mode: "cors",
       method: "GET",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `JWT ${userData?.accessToken}`,
       },
     });
   } catch (err) {
