@@ -95,5 +95,14 @@ describe("SignUp Form Validation", () => {
     await user.type(passwordField, "word");
     expect(passwordField).toHaveValue("password");
     expect(passwordField.validationMessage).toBe("");
+
+    const confirmPasswordField = screen.getByLabelText(/Confirm Password/i);
+    await user.type(confirmPasswordField, "different");
+    expect(confirmPasswordField).toHaveValue("different");
+    expect(confirmPasswordField.validationMessage).toMatch(/must match/i);
+    await user.clear(confirmPasswordField);
+    await user.type(confirmPasswordField, "password");
+    expect(confirmPasswordField).toHaveValue("password");
+    expect(confirmPasswordField.validationMessage).toBe("");
   });
 });
