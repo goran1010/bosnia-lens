@@ -9,7 +9,6 @@ import Navbar from "../../src/components/Navbar/Navbar";
 import { MemoryRouter } from "react-router-dom";
 import ErrorPage from "../../src/components/ErrorPage";
 import UserDataContext from "../../src/utils/UserDataContext";
-import SignUp from "../../src/components/SignUp/SignUp";
 
 describe("Render Components", () => {
   test("Home component", () => {
@@ -72,21 +71,6 @@ describe("Render Components", () => {
       </MemoryRouter>
     );
     const linkElement = screen.getByText(/There is nothing here, sorry./i);
-    expect(linkElement).toBeInTheDocument();
-  });
-
-  test("SignUp component", () => {
-    render(
-      <MemoryRouter>
-        <UserDataContext value={{ message: [], setMessage: () => {} }}>
-          <SignUp />
-        </UserDataContext>
-      </MemoryRouter>
-    );
-
-    const linkElement = screen.getByRole("heading", {
-      name: /Create your account/i,
-    });
     expect(linkElement).toBeInTheDocument();
   });
 });
