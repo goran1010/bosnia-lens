@@ -105,4 +105,63 @@ describe("SignUp Form Validation", () => {
     expect(confirmPasswordField).toHaveValue("password");
     expect(confirmPasswordField.validationMessage).toBe("");
   });
+
+  test("shows validation messages for invalid input when clicking Create button", async () => {
+    const createButton = screen.getByRole("button", { name: /Create/i });
+
+    const user = userEvent.setup();
+    const usernameField = screen.getByLabelText(/Username/i);
+    await user.type(usernameField, "test");
+    expect(usernameField).toHaveValue("test");
+    await user.click(createButton);
+    expect(usernameField.validationMessage).toMatch(/at least 6 characters/i);
+    await user.type(usernameField, "user");
+    expect(usernameField).toHaveValue("testuser");
+    expect(usernameField.validationMessage).toBe("");
+
+    const emailField = screen.getByLabelText(/Email/i);
+    await user.type(emailField, "te");
+    expect(emailField).toHaveValue("te");
+    await user.click(createButton);
+    expect(emailField.validationMessage).toMatch(
+      /Email must have at least 3 characters/i
+    );
+    await user.type(emailField, "st");
+    expect(emailField).toHaveValue("test");
+    await user.click(createButton);
+    expect(emailField.validationMessage).toMatch(
+      /Please include an '@' in the email address. 'test' is missing an '@'./i
+    );
+    await user.type(emailField, "@");
+    expect(emailField).toHaveValue("test@");
+    await user.click(createButton);
+    expect(emailField.validationMessage).toMatch(
+      /Please enter a part following '@'. test@ is incomplete./i
+    );
+    await user.type(emailField, "mail");
+    expect(emailField).toHaveValue("test@mail");
+    await user.click(createButton);
+    expect(emailField.validationMessage).toBe("");
+
+    const passwordField = screen.getByLabelText("Password");
+    await user.type(passwordField, "pass");
+    expect(passwordField).toHaveValue("pass");
+    await user.click(createButton);
+    expect(passwordField.validationMessage).toMatch(/at least 6 characters/i);
+    await user.type(passwordField, "word");
+    expect(passwordField).toHaveValue("password");
+    await user.click(createButton);
+    expect(passwordField.validationMessage).toBe("");
+
+    const confirmPasswordField = screen.getByLabelText(/Confirm Password/i);
+    await user.type(confirmPasswordField, "different");
+    expect(confirmPasswordField).toHaveValue("different");
+    await user.click(createButton);
+    expect(confirmPasswordField.validationMessage).toMatch(/must match/i);
+    await user.clear(confirmPasswordField);
+    await user.type(confirmPasswordField, "password");
+    expect(confirmPasswordField).toHaveValue("password");
+    await user.click(createButton);
+    expect(confirmPasswordField.validationMessage).toBe("");
+  });
 });
