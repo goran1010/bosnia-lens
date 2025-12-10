@@ -87,5 +87,13 @@ describe("SignUp Form Validation", () => {
     await user.type(emailField, "mail");
     expect(emailField).toHaveValue("test@mail");
     expect(emailField.validationMessage).toBe("");
+
+    const passwordField = screen.getByLabelText("Password");
+    await user.type(passwordField, "pass");
+    expect(passwordField).toHaveValue("pass");
+    expect(passwordField.validationMessage).toMatch(/at least 6 characters/i);
+    await user.type(passwordField, "word");
+    expect(passwordField).toHaveValue("password");
+    expect(passwordField.validationMessage).toBe("");
   });
 });
