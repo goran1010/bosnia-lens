@@ -42,7 +42,7 @@ describe("Render SignUp Component", () => {
   });
 });
 
-describe("User interaction with SignUp Component", () => {
+describe("User typing in input fields in SignUp Component", () => {
   test("allows user to fill out and submit the SignUp form", async () => {
     const formElements = createFormElements();
     const user = userEvent.setup();
@@ -57,18 +57,27 @@ describe("User interaction with SignUp Component", () => {
     expect(formElements.passwordField).toHaveValue("Password123!");
     expect(formElements.confirmPasswordField).toHaveValue("Password123!");
   });
+});
 
+describe("SignUp Form Validation", () => {
   test("shows validation messages for invalid input", async () => {
     const user = userEvent.setup();
-
-    const button = screen.getByRole("button", { name: /Create/i });
     const usernameField = screen.getByLabelText(/Username/i);
-
     await user.type(usernameField, "test");
-    await user.click(button);
-
     expect(usernameField).toHaveValue("test");
     // JSDOM doesn't render browser validation UI so check the input's validationMessage
     expect(usernameField.validationMessage).toMatch(/at least 6 characters/i);
+
+    const emailField = screen.getByLabelText(/Email/i);
+    await user.type(emailField, "te");
+    expect(emailField).toHaveValue("te");
+    expect(emailField.validationMessage).toMatch(
+      /Email must have at least 3 characters/i
+    );
+    await user.type(emailField, "st");
+    expect(emailField).toHaveValue("test");
+    expect(emailField.validationMessage).toMatch(
+      /Please include an '@' in the email address. 'test' is missing an '@'./i
+    );
   });
 });
