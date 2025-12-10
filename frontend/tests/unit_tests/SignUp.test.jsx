@@ -79,5 +79,13 @@ describe("SignUp Form Validation", () => {
     expect(emailField.validationMessage).toMatch(
       /Please include an '@' in the email address. 'test' is missing an '@'./i
     );
+    await user.type(emailField, "@");
+    expect(emailField).toHaveValue("test@");
+    expect(emailField.validationMessage).toMatch(
+      /Please enter a part following '@'. test@ is incomplete./i
+    );
+    await user.type(emailField, "mail");
+    expect(emailField).toHaveValue("test@mail");
+    expect(emailField.validationMessage).toBe("");
   });
 });
