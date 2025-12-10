@@ -18,15 +18,16 @@ export default function checkFormValidityClick(
       "Email must have at least 3 characters"
     );
     emailInput.current.reportValidity();
-  } else emailInput.current.setCustomValidity("");
-
-  if (emailValue.length >= 3) {
-    if (!emailValue.includes("@")) {
-      emailInput.current.setCustomValidity(
-        `Please include an '@' in the email address. '${emailValue}' is missing an '@'.`
-      );
-      emailInput.current.reportValidity();
-    }
+  } else if (!emailValue.includes("@")) {
+    emailInput.current.setCustomValidity(
+      `Please include an '@' in the email address. '${emailValue}' is missing an '@'.`
+    );
+    emailInput.current.reportValidity();
+  } else if (emailValue.split("@")[1]?.length === 0) {
+    emailInput.current.setCustomValidity(
+      `Please enter a part following '@'. ${emailValue} is incomplete.`
+    );
+    emailInput.current.reportValidity();
   } else {
     emailInput.current.setCustomValidity("");
   }
