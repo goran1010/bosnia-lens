@@ -73,4 +73,15 @@ describe("Render Components", () => {
     const linkElement = screen.getByText(/There is nothing here, sorry./i);
     expect(linkElement).toBeInTheDocument();
   });
+
+  test("SignUp component", () => {
+    render(
+      <MemoryRouter>
+        <ErrorPage />
+      </MemoryRouter>
+    );
+
+    const linkElement = screen.getByText(/There is nothing here, sorry./i);
+    expect(linkElement).toBeInTheDocument();
+  });
 });
