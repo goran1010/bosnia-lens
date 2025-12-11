@@ -15,14 +15,14 @@ beforeEach(async () => {
     const [message, setMessage] = useState([]);
 
     return (
-      <UserDataContext.Provider value={{ message, setMessage }}>
+      <UserDataContext value={{ message, setMessage }}>
         <MemoryRouter initialEntries={["/signup"]}>
           <Routes>
             <Route path="/signup" element={<SignUp />} />
             <Route path="/login" element={<LogIn />} />
           </Routes>
         </MemoryRouter>
-      </UserDataContext.Provider>
+      </UserDataContext>
     );
   }
 
