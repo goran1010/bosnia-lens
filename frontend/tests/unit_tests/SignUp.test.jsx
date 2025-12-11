@@ -1,11 +1,10 @@
 import { test, describe, expect, beforeEach, vi } from "vitest";
 import SignUp from "../../src/components/SignUp/SignUp";
 import { render, screen } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Routes, Route } from "react-router-dom";
 import UserDataContext from "../../src/utils/UserDataContext";
 import { userEvent } from "@testing-library/user-event";
 import { useState } from "react";
-import { Routes, Route } from "react-router-dom";
 import LogIn from "../../src/components/LogIn/LogIn";
 
 const user = userEvent.setup();
