@@ -1,19 +1,10 @@
-import { test, describe, expect, beforeEach } from "vitest";
+import { test, describe, expect, beforeEach, vi } from "vitest";
 import SignUp from "../../src/components/SignUp/SignUp";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import UserDataContext from "../../src/utils/UserDataContext";
 import { userEvent } from "@testing-library/user-event";
-
-beforeEach(() => {
-  render(
-    <MemoryRouter>
-      <UserDataContext value={{ message: [], setMessage: () => {} }}>
-        <SignUp />
-      </UserDataContext>
-    </MemoryRouter>
-  );
-});
+import { useState } from "react";
 
 function createFormElements() {
   return {
@@ -26,6 +17,16 @@ function createFormElements() {
 }
 
 describe("Render SignUp Component", () => {
+  beforeEach(async () => {
+    render(
+      <MemoryRouter>
+        <UserDataContext value={{ message: [], setMessage: () => {} }}>
+          <SignUp />
+        </UserDataContext>
+      </MemoryRouter>
+    );
+  });
+
   test("SignUp component heading", () => {
     const linkElement = screen.getByRole("heading", {
       name: /Create your account/i,
@@ -43,6 +44,16 @@ describe("Render SignUp Component", () => {
 });
 
 describe("User typing in input fields in SignUp Component", () => {
+  beforeEach(async () => {
+    render(
+      <MemoryRouter>
+        <UserDataContext value={{ message: [], setMessage: () => {} }}>
+          <SignUp />
+        </UserDataContext>
+      </MemoryRouter>
+    );
+  });
+
   test("allows user to fill out and submit the SignUp form", async () => {
     const formElements = createFormElements();
     const user = userEvent.setup();
@@ -60,6 +71,16 @@ describe("User typing in input fields in SignUp Component", () => {
 });
 
 describe("SignUp Form Validation", () => {
+  beforeEach(async () => {
+    render(
+      <MemoryRouter>
+        <UserDataContext value={{ message: [], setMessage: () => {} }}>
+          <SignUp />
+        </UserDataContext>
+      </MemoryRouter>
+    );
+  });
+
   test("shows validation messages for invalid input", async () => {
     const user = userEvent.setup();
     const usernameField = screen.getByLabelText(/Username/i);
@@ -163,5 +184,57 @@ describe("SignUp Form Validation", () => {
     expect(confirmPasswordField).toHaveValue("password");
     await user.click(createButton);
     expect(confirmPasswordField.validationMessage).toBe("");
+  });
+});
+
+describe("SignUp Form Submit", () => {
+  beforeEach(async () => {
+    function Wrapper() {
+      const [message, setMessage] = useState([]);
+
+      return (
+        <MemoryRouter>
+          <UserDataContext.Provider value={{ message, setMessage }}>
+            <SignUp />
+          </UserDataContext.Provider>
+        </MemoryRouter>
+      );
+    }
+
+    render(<Wrapper />);
+  });
+
+  test("Shows error message after clicking Create button and fetching with existing username/email", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
+      ok: false,
+      status: 400,
+      json: async () => ({
+        error: "Validation failed",
+        details: [
+          {
+            msg: "Username already in use",
+          },
+          { msg: "Email already in use" },
+        ],
+      }),
+    });
+
+    const formElements = createFormElements();
+    const user = userEvent.setup();
+
+    await user.type(formElements.usernameField, "existing_user");
+    await user.type(formElements.emailField, "existingemail@mail.com");
+    await user.type(formElements.passwordField, "Password123!");
+    await user.type(formElements.confirmPasswordField, "Password123!");
+
+    await user.click(formElements.signUpButton);
+
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(
+      await screen.findByText(/Username already in use/i)
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByText(/Email already in use/i)
+    ).toBeInTheDocument();
   });
 });
