@@ -13,10 +13,10 @@ vi.mock("../../src/customHooks/useWeatherCheck", () => ({
   },
 }));
 
-describe("Navigation when loading a route", () => {
-  test("render Error Page when visiting non-existent route", () => {
+describe("Loading components when visiting an address", () => {
+  test("render Error Page when visiting non-existent address", () => {
     const router = createMemoryRouter(routes, {
-      initialEntries: ["/non-existent-route"],
+      initialEntries: ["/non-existent-address"],
     });
     render(<RouterProvider router={router} />);
 
@@ -24,7 +24,7 @@ describe("Navigation when loading a route", () => {
     expect(linkElement).toBeInTheDocument();
   });
 
-  test("navigate to Universities page", () => {
+  test("visit universities page", () => {
     const router = createMemoryRouter(routes, {
       initialEntries: ["/universities"],
     });
@@ -34,7 +34,7 @@ describe("Navigation when loading a route", () => {
     expect(linkElements[0]).toBeInTheDocument();
   });
 
-  test("navigate to Postal Codes page", async () => {
+  test("visit postal codes page", async () => {
     const router = createMemoryRouter(routes, {
       initialEntries: ["/postal-codes"],
     });
@@ -48,7 +48,7 @@ describe("Navigation when loading a route", () => {
     expect(linkElement).toBeInTheDocument();
   });
 
-  test("navigate to Holidays page", () => {
+  test("visit holidays page", () => {
     const router = createMemoryRouter(routes, {
       initialEntries: ["/holidays"],
     });
@@ -58,7 +58,7 @@ describe("Navigation when loading a route", () => {
     expect(linkElements[0]).toBeInTheDocument();
   });
 
-  test("navigate to Home page", () => {
+  test("visit home page", () => {
     const router = createMemoryRouter(routes, {
       initialEntries: ["/"],
     });
@@ -76,8 +76,10 @@ describe("Navigation when loading a route", () => {
       });
       render(<RouterProvider router={router} />);
 
-      const footer = screen.getByText(/goran1010jovic@gmail.com/i);
-      expect(footer).toBeInTheDocument();
+      const footerEmail = screen.getByText(/goran1010jovic@gmail.com/i);
+      const footerAuthor = screen.getByText(/Goran Jović/i);
+      expect(footerEmail).toBeInTheDocument();
+      expect(footerAuthor).toBeInTheDocument();
     }
   );
 
