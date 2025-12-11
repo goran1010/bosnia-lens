@@ -56,13 +56,13 @@ describe("Render LogIn Component", () => {
 
 describe("User typing in input fields in LogIn Component", () => {
   test("displays user input", async () => {
-    const formElements = createFormElements();
+    const { passwordField, usernameField } = createFormElements();
 
-    await user.type(formElements.usernameField, "testuser");
-    await user.type(formElements.passwordField, "Password123!");
+    await user.type(usernameField, "testuser");
+    await user.type(passwordField, "Password123!");
 
-    expect(formElements.usernameField).toHaveValue("testuser");
-    expect(formElements.passwordField).toHaveValue("Password123!");
+    expect(usernameField).toHaveValue("testuser");
+    expect(passwordField).toHaveValue("Password123!");
   });
 });
 
@@ -97,7 +97,6 @@ describe("LogIn for validation on button click", () => {
     await user.type(usernameField, "test");
     await user.click(logInButton);
     expect(usernameField).toHaveValue("test");
-    // JSDOM doesn't render browser validation UI so check the input's validationMessage
     expect(usernameField.validationMessage).toMatch(/at least 6 characters/i);
     await user.type(usernameField, "user");
     await user.click(logInButton);
