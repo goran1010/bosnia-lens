@@ -34,7 +34,7 @@ describe("Render SignUp Component", () => {
     expect(linkElement).toBeInTheDocument();
   });
 
-  test("renders SignUp form fields", () => {
+  test("SignUp form fields", () => {
     const formElements = createFormElements();
 
     for (let element in formElements) {
@@ -54,7 +54,7 @@ describe("User typing in input fields in SignUp Component", () => {
     );
   });
 
-  test("allows user to fill out and submit the SignUp form", async () => {
+  test("displays user input", async () => {
     const formElements = createFormElements();
     const user = userEvent.setup();
 
@@ -204,7 +204,7 @@ describe("SignUp Form Submit", () => {
     render(<Wrapper />);
   });
 
-  test("Shows error message after clicking Create button and fetching with existing username/email", async () => {
+  test("Shows error message after clicking Create when fetching with existing username/email", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
       ok: false,
       status: 400,
