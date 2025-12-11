@@ -5,6 +5,8 @@ import { MemoryRouter } from "react-router-dom";
 import UserDataContext from "../../src/utils/UserDataContext";
 import { userEvent } from "@testing-library/user-event";
 import { useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import LogIn from "../../src/components/LogIn/LogIn";
 
 const user = userEvent.setup();
 
@@ -13,11 +15,14 @@ beforeEach(async () => {
     const [message, setMessage] = useState([]);
 
     return (
-      <MemoryRouter>
-        <UserDataContext.Provider value={{ message, setMessage }}>
-          <SignUp />
-        </UserDataContext.Provider>
-      </MemoryRouter>
+      <UserDataContext.Provider value={{ message, setMessage }}>
+        <MemoryRouter initialEntries={["/signup"]}>
+          <Routes>
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/login" element={<LogIn />} />
+          </Routes>
+        </MemoryRouter>
+      </UserDataContext.Provider>
     );
   }
 
@@ -231,6 +236,31 @@ describe("SignUp Form Submit", () => {
     ).toBeInTheDocument();
     expect(
       await screen.findByText(/Email already in use/i)
+    ).toBeInTheDocument();
+  });
+
+  test("Redirects to LogIn on successful form submit", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: async () => ({
+        message: "Registration successful! Check your email.",
+      }),
+    });
+
+    const formElements = createFormElements();
+
+    await user.type(formElements.usernameField, "new_user");
+    await user.type(formElements.emailField, "newemail@mail.com");
+    await user.type(formElements.passwordField, "Password123!");
+    await user.type(formElements.confirmPasswordField, "Password123!");
+
+    await user.click(formElements.signUpButton);
+
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(await screen.findByText(/Please log in/i)).toBeInTheDocument();
+    expect(
+      await screen.findByText(/Registration successful! Check your email./i)
     ).toBeInTheDocument();
   });
 });
