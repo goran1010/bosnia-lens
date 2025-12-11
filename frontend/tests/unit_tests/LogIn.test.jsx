@@ -5,6 +5,8 @@ import userEvent from "@testing-library/user-event";
 import UserDataContext from "../../src/utils/UserDataContext";
 import LogIn from "../../src/components/LogIn/LogIn";
 
+const user = userEvent.setup();
+
 function createFormElements() {
   return {
     usernameField: screen.getByLabelText(/Username/i),
@@ -43,7 +45,6 @@ describe("Render LogIn Component", () => {
 describe("User typing in input fields in LogIn Component", () => {
   test("displays user input", async () => {
     const formElements = createFormElements();
-    const user = userEvent.setup();
 
     await user.type(formElements.usernameField, "testuser");
     await user.type(formElements.passwordField, "Password123!");
@@ -53,9 +54,8 @@ describe("User typing in input fields in LogIn Component", () => {
   });
 });
 
-describe("LogIn form validation", () => {
-  test("shows validation messages for invalid input", async () => {
-    const user = userEvent.setup();
+describe("LogIn form validation on input", () => {
+  test("shows validation messages for invalid username", async () => {
     const usernameField = screen.getByLabelText(/Username/i);
     await user.type(usernameField, "test");
     expect(usernameField).toHaveValue("test");
@@ -64,7 +64,8 @@ describe("LogIn form validation", () => {
     await user.type(usernameField, "user");
     expect(usernameField).toHaveValue("testuser");
     expect(usernameField.validationMessage).toBe("");
-
+  });
+  test("shows validation messages for invalid password", async () => {
     const passwordField = screen.getByLabelText("Password");
     await user.type(passwordField, "pass");
     expect(passwordField).toHaveValue("pass");
@@ -73,11 +74,11 @@ describe("LogIn form validation", () => {
     expect(passwordField).toHaveValue("password");
     expect(passwordField.validationMessage).toBe("");
   });
+});
 
-  test("shows validation messages for invalid input on Login button click", async () => {
+describe("LogIn for validation on button click", () => {
+  test("shows validation messages for invalid username input", async () => {
     const logInButton = screen.getByRole("button", { name: /Log in/i });
-
-    const user = userEvent.setup();
     const usernameField = screen.getByLabelText(/Username/i);
     await user.type(usernameField, "test");
     await user.click(logInButton);
@@ -88,7 +89,10 @@ describe("LogIn form validation", () => {
     await user.click(logInButton);
     expect(usernameField).toHaveValue("testuser");
     expect(usernameField.validationMessage).toBe("");
+  });
 
+  test("shows validation messages for invalid password input", async () => {
+    const logInButton = screen.getByRole("button", { name: /Log in/i });
     const passwordField = screen.getByLabelText("Password");
     await user.type(passwordField, "pass");
     await user.click(logInButton);
