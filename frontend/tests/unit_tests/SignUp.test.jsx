@@ -6,6 +6,24 @@ import UserDataContext from "../../src/utils/UserDataContext";
 import { userEvent } from "@testing-library/user-event";
 import { useState } from "react";
 
+const user = userEvent.setup();
+
+beforeEach(async () => {
+  function Wrapper() {
+    const [message, setMessage] = useState([]);
+
+    return (
+      <MemoryRouter>
+        <UserDataContext.Provider value={{ message, setMessage }}>
+          <SignUp />
+        </UserDataContext.Provider>
+      </MemoryRouter>
+    );
+  }
+
+  render(<Wrapper />);
+});
+
 function createFormElements() {
   return {
     usernameField: screen.getByLabelText(/Username/i),
@@ -17,16 +35,6 @@ function createFormElements() {
 }
 
 describe("Render SignUp Component", () => {
-  beforeEach(async () => {
-    render(
-      <MemoryRouter>
-        <UserDataContext value={{ message: [], setMessage: () => {} }}>
-          <SignUp />
-        </UserDataContext>
-      </MemoryRouter>
-    );
-  });
-
   test("SignUp component heading", () => {
     const linkElement = screen.getByRole("heading", {
       name: /Create your account/i,
@@ -44,19 +52,8 @@ describe("Render SignUp Component", () => {
 });
 
 describe("User typing in input fields in SignUp Component", () => {
-  beforeEach(async () => {
-    render(
-      <MemoryRouter>
-        <UserDataContext value={{ message: [], setMessage: () => {} }}>
-          <SignUp />
-        </UserDataContext>
-      </MemoryRouter>
-    );
-  });
-
   test("displays user input", async () => {
     const formElements = createFormElements();
-    const user = userEvent.setup();
 
     await user.type(formElements.usernameField, "testuser");
     await user.type(formElements.emailField, "testuser@example.com");
@@ -70,25 +67,20 @@ describe("User typing in input fields in SignUp Component", () => {
   });
 });
 
-describe("SignUp Form Validation", () => {
-  beforeEach(async () => {
-    render(
-      <MemoryRouter>
-        <UserDataContext value={{ message: [], setMessage: () => {} }}>
-          <SignUp />
-        </UserDataContext>
-      </MemoryRouter>
-    );
-  });
-
-  test("shows validation messages for invalid input", async () => {
-    const user = userEvent.setup();
+describe("SignUp Form Validation on input", () => {
+  test("shows validation messages for username input", async () => {
     const usernameField = screen.getByLabelText(/Username/i);
     await user.type(usernameField, "test");
     expect(usernameField).toHaveValue("test");
     // JSDOM doesn't render browser validation UI so check the input's validationMessage
     expect(usernameField.validationMessage).toMatch(/at least 6 characters/i);
 
+    await user.type(usernameField, "user");
+    expect(usernameField).toHaveValue("testuser");
+    expect(usernameField.validationMessage).toBe("");
+  });
+
+  test("shows validation messages for email input", async () => {
     const emailField = screen.getByLabelText(/Email/i);
     await user.type(emailField, "te");
     expect(emailField).toHaveValue("te");
@@ -108,7 +100,9 @@ describe("SignUp Form Validation", () => {
     await user.type(emailField, "mail");
     expect(emailField).toHaveValue("test@mail");
     expect(emailField.validationMessage).toBe("");
+  });
 
+  test("shows validation messages for password input", async () => {
     const passwordField = screen.getByLabelText("Password");
     await user.type(passwordField, "pass");
     expect(passwordField).toHaveValue("pass");
@@ -116,6 +110,12 @@ describe("SignUp Form Validation", () => {
     await user.type(passwordField, "word");
     expect(passwordField).toHaveValue("password");
     expect(passwordField.validationMessage).toBe("");
+  });
+
+  test("shows validation messages for confirm password input", async () => {
+    const passwordField = screen.getByLabelText("Password");
+    await user.type(passwordField, "password");
+    expect(passwordField).toHaveValue("password");
 
     const confirmPasswordField = screen.getByLabelText(/Confirm Password/i);
     await user.type(confirmPasswordField, "different");
@@ -126,11 +126,11 @@ describe("SignUp Form Validation", () => {
     expect(confirmPasswordField).toHaveValue("password");
     expect(confirmPasswordField.validationMessage).toBe("");
   });
+});
 
+describe("SignUp Form Validation on Create button click", () => {
   test("shows validation messages for invalid input when clicking Create button", async () => {
     const createButton = screen.getByRole("button", { name: /Create/i });
-
-    const user = userEvent.setup();
     const usernameField = screen.getByLabelText(/Username/i);
     await user.type(usernameField, "test");
     expect(usernameField).toHaveValue("test");
@@ -139,7 +139,10 @@ describe("SignUp Form Validation", () => {
     await user.type(usernameField, "user");
     expect(usernameField).toHaveValue("testuser");
     expect(usernameField.validationMessage).toBe("");
+  });
 
+  test("shows validation messages for invalid input on Create button click", async () => {
+    const createButton = screen.getByRole("button", { name: /Create/i });
     const emailField = screen.getByLabelText(/Email/i);
     await user.type(emailField, "te");
     expect(emailField).toHaveValue("te");
@@ -163,7 +166,10 @@ describe("SignUp Form Validation", () => {
     expect(emailField).toHaveValue("test@mail");
     await user.click(createButton);
     expect(emailField.validationMessage).toBe("");
+  });
 
+  test("shows validation messages for password input", async () => {
+    const createButton = screen.getByRole("button", { name: /Create/i });
     const passwordField = screen.getByLabelText("Password");
     await user.type(passwordField, "pass");
     expect(passwordField).toHaveValue("pass");
@@ -173,7 +179,14 @@ describe("SignUp Form Validation", () => {
     expect(passwordField).toHaveValue("password");
     await user.click(createButton);
     expect(passwordField.validationMessage).toBe("");
+  });
 
+  test("shows validation messages for confirm password input", async () => {
+    const passwordField = screen.getByLabelText("Password");
+    await user.type(passwordField, "password");
+    expect(passwordField).toHaveValue("password");
+
+    const createButton = screen.getByRole("button", { name: /Create/i });
     const confirmPasswordField = screen.getByLabelText(/Confirm Password/i);
     await user.type(confirmPasswordField, "different");
     expect(confirmPasswordField).toHaveValue("different");
@@ -188,22 +201,6 @@ describe("SignUp Form Validation", () => {
 });
 
 describe("SignUp Form Submit", () => {
-  beforeEach(async () => {
-    function Wrapper() {
-      const [message, setMessage] = useState([]);
-
-      return (
-        <MemoryRouter>
-          <UserDataContext.Provider value={{ message, setMessage }}>
-            <SignUp />
-          </UserDataContext.Provider>
-        </MemoryRouter>
-      );
-    }
-
-    render(<Wrapper />);
-  });
-
   test("Shows error message after clicking Create when fetching with existing username/email", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
       ok: false,
@@ -220,7 +217,6 @@ describe("SignUp Form Submit", () => {
     });
 
     const formElements = createFormElements();
-    const user = userEvent.setup();
 
     await user.type(formElements.usernameField, "existing_user");
     await user.type(formElements.emailField, "existingemail@mail.com");
