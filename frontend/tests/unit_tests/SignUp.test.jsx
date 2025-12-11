@@ -57,23 +57,25 @@ describe("Render SignUp Component", () => {
 
 describe("User typing in input fields in SignUp Component", () => {
   test("displays user input", async () => {
-    const formElements = createFormElements();
+    const { passwordField, confirmPasswordField, emailField, usernameField } =
+      createFormElements();
 
-    await user.type(formElements.usernameField, "testuser");
-    await user.type(formElements.emailField, "testuser@example.com");
-    await user.type(formElements.passwordField, "Password123!");
-    await user.type(formElements.confirmPasswordField, "Password123!");
+    await user.type(usernameField, "testuser");
+    await user.type(emailField, "testuser@example.com");
+    await user.type(passwordField, "Password123!");
+    await user.type(confirmPasswordField, "Password123!");
 
-    expect(formElements.usernameField).toHaveValue("testuser");
-    expect(formElements.emailField).toHaveValue("testuser@example.com");
-    expect(formElements.passwordField).toHaveValue("Password123!");
-    expect(formElements.confirmPasswordField).toHaveValue("Password123!");
+    expect(usernameField).toHaveValue("testuser");
+    expect(emailField).toHaveValue("testuser@example.com");
+    expect(passwordField).toHaveValue("Password123!");
+    expect(confirmPasswordField).toHaveValue("Password123!");
   });
 });
 
 describe("SignUp Form Validation on input", () => {
   test("shows validation messages for username input", async () => {
-    const usernameField = screen.getByLabelText(/Username/i);
+    const { usernameField } = createFormElements();
+
     await user.type(usernameField, "test");
     expect(usernameField).toHaveValue("test");
     // JSDOM doesn't render browser validation UI so check the input's validationMessage
@@ -85,7 +87,8 @@ describe("SignUp Form Validation on input", () => {
   });
 
   test("shows validation messages for email input", async () => {
-    const emailField = screen.getByLabelText(/Email/i);
+    const { emailField } = createFormElements();
+
     await user.type(emailField, "te");
     expect(emailField).toHaveValue("te");
     expect(emailField.validationMessage).toMatch(
@@ -107,7 +110,8 @@ describe("SignUp Form Validation on input", () => {
   });
 
   test("shows validation messages for password input", async () => {
-    const passwordField = screen.getByLabelText("Password");
+    const { passwordField } = createFormElements();
+
     await user.type(passwordField, "pass");
     expect(passwordField).toHaveValue("pass");
     expect(passwordField.validationMessage).toMatch(/at least 6 characters/i);
@@ -117,11 +121,11 @@ describe("SignUp Form Validation on input", () => {
   });
 
   test("shows validation messages for confirm password input", async () => {
-    const passwordField = screen.getByLabelText("Password");
+    const { passwordField, confirmPasswordField } = createFormElements();
+
     await user.type(passwordField, "password");
     expect(passwordField).toHaveValue("password");
 
-    const confirmPasswordField = screen.getByLabelText(/Confirm Password/i);
     await user.type(confirmPasswordField, "different");
     expect(confirmPasswordField).toHaveValue("different");
     expect(confirmPasswordField.validationMessage).toMatch(/must match/i);
@@ -134,11 +138,11 @@ describe("SignUp Form Validation on input", () => {
 
 describe("SignUp Form Validation on Create button click", () => {
   test("shows validation messages for invalid input when clicking Create button", async () => {
-    const createButton = screen.getByRole("button", { name: /Create/i });
-    const usernameField = screen.getByLabelText(/Username/i);
+    const { usernameField, signUpButton } = createFormElements();
+
     await user.type(usernameField, "test");
     expect(usernameField).toHaveValue("test");
-    await user.click(createButton);
+    await user.click(signUpButton);
     expect(usernameField.validationMessage).toMatch(/at least 6 characters/i);
     await user.type(usernameField, "user");
     expect(usernameField).toHaveValue("testuser");
@@ -146,60 +150,60 @@ describe("SignUp Form Validation on Create button click", () => {
   });
 
   test("shows validation messages for invalid input on Create button click", async () => {
-    const createButton = screen.getByRole("button", { name: /Create/i });
-    const emailField = screen.getByLabelText(/Email/i);
+    const { signUpButton, emailField } = createFormElements();
+
     await user.type(emailField, "te");
     expect(emailField).toHaveValue("te");
-    await user.click(createButton);
+    await user.click(signUpButton);
     expect(emailField.validationMessage).toMatch(
       /Email must have at least 3 characters/i
     );
     await user.type(emailField, "st");
     expect(emailField).toHaveValue("test");
-    await user.click(createButton);
+    await user.click(signUpButton);
     expect(emailField.validationMessage).toMatch(
       /Please include an '@' in the email address. 'test' is missing an '@'./i
     );
     await user.type(emailField, "@");
     expect(emailField).toHaveValue("test@");
-    await user.click(createButton);
+    await user.click(signUpButton);
     expect(emailField.validationMessage).toMatch(
       /Please enter a part following '@'. test@ is incomplete./i
     );
     await user.type(emailField, "mail");
     expect(emailField).toHaveValue("test@mail");
-    await user.click(createButton);
+    await user.click(signUpButton);
     expect(emailField.validationMessage).toBe("");
   });
 
   test("shows validation messages for password input", async () => {
-    const createButton = screen.getByRole("button", { name: /Create/i });
-    const passwordField = screen.getByLabelText("Password");
+    const { passwordField, signUpButton } = createFormElements();
+
     await user.type(passwordField, "pass");
     expect(passwordField).toHaveValue("pass");
-    await user.click(createButton);
+    await user.click(signUpButton);
     expect(passwordField.validationMessage).toMatch(/at least 6 characters/i);
     await user.type(passwordField, "word");
     expect(passwordField).toHaveValue("password");
-    await user.click(createButton);
+    await user.click(signUpButton);
     expect(passwordField.validationMessage).toBe("");
   });
 
   test("shows validation messages for confirm password input", async () => {
-    const passwordField = screen.getByLabelText("Password");
+    const { passwordField, confirmPasswordField, signUpButton } =
+      createFormElements();
+
     await user.type(passwordField, "password");
     expect(passwordField).toHaveValue("password");
 
-    const createButton = screen.getByRole("button", { name: /Create/i });
-    const confirmPasswordField = screen.getByLabelText(/Confirm Password/i);
     await user.type(confirmPasswordField, "different");
     expect(confirmPasswordField).toHaveValue("different");
-    await user.click(createButton);
+    await user.click(signUpButton);
     expect(confirmPasswordField.validationMessage).toMatch(/must match/i);
     await user.clear(confirmPasswordField);
     await user.type(confirmPasswordField, "password");
     expect(confirmPasswordField).toHaveValue("password");
-    await user.click(createButton);
+    await user.click(signUpButton);
     expect(confirmPasswordField.validationMessage).toBe("");
   });
 });
@@ -219,15 +223,20 @@ describe("SignUp Form Submit", () => {
         ],
       }),
     });
+    const {
+      usernameField,
+      emailField,
+      passwordField,
+      confirmPasswordField,
+      signUpButton,
+    } = createFormElements();
 
-    const formElements = createFormElements();
+    await user.type(usernameField, "new_user");
+    await user.type(emailField, "newemail@mail.com");
+    await user.type(passwordField, "Password123!");
+    await user.type(confirmPasswordField, "Password123!");
 
-    await user.type(formElements.usernameField, "existing_user");
-    await user.type(formElements.emailField, "existingemail@mail.com");
-    await user.type(formElements.passwordField, "Password123!");
-    await user.type(formElements.confirmPasswordField, "Password123!");
-
-    await user.click(formElements.signUpButton);
+    await user.click(signUpButton);
 
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(
@@ -247,14 +256,20 @@ describe("SignUp Form Submit", () => {
       }),
     });
 
-    const formElements = createFormElements();
+    const {
+      usernameField,
+      emailField,
+      passwordField,
+      confirmPasswordField,
+      signUpButton,
+    } = createFormElements();
 
-    await user.type(formElements.usernameField, "new_user");
-    await user.type(formElements.emailField, "newemail@mail.com");
-    await user.type(formElements.passwordField, "Password123!");
-    await user.type(formElements.confirmPasswordField, "Password123!");
+    await user.type(usernameField, "new_user");
+    await user.type(emailField, "newemail@mail.com");
+    await user.type(passwordField, "Password123!");
+    await user.type(confirmPasswordField, "Password123!");
 
-    await user.click(formElements.signUpButton);
+    await user.click(signUpButton);
 
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(await screen.findByText(/Please log in/i)).toBeInTheDocument();

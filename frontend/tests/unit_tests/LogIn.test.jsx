@@ -20,9 +20,10 @@ function createFormElements() {
 beforeEach(async () => {
   function Wrapper() {
     const [message, setMessage] = useState([]);
+    const [userData, setUserData] = useState([]);
 
     return (
-      <UserDataContext value={{ message, setMessage }}>
+      <UserDataContext value={{ message, setMessage, userData, setUserData }}>
         <MemoryRouter initialEntries={["/login"]}>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -143,6 +144,28 @@ describe("LogIn Form Submit", () => {
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(
       await screen.findByText(/Invalid username or password/i)
+    ).toBeInTheDocument();
+  });
+
+  test("Redirects to Home on successful form submit", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: async () => ({
+        username: "new_user",
+      }),
+    });
+
+    const { usernameField, passwordField, logInButton } = createFormElements();
+
+    await user.type(usernameField, "new_user");
+    await user.type(passwordField, "Password123!");
+
+    await user.click(logInButton);
+
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(
+      await screen.findByText(/A free, open-source project/i)
     ).toBeInTheDocument();
   });
 });
