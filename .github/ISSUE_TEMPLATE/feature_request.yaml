@@ -48,7 +48,7 @@ body:
       description: How important is this feature?
       options:
         - Low - Nice to have
-        - Medium - Would improve user experience
+        - Medium - Would improve the overall experience
         - High - Critical for project goals
 
   - type: textarea
