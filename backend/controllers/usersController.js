@@ -53,7 +53,7 @@ export async function signup(req, res) {
         return res.status(400).json({ error: "User could not be created" });
       }
 
-      return res.json({
+      return res.status(201).json({
         message: "Registration successful! Check your email.",
       });
     }
