@@ -9,9 +9,9 @@
     "test:frontend": "cd frontend && npm run test",
     "test:backend": "cd backend && npm run test",
     "test:all": "concurrently \"npm run test:backend\" \"npm run test:frontend\"",
-    "test:coverage:backend": "cd backend && npx jest --coverage",
+    "test:coverage:backend": "cd backend && npx vitest --coverage",
     "test:coverage:frontend": "cd frontend && npx vitest --coverage",
-    "test:coverage:all": "concurrently \"cd backend && npx jest --coverage\" \"cd frontend && npx vitest --coverage\""
+    "test:coverage:all": "concurrently \"cd backend && npx vitest --coverage\" \"cd frontend && npx vitest --coverage\""
   },
   "repository": {
     "type": "git",

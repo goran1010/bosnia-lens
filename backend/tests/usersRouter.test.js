@@ -2,6 +2,7 @@ import request from "supertest";
 import app from "../app.js";
 import prisma from "../db/prisma.js";
 import jwt from "jsonwebtoken";
+import { describe, test, expect, beforeEach } from "vitest";
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 
 beforeEach(async () => {
