@@ -1,4 +1,5 @@
 import request from "supertest";
+import { describe, test, expect } from "vitest";
 import app from "../app.js";
 
 describe("GET /me", () => {
