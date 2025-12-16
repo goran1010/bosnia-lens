@@ -1,6 +1,36 @@
 import request from "supertest";
-import { describe, test, expect } from "vitest";
+import { describe, test, expect, beforeEach } from "vitest";
+import prisma from "../db/prisma.js";
 import app from "../app.js";
+
+beforeEach(async () => {
+  await prisma.user.deleteMany();
+});
+
+async function createAndLoginUser() {
+  const createUserData = {
+    username: "test_user_me",
+    password: "123123",
+    email: "example_me@mail.com",
+    ["confirm-password"]: "123123",
+  };
+  await request(app).post("/users/signup").send(createUserData);
+
+  await prisma.user.update({
+    where: { username: createUserData.username },
+    data: { isEmailConfirmed: true },
+  });
+
+  const requestData = {
+    username: "test_user_me",
+    password: "123123",
+  };
+  const responseData = await request(app)
+    .post("/users/login")
+    .send(requestData);
+
+  return responseData;
+}
 
 describe("GET /me", () => {
   test("responds with status 403 and Need to be logged in if not logged in", async () => {
@@ -28,5 +58,34 @@ describe("GET /me", () => {
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(403);
     expect(response.body).toEqual(notLoggedInResponse);
+  });
+
+  test("responds with status 200 and User is authenticated if logged in", async () => {
+    const responseData = await createAndLoginUser();
+
+    const loggedInResponse = { message: "User is authenticated" };
+
+    const response = await request(app)
+      .get("/auth/me")
+      .set("Authorization", `Token ${responseData.body.data.accessToken}`);
+
+    expect(response.header["content-type"]).toMatch(/json/);
+    expect(response.status).toBe(200);
+    expect(response.body.message).toEqual(loggedInResponse.message);
+  });
+});
+
+describe("GitHub login", () => {
+  test("redirects to GitHub OAuth URL", async () => {
+    const response = await request(app).get("/auth/github");
+
+    expect(response.status).toBe(302);
+    expect(response.header.location).toMatch(
+      /^https:\/\/github\.com\/login\/oauth\/authorize\?/,
+    );
+    expect(response.header.location).toContain("scope=read%3Auser");
+    expect(response.header.location).toContain(
+      `client_id=${process.env.CLIENT_ID}`,
+    );
   });
 });
