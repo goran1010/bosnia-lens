@@ -1,7 +1,7 @@
 import { describe, test, expect, vi } from "vitest";
 
 describe("process.env.URL missing or undefined", () => {
-  test.skip("should throw an error if process.env.URL is missing", async () => {
+  test("should throw an error if process.env.URL is missing", async () => {
     const originalEnv = process.env;
 
     // Replace process.env with a clean object
