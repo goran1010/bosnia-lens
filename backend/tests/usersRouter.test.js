@@ -4,6 +4,7 @@ import prisma from "../db/prisma.js";
 import jwt from "jsonwebtoken";
 import { describe, test, expect } from "vitest";
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
+import emailConfirmHTML from "../utils/emailConfirmHTML.js";
 
 async function createAndLoginUser(newUser) {
   const createUserData = {
@@ -294,5 +295,45 @@ describe("GET //refresh-token", () => {
 
     expect(response.status).toBe(200);
     expect(response.body.data).toHaveProperty("accessToken");
+  });
+});
+
+describe("GET /confirm/:token", () => {
+  test("responds with status 400 and message for no token provided", async () => {
+    const response = await request(app).get("/users/confirm/");
+
+    expect(response.status).toBe(404);
+    expect(response.body).toEqual({ error: "No resource found" });
+  });
+
+  test("responds with status 400 and message for invalid token", async () => {
+    const response = await request(app).get("/users/confirm/12345");
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ error: "Invalid or expired token" });
+  });
+
+  test("responds with status 200 and HTML for valid token", async () => {
+    const newUser = await prisma.user.create({
+      data: {
+        username: "test_user_email_confirmation",
+        password: "123123",
+        email: "email_confirmation@mail.com",
+        isEmailConfirmed: false,
+      },
+    });
+
+    const accessToken = jwt.sign(
+      { email: newUser.email, username: newUser.username },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "1d" },
+    );
+
+    const response = await request(app).get(`/users/confirm/${accessToken}`);
+
+    expect(response.status).toBe(200);
+    expect(response.text).toContain(emailConfirmHTML());
+
+    await prisma.user.delete({ where: { username: newUser.username } });
   });
 });

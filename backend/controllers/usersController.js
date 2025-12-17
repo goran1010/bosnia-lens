@@ -70,6 +70,10 @@ export async function signup(req, res) {
 export async function confirmEmail(req, res) {
   const { token } = req.params;
 
+  if (!token) {
+    return res.status(400).json({ error: "No token provided" });
+  }
+
   try {
     const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET);
 
