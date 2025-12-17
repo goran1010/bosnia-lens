@@ -1,17 +1,13 @@
 import request from "supertest";
-import { describe, test, expect, beforeEach } from "vitest";
+import { describe, test, expect } from "vitest";
 import prisma from "../db/prisma.js";
 import app from "../app.js";
 
-beforeEach(async () => {
-  await prisma.user.deleteMany();
-});
-
-async function createAndLoginUser() {
+async function createAndLoginUser(newUser) {
   const createUserData = {
-    username: "test_user_me",
+    username: newUser.username,
     password: "123123",
-    email: "example_me@mail.com",
+    email: newUser.email,
     ["confirm-password"]: "123123",
   };
   await request(app).post("/users/signup").send(createUserData);
@@ -22,7 +18,7 @@ async function createAndLoginUser() {
   });
 
   const requestData = {
-    username: "test_user_me",
+    username: createUserData.username,
     password: "123123",
   };
   const responseData = await request(app)
@@ -61,7 +57,12 @@ describe("GET /me", () => {
   });
 
   test("responds with status 200 and User is authenticated if logged in", async () => {
-    const responseData = await createAndLoginUser();
+    const newUser = {
+      username: "test_user_me",
+      email: "example_me@mail.com",
+    };
+
+    const responseData = await createAndLoginUser(newUser);
 
     const loggedInResponse = { message: "User is authenticated" };
 
@@ -72,6 +73,8 @@ describe("GET /me", () => {
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(200);
     expect(response.body.message).toEqual(loggedInResponse.message);
+
+    await prisma.user.delete({ where: { username: newUser.username } });
   });
 });
 
@@ -88,4 +91,6 @@ describe("GitHub login", () => {
       `client_id=${process.env.CLIENT_ID}`,
     );
   });
+
+  test("GitHub callback");
 });
