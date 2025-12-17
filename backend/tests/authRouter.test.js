@@ -1,7 +1,8 @@
 import request from "supertest";
-import { describe, test, expect } from "vitest";
+import { describe, test, expect, vi } from "vitest";
 import prisma from "../db/prisma.js";
 import app from "../app.js";
+import axios from "axios";
 
 async function createAndLoginUser(newUser) {
   const createUserData = {
@@ -91,6 +92,35 @@ describe("GitHub login", () => {
       `client_id=${process.env.CLIENT_ID}`,
     );
   });
+});
 
-  test("GitHub callback");
+describe("GitHub callback", () => {
+  test("github-callback route responds with 400 if no code is provided", async () => {
+    const response = await request(app).get("/auth/github-callback");
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ error: "Code not provided" });
+  });
+
+  test("github-callback?code= route responds with 200 and tokens if valid code is provided", async () => {
+    const validCode = "valid_code";
+
+    // Mock axios post and get requests
+    const mockPost = vi.spyOn(axios, "post").mockResolvedValue({
+      data: { access_token: "mock_github_access_token" },
+    });
+    const mockGet = vi.spyOn(axios, "get").mockResolvedValue({
+      data: { email: "test@example.com", login: "testuser" },
+    });
+
+    const response = await request(app).get(
+      `/auth/github-callback?code=${validCode}`,
+    );
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("data");
+
+    mockPost.mockRestore();
+    mockGet.mockRestore();
+  });
 });
