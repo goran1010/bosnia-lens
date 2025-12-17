@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser";
 const currentURL = process.env.URL;
 
 if (!currentURL) {
-  throw new Error("Missing required environment variable: URL");
+  throw new Error("Missing required environment variable: process.env.URL");
 }
 
 app.use(cookieParser());

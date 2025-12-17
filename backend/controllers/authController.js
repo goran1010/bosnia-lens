@@ -24,6 +24,10 @@ export async function githubLogin(req, res) {
 export async function githubCallback(req, res) {
   const { code } = req.query;
 
+  if (!code) {
+    return res.status(400).json({ error: "Code not provided" });
+  }
+
   const body = {
     client_id: gitHubClientId,
     client_secret: gitHubClientSecret,
