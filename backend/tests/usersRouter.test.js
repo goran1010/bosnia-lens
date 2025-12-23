@@ -1,6 +1,5 @@
 import request from "supertest";
 import app from "../app.js";
-import prisma from "../db/prisma.js";
 import jwt from "jsonwebtoken";
 import { describe, test, expect } from "vitest";
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
@@ -8,6 +7,7 @@ import emailConfirmHTML from "../utils/emailConfirmHTML.js";
 import createAndLoginUser from "./utils/createUserAndLogin.js";
 import removeUserFromDB from "./utils/removeUserFromDB.js";
 import createNewUser from "./utils/createNewUser.js";
+import createUserInDB from "./utils/createUserInDB.js";
 
 describe("POST /signup", () => {
   test("responds with status 400 and message for incorrect username input", async () => {
@@ -97,13 +97,7 @@ describe("POST /signup", () => {
   });
 
   test("responds with json 400, Username already taken, if given username exists", async () => {
-    const userInDB = await prisma.user.create({
-      data: {
-        username: "test_user",
-        password: "123123",
-        email: "example15@mail.com",
-      },
-    });
+    const userInDB = await createUserInDB({ email: "test_user_bad@mail.com" });
 
     const newUser = createNewUser();
 
@@ -125,17 +119,11 @@ describe("POST /signup", () => {
     expect(response.status).toBe(400);
     expect(response.body).toEqual(responseData);
 
-    await removeUserFromDB(newUser);
+    await removeUserFromDB(userInDB);
   });
 
   test("responds with json 400, Email already taken, if given email exists", async () => {
-    const userInDB = await prisma.user.create({
-      data: {
-        username: "test_user_new",
-        password: "123123",
-        email: "test_user@mail.com",
-      },
-    });
+    const userInDB = await createUserInDB({ username: "test_user_bad" });
 
     const newUser = createNewUser();
 
@@ -163,13 +151,7 @@ describe("POST /signup", () => {
 
 describe("POST /login", () => {
   test("responds with Invalid username or password for wrong input", async () => {
-    const userInDB = await prisma.user.create({
-      data: {
-        username: "test_user_bad",
-        password: "123123",
-        email: "test_user@mail.com",
-      },
-    });
+    const userInDB = await createUserInDB({ username: "test_user_bad" });
 
     const newUser = createNewUser();
 
@@ -269,17 +251,10 @@ describe("GET /confirm/:token", () => {
   });
 
   test("responds with status 200 and HTML for valid token", async () => {
-    const newUser = await prisma.user.create({
-      data: {
-        username: "test_user",
-        password: "123123",
-        email: "test_user@mail.com",
-        isEmailConfirmed: false,
-      },
-    });
+    const userInDB = await createUserInDB();
 
     const accessToken = jwt.sign(
-      { email: newUser.email, username: newUser.username },
+      { email: userInDB.email, username: userInDB.username },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "1d" },
     );
@@ -289,6 +264,6 @@ describe("GET /confirm/:token", () => {
     expect(response.status).toBe(200);
     expect(response.text).toContain(emailConfirmHTML());
 
-    await removeUserFromDB(newUser);
+    await removeUserFromDB(userInDB);
   });
 });
