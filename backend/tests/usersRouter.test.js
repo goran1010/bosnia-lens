@@ -5,31 +5,7 @@ import jwt from "jsonwebtoken";
 import { describe, test, expect } from "vitest";
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 import emailConfirmHTML from "../utils/emailConfirmHTML.js";
-
-async function createAndLoginUser(newUser) {
-  const createUserData = {
-    username: newUser.username,
-    password: "123123",
-    email: newUser.email,
-    ["confirm-password"]: "123123",
-  };
-  await request(app).post("/users/signup").send(createUserData);
-
-  await prisma.user.update({
-    where: { username: createUserData.username },
-    data: { isEmailConfirmed: true },
-  });
-
-  const requestData = {
-    username: newUser.username,
-    password: "123123",
-  };
-  const responseData = await request(app)
-    .post("/users/login")
-    .send(requestData);
-
-  return responseData;
-}
+import createAndLoginUser from "./utils/createUserAndLogin.js";
 
 describe("POST /signup", () => {
   test("responds with status 400 and message for incorrect username input", async () => {
@@ -234,7 +210,7 @@ describe("POST /login", () => {
       email: "test_user@mail.com",
     };
 
-    const responseData = await createAndLoginUser(newUser);
+    const responseData = await createAndLoginUser(newUser, prisma, app);
 
     const expectedData = {
       message: `User ${newUser.username} logged in successfully`,
@@ -256,7 +232,7 @@ describe("POST /logout", () => {
       username: "test_user",
       email: "test_user@mail.com",
     };
-    const responseData = await createAndLoginUser(newUser);
+    const responseData = await createAndLoginUser(newUser, prisma, app);
 
     const response = await request(app)
       .post("/users/logout")
@@ -280,8 +256,7 @@ describe("GET //refresh-token", () => {
   });
 
   test("responds with status 403 and message if invalid refresh token", async () => {
-    const response = await request
-      .agent(app)
+    const response = await request(app)
       .get("/users/refresh-token")
       .set("Cookie", ["refreshToken=123"]);
 
@@ -296,8 +271,7 @@ describe("GET //refresh-token", () => {
       { expiresIn: "30d" },
     );
 
-    const response = await request
-      .agent(app)
+    const response = await request(app)
       .get("/users/refresh-token")
       .set("Cookie", [`refreshToken=${refreshToken}`]);
 
@@ -307,7 +281,7 @@ describe("GET //refresh-token", () => {
 });
 
 describe("GET /confirm/:token", () => {
-  test("responds with status 400 and message for no token provided", async () => {
+  test("responds with status 404 and message for no token provided", async () => {
     const response = await request(app).get("/users/confirm/");
 
     expect(response.status).toBe(404);
@@ -324,9 +298,9 @@ describe("GET /confirm/:token", () => {
   test("responds with status 200 and HTML for valid token", async () => {
     const newUser = await prisma.user.create({
       data: {
-        username: "test_user_email_confirmation",
+        username: "test_user",
         password: "123123",
-        email: "email_confirmation@mail.com",
+        email: "test_user@mail.com",
         isEmailConfirmed: false,
       },
     });
