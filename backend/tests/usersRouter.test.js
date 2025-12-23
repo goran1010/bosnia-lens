@@ -127,20 +127,7 @@ describe("POST /signup", () => {
   });
 
   test("responds with json 400, Username already taken, if given username exists", async () => {
-    const responseData = {
-      error: "Validation failed",
-      details: [
-        {
-          type: "field",
-          value: "test_user_15",
-          msg: "Username already in use",
-          path: "username",
-          location: "body",
-        },
-      ],
-    };
-
-    await prisma.user.create({
+    const userInDB = await prisma.user.create({
       data: {
         username: "test_user_15",
         password: "123123",
@@ -149,28 +136,55 @@ describe("POST /signup", () => {
     });
 
     const requestData = {
-      username: "test_user_15",
-      password: "123123",
-      email: "example_23@mail.com",
-      ["confirm-password"]: "123123",
+      username: userInDB.username,
+      password: userInDB.password,
+      email: "some_user@mail.com",
+      ["confirm-password"]: userInDB.password,
     };
-    const response = await request(app).post("/users/signup").send(requestData);
-
-    expect(response.status).toBe(400);
-    expect(response.body).toEqual(responseData);
-
-    await prisma.user.delete({ where: { username: requestData.username } });
-  });
-
-  test("responds with json 400, Email already taken, if given email exists", async () => {
-    await prisma.user.deleteMany({ where: { email: "goran12@mail.com" } });
 
     const responseData = {
       error: "Validation failed",
       details: [
         {
           type: "field",
-          value: "goran12@mail.com",
+          value: userInDB.username,
+          msg: "Username already in use",
+          path: "username",
+          location: "body",
+        },
+      ],
+    };
+
+    const response = await request(app).post("/users/signup").send(requestData);
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual(responseData);
+
+    await prisma.user.delete({ where: { username: userInDB.username } });
+  });
+
+  test("responds with json 400, Email already taken, if given email exists", async () => {
+    const userInDB = await prisma.user.create({
+      data: {
+        username: "test_user",
+        password: "123123",
+        email: "example15@mail.com",
+      },
+    });
+
+    const requestData = {
+      username: "some_username",
+      password: userInDB.password,
+      email: userInDB.email,
+      ["confirm-password"]: userInDB.password,
+    };
+
+    const responseData = {
+      error: "Validation failed",
+      details: [
+        {
+          type: "field",
+          value: userInDB.email,
           msg: "Email already in use",
           path: "email",
           location: "body",
@@ -178,62 +192,52 @@ describe("POST /signup", () => {
       ],
     };
 
-    await prisma.user.create({
-      data: {
-        username: "goran1212",
-        password: "123123",
-        email: "goran12@mail.com",
-      },
-    });
-
-    const requestData = {
-      username: "test_user222",
-      password: "123123",
-      email: "goran12@mail.com",
-      ["confirm-password"]: "123123",
-    };
     const response = await request(app).post("/users/signup").send(requestData);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual(responseData);
+
+    await prisma.user.delete({ where: { email: userInDB.email } });
   });
 });
 
 describe("POST /login", () => {
   test("responds with Invalid username or password for wrong input", async () => {
-    await prisma.user.deleteMany({ where: { username: "test_user333" } });
-
-    await prisma.user.create({
+    const userInDB = await prisma.user.create({
       data: {
-        username: "test_user333",
+        username: "test_user",
         password: "123123",
-        email: "example333@mail.com",
+        email: "example15@mail.com",
       },
     });
 
+    const requestData = {
+      username: "some_username",
+      password: userInDB.password,
+      email: userInDB.email,
+      ["confirm-password"]: userInDB.password,
+    };
+
     const responseData = { error: "Invalid username or password" };
 
-    const requestData = {
-      username: "test",
-      password: "123123",
-      confirmPassword: "123123",
-    };
     const response = await request(app).post("/users/login").send(requestData);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual(responseData);
+
+    await prisma.user.delete({ where: { username: userInDB.username } });
   });
 
   test("responds with User test_user logged in successfully for correct input", async () => {
     const newUser = {
-      username: "test_user30",
-      email: "example30@mail.com",
+      username: "test_user",
+      email: "test_user@mail.com",
     };
 
     const responseData = await createAndLoginUser(newUser);
 
     const expectedData = {
-      message: `User test_user30 logged in successfully`,
+      message: `User ${newUser.username} logged in successfully`,
       accessToken: "randomstring",
     };
 
@@ -241,14 +245,16 @@ describe("POST /login", () => {
     expect(responseData.body.message).toEqual(expectedData.message);
 
     expect(responseData.body.data).toHaveProperty("accessToken");
+
+    await prisma.user.delete({ where: { username: newUser.username } });
   });
 });
 
 describe("POST /logout", () => {
   test("responds User logged out successfully", async () => {
     const newUser = {
-      username: "test_user2",
-      email: "example2@mail.com",
+      username: "test_user",
+      email: "test_user@mail.com",
     };
     const responseData = await createAndLoginUser(newUser);
 
@@ -260,6 +266,8 @@ describe("POST /logout", () => {
     expect(response.body).toEqual({
       message: "User logged out successfully",
     });
+
+    await prisma.user.delete({ where: { username: newUser.username } });
   });
 });
 
