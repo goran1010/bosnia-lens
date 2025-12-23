@@ -1,6 +1,6 @@
 import request from "supertest";
 import { describe, test, expect, vi } from "vitest";
-import prisma from "../db/prisma.js";
+import removeUserFromDB from "./utils/removeUserFromDB.js";
 import app from "../app.js";
 import axios from "axios";
 import createAndLoginUser from "./utils/createUserAndLogin.js";
@@ -51,7 +51,7 @@ describe("GET /me", () => {
     expect(response.status).toBe(200);
     expect(response.body.message).toEqual(loggedInResponse.message);
 
-    await prisma.user.delete({ where: { username: newUser.username } });
+    await removeUserFromDB(newUser);
   });
 });
 

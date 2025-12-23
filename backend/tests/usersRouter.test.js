@@ -6,6 +6,7 @@ import { describe, test, expect } from "vitest";
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 import emailConfirmHTML from "../utils/emailConfirmHTML.js";
 import createAndLoginUser from "./utils/createUserAndLogin.js";
+import removeUserFromDB from "./utils/removeUserFromDB.js";
 
 describe("POST /signup", () => {
   test("responds with status 400 and message for incorrect username input", async () => {
@@ -21,13 +22,13 @@ describe("POST /signup", () => {
         },
       ],
     };
-    const requestData = {
+    const newUser = {
       username: "user",
       email: "example_6@mail.com",
       password: "123123",
       ["confirm-password"]: "123123",
     };
-    const response = await request(app).post("/users/signup").send(requestData);
+    const response = await request(app).post("/users/signup").send(newUser);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual(responseData);
@@ -46,13 +47,13 @@ describe("POST /signup", () => {
         },
       ],
     };
-    const requestData = {
+    const newUser = {
       username: "username",
       email: "example11@mail.com",
       password: "123",
       ["confirm-password"]: "123",
     };
-    const response = await request(app).post("/users/signup").send(requestData);
+    const response = await request(app).post("/users/signup").send(newUser);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual(responseData);
@@ -71,13 +72,13 @@ describe("POST /signup", () => {
         },
       ],
     };
-    const requestData = {
+    const newUser = {
       username: "username_1",
       email: "example12@mail.com",
       password: "123123",
       ["confirm-password"]: "123",
     };
-    const response = await request(app).post("/users/signup").send(requestData);
+    const response = await request(app).post("/users/signup").send(newUser);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual(responseData);
@@ -88,18 +89,18 @@ describe("POST /signup", () => {
       message: "Registration successful! Check your email.",
     };
 
-    const requestData = {
+    const newUser = {
       username: "test_user_4",
       password: "123123",
       ["confirm-password"]: "123123",
       email: "example_4@mail.com",
     };
-    const response = await request(app).post("/users/signup").send(requestData);
+    const response = await request(app).post("/users/signup").send(newUser);
 
     expect(response.status).toBe(201);
     expect(response.body).toEqual(responseData);
 
-    await prisma.user.delete({ where: { username: requestData.username } });
+    await removeUserFromDB(newUser);
   });
 
   test("responds with json 400, Username already taken, if given username exists", async () => {
@@ -111,7 +112,7 @@ describe("POST /signup", () => {
       },
     });
 
-    const requestData = {
+    const newUser = {
       username: userInDB.username,
       password: userInDB.password,
       email: "some_user@mail.com",
@@ -131,12 +132,12 @@ describe("POST /signup", () => {
       ],
     };
 
-    const response = await request(app).post("/users/signup").send(requestData);
+    const response = await request(app).post("/users/signup").send(newUser);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual(responseData);
 
-    await prisma.user.delete({ where: { username: userInDB.username } });
+    await removeUserFromDB(newUser);
   });
 
   test("responds with json 400, Email already taken, if given email exists", async () => {
@@ -148,7 +149,7 @@ describe("POST /signup", () => {
       },
     });
 
-    const requestData = {
+    const newUser = {
       username: "some_username",
       password: userInDB.password,
       email: userInDB.email,
@@ -168,12 +169,12 @@ describe("POST /signup", () => {
       ],
     };
 
-    const response = await request(app).post("/users/signup").send(requestData);
+    const response = await request(app).post("/users/signup").send(newUser);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual(responseData);
 
-    await prisma.user.delete({ where: { email: userInDB.email } });
+    await removeUserFromDB(userInDB);
   });
 });
 
@@ -187,7 +188,7 @@ describe("POST /login", () => {
       },
     });
 
-    const requestData = {
+    const newUser = {
       username: "some_username",
       password: userInDB.password,
       email: userInDB.email,
@@ -196,12 +197,12 @@ describe("POST /login", () => {
 
     const responseData = { error: "Invalid username or password" };
 
-    const response = await request(app).post("/users/login").send(requestData);
+    const response = await request(app).post("/users/login").send(newUser);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual(responseData);
 
-    await prisma.user.delete({ where: { username: userInDB.username } });
+    await removeUserFromDB(userInDB);
   });
 
   test("responds with User test_user logged in successfully for correct input", async () => {
@@ -222,7 +223,7 @@ describe("POST /login", () => {
 
     expect(responseData.body.data).toHaveProperty("accessToken");
 
-    await prisma.user.delete({ where: { username: newUser.username } });
+    await removeUserFromDB(newUser);
   });
 });
 
@@ -243,7 +244,7 @@ describe("POST /logout", () => {
       message: "User logged out successfully",
     });
 
-    await prisma.user.delete({ where: { username: newUser.username } });
+    await removeUserFromDB(newUser);
   });
 });
 
@@ -316,6 +317,6 @@ describe("GET /confirm/:token", () => {
     expect(response.status).toBe(200);
     expect(response.text).toContain(emailConfirmHTML());
 
-    await prisma.user.delete({ where: { username: newUser.username } });
+    await removeUserFromDB(newUser);
   });
 });
