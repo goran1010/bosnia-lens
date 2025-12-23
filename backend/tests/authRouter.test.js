@@ -4,6 +4,7 @@ import removeUserFromDB from "./utils/removeUserFromDB.js";
 import app from "../app.js";
 import axios from "axios";
 import createAndLoginUser from "./utils/createUserAndLogin.js";
+import createNewUser from "./utils/createNewUser.js";
 
 describe("GET /me", () => {
   test("responds with status 403 and Need to be logged in if not logged in", async () => {
@@ -34,10 +35,10 @@ describe("GET /me", () => {
   });
 
   test("responds with status 200 and User is authenticated if logged in", async () => {
-    const newUser = {
-      username: "test_user_me",
-      email: "example_me@mail.com",
-    };
+    const newUser = createNewUser({
+      username: "test_user_auth",
+      email: "test_user_auth@mail.com",
+    });
 
     const responseData = await createAndLoginUser(newUser);
 
