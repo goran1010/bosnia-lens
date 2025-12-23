@@ -7,27 +7,25 @@ const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 import emailConfirmHTML from "../utils/emailConfirmHTML.js";
 import createAndLoginUser from "./utils/createUserAndLogin.js";
 import removeUserFromDB from "./utils/removeUserFromDB.js";
+import createNewUser from "./utils/createNewUser.js";
 
 describe("POST /signup", () => {
   test("responds with status 400 and message for incorrect username input", async () => {
+    const newUser = createNewUser({ username: "user" });
+
     const responseData = {
       error: "Validation failed",
       details: [
         {
           type: "field",
-          value: "user",
+          value: newUser.username,
           msg: "Username must be at least 6 characters long",
           path: "username",
           location: "body",
         },
       ],
     };
-    const newUser = {
-      username: "user",
-      email: "example_6@mail.com",
-      password: "123123",
-      ["confirm-password"]: "123123",
-    };
+
     const response = await request(app).post("/users/signup").send(newUser);
 
     expect(response.status).toBe(400);
@@ -35,24 +33,24 @@ describe("POST /signup", () => {
   });
 
   test("responds with status 400 and message for incorrect password input", async () => {
+    const newUser = createNewUser({
+      password: "123",
+      "confirm-password": "123",
+    });
+
     const responseData = {
       error: "Validation failed",
       details: [
         {
           type: "field",
-          value: "123",
+          value: newUser.password,
           msg: "Password must be at least 6 characters long",
           path: "password",
           location: "body",
         },
       ],
     };
-    const newUser = {
-      username: "username",
-      email: "example11@mail.com",
-      password: "123",
-      ["confirm-password"]: "123",
-    };
+
     const response = await request(app).post("/users/signup").send(newUser);
 
     expect(response.status).toBe(400);
@@ -60,6 +58,10 @@ describe("POST /signup", () => {
   });
 
   test("responds with status 400 and message for incorrect confirm-password input", async () => {
+    const newUser = createNewUser({
+      "confirm-password": "123",
+    });
+
     const responseData = {
       error: "Validation failed",
       details: [
@@ -72,12 +74,7 @@ describe("POST /signup", () => {
         },
       ],
     };
-    const newUser = {
-      username: "username_1",
-      email: "example12@mail.com",
-      password: "123123",
-      ["confirm-password"]: "123",
-    };
+
     const response = await request(app).post("/users/signup").send(newUser);
 
     expect(response.status).toBe(400);
@@ -89,12 +86,8 @@ describe("POST /signup", () => {
       message: "Registration successful! Check your email.",
     };
 
-    const newUser = {
-      username: "test_user_4",
-      password: "123123",
-      ["confirm-password"]: "123123",
-      email: "example_4@mail.com",
-    };
+    const newUser = createNewUser();
+
     const response = await request(app).post("/users/signup").send(newUser);
 
     expect(response.status).toBe(201);
@@ -106,18 +99,13 @@ describe("POST /signup", () => {
   test("responds with json 400, Username already taken, if given username exists", async () => {
     const userInDB = await prisma.user.create({
       data: {
-        username: "test_user_15",
+        username: "test_user",
         password: "123123",
         email: "example15@mail.com",
       },
     });
 
-    const newUser = {
-      username: userInDB.username,
-      password: userInDB.password,
-      email: "some_user@mail.com",
-      ["confirm-password"]: userInDB.password,
-    };
+    const newUser = createNewUser();
 
     const responseData = {
       error: "Validation failed",
@@ -143,18 +131,13 @@ describe("POST /signup", () => {
   test("responds with json 400, Email already taken, if given email exists", async () => {
     const userInDB = await prisma.user.create({
       data: {
-        username: "test_user",
+        username: "test_user_new",
         password: "123123",
-        email: "example15@mail.com",
+        email: "test_user@mail.com",
       },
     });
 
-    const newUser = {
-      username: "some_username",
-      password: userInDB.password,
-      email: userInDB.email,
-      ["confirm-password"]: userInDB.password,
-    };
+    const newUser = createNewUser();
 
     const responseData = {
       error: "Validation failed",
@@ -182,18 +165,13 @@ describe("POST /login", () => {
   test("responds with Invalid username or password for wrong input", async () => {
     const userInDB = await prisma.user.create({
       data: {
-        username: "test_user",
+        username: "test_user_bad",
         password: "123123",
-        email: "example15@mail.com",
+        email: "test_user@mail.com",
       },
     });
 
-    const newUser = {
-      username: "some_username",
-      password: userInDB.password,
-      email: userInDB.email,
-      ["confirm-password"]: userInDB.password,
-    };
+    const newUser = createNewUser();
 
     const responseData = { error: "Invalid username or password" };
 
@@ -206,10 +184,7 @@ describe("POST /login", () => {
   });
 
   test("responds with User test_user logged in successfully for correct input", async () => {
-    const newUser = {
-      username: "test_user",
-      email: "test_user@mail.com",
-    };
+    const newUser = createNewUser();
 
     const responseData = await createAndLoginUser(newUser);
 
@@ -229,10 +204,7 @@ describe("POST /login", () => {
 
 describe("POST /logout", () => {
   test("responds User logged out successfully", async () => {
-    const newUser = {
-      username: "test_user",
-      email: "test_user@mail.com",
-    };
+    const newUser = createNewUser();
     const responseData = await createAndLoginUser(newUser);
 
     const response = await request(app)
