@@ -3,31 +3,7 @@ import { describe, test, expect, vi } from "vitest";
 import prisma from "../db/prisma.js";
 import app from "../app.js";
 import axios from "axios";
-
-async function createAndLoginUser(newUser) {
-  const createUserData = {
-    username: newUser.username,
-    password: "123123",
-    email: newUser.email,
-    ["confirm-password"]: "123123",
-  };
-  await request(app).post("/users/signup").send(createUserData);
-
-  await prisma.user.update({
-    where: { username: createUserData.username },
-    data: { isEmailConfirmed: true },
-  });
-
-  const requestData = {
-    username: createUserData.username,
-    password: "123123",
-  };
-  const responseData = await request(app)
-    .post("/users/login")
-    .send(requestData);
-
-  return responseData;
-}
+import createAndLoginUser from "./utils/createUserAndLogin.js";
 
 describe("GET /me", () => {
   test("responds with status 403 and Need to be logged in if not logged in", async () => {

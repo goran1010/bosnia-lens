@@ -210,7 +210,7 @@ describe("POST /login", () => {
       email: "test_user@mail.com",
     };
 
-    const responseData = await createAndLoginUser(newUser, prisma, app);
+    const responseData = await createAndLoginUser(newUser);
 
     const expectedData = {
       message: `User ${newUser.username} logged in successfully`,
@@ -232,7 +232,7 @@ describe("POST /logout", () => {
       username: "test_user",
       email: "test_user@mail.com",
     };
-    const responseData = await createAndLoginUser(newUser, prisma, app);
+    const responseData = await createAndLoginUser(newUser);
 
     const response = await request(app)
       .post("/users/logout")

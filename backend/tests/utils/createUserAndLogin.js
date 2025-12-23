@@ -1,6 +1,8 @@
 import request from "supertest";
+import prisma from "../../db/prisma";
+import app from "../../app";
 
-export default async function createAndLoginUser(newUser, prisma, app) {
+export default async function createAndLoginUser(newUser) {
   const createUserData = {
     username: newUser.username,
     password: "123123",
