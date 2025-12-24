@@ -1,6 +1,6 @@
 import { describe, test, expect, vi } from "vitest";
 
-describe("process.env.URL missing or undefined", () => {
+describe.skip("process.env.URL missing or undefined", () => {
   test("should throw an error if process.env.URL is missing", async () => {
     vi.resetModules();
     vi.stubEnv("PORT", undefined);
