@@ -1,88 +1,67 @@
 import request from "supertest";
 import app from "../app.js";
-import prisma from "../db/prisma.js";
 import jwt from "jsonwebtoken";
 import { describe, test, expect } from "vitest";
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 import emailConfirmHTML from "../utils/emailConfirmHTML.js";
-
-async function createAndLoginUser(newUser) {
-  const createUserData = {
-    username: newUser.username,
-    password: "123123",
-    email: newUser.email,
-    ["confirm-password"]: "123123",
-  };
-  await request(app).post("/users/signup").send(createUserData);
-
-  await prisma.user.update({
-    where: { username: createUserData.username },
-    data: { isEmailConfirmed: true },
-  });
-
-  const requestData = {
-    username: newUser.username,
-    password: "123123",
-  };
-  const responseData = await request(app)
-    .post("/users/login")
-    .send(requestData);
-
-  return responseData;
-}
+import createAndLoginUser from "./utils/createUserAndLogin.js";
+import removeUserFromDB from "./utils/removeUserFromDB.js";
+import createNewUser from "./utils/createNewUser.js";
+import createUserInDB from "./utils/createUserInDB.js";
 
 describe("POST /signup", () => {
   test("responds with status 400 and message for incorrect username input", async () => {
+    const newUser = createNewUser({ username: "user" });
+
     const responseData = {
       error: "Validation failed",
       details: [
         {
           type: "field",
-          value: "user",
+          value: newUser.username,
           msg: "Username must be at least 6 characters long",
           path: "username",
           location: "body",
         },
       ],
     };
-    const requestData = {
-      username: "user",
-      email: "example_6@mail.com",
-      password: "123123",
-      ["confirm-password"]: "123123",
-    };
-    const response = await request(app).post("/users/signup").send(requestData);
+
+    const response = await request(app).post("/users/signup").send(newUser);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual(responseData);
   });
 
   test("responds with status 400 and message for incorrect password input", async () => {
+    const newUser = createNewUser({
+      password: "123",
+      "confirm-password": "123",
+    });
+
     const responseData = {
       error: "Validation failed",
       details: [
         {
           type: "field",
-          value: "123",
+          value: newUser.password,
           msg: "Password must be at least 6 characters long",
           path: "password",
           location: "body",
         },
       ],
     };
-    const requestData = {
-      username: "username",
-      email: "example11@mail.com",
-      password: "123",
-      ["confirm-password"]: "123",
-    };
-    const response = await request(app).post("/users/signup").send(requestData);
+
+    const response = await request(app).post("/users/signup").send(newUser);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual(responseData);
   });
 
   test("responds with status 400 and message for incorrect confirm-password input", async () => {
+    const newUser = createNewUser({
+      "confirm-password": "123",
+    });
+
     const responseData = {
       error: "Validation failed",
       details: [
@@ -95,13 +74,8 @@ describe("POST /signup", () => {
         },
       ],
     };
-    const requestData = {
-      username: "username_1",
-      email: "example12@mail.com",
-      password: "123123",
-      ["confirm-password"]: "123",
-    };
-    const response = await request(app).post("/users/signup").send(requestData);
+
+    const response = await request(app).post("/users/signup").send(newUser);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual(responseData);
@@ -112,27 +86,27 @@ describe("POST /signup", () => {
       message: "Registration successful! Check your email.",
     };
 
-    const requestData = {
-      username: "test_user_4",
-      password: "123123",
-      ["confirm-password"]: "123123",
-      email: "example_4@mail.com",
-    };
-    const response = await request(app).post("/users/signup").send(requestData);
+    const newUser = createNewUser();
+
+    const response = await request(app).post("/users/signup").send(newUser);
 
     expect(response.status).toBe(201);
     expect(response.body).toEqual(responseData);
 
-    await prisma.user.delete({ where: { username: requestData.username } });
+    await removeUserFromDB(newUser);
   });
 
   test("responds with json 400, Username already taken, if given username exists", async () => {
+    const userInDB = await createUserInDB({ email: "test_user_bad@mail.com" });
+
+    const newUser = createNewUser();
+
     const responseData = {
       error: "Validation failed",
       details: [
         {
           type: "field",
-          value: "test_user_15",
+          value: userInDB.username,
           msg: "Username already in use",
           path: "username",
           location: "body",
@@ -140,37 +114,25 @@ describe("POST /signup", () => {
       ],
     };
 
-    await prisma.user.create({
-      data: {
-        username: "test_user_15",
-        password: "123123",
-        email: "example15@mail.com",
-      },
-    });
-
-    const requestData = {
-      username: "test_user_15",
-      password: "123123",
-      email: "example_23@mail.com",
-      ["confirm-password"]: "123123",
-    };
-    const response = await request(app).post("/users/signup").send(requestData);
+    const response = await request(app).post("/users/signup").send(newUser);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual(responseData);
 
-    await prisma.user.delete({ where: { username: requestData.username } });
+    await removeUserFromDB(userInDB);
   });
 
   test("responds with json 400, Email already taken, if given email exists", async () => {
-    await prisma.user.deleteMany({ where: { email: "goran12@mail.com" } });
+    const userInDB = await createUserInDB({ username: "test_user_bad" });
+
+    const newUser = createNewUser();
 
     const responseData = {
       error: "Validation failed",
       details: [
         {
           type: "field",
-          value: "goran12@mail.com",
+          value: userInDB.email,
           msg: "Email already in use",
           path: "email",
           location: "body",
@@ -178,62 +140,38 @@ describe("POST /signup", () => {
       ],
     };
 
-    await prisma.user.create({
-      data: {
-        username: "goran1212",
-        password: "123123",
-        email: "goran12@mail.com",
-      },
-    });
-
-    const requestData = {
-      username: "test_user222",
-      password: "123123",
-      email: "goran12@mail.com",
-      ["confirm-password"]: "123123",
-    };
-    const response = await request(app).post("/users/signup").send(requestData);
+    const response = await request(app).post("/users/signup").send(newUser);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual(responseData);
+
+    await removeUserFromDB(userInDB);
   });
 });
 
 describe("POST /login", () => {
   test("responds with Invalid username or password for wrong input", async () => {
-    await prisma.user.deleteMany({ where: { username: "test_user333" } });
+    const userInDB = await createUserInDB({ username: "test_user_bad" });
 
-    await prisma.user.create({
-      data: {
-        username: "test_user333",
-        password: "123123",
-        email: "example333@mail.com",
-      },
-    });
+    const newUser = createNewUser();
 
     const responseData = { error: "Invalid username or password" };
 
-    const requestData = {
-      username: "test",
-      password: "123123",
-      confirmPassword: "123123",
-    };
-    const response = await request(app).post("/users/login").send(requestData);
+    const response = await request(app).post("/users/login").send(newUser);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual(responseData);
+
+    await removeUserFromDB(userInDB);
   });
 
   test("responds with User test_user logged in successfully for correct input", async () => {
-    const newUser = {
-      username: "test_user30",
-      email: "example30@mail.com",
-    };
+    const newUser = createNewUser();
 
     const responseData = await createAndLoginUser(newUser);
 
     const expectedData = {
-      message: `User test_user30 logged in successfully`,
+      message: `User ${newUser.username} logged in successfully`,
       accessToken: "randomstring",
     };
 
@@ -241,15 +179,14 @@ describe("POST /login", () => {
     expect(responseData.body.message).toEqual(expectedData.message);
 
     expect(responseData.body.data).toHaveProperty("accessToken");
+
+    await removeUserFromDB(newUser);
   });
 });
 
 describe("POST /logout", () => {
   test("responds User logged out successfully", async () => {
-    const newUser = {
-      username: "test_user2",
-      email: "example2@mail.com",
-    };
+    const newUser = createNewUser();
     const responseData = await createAndLoginUser(newUser);
 
     const response = await request(app)
@@ -260,6 +197,8 @@ describe("POST /logout", () => {
     expect(response.body).toEqual({
       message: "User logged out successfully",
     });
+
+    await removeUserFromDB(newUser);
   });
 });
 
@@ -272,8 +211,7 @@ describe("GET //refresh-token", () => {
   });
 
   test("responds with status 403 and message if invalid refresh token", async () => {
-    const response = await request
-      .agent(app)
+    const response = await request(app)
       .get("/users/refresh-token")
       .set("Cookie", ["refreshToken=123"]);
 
@@ -288,8 +226,7 @@ describe("GET //refresh-token", () => {
       { expiresIn: "30d" },
     );
 
-    const response = await request
-      .agent(app)
+    const response = await request(app)
       .get("/users/refresh-token")
       .set("Cookie", [`refreshToken=${refreshToken}`]);
 
@@ -299,7 +236,7 @@ describe("GET //refresh-token", () => {
 });
 
 describe("GET /confirm/:token", () => {
-  test("responds with status 400 and message for no token provided", async () => {
+  test("responds with status 404 and message for no token provided", async () => {
     const response = await request(app).get("/users/confirm/");
 
     expect(response.status).toBe(404);
@@ -314,17 +251,10 @@ describe("GET /confirm/:token", () => {
   });
 
   test("responds with status 200 and HTML for valid token", async () => {
-    const newUser = await prisma.user.create({
-      data: {
-        username: "test_user_email_confirmation",
-        password: "123123",
-        email: "email_confirmation@mail.com",
-        isEmailConfirmed: false,
-      },
-    });
+    const userInDB = await createUserInDB();
 
     const accessToken = jwt.sign(
-      { email: newUser.email, username: newUser.username },
+      { email: userInDB.email, username: userInDB.username },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "1d" },
     );
@@ -334,6 +264,6 @@ describe("GET /confirm/:token", () => {
     expect(response.status).toBe(200);
     expect(response.text).toContain(emailConfirmHTML());
 
-    await prisma.user.delete({ where: { username: newUser.username } });
+    await removeUserFromDB(userInDB);
   });
 });

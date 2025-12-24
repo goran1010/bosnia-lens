@@ -1,33 +1,10 @@
 import request from "supertest";
 import { describe, test, expect, vi } from "vitest";
-import prisma from "../db/prisma.js";
+import removeUserFromDB from "./utils/removeUserFromDB.js";
 import app from "../app.js";
 import axios from "axios";
-
-async function createAndLoginUser(newUser) {
-  const createUserData = {
-    username: newUser.username,
-    password: "123123",
-    email: newUser.email,
-    ["confirm-password"]: "123123",
-  };
-  await request(app).post("/users/signup").send(createUserData);
-
-  await prisma.user.update({
-    where: { username: createUserData.username },
-    data: { isEmailConfirmed: true },
-  });
-
-  const requestData = {
-    username: createUserData.username,
-    password: "123123",
-  };
-  const responseData = await request(app)
-    .post("/users/login")
-    .send(requestData);
-
-  return responseData;
-}
+import createAndLoginUser from "./utils/createUserAndLogin.js";
+import createNewUser from "./utils/createNewUser.js";
 
 describe("GET /me", () => {
   test("responds with status 403 and Need to be logged in if not logged in", async () => {
@@ -58,10 +35,10 @@ describe("GET /me", () => {
   });
 
   test("responds with status 200 and User is authenticated if logged in", async () => {
-    const newUser = {
-      username: "test_user_me",
-      email: "example_me@mail.com",
-    };
+    const newUser = createNewUser({
+      username: "test_user_auth",
+      email: "test_user_auth@mail.com",
+    });
 
     const responseData = await createAndLoginUser(newUser);
 
@@ -75,7 +52,7 @@ describe("GET /me", () => {
     expect(response.status).toBe(200);
     expect(response.body.message).toEqual(loggedInResponse.message);
 
-    await prisma.user.delete({ where: { username: newUser.username } });
+    await removeUserFromDB(newUser);
   });
 });
 
