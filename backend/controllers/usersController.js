@@ -142,8 +142,8 @@ export async function login(req, res) {
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    sameSite: "none",
-    secure: true,
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    secure: process.env.NODE_ENV === "production",
     maxAge: 30 * 24 * 60 * 60 * 1000,
   });
 
@@ -157,6 +157,8 @@ export async function login(req, res) {
 }
 
 export function logout(req, res) {
+  console.log("clearing cookie");
+  console.log(req.cookies);
   res.clearCookie("refreshToken");
   res.json({ message: "User logged out successfully" });
 }
