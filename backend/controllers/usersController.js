@@ -140,6 +140,12 @@ export async function login(req, res) {
     { expiresIn: "30d" },
   );
 
+  console.log("Is production:", process.env.NODE_ENV === "production");
+  console.log(
+    "Setting cookie with secure flag:",
+    process.env.NODE_ENV === "production" ? "none" : "lax",
+  );
+
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
@@ -157,8 +163,6 @@ export async function login(req, res) {
 }
 
 export function logout(req, res) {
-  console.log("clearing cookie");
-  console.log(req.cookies);
   res.clearCookie("refreshToken");
   res.json({ message: "User logged out successfully" });
 }
