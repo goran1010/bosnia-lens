@@ -140,12 +140,6 @@ export async function login(req, res) {
     { expiresIn: "30d" },
   );
 
-  console.log(
-    "Same site",
-    process.env.NODE_ENV === "production" ? "none" : "lax",
-  );
-  console.log("Secure:", process.env.NODE_ENV === "production");
-
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
@@ -162,6 +156,7 @@ export async function login(req, res) {
   });
 }
 
+// Must set all clearCookie options to successfully clear the cookie
 export function logout(req, res) {
   res.clearCookie("refreshToken", {
     httpOnly: true,
