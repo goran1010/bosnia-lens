@@ -25,70 +25,116 @@ export async function githubCallback(req, res) {
   const { code } = req.query;
 
   if (!code) {
-    return res.status(400).json({ error: "Code not provided" });
+    return res.redirect(`${process.env.URL}/login?error=no_code`);
   }
 
-  const body = {
-    client_id: gitHubClientId,
-    client_secret: gitHubClientSecret,
-    code,
-  };
+  try {
+    const body = {
+      client_id: gitHubClientId,
+      client_secret: gitHubClientSecret,
+      code,
+    };
 
-  const options = { headers: { accept: "application/json" } };
+    const options = { headers: { accept: "application/json" } };
 
-  const response = await axios.post(
-    "https://github.com/login/oauth/access_token",
-    body,
-    options,
-  );
+    const response = await axios.post(
+      "https://github.com/login/oauth/access_token",
+      body,
+      options,
+    );
 
-  const githubAccessToken = response.data.access_token;
+    const githubAccessToken = response.data.access_token;
 
-  const userData = await axios.get(`https://api.github.com/user`, {
-    headers: { Authorization: `Bearer ${githubAccessToken}` },
-  });
-
-  let { email, login } = userData.data;
-
-  let userExists = await prisma.user.findUnique({ where: { email } });
-
-  if (userExists) {
-    login = userExists.username;
-
-    if (!userExists.isEmailConfirmed) {
-      await prisma.user.update({
-        where: { email: userExists.email },
-        data: { isEmailConfirmed: true },
-      });
+    if (!githubAccessToken) {
+      return res.redirect(`${process.env.URL}/login?error=no_token`);
     }
+
+    const userData = await axios.get(`https://api.github.com/user`, {
+      headers: { Authorization: `Bearer ${githubAccessToken}` },
+    });
+
+    let { email, login } = userData.data;
+
+    if (!email) {
+      return res.redirect(`${process.env.URL}/login?error=no_email`);
+    }
+
+    let userExists = await prisma.user.findUnique({ where: { email } });
+
+    if (userExists) {
+      login = userExists.username;
+
+      if (!userExists.isEmailConfirmed) {
+        await prisma.user.update({
+          where: { email: userExists.email },
+          data: { isEmailConfirmed: true },
+        });
+      }
+    }
+
+    const accessToken = jwt.sign(
+      { email, username: login },
+      ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: "30m",
+      },
+    );
+
+    const refreshToken = jwt.sign(
+      { email, username: login },
+      REFRESH_TOKEN_SECRET,
+      { expiresIn: "30d" },
+    );
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+    });
+
+    // Send HTML page that will post message to parent window
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Authentication Success</title>
+        </head>
+        <body>
+          <script>
+            window.opener.postMessage({
+              type: 'github-auth-success',
+              data: ${JSON.stringify({
+                accessToken,
+                user: { email, username: login },
+                message: `User ${login} logged in successfully`,
+              })}
+            }, '${process.env.URL}');
+            window.close();
+          </script>
+        </body>
+      </html>
+    `;
+    res.send(html);
+  } catch (error) {
+    console.error("GitHub OAuth error:", error);
+    const errorHtml = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Authentication Error</title>
+        </head>
+        <body>
+          <script>
+            window.opener.postMessage({
+              type: 'github-auth-error',
+              error: ${JSON.stringify(error.message)}
+            }, '${process.env.URL}');
+            window.close();
+          </script>
+        </body>
+      </html>
+    `;
+    res.send(errorHtml);
   }
-
-  const accessToken = jwt.sign(
-    { email, username: login },
-    ACCESS_TOKEN_SECRET,
-    {
-      expiresIn: "30m",
-    },
-  );
-
-  const refreshToken = jwt.sign(
-    { email, username: login },
-    REFRESH_TOKEN_SECRET,
-    { expiresIn: "30d" },
-  );
-
-  res.cookie("refreshToken", refreshToken, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: false,
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-  });
-
-  res.json({
-    message: `User ${login} logged in successfully`,
-    data: {
-      accessToken,
-      user: { email, username: login },
-    },
-  });
 }
