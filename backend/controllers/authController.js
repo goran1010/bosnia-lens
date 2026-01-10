@@ -88,27 +88,53 @@ export async function githubCallback(req, res) {
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      sameSite: "lax",
-      secure: false,
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: process.env.NODE_ENV === "production",
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
 
-    // Redirect to frontend with success data encoded in URL
-    const successData = encodeURIComponent(
-      JSON.stringify({
-        accessToken,
-        user: { email, username: login },
-        message: `User ${login} logged in successfully`,
-      }),
-    );
-
-    res.redirect(
-      `${process.env.URL}/auth/github-callback?success=${successData}`,
-    );
+    // Send HTML page that will post message to parent window
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Authentication Success</title>
+        </head>
+        <body>
+          <script>
+            window.opener.postMessage({
+              type: 'github-auth-success',
+              data: ${JSON.stringify({
+                accessToken,
+                user: { email, username: login },
+                message: `User ${login} logged in successfully`,
+              })}
+            }, '${process.env.URL}');
+            window.close();
+          </script>
+        </body>
+      </html>
+    `;
+    res.send(html);
   } catch (error) {
     console.error("GitHub OAuth error:", error);
-    res.redirect(
-      `${process.env.URL}/login?error=${encodeURIComponent(error.message)}`,
-    );
+    const errorHtml = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Authentication Error</title>
+        </head>
+        <body>
+          <script>
+            window.opener.postMessage({
+              type: 'github-auth-error',
+              error: ${JSON.stringify(error.message)}
+            }, '${process.env.URL}');
+            window.close();
+          </script>
+        </body>
+      </html>
+    `;
+    res.send(errorHtml);
   }
 }

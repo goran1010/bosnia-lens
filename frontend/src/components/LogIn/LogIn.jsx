@@ -1,11 +1,48 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
 import Spinner from "@goran1010/spinner";
 import MessageCard from "../MessageCard.jsx";
 import LogInForm from "./LogInForm.jsx";
+import UserDataContext from "../../utils/UserDataContext";
 
 export default function LogIn() {
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { setUserData, setMessage } = useContext(UserDataContext);
+
+  useEffect(() => {
+    const handleMessage = (event) => {
+      // Verify origin
+      if (event.origin !== import.meta.env.VITE_BACKEND_URL) {
+        return;
+      }
+
+      if (event.data.type === "github-auth-success") {
+        const { accessToken, user, message } = event.data.data;
+        setUserData([{ accessToken, user }]);
+        setMessage(["Success!", [message]]);
+        navigate("/");
+      } else if (event.data.type === "github-auth-error") {
+        setMessage(["Authentication failed", [event.data.error]]);
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, [navigate, setUserData, setMessage]);
+
+  const handleGitHubLogin = () => {
+    const width = 600;
+    const height = 700;
+    const left = window.screenX + (window.outerWidth - width) / 2;
+    const top = window.screenY + (window.outerHeight - height) / 2;
+
+    window.open(
+      `${import.meta.env.VITE_BACKEND_URL}/auth/github`,
+      "GitHub Login",
+      `width=${width},height=${height},left=${left},top=${top}`
+    );
+  };
 
   return (
     <div className="relative min-h-full flex items-center justify-center bg-gray-50 ">
@@ -17,13 +54,14 @@ export default function LogIn() {
         <LogInForm setLoading={setLoading} />
 
         <div className="relative flex items-center my-4">
-          <div className="flex-grow border-t border-gray-300"></div>
+          <div className="grow border-t border-gray-300"></div>
           <span className="mx-4 text-gray-500 text-sm">OR</span>
-          <div className="flex-grow border-t border-gray-300"></div>
+          <div className="grow border-t border-gray-300"></div>
         </div>
 
-        <a
-          href={`${import.meta.env.VITE_BACKEND_URL}/auth/github`}
+        <button
+          onClick={handleGitHubLogin}
+          type="button"
           className="w-full bg-gray-800 text-white py-2 px-4 rounded-md hover:bg-gray-900 transition-colors flex items-center justify-center gap-3 font-medium"
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -34,7 +72,7 @@ export default function LogIn() {
             />
           </svg>
           Log in with GitHub
-        </a>
+        </button>
 
         <div className="relative mt-4">
           <p className="text-center">

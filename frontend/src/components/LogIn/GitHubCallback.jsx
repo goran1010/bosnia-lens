@@ -38,6 +38,9 @@ export default function GitHubCallback() {
         setUserData([{ accessToken: data.accessToken, user: data.user }]);
         setStatus("success");
         setMessage(["Success!", [data.message]]);
+
+        
+
         setTimeout(() => navigate("/"), 1500);
       } catch (err) {
         console.error("Failed to parse success data:", err);
