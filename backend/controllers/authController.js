@@ -59,7 +59,7 @@ export async function githubCallback(req, res) {
       return res.redirect(`${process.env.URL}/login?error=no_email`);
     }
 
-    let userExists = await usersModel.getAllUserByEmail(email);
+    let userExists = await usersModel.getUserByEmail(email);
 
     if (userExists) {
       login = userExists.username;
