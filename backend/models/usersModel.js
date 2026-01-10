@@ -7,3 +7,10 @@ export async function getUserByUsername(username) {
 export async function getUserByEmail(email) {
   return await prisma.user.findUnique({ where: { email } });
 }
+
+export async function updateEmailConfirmed(email) {
+  return await prisma.user.update({
+    where: { email: email },
+    data: { isEmailConfirmed: true },
+  });
+}
