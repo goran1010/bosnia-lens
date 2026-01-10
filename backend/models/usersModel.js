@@ -1,16 +1,33 @@
 import prisma from "../db/prisma.js";
 
-export async function getUserByUsername(username) {
-  return await prisma.user.findUnique({ where: { username } });
+export function getUserByUsername(username) {
+  return prisma.user.findUnique({ where: { username } });
 }
 
-export async function getUserByEmail(email) {
-  return await prisma.user.findUnique({ where: { email } });
+export function getUserByEmail(email) {
+  return prisma.user.findUnique({ where: { email } });
 }
 
-export async function updateEmailConfirmedByEmail(email) {
-  return await prisma.user.update({
-    where: { email: email },
+export function updateEmailConfirmedByEmail(email) {
+  return prisma.user.update({
+    where: { email },
     data: { isEmailConfirmed: true },
+  });
+}
+
+export function updateEmailConfirmedByUsername(username) {
+  return prisma.user.update({
+    where: { username },
+    data: { isEmailConfirmed: true },
+  });
+}
+
+export function createNewUser(username, email, password) {
+  return prisma.user.create({
+    data: {
+      username,
+      email,
+      password,
+    },
   });
 }

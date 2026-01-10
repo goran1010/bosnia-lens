@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import prisma from "../db/prisma.js";
+import * as usersModel from "../models/usersModel.js";
 import jwt from "jsonwebtoken";
 import sendConfirmationEmail from "../email/confirmationEmail.js";
 import emailConfirmHTML from "../utils/emailConfirmHTML.js";
@@ -18,9 +18,7 @@ export async function signup(req, res) {
     const { username, email, password } = req.body;
     const hashedPassword = bcrypt.hashSync(password, 10);
 
-    const userExists = await prisma.user.findUnique({
-      where: { username },
-    });
+    const userExists = await usersModel.getUserByUsername(username);
 
     if (userExists) {
       return res.status(400).json({ error: "Username already taken" });
@@ -41,13 +39,11 @@ export async function signup(req, res) {
     );
 
     if (result.success) {
-      const user = await prisma.user.create({
-        data: {
-          username,
-          email,
-          password: hashedPassword,
-        },
-      });
+      const user = await usersModel.createNewUser(
+        username,
+        email,
+        hashedPassword,
+      );
 
       if (!user) {
         return res.status(400).json({ error: "User could not be created" });
@@ -77,9 +73,7 @@ export async function confirmEmail(req, res) {
   try {
     const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET);
 
-    const user = await prisma.user.findUnique({
-      where: { username: decoded.username },
-    });
+    const user = await usersModel.getUserByUsername(decoded.username);
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -89,12 +83,7 @@ export async function confirmEmail(req, res) {
       return res.status(400).json({ error: "Email already confirmed" });
     }
 
-    await prisma.user.update({
-      where: { username: decoded.username },
-      data: {
-        isEmailConfirmed: true,
-      },
-    });
+    await usersModel.updateEmailConfirmedByUsername(decoded.username);
 
     res.send(emailConfirmHTML());
   } catch (err) {
@@ -109,9 +98,7 @@ export async function confirmEmail(req, res) {
 export async function login(req, res) {
   const { username, password } = req.body;
 
-  const user = await prisma.user.findUnique({
-    where: { username },
-  });
+  const user = await usersModel.getUserByUsername(username);
 
   if (!user) {
     return res.status(400).json({ error: "Invalid username or password" });
