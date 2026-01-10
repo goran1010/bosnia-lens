@@ -27,7 +27,7 @@ export default function GitHubCallback() {
         errorMessage = decodeURIComponent(error);
       }
 
-      setMessage(["Authentication failed", errorMessage]);
+      setMessage(["Authentication failed", [errorMessage]]);
       setTimeout(() => navigate("/login"), 3000);
       return;
     }
@@ -37,10 +37,7 @@ export default function GitHubCallback() {
         const data = JSON.parse(decodeURIComponent(successData));
         setUserData([{ accessToken: data.accessToken, user: data.user }]);
         setStatus("success");
-        setMessage([
-          "Success!",
-          data.message || "Successfully authenticated with GitHub",
-        ]);
+        setMessage(["Success!", [data.message]]);
         setTimeout(() => navigate("/"), 1500);
       } catch (err) {
         console.error("Failed to parse success data:", err);

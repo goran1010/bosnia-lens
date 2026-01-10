@@ -15,7 +15,6 @@ export async function githubLogin(req, res) {
   const params = {
     scope: "read:user",
     client_id: gitHubClientId,
-    redirect_uri: `${process.env.BACKEND_URL}/auth/github-callback`,
   };
 
   const urlEncodedParams = new URLSearchParams(params).toString();

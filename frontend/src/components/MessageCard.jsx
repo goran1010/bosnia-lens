@@ -3,6 +3,7 @@ import { useContext } from "react";
 
 export default function MessageCard() {
   const { message, setMessage } = useContext(UserDataContext);
+  console.log("MessageCard message:", message);
 
   if (message.length === 0) return null;
 
