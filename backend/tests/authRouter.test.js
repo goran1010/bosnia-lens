@@ -79,6 +79,21 @@ describe("GitHub callback", () => {
     expect(response.header.location).toMatch(/login\?error=no_code/);
   });
 
+  test("github-callback?code= route responds with 500 and HTML if error is thrown", async () => {
+    const validCode = "valid_code";
+
+    const mockPost = vi.spyOn(axios, "post").mockResolvedValue({});
+
+    const response = await request(app).get(
+      `/auth/github-callback?code=${validCode}`,
+    );
+
+    expect(response.status).toBe(500);
+    expect(response.text).toMatch(/ <title>Authentication Error<\/title>/i);
+
+    mockPost.mockRestore();
+  });
+
   test("github-callback?code= route responds with 302 and /login?error=no_token if no_access token", async () => {
     const validCode = "valid_code";
 
@@ -133,7 +148,7 @@ describe("GitHub callback", () => {
     );
 
     expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty("data");
+    expect(response.text).toMatch(/<title>Authentication Success<\/title>/i);
 
     mockPost.mockRestore();
     mockGet.mockRestore();

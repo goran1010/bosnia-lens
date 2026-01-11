@@ -135,6 +135,6 @@ export async function githubCallback(req, res) {
         </body>
       </html>
     `;
-    res.send(errorHtml);
+    res.status(500).send(errorHtml);
   }
 }
