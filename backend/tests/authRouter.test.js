@@ -79,10 +79,26 @@ describe("GitHub callback", () => {
     expect(response.header.location).toMatch(/login\?error=no_code/);
   });
 
+  test("github-callback?code= route responds with 302 and /login?error=no_token if no_access token", async () => {
+    const validCode = "valid_code";
+
+    const mockPost = vi.spyOn(axios, "post").mockResolvedValue({
+      data: {},
+    });
+
+    const response = await request(app).get(
+      `/auth/github-callback?code=${validCode}`,
+    );
+
+    expect(response.status).toBe(302);
+    expect(response.header.location).toMatch(/login\?error=no_token/i);
+
+    mockPost.mockRestore();
+  });
+
   test("github-callback?code= route responds with 200 and tokens if valid code is provided", async () => {
     const validCode = "valid_code";
 
-    // Mock axios post and get requests
     const mockPost = vi.spyOn(axios, "post").mockResolvedValue({
       data: { access_token: "mock_github_access_token" },
     });
