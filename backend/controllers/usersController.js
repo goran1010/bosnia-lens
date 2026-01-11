@@ -18,7 +18,7 @@ export async function signup(req, res) {
     const { username, email, password } = req.body;
     const hashedPassword = bcrypt.hashSync(password, 10);
 
-    const userExists = await usersModel.getUserByUsername(username);
+    const userExists = await usersModel.find({ username });
 
     if (userExists) {
       return res.status(400).json({ error: "Username already taken" });
@@ -39,11 +39,11 @@ export async function signup(req, res) {
     );
 
     if (result.success) {
-      const user = await usersModel.createNewUser(
+      const user = await usersModel.create({
         username,
         email,
-        hashedPassword,
-      );
+        password: hashedPassword,
+      });
 
       if (!user) {
         return res.status(400).json({ error: "User could not be created" });
@@ -73,7 +73,7 @@ export async function confirmEmail(req, res) {
   try {
     const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET);
 
-    const user = await usersModel.getUserByUsername(decoded.username);
+    const user = await usersModel.find({ username: decoded.username });
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -83,7 +83,10 @@ export async function confirmEmail(req, res) {
       return res.status(400).json({ error: "Email already confirmed" });
     }
 
-    await usersModel.updateEmailConfirmedByUsername(decoded.username);
+    await usersModel.update(
+      { username: decoded.username },
+      { isEmailConfirmed: true },
+    );
 
     res.send(emailConfirmHTML());
   } catch (err) {
@@ -98,7 +101,7 @@ export async function confirmEmail(req, res) {
 export async function login(req, res) {
   const { username, password } = req.body;
 
-  const user = await usersModel.getUserByUsername(username);
+  const user = await usersModel.find({ username });
 
   if (!user) {
     return res.status(400).json({ error: "Invalid username or password" });
