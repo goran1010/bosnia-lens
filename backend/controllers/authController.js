@@ -1,6 +1,6 @@
 import axios from "axios";
-import prisma from "../db/prisma.js";
 import jwt from "jsonwebtoken";
+import * as usersModel from "../models/usersModel.js";
 
 const gitHubClientId = process.env.CLIENT_ID;
 const gitHubClientSecret = process.env.CLIENT_SECRET;
@@ -59,16 +59,16 @@ export async function githubCallback(req, res) {
       return res.redirect(`${process.env.URL}/login?error=no_email`);
     }
 
-    let userExists = await prisma.user.findUnique({ where: { email } });
+    let userExists = await usersModel.find({ email });
 
     if (userExists) {
       login = userExists.username;
 
       if (!userExists.isEmailConfirmed) {
-        await prisma.user.update({
-          where: { email: userExists.email },
-          data: { isEmailConfirmed: true },
-        });
+        await usersModel.update(
+          { email: userExists.email },
+          { isEmailConfirmed: true },
+        );
       }
     }
 
