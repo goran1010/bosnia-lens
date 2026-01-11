@@ -72,11 +72,11 @@ describe("GitHub login", () => {
 });
 
 describe("GitHub callback", () => {
-  test("github-callback route responds with 400 if no code is provided", async () => {
+  test("github-callback route responds with 302 and redirects if no code is provided", async () => {
     const response = await request(app).get("/auth/github-callback");
 
-    expect(response.status).toBe(400);
-    expect(response.body).toEqual({ error: "Code not provided" });
+    expect(response.status).toBe(302);
+    expect(response.header.location).toMatch(/login\?error=no_code/);
   });
 
   test("github-callback?code= route responds with 200 and tokens if valid code is provided", async () => {
