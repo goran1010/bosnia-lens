@@ -1,6 +1,6 @@
 import request from "supertest";
-import prisma from "../../db/prisma";
-import app from "../../app";
+import prisma from "../../../db/prisma";
+import app from "../../../app";
 
 export default async function createAndLoginUser(newUser) {
   const createUserData = {

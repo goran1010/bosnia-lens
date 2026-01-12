@@ -1,4 +1,4 @@
-import prisma from "../../db/prisma";
+import prisma from "../../../db/prisma";
 import createNewUser from "./createNewUser";
 
 export default async function createUserInDB(newUser) {

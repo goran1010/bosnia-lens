@@ -1,9 +1,9 @@
 import request from "supertest";
-import app from "../app.js";
+import app from "../../app.js";
 import jwt from "jsonwebtoken";
 import { describe, test, expect } from "vitest";
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
-import emailConfirmHTML from "../utils/emailConfirmHTML.js";
+import emailConfirmHTML from "../../utils/emailConfirmHTML.js";
 import createAndLoginUser from "./utils/createUserAndLogin.js";
 import removeUserFromDB from "./utils/removeUserFromDB.js";
 import createNewUser from "./utils/createNewUser.js";

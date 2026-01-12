@@ -1,10 +1,8 @@
 import request from "supertest";
 import { describe, test, expect, vi } from "vitest";
-import removeUserFromDB from "./utils/removeUserFromDB.js";
-import app from "../app.js";
+import app from "../../app.js";
 import axios from "axios";
-import createAndLoginUser from "./utils/createUserAndLogin.js";
-import createNewUser from "./utils/createNewUser.js";
+import jwt from "jsonwebtoken";
 
 describe("GET /me", () => {
   test("responds with status 403 and Need to be logged in if not logged in", async () => {
@@ -35,24 +33,23 @@ describe("GET /me", () => {
   });
 
   test("responds with status 200 and User is authenticated if logged in", async () => {
-    const newUser = createNewUser({
-      username: "test_user_auth",
-      email: "test_user_auth@mail.com",
-    });
-
-    const responseData = await createAndLoginUser(newUser);
+    const accessToken = jwt.sign(
+      { email: "test_email@mail.com", username: "test_username" },
+      process.env.ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: "30m",
+      },
+    );
 
     const loggedInResponse = { message: "User is authenticated" };
 
     const response = await request(app)
       .get("/auth/me")
-      .set("Authorization", `Token ${responseData.body.data.accessToken}`);
+      .set("Authorization", `Token ${accessToken}`);
 
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(200);
     expect(response.body.message).toEqual(loggedInResponse.message);
-
-    await removeUserFromDB(newUser);
   });
 });
 
