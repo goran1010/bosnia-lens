@@ -7,7 +7,7 @@ describe.skip("process.env.URL missing or undefined", () => {
 
     let error;
     try {
-      await import("../app.js");
+      await import("../../app.js");
     } catch (err) {
       error = err;
     }
