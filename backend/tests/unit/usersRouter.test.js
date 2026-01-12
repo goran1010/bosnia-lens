@@ -1,7 +1,7 @@
 import request from "supertest";
 import app from "../../app.js";
 import jwt from "jsonwebtoken";
-import { describe, test, expect, vi } from "vitest";
+import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 import emailConfirmHTML from "../../utils/emailConfirmHTML.js";
 import createNewUser from "./utils/createNewUser.js";
@@ -16,6 +16,16 @@ vi.mock("../../email/confirmationEmail.js", () => ({
     };
   }),
 }));
+
+beforeEach(() => {
+  vi.spyOn(usersModel, "find").mockResolvedValue();
+  vi.spyOn(usersModel, "update").mockResolvedValue();
+  vi.spyOn(usersModel, "create").mockResolvedValue();
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 describe("POST /signup", () => {
   test("responds with status 400 and message for incorrect username input", async () => {
@@ -90,7 +100,6 @@ describe("POST /signup", () => {
   });
 
   test("successfully create a user and returns status 201 and message", async () => {
-    vi.spyOn(usersModel, "find").mockResolvedValueOnce();
     vi.spyOn(usersModel, "create").mockResolvedValueOnce(true);
 
     const responseData = {
@@ -134,8 +143,6 @@ describe("POST /signup", () => {
 
 describe("POST /login", () => {
   test("responds with Invalid username or password for wrong input", async () => {
-    vi.spyOn(usersModel, "find").mockResolvedValueOnce();
-
     const newUser = createNewUser();
 
     const responseData = { error: "Invalid username or password" };
@@ -243,13 +250,12 @@ describe("GET /confirm/:token", () => {
     const accessToken = jwt.sign(
       { email: newUser.email, username: newUser.username },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "1d" },
+      { expiresIn: "15m" },
     );
 
     vi.spyOn(usersModel, "find").mockResolvedValueOnce({
       isEmailConfirmed: false,
     });
-    vi.spyOn(usersModel, "update").mockResolvedValueOnce({});
 
     const response = await request(app).get(`/users/confirm/${accessToken}`);
 
