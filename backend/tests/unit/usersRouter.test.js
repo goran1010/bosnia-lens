@@ -1,13 +1,14 @@
 import request from "supertest";
 import app from "../../app.js";
 import jwt from "jsonwebtoken";
-import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
-const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
+import { describe, test, expect, vi } from "vitest";
 import emailConfirmHTML from "../../utils/emailConfirmHTML.js";
 import createNewUser from "./utils/createNewUser.js";
 import * as usersModel from "../../models/usersModel.js";
 import sendConfirmationEmail from "../../email/confirmationEmail.js";
 import bcrypt from "bcryptjs";
+
+const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 
 vi.mock("../../email/confirmationEmail.js", () => ({
   default: vi.fn(() => {
@@ -18,10 +19,6 @@ vi.mock("../../email/confirmationEmail.js", () => ({
 }));
 
 vi.mock("../../models/usersModel.js");
-
-afterEach(() => {
-  vi.restoreAllMocks();
-});
 
 describe("POST /signup", () => {
   test("responds with status 400 and message for incorrect username input", async () => {
