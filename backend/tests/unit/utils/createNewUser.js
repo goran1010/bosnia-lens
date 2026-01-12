@@ -1,10 +1,10 @@
-export default function createNewUser(newUser) {
-  if (!newUser) newUser = {};
+export default function createNewUser(user = {}) {
+  const newUser = {};
 
-  newUser.username = newUser.username || "test_user";
-  newUser.password = newUser.password || "123123";
-  newUser.email = newUser.email || "test_user@mail.com";
-  newUser["confirm-password"] = newUser["confirm-password"] || "123123";
+  newUser.username = user.username || "test_user";
+  newUser.password = user.password || "123123";
+  newUser.email = user.email || "test_user@mail.com";
+  newUser["confirm-password"] = user["confirm-password"] || "123123";
 
   return newUser;
 }

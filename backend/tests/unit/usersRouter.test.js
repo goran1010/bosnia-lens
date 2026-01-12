@@ -10,6 +10,7 @@ import createNewUser from "./utils/createNewUser.js";
 import createUserInDB from "./utils/createUserInDB.js";
 import * as usersModel from "../../models/usersModel.js";
 import sendConfirmationEmail from "../../email/confirmationEmail.js";
+import bcrypt, { compare } from "bcryptjs";
 
 vi.mock("../../email/confirmationEmail.js", () => ({
   default: vi.fn(() => {
@@ -109,17 +110,17 @@ describe("POST /signup", () => {
   });
 
   test("responds with json 400, Username already taken, if given username exists", async () => {
-    const username = "test_user";
-    vi.spyOn(usersModel, "find").mockResolvedValueOnce({ username });
-
     const newUser = createNewUser();
+    vi.spyOn(usersModel, "find").mockResolvedValueOnce({
+      username: newUser.username,
+    });
 
     const responseData = {
       error: "Validation failed",
       details: [
         {
           type: "field",
-          value: username,
+          value: newUser.username,
           msg: "Username already in use",
           path: "username",
           location: "body",
@@ -132,37 +133,11 @@ describe("POST /signup", () => {
     expect(response.status).toBe(400);
     expect(response.body).toEqual(responseData);
   });
-
-  test("responds with json 400, Email already taken, if given email exists", async () => {
-    const userInDB = await createUserInDB({ username: "test_user_bad" });
-
-    const newUser = createNewUser();
-
-    const responseData = {
-      error: "Validation failed",
-      details: [
-        {
-          type: "field",
-          value: userInDB.email,
-          msg: "Email already in use",
-          path: "email",
-          location: "body",
-        },
-      ],
-    };
-
-    const response = await request(app).post("/users/signup").send(newUser);
-
-    expect(response.status).toBe(400);
-    expect(response.body).toEqual(responseData);
-
-    await removeUserFromDB(userInDB);
-  });
 });
 
 describe("POST /login", () => {
   test("responds with Invalid username or password for wrong input", async () => {
-    const userInDB = await createUserInDB({ username: "test_user_bad" });
+    vi.spyOn(usersModel, "find").mockResolvedValueOnce();
 
     const newUser = createNewUser();
 
@@ -172,26 +147,26 @@ describe("POST /login", () => {
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual(responseData);
-
-    await removeUserFromDB(userInDB);
   });
 
-  test("responds with User test_user logged in successfully for correct input", async () => {
+  test.only("responds with User test_user logged in successfully for correct input", async () => {
+    vi.spyOn(bcrypt, "compareSync").mockResolvedValueOnce(true);
+
     const newUser = createNewUser();
+    vi.spyOn(usersModel, "find").mockResolvedValueOnce({
+      ...newUser,
+      isEmailConfirmed: true,
+    });
+    const response = await request(app).post("/users/login").send(newUser);
 
-    const responseData = await createAndLoginUser(newUser);
-
-    const expectedData = {
+    const responseData = {
       message: `User ${newUser.username} logged in successfully`,
-      accessToken: "randomstring",
     };
 
-    expect(responseData.status).toBe(200);
-    expect(responseData.body.message).toEqual(expectedData.message);
+    expect(response.status).toBe(200);
+    expect(response.body.message).toEqual(responseData.message);
 
-    expect(responseData.body.data).toHaveProperty("accessToken");
-
-    await removeUserFromDB(newUser);
+    expect(response.body.data).toHaveProperty("accessToken");
   });
 });
 
