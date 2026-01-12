@@ -10,7 +10,7 @@ import createNewUser from "./utils/createNewUser.js";
 import createUserInDB from "./utils/createUserInDB.js";
 import * as usersModel from "../../models/usersModel.js";
 import sendConfirmationEmail from "../../email/confirmationEmail.js";
-import bcrypt, { compare } from "bcryptjs";
+import bcrypt from "bcryptjs";
 
 vi.mock("../../email/confirmationEmail.js", () => ({
   default: vi.fn(() => {
@@ -149,7 +149,7 @@ describe("POST /login", () => {
     expect(response.body).toEqual(responseData);
   });
 
-  test.only("responds with User test_user logged in successfully for correct input", async () => {
+  test("responds with User test_user logged in successfully for correct input", async () => {
     vi.spyOn(bcrypt, "compareSync").mockResolvedValueOnce(true);
 
     const newUser = createNewUser();
@@ -173,18 +173,22 @@ describe("POST /login", () => {
 describe("POST /logout", () => {
   test("responds User logged out successfully", async () => {
     const newUser = createNewUser();
-    const responseData = await createAndLoginUser(newUser);
+
+    const accessToken = jwt.sign(
+      { email: newUser.email, username: newUser.username },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "15m" },
+    );
 
     const response = await request(app)
       .post("/users/logout")
-      .set("Authorization", `Token ${responseData.body.data.accessToken}`);
+      .set("Authorization", `Token ${accessToken}`);
 
     expect(response.status).toBe(200);
+    expect(response.request.cookies).not.toMatch(/refreshToken/);
     expect(response.body).toEqual({
       message: "User logged out successfully",
     });
-
-    await removeUserFromDB(newUser);
   });
 });
 
