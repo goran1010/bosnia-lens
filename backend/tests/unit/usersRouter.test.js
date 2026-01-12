@@ -17,11 +17,7 @@ vi.mock("../../email/confirmationEmail.js", () => ({
   }),
 }));
 
-beforeEach(() => {
-  vi.spyOn(usersModel, "find").mockResolvedValue();
-  vi.spyOn(usersModel, "update").mockResolvedValue();
-  vi.spyOn(usersModel, "create").mockResolvedValue();
-});
+vi.mock("../../models/usersModel.js");
 
 afterEach(() => {
   vi.restoreAllMocks();
