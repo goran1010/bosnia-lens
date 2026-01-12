@@ -241,19 +241,22 @@ describe("GET /confirm/:token", () => {
   });
 
   test("responds with status 200 and HTML for valid token", async () => {
-    const userInDB = await createUserInDB();
+    const newUser = createNewUser();
 
     const accessToken = jwt.sign(
-      { email: userInDB.email, username: userInDB.username },
+      { email: newUser.email, username: newUser.username },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "1d" },
     );
+
+    vi.spyOn(usersModel, "find").mockResolvedValueOnce({
+      isEmailConfirmed: false,
+    });
+    vi.spyOn(usersModel, "update").mockResolvedValueOnce({});
 
     const response = await request(app).get(`/users/confirm/${accessToken}`);
 
     expect(response.status).toBe(200);
     expect(response.text).toContain(emailConfirmHTML());
-
-    await removeUserFromDB(userInDB);
   });
 });
