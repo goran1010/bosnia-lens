@@ -72,12 +72,7 @@ cp frontend/.env.example frontend/.env
 Initialize the database and run migrations:
 
 ```bash
-cd backend
-# run existing migrations
-npx prisma migrate deploy
-
-# generate the Prisma client
-npx prisma generate
+npm run db:test:deploy_generate
 ```
 
 End with running the development servers:
