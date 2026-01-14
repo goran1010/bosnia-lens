@@ -1,5 +1,5 @@
 import request from "supertest";
-import prisma from "../../db/prisma";
+import * as usersModel from "../../models/usersModel.js";
 import app from "../../app";
 
 export default async function createAndLoginUser(newUser) {
@@ -11,10 +11,10 @@ export default async function createAndLoginUser(newUser) {
   };
   await request(app).post("/users/signup").send(createUserData);
 
-  await prisma.user.update({
-    where: { username: createUserData.username },
-    data: { isEmailConfirmed: true },
-  });
+  await usersModel.update(
+    { username: createUserData.username },
+    { isEmailConfirmed: true },
+  );
 
   const requestData = {
     username: newUser.username,
