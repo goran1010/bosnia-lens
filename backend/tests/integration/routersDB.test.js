@@ -5,6 +5,8 @@ import createAndLoginUser from "../utils/createUserAndLogin.js";
 import createNewUserData from "../utils/createNewUser.js";
 import { afterEach } from "vitest";
 import * as usersModel from "../../models/usersModel.js";
+import jwt from "jsonwebtoken";
+import emailConfirmHTML from "../../utils/emailConfirmHTML.js";
 
 afterEach(async () => {
   await usersModel.deleteAll();
@@ -73,5 +75,25 @@ describe("usersRouter", () => {
     expect(response.body).toEqual({
       message: "User logged out successfully",
     });
+  });
+
+  test("responds with status 200 and HTML for valid token", async () => {
+    const { username, password, email } = createNewUserData();
+    const userInDB = await usersModel.create({
+      username,
+      password,
+      email,
+    });
+
+    const accessToken = jwt.sign(
+      { email: userInDB.email, username: userInDB.username },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "30d" },
+    );
+
+    const response = await request(app).get(`/users/confirm/${accessToken}`);
+
+    expect(response.status).toBe(200);
+    expect(response.text).toContain(emailConfirmHTML());
   });
 });
