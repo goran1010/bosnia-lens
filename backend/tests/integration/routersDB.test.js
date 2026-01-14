@@ -44,4 +44,20 @@ describe("usersRouter", () => {
     expect(response.status).toBe(201);
     expect(response.body).toEqual(responseData);
   });
+
+  test("responds with 200 and User test_user logged in successfully for correct input", async () => {
+    const newUser = createNewUser();
+
+    const responseData = await createAndLoginUser(newUser);
+
+    const expectedData = {
+      message: `User ${newUser.username} logged in successfully`,
+      accessToken: "randomstring",
+    };
+
+    expect(responseData.status).toBe(200);
+    expect(responseData.body.message).toEqual(expectedData.message);
+
+    expect(responseData.body.data).toHaveProperty("accessToken");
+  });
 });
