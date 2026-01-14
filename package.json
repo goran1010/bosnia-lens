@@ -2,6 +2,7 @@
   "name": "bosnia-lens",
   "private": true,
   "scripts": {
+    "db:deploy_generate": "cd backend && npx prisma migrate deploy && npx prisma generate",
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
     "dev:all": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
