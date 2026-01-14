@@ -18,3 +18,7 @@ export function create(data) {
     },
   });
 }
+
+export function deleteAll() {
+  return prisma.user.deleteMany();
+}

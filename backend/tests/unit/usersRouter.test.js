@@ -3,7 +3,7 @@ import app from "../../app.js";
 import jwt from "jsonwebtoken";
 import { describe, test, expect, vi } from "vitest";
 import emailConfirmHTML from "../../utils/emailConfirmHTML.js";
-import createNewUser from "./utils/createNewUser.js";
+import createNewUser from "../utils/createNewUser.js";
 import * as usersModel from "../../models/usersModel.js";
 import sendConfirmationEmail from "../../email/confirmationEmail.js";
 import bcrypt from "bcryptjs";
