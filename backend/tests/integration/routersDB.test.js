@@ -2,7 +2,7 @@ import request from "supertest";
 import { describe, test, expect } from "vitest";
 import app from "../../app.js";
 import createAndLoginUser from "../utils/createUserAndLogin.js";
-import createNewUser from "../utils/createNewUser.js";
+import createNewUserData from "../utils/createNewUser.js";
 import { afterEach } from "vitest";
 import * as usersModel from "../../models/usersModel.js";
 
@@ -12,12 +12,12 @@ afterEach(async () => {
 
 describe("authRouter", () => {
   test("responds with status 200 and User is authenticated if logged in", async () => {
-    const newUser = createNewUser({
+    const newUserData = createNewUserData({
       username: "test_user_auth",
       email: "test_user_auth@mail.com",
     });
 
-    const responseData = await createAndLoginUser(newUser);
+    const responseData = await createAndLoginUser(newUserData);
 
     const loggedInResponse = { message: "User is authenticated" };
 
@@ -37,21 +37,21 @@ describe("usersRouter", () => {
       message: "Registration successful! Check your email.",
     };
 
-    const newUser = createNewUser();
+    const newUserData = createNewUserData();
 
-    const response = await request(app).post("/users/signup").send(newUser);
+    const response = await request(app).post("/users/signup").send(newUserData);
 
     expect(response.status).toBe(201);
     expect(response.body).toEqual(responseData);
   });
 
-  test("responds with 200 and User test_user logged in successfully for correct input", async () => {
-    const newUser = createNewUser();
+  test("responds with 200 and User test_user logged in successfully for correct login input", async () => {
+    const newUserData = createNewUserData();
 
-    const response = await createAndLoginUser(newUser);
+    const response = await createAndLoginUser(newUserData);
 
     const expectedData = {
-      message: `User ${newUser.username} logged in successfully`,
+      message: `User ${newUserData.username} logged in successfully`,
       accessToken: "randomstring",
     };
 
@@ -59,5 +59,19 @@ describe("usersRouter", () => {
     expect(response.body.message).toEqual(expectedData.message);
 
     expect(response.body.data).toHaveProperty("accessToken");
+  });
+
+  test("responds User logged out successfully", async () => {
+    const newUserData = createNewUserData();
+    const responseData = await createAndLoginUser(newUserData);
+
+    const response = await request(app)
+      .post("/users/logout")
+      .set("Authorization", `Token ${responseData.body.data.accessToken}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      message: "User logged out successfully",
+    });
   });
 });
