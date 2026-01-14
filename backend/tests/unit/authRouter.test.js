@@ -1,10 +1,8 @@
 import request from "supertest";
 import { describe, test, expect, vi } from "vitest";
-import removeUserFromDB from "./utils/removeUserFromDB.js";
-import app from "../app.js";
+import app from "../../app.js";
 import axios from "axios";
-import createAndLoginUser from "./utils/createUserAndLogin.js";
-import createNewUser from "./utils/createNewUser.js";
+import jwt from "jsonwebtoken";
 
 describe("GET /me", () => {
   test("responds with status 403 and Need to be logged in if not logged in", async () => {
@@ -35,24 +33,23 @@ describe("GET /me", () => {
   });
 
   test("responds with status 200 and User is authenticated if logged in", async () => {
-    const newUser = createNewUser({
-      username: "test_user_auth",
-      email: "test_user_auth@mail.com",
-    });
-
-    const responseData = await createAndLoginUser(newUser);
+    const accessToken = jwt.sign(
+      { email: "test_email@mail.com", username: "test_username" },
+      process.env.ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: "30m",
+      },
+    );
 
     const loggedInResponse = { message: "User is authenticated" };
 
     const response = await request(app)
       .get("/auth/me")
-      .set("Authorization", `Token ${responseData.body.data.accessToken}`);
+      .set("Authorization", `Token ${accessToken}`);
 
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(200);
     expect(response.body.message).toEqual(loggedInResponse.message);
-
-    await removeUserFromDB(newUser);
   });
 });
 
@@ -77,6 +74,21 @@ describe("GitHub callback", () => {
 
     expect(response.status).toBe(302);
     expect(response.header.location).toMatch(/login\?error=no_code/);
+  });
+
+  test("github-callback?code= route responds with 500 and HTML if error is thrown", async () => {
+    const validCode = "valid_code";
+
+    const mockPost = vi.spyOn(axios, "post").mockResolvedValue({});
+
+    const response = await request(app).get(
+      `/auth/github-callback?code=${validCode}`,
+    );
+
+    expect(response.status).toBe(500);
+    expect(response.text).toMatch(/ <title>Authentication Error<\/title>/i);
+
+    mockPost.mockRestore();
   });
 
   test("github-callback?code= route responds with 302 and /login?error=no_token if no_access token", async () => {
@@ -133,7 +145,7 @@ describe("GitHub callback", () => {
     );
 
     expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty("data");
+    expect(response.text).toMatch(/<title>Authentication Success<\/title>/i);
 
     mockPost.mockRestore();
     mockGet.mockRestore();

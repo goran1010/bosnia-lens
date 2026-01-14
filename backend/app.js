@@ -3,12 +3,9 @@ import express from "express";
 const app = express();
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import "./config/envCheck.js";
 
 const currentURL = process.env.URL;
-
-if (!process.env.URL) {
-  throw new Error("Missing required environment variable: process.env.URL");
-}
 
 app.use(cookieParser());
 
