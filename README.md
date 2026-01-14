@@ -24,9 +24,9 @@ These instructions will get you a copy of the project up and running on your loc
 
 Before running this project, you need to have the following installed:
 
-- Node.js (v18 or higher)
+- Node.js (v22 or higher)
 - PostgreSQL database server
-- npm or yarn package manager
+- npm package manager
 
 ```bash
 node --version
@@ -36,7 +36,7 @@ psql --version
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development environment running
+A step by step series of examples that tell you how to get a development environment running.
 
 Clone the repository:
 
@@ -55,19 +55,19 @@ Set up environment variables:
 
 The repository includes example environment files for both services. Copy them and fill in real values before running the app:
 
-- Backend: copy `backend/.env.example` to `backend/.env` and edit values (database URLs, JWT secrets, email API key, etc.).
+Backend: copy `backend/.env.example` to `backend/.env` and edit values (database URLs, JWT secrets, email API key, etc.).
 
-  ```bash
-  cp backend/.env.example backend/.env
-  # edit backend/.env
-  ```
+```bash
+cp backend/.env.example backend/.env
+# edit backend/.env
+```
 
-- Frontend: copy `frontend/.env.example` to `frontend/.env` and update `VITE_BACKEND_URL` if needed.
+Frontend: copy `frontend/.env.example` to `frontend/.env` and update `VITE_BACKEND_URL` if needed.
 
-  ```bash
-  cp frontend/.env.example frontend/.env
-  # edit frontend/.env (optional)
-  ```
+```bash
+cp frontend/.env.example frontend/.env
+# edit frontend/.env (optional)
+```
 
 Initialize the database and run migrations:
 
@@ -95,17 +95,19 @@ You should now be able to access the API at `http://localhost:3000` and the web 
 
 ## Running the tests
 
-### Backend Tests
-
-Backend tests use Jest and Supertest to test API endpoints, authentication, and controllers:
+### Run All Tests
 
 ```bash
-# From root directory
-npm run test:backend
+# Run both backend and frontend tests concurrently
+npm run test:all
+```
 
-# Or from backend directory
-cd backend
-npm run test
+### Backend Tests
+
+Backend tests use Vitest and Supertest to test API endpoints, authentication, and controllers:
+
+```bash
+npm run test:backend
 ```
 
 ### Frontend Tests
@@ -113,19 +115,20 @@ npm run test
 Frontend tests use Vitest and React Testing Library for unit and integration tests:
 
 ```bash
-# From root directory
 npm run test:frontend
-
-# Or from frontend directory
-cd frontend
-npm run test
 ```
 
-### Run All Tests
+### Run test coverage
+
+Vitest test coverage is by default provided by v8:
 
 ```bash
-# Run both backend and frontend tests concurrently
-npm run test:all
+# Run both backend and frontend coverage tests concurrently
+test:coverage:all
+
+# Run coverage tests individually
+test:coverage:backend
+test:coverage:frontend
 ```
 
 ## Deployment
@@ -134,7 +137,7 @@ The project is designed to be deployed with:
 
 - **Backend**: Any Node.js hosting service (Koyeb, Railway, Render, Heroku)
 - **Frontend**: Static hosting (Netlify, Vercel)
-- **Database**: PostgreSQL (Supabase, PlanetScale, or self-hosted)
+- **Database**: PostgreSQL (Supabase, Koyeb, or self-hosted)
 
 Configure production environment variables and run build commands for each service.
 
@@ -142,26 +145,26 @@ Configure production environment variables and run build commands for each servi
 
 ### Backend
 
-- [Express.js](https://expressjs.com/) - Web framework for the REST API
-- [Prisma](https://www.prisma.io/) - Database ORM and migration tool
-- [PostgreSQL](https://www.postgresql.org/) - Database system
-- [JSON Web Tokens](https://jwt.io/) - Authentication and authorization
-- [bcryptjs](https://www.npmjs.com/package/bcryptjs) - Password hashing
-- [Express Validator](https://express-validator.github.io/) - Request validation
-- [Resend](https://resend.com/) - Email service for confirmations
-- [Jest](https://jestjs.io/) & [Supertest](https://github.com/ladjs/supertest) - Testing
+- [Express.js](https://expressjs.com/)
+- [Prisma](https://www.prisma.io/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [JSON Web Tokens](https://jwt.io/)
+- [bcryptjs](https://www.npmjs.com/package/bcryptjs)
+- [Express Validator](https://express-validator.github.io/)
+- [Resend](https://resend.com/)
+- [Vitest](https://vitest.dev/) & [Supertest](https://github.com/ladjs/supertest)
 
 ### Frontend
 
-- [React](https://reactjs.org/) - UI library (v19)
-- [Vite](https://vitejs.dev/) - Build tool and development server
-- [React Router](https://reactrouter.com/) - Client-side routing
-- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
-- [Vitest](https://vitest.dev/) & [React Testing Library](https://testing-library.com/react) - Testing
+- [React](https://reactjs.org/)
+- [Vite](https://vitejs.dev/)
+- [React Router](https://reactrouter.com/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Vitest](https://vitest.dev/) & [React Testing Library](https://testing-library.com/react)
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us. We welcome contributions of data, code improvements, documentation, and bug reports.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests. Contributions of data, code improvements, documentation, and bug reports are all welcomed.
 
 ## Authors
 
@@ -172,9 +175,3 @@ See also the list of [contributors](https://github.com/goran1010/bosnia-lens/con
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details. All data used will be public domain or properly attributed to its original source.
-
-## Acknowledgments
-
-- Inspired by global open data initiatives
-- Thanks to the open-source community for tools and libraries
-- Special recognition to contributors helping maintain accurate data about Bosnia and Herzegovina
