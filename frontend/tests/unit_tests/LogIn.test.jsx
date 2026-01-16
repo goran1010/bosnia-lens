@@ -13,7 +13,7 @@ function createFormElements() {
   return {
     usernameField: screen.getByLabelText(/Username/i),
     passwordField: screen.getByLabelText("Password"),
-    logInButton: screen.getByRole("button", { name: /Log in/i }),
+    logInButton: screen.getByRole("button", { name: "Log in" }),
   };
 }
 
