@@ -6,6 +6,8 @@ import UserDataContext from "./utils/UserDataContext";
 import Spinner from "@goran1010/spinner";
 import useStatusCheck from "./customHooks/useStatusCheck.jsx";
 
+// Need to rework to save userData in a more persistent way
+
 function Root() {
   const [userData, setUserData] = useState(null);
   const [message, setMessage] = useState([]);
