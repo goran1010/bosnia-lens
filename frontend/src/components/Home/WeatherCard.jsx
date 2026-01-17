@@ -1,6 +1,13 @@
 import getDayInWeek from "../../utils/getDayInWeek";
 
 export default function WeatherCard({ weatherForecast }) {
+  if (!weatherForecast || weatherForecast.length === 0) {
+    return (
+      <section>
+        <p>Weather forecast failed to be fetched.</p>
+      </section>
+    );
+  }
   return (
     <section className="flex flex-col items-center">
       <div className="flex">
@@ -12,7 +19,10 @@ export default function WeatherCard({ weatherForecast }) {
             >
               <div>{getDayInWeek(day.datetime)}</div>
               <div className="flex flex-col items-center justify-center w-15 h-15">
-                <img src={day.iconURL} alt="" />
+                <img
+                  src={day.iconURL}
+                  alt={`Icon for ${getDayInWeek(day.datetime)}`}
+                />
               </div>
               <div className="flex flex-col">
                 <div>min: {day.tempmin}</div>

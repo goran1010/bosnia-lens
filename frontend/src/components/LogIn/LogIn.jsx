@@ -5,6 +5,8 @@ import MessageCard from "../MessageCard.jsx";
 import LogInForm from "./LogInForm.jsx";
 import UserDataContext from "../../utils/UserDataContext";
 
+//Need to rework to not use new window
+
 export default function LogIn() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -40,7 +42,7 @@ export default function LogIn() {
     window.open(
       `${import.meta.env.VITE_BACKEND_URL}/auth/github`,
       "GitHub Login",
-      `width=${width},height=${height},left=${left},top=${top}`
+      `width=${width},height=${height},left=${left},top=${top}`,
     );
   };
 
