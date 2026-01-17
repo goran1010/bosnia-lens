@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => {
 
   if (missingVars.length > 0) {
     throw new Error(
-      `Missing required environment variables: ${missingVars.join(", ")}`
+      `Missing required environment variables: ${missingVars.join(", ")}`,
     );
   }
 
@@ -23,6 +23,15 @@ export default defineConfig(({ mode }) => {
       globals: true,
       environment: "jsdom",
       setupFiles: "./tests/setup.js",
+      coverage: {
+        include: ["src/**/*.{js,jsx}"],
+        exclude: [
+          "src/main.jsx",
+          "**/*.test.{js,jsx}",
+          "**/*.config.{js,jsx}",
+          "**/node_modules/**",
+        ],
+      },
     },
   };
 });
