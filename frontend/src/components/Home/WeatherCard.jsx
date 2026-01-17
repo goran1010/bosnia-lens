@@ -1,6 +1,13 @@
 import getDayInWeek from "../../utils/getDayInWeek";
 
 export default function WeatherCard({ weatherForecast }) {
+  if (!weatherForecast || weatherForecast.length === 0) {
+    return (
+      <section>
+        <p>Weather forecast failed to be fetched.</p>
+      </section>
+    );
+  }
   return (
     <section className="flex flex-col items-center">
       <div className="flex">
