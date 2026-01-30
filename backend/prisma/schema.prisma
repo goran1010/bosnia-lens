@@ -22,3 +22,12 @@ model User {
 
   @@map("users")
 }
+
+model PostalCode {
+  id   String  @id @default(uuid())
+  code String  @unique
+  city String
+  post String?
+
+  @@map("postal_codes")
+}
