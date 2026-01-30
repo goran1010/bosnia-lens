@@ -13,7 +13,7 @@ function Root() {
   const [message, setMessage] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useStatusCheck(userData, setUserData, setLoading);
+  useStatusCheck(setUserData, setLoading);
 
   return (
     <UserDataContext value={{ userData, setUserData, message, setMessage }}>
