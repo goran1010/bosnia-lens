@@ -168,6 +168,6 @@ export function refreshToken(req, res) {
       { expiresIn: "30m" },
     );
 
-    res.json({ data: { accessToken } });
+    res.json({ data: { user: decodedToken, accessToken } });
   });
 }

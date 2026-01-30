@@ -7,8 +7,14 @@ const gitHubClientSecret = process.env.CLIENT_SECRET;
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 
-export function me(req, res) {
-  res.json({ message: "User is authenticated" });
+export async function me(req, res) {
+  const token = req.token;
+  if (!token) {
+    return res.status(401).json({ error: "No token provided" });
+  }
+  const user = { email: token.email, username: token.username };
+
+  res.json({ data: user });
 }
 
 export async function githubLogin(req, res) {

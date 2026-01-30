@@ -5,6 +5,7 @@ const currentURL = import.meta.env.VITE_BACKEND_URL;
 
 export default function Status() {
   const { userData, setUserData } = useContext(UserDataContext);
+  const accessToken = localStorage.getItem("accessToken");
 
   async function handleLogout() {
     try {
@@ -14,7 +15,7 @@ export default function Status() {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${userData?.accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
@@ -22,6 +23,7 @@ export default function Status() {
       if (!response.ok) {
         return console.warn(result.error);
       }
+      localStorage.removeItem("accessToken");
       setUserData(null);
     } catch (err) {
       console.error(err);

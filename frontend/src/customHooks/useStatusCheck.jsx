@@ -2,13 +2,14 @@ import { useEffect } from "react";
 import checkStatusAccessToken from "../utils/checkLogin/checkStatusAccessToken.js";
 import checkStatusRefreshToken from "../utils/checkLogin/checkStatusRefreshToken.js";
 
-export default function useStatusCheck(userData, setUserData, setLoading) {
+export default function useStatusCheck(setUserData, setLoading) {
+  const accessToken = localStorage.getItem("accessToken");
   useEffect(() => {
     let isMounted = true;
 
     async function checkLogin() {
       try {
-        const response = await checkStatusAccessToken(userData);
+        const response = await checkStatusAccessToken(accessToken);
         const result = await response.json();
 
         if (!isMounted) return;
@@ -25,16 +26,11 @@ export default function useStatusCheck(userData, setUserData, setLoading) {
             return console.warn(refreshResult.error);
           }
 
-          return setUserData((prev) => ({
-            ...prev,
-            accessToken: refreshResult.data.accessToken,
-          }));
+          localStorage.setItem("accessToken", refreshResult.data.accessToken);
+          return setUserData(refreshResult.data.user);
         }
 
-        setUserData((prev) => ({
-          ...prev,
-          accessToken: result.data.accessToken,
-        }));
+        setUserData(result.data);
       } catch (err) {
         console.error(err);
       } finally {

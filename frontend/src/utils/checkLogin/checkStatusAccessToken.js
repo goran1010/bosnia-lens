@@ -1,4 +1,4 @@
-export default async function checkStatusAccessToken() {
+export default async function checkStatusAccessToken(accessToken) {
   try {
     const currentURL = import.meta.env.VITE_BACKEND_URL;
 
@@ -8,6 +8,7 @@ export default async function checkStatusAccessToken() {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
     });
   } catch (err) {
