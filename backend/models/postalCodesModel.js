@@ -1,18 +1,18 @@
 import prisma from "../db/prisma.js";
 
-export function createMany(data) {
+export function createMany(postalCodesData) {
   return prisma.postalCode.createMany({
-    data: data.map((name) => ({
-      code: name.postalCode,
-      city: name.city,
-      post: name.post,
+    data: postalCodesData.map((postalCode) => ({
+      code: postalCode.postalCode,
+      city: postalCode.city,
+      post: postalCode.post,
     })),
     skipDuplicates: true,
   });
 }
 
 export function getAllPostalCodes() {
-  return prisma.postalCode.findMany();
+  return prisma.postalCode.findMany({ orderBy: { code: "asc" } });
 }
 
 export function getPostalCodeByCode(code) {
@@ -29,5 +29,6 @@ export function getPostalCodesByCity(city) {
 
   return prisma.postalCode.findMany({
     where: { city: capitalizedCity },
+    orderBy: { code: "asc" },
   });
 }
