@@ -24,7 +24,30 @@ const prisma = new PrismaClient({ adapter });
 
 const filePath = path.resolve(__dirname, "JSON_files/postal_codes.json");
 const JSONdata = fs.readFileSync(filePath, "utf-8");
-const postalCodes = JSON.parse(JSONdata);
+let postalCodes = JSON.parse(JSONdata);
+
+function covertPostNamesToEnum() {
+  const postMapping = {
+    "BH Pošta": "BH_POSTA",
+    "Pošte Srpske": "POSTE_SRP",
+    "HP Mostar": "HP_MOSTAR",
+  };
+
+  postalCodes = postalCodes.map((postalCode) => ({
+    ...postalCode,
+    post: postMapping[postalCode.post] || postalCode.post,
+  }));
+}
+covertPostNamesToEnum();
+
+function filterOutInvalidPosts() {
+  const validPosts = ["BH_POSTA", "POSTE_SRP", "HP_MOSTAR"];
+
+  postalCodes = postalCodes.filter((postalCode) =>
+    validPosts.includes(postalCode.post),
+  );
+}
+filterOutInvalidPosts();
 
 async function seedPostalCodes() {
   try {

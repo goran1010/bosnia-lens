@@ -23,11 +23,17 @@ model User {
   @@map("users")
 }
 
+enum postOperator {
+  BH_POSTA
+  POSTE_SRP
+  HP_MOSTAR
+}
+
 model PostalCode {
-  id   String  @id @default(uuid())
-  code Int     @unique
+  id   String        @id @default(uuid())
+  code Int           @unique
   city String
-  post String?
+  post postOperator?
 
   @@map("postal_codes")
 }

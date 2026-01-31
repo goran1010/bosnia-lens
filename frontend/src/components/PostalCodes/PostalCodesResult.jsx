@@ -9,8 +9,8 @@ export default function PostalCodesResult({ searchResult }) {
                 className="flex flex-1 justify-between items-center"
                 key={result.code}
               >
-                <div>{result.place}</div>
-                <div>{result.code}</div> <div>{result.entity}</div>
+                <div>{result.code}</div>
+                <div>{result.city}</div> <div>{result.post}</div>
               </li>
             );
           })}
