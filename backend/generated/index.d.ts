@@ -210,8 +210,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 7.2.0
-   * Query Engine version: 0c8ef2ce45c83248ab3df073180d5eda9e8be7a3
+   * Prisma Client JS version: 7.3.0
+   * Query Engine version: 9d6ad21cbbceab97458517b147a6a09ff43aa735
    */
   export type PrismaVersion = {
     client: string
@@ -1954,20 +1954,30 @@ export namespace Prisma {
 
   export type AggregatePostalCode = {
     _count: PostalCodeCountAggregateOutputType | null
+    _avg: PostalCodeAvgAggregateOutputType | null
+    _sum: PostalCodeSumAggregateOutputType | null
     _min: PostalCodeMinAggregateOutputType | null
     _max: PostalCodeMaxAggregateOutputType | null
   }
 
+  export type PostalCodeAvgAggregateOutputType = {
+    code: number | null
+  }
+
+  export type PostalCodeSumAggregateOutputType = {
+    code: number | null
+  }
+
   export type PostalCodeMinAggregateOutputType = {
     id: string | null
-    code: string | null
+    code: number | null
     city: string | null
     post: string | null
   }
 
   export type PostalCodeMaxAggregateOutputType = {
     id: string | null
-    code: string | null
+    code: number | null
     city: string | null
     post: string | null
   }
@@ -1980,6 +1990,14 @@ export namespace Prisma {
     _all: number
   }
 
+
+  export type PostalCodeAvgAggregateInputType = {
+    code?: true
+  }
+
+  export type PostalCodeSumAggregateInputType = {
+    code?: true
+  }
 
   export type PostalCodeMinAggregateInputType = {
     id?: true
@@ -2041,6 +2059,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: PostalCodeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PostalCodeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: PostalCodeMinAggregateInputType
@@ -2071,16 +2101,20 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: PostalCodeCountAggregateInputType | true
+    _avg?: PostalCodeAvgAggregateInputType
+    _sum?: PostalCodeSumAggregateInputType
     _min?: PostalCodeMinAggregateInputType
     _max?: PostalCodeMaxAggregateInputType
   }
 
   export type PostalCodeGroupByOutputType = {
     id: string
-    code: string
+    code: number
     city: string
     post: string | null
     _count: PostalCodeCountAggregateOutputType | null
+    _avg: PostalCodeAvgAggregateOutputType | null
+    _sum: PostalCodeSumAggregateOutputType | null
     _min: PostalCodeMinAggregateOutputType | null
     _max: PostalCodeMaxAggregateOutputType | null
   }
@@ -2134,7 +2168,7 @@ export namespace Prisma {
     objects: {}
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      code: string
+      code: number
       city: string
       post: string | null
     }, ExtArgs["result"]["postalCode"]>
@@ -2561,7 +2595,7 @@ export namespace Prisma {
    */
   interface PostalCodeFieldRefs {
     readonly id: FieldRef<"PostalCode", 'String'>
-    readonly code: FieldRef<"PostalCode", 'String'>
+    readonly code: FieldRef<"PostalCode", 'Int'>
     readonly city: FieldRef<"PostalCode", 'String'>
     readonly post: FieldRef<"PostalCode", 'String'>
   }
@@ -3027,6 +3061,20 @@ export namespace Prisma {
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
+
+
+  /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
   /**
    * Deep Input Types
    */
@@ -3089,7 +3137,7 @@ export namespace Prisma {
     OR?: PostalCodeWhereInput[]
     NOT?: PostalCodeWhereInput | PostalCodeWhereInput[]
     id?: StringFilter<"PostalCode"> | string
-    code?: StringFilter<"PostalCode"> | string
+    code?: IntFilter<"PostalCode"> | number
     city?: StringFilter<"PostalCode"> | string
     post?: StringNullableFilter<"PostalCode"> | string | null
   }
@@ -3103,7 +3151,7 @@ export namespace Prisma {
 
   export type PostalCodeWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    code?: string
+    code?: number
     AND?: PostalCodeWhereInput | PostalCodeWhereInput[]
     OR?: PostalCodeWhereInput[]
     NOT?: PostalCodeWhereInput | PostalCodeWhereInput[]
@@ -3117,8 +3165,10 @@ export namespace Prisma {
     city?: SortOrder
     post?: SortOrderInput | SortOrder
     _count?: PostalCodeCountOrderByAggregateInput
+    _avg?: PostalCodeAvgOrderByAggregateInput
     _max?: PostalCodeMaxOrderByAggregateInput
     _min?: PostalCodeMinOrderByAggregateInput
+    _sum?: PostalCodeSumOrderByAggregateInput
   }
 
   export type PostalCodeScalarWhereWithAggregatesInput = {
@@ -3126,7 +3176,7 @@ export namespace Prisma {
     OR?: PostalCodeScalarWhereWithAggregatesInput[]
     NOT?: PostalCodeScalarWhereWithAggregatesInput | PostalCodeScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"PostalCode"> | string
-    code?: StringWithAggregatesFilter<"PostalCode"> | string
+    code?: IntWithAggregatesFilter<"PostalCode"> | number
     city?: StringWithAggregatesFilter<"PostalCode"> | string
     post?: StringNullableWithAggregatesFilter<"PostalCode"> | string | null
   }
@@ -3189,49 +3239,49 @@ export namespace Prisma {
 
   export type PostalCodeCreateInput = {
     id?: string
-    code: string
+    code: number
     city: string
     post?: string | null
   }
 
   export type PostalCodeUncheckedCreateInput = {
     id?: string
-    code: string
+    code: number
     city: string
     post?: string | null
   }
 
   export type PostalCodeUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: StringFieldUpdateOperationsInput | string
+    code?: IntFieldUpdateOperationsInput | number
     city?: StringFieldUpdateOperationsInput | string
     post?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PostalCodeUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: StringFieldUpdateOperationsInput | string
+    code?: IntFieldUpdateOperationsInput | number
     city?: StringFieldUpdateOperationsInput | string
     post?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PostalCodeCreateManyInput = {
     id?: string
-    code: string
+    code: number
     city: string
     post?: string | null
   }
 
   export type PostalCodeUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: StringFieldUpdateOperationsInput | string
+    code?: IntFieldUpdateOperationsInput | number
     city?: StringFieldUpdateOperationsInput | string
     post?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PostalCodeUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: StringFieldUpdateOperationsInput | string
+    code?: IntFieldUpdateOperationsInput | number
     city?: StringFieldUpdateOperationsInput | string
     post?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -3306,6 +3356,17 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type StringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -3333,6 +3394,10 @@ export namespace Prisma {
     post?: SortOrder
   }
 
+  export type PostalCodeAvgOrderByAggregateInput = {
+    code?: SortOrder
+  }
+
   export type PostalCodeMaxOrderByAggregateInput = {
     id?: SortOrder
     code?: SortOrder
@@ -3345,6 +3410,26 @@ export namespace Prisma {
     code?: SortOrder
     city?: SortOrder
     post?: SortOrder
+  }
+
+  export type PostalCodeSumOrderByAggregateInput = {
+    code?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -3371,6 +3456,14 @@ export namespace Prisma {
 
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -3444,6 +3537,33 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {

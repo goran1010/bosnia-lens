@@ -1,19 +1,16 @@
 import normalizeName from "../utils/normalizeName.js";
+import * as postalCodesModel from "../models/postalCodesModel.js";
 
 export function status(req, res) {
   res.json({ message: "Server is running" });
 }
 
-export function getPostalCodes(req, res) {
-  const postalCodes = [
-    { code: 71000, place: "Sarajevo" },
-    { code: 71001, place: "Sarajevo" },
-    { code: 78000, place: "Banja Luka" },
-  ];
+export async function getPostalCodes(req, res) {
+  const postalCodes = await postalCodesModel.getAllPostalCodes();
   res.json({ data: postalCodes });
 }
 
-export function getPostalCodeByCode(req, res) {
+export async function getPostalCodeByCode(req, res) {
   let { searchTerm } = req.params;
 
   if (!searchTerm || searchTerm.trim() === "") {
@@ -27,20 +24,12 @@ export function getPostalCodeByCode(req, res) {
     searchTerm = normalizeName(searchTerm);
   }
 
-  const postalCodeData = [
-    { code: 71000, place: "Sarajevo" },
-    { code: 71001, place: "Sarajevo" },
-    { code: 78000, place: "Banja Luka" },
-  ];
-
   let result = [];
   if (typeof searchTerm === "number") {
-    const found = postalCodeData.find((item) => item.code === searchTerm);
+    const found = await postalCodesModel.getPostalCodeByCode(searchTerm);
     if (found) result.push(found);
   } else {
-    result = postalCodeData.filter(
-      (item) => normalizeName(item.place) === searchTerm,
-    );
+    result = await postalCodesModel.getPostalCodesByCity(searchTerm);
   }
 
   if (result.length > 0) {

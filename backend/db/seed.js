@@ -32,7 +32,7 @@ async function seedPostalCodes() {
 
     const result = await prisma.postalCode.createMany({
       data: postalCodes.map((postalCode) => ({
-        code: postalCode.postalCode,
+        code: Number(postalCode.postalCode),
         city: postalCode.city,
         post: postalCode.post,
       })),

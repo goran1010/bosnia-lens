@@ -39,12 +39,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 7.2.0
- * Query Engine version: 0c8ef2ce45c83248ab3df073180d5eda9e8be7a3
+ * Prisma Client JS version: 7.3.0
+ * Query Engine version: 9d6ad21cbbceab97458517b147a6a09ff43aa735
  */
 Prisma.prismaVersion = {
-  client: "7.2.0",
-  engine: "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3"
+  client: "7.3.0",
+  engine: "9d6ad21cbbceab97458517b147a6a09ff43aa735"
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
@@ -133,23 +133,24 @@ exports.Prisma.ModelName = {
  */
 const config = {
   "previewFeatures": [],
-  "clientVersion": "7.2.0",
-  "engineVersion": "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3",
+  "clientVersion": "7.3.0",
+  "engineVersion": "9d6ad21cbbceab97458517b147a6a09ff43aa735",
   "activeProvider": "postgresql",
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id               String  @id @default(uuid())\n  username         String  @unique\n  email            String  @unique\n  isEmailConfirmed Boolean @default(false)\n  password         String\n\n  @@map(\"users\")\n}\n\nmodel PostalCode {\n  id   String  @id @default(uuid())\n  code String  @unique\n  city String\n  post String?\n\n  @@map(\"postal_codes\")\n}\n"
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id               String  @id @default(uuid())\n  username         String  @unique\n  email            String  @unique\n  isEmailConfirmed Boolean @default(false)\n  password         String\n\n  @@map(\"users\")\n}\n\nmodel PostalCode {\n  id   String  @id @default(uuid())\n  code Int     @unique\n  city String\n  post String?\n\n  @@map(\"postal_codes\")\n}\n"
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isEmailConfirmed\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":\"users\"},\"PostalCode\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"code\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"city\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"post\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":\"postal_codes\"}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isEmailConfirmed\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":\"users\"},\"PostalCode\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"code\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"city\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"post\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":\"postal_codes\"}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.compilerWasm = {
-      getRuntime: async () => require('./query_compiler_bg.js'),
+      getRuntime: async () => require('./query_compiler_fast_bg.js'),
       getQueryCompilerWasmModule: async () => {
         const { Buffer } = require('node:buffer')
-        const { wasm } = require('./query_compiler_bg.wasm-base64.js')
+        const { wasm } = require('./query_compiler_fast_bg.wasm-base64.js')
         const queryCompilerWasmFileBytes = Buffer.from(wasm, 'base64')
 
         return new WebAssembly.Module(queryCompilerWasmFileBytes)
-      }
+      },
+      importName: './query_compiler_fast_bg.js',
     }
 
 const PrismaClient = getPrismaClient(config)
