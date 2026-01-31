@@ -6,7 +6,7 @@ import { postalCodeSearchValidationRules } from "../validation/postalCodeValidat
 apiRouter.get("/status", apiController.status);
 
 apiRouter.get(
-  "/postal-codes/:searchTerm",
+  "/postal-codes/search",
   postalCodeSearchValidationRules,
   apiController.getPostalCodeByCode,
 );

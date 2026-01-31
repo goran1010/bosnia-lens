@@ -20,7 +20,7 @@ export default function SearchPostalCode({ setSearchResult, setLoading }) {
       e.preventDefault();
 
       const response = await fetch(
-        `${currentURL}/api/v1/postal-codes/${searchTerm}`,
+        `${currentURL}/api/v1/postal-codes/search?searchTerm=${searchTerm}`,
       );
       const result = await response.json();
 

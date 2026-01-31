@@ -11,11 +11,7 @@ export async function getPostalCodes(req, res) {
 }
 
 export async function getPostalCodeByCode(req, res) {
-  let { searchTerm } = req.params;
-
-  if (!searchTerm || searchTerm.trim() === "") {
-    return res.status(400).json({ error: "Search term is required" });
-  }
+  let { searchTerm } = req.query;
 
   const numericSearchTerm = Number(searchTerm);
   if (!Number.isNaN(numericSearchTerm) && numericSearchTerm > 0) {

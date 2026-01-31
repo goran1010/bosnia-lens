@@ -1,8 +1,8 @@
-import { body, validationResult } from "express-validator";
+import { query, validationResult } from "express-validator";
 
 export const postalCodeSearchValidationRules = [
-  body("searchTerm").trim().notEmpty().withMessage("Search term is required"),
-  body("searchTerm").custom((value) => {
+  query("searchTerm").trim().notEmpty().withMessage("Search term is required"),
+  query("searchTerm").custom((value) => {
     if (Number.isInteger(Number(value))) {
       if (value.length !== 5) {
         throw new Error("Postal codes must have 5 numbers");
