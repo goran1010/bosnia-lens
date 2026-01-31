@@ -1,6 +1,11 @@
 import request from "supertest";
 import app from "../../app.js";
-import { describe, test, expect } from "vitest";
+import { describe, test, expect, vi, beforeEach } from "vitest";
+import * as postalCodesModel from "../../models/postalCodesModel.js";
+
+beforeEach(() => {
+  vi.clearAllMocks();
+});
 
 const dummyData = {
   data: [
@@ -9,6 +14,24 @@ const dummyData = {
     { code: 78000, place: "Banja Luka" },
   ],
 };
+
+vi.spyOn(postalCodesModel, "getAllPostalCodes").mockResolvedValue(
+  dummyData.data,
+);
+vi.spyOn(postalCodesModel, "getPostalCodesByCity").mockImplementation(
+  async (city) => {
+    return dummyData.data.filter(
+      (postalCode) => postalCode.place.toLowerCase() === city.toLowerCase(),
+    );
+  },
+);
+vi.spyOn(postalCodesModel, "getPostalCodeByCode").mockImplementation(
+  async (code) => {
+    return (
+      dummyData.data.find((postalCode) => postalCode.code === code) || null
+    );
+  },
+);
 
 describe("GET /status", () => {
   test("responds with status 200 when LIVE", async () => {
@@ -34,7 +57,9 @@ describe("GET /postal-codes", () => {
 
 describe("GET /postal-codes/:searchTerm", () => {
   test("responds with status 200 and postal codes for /postal-codes/sarajevo", async () => {
-    const response = await request(app).get("/api/v1/postal-codes/sarajevo");
+    const response = await request(app).get(
+      "/api/v1/postal-codes/search?searchTerm=sarajevo",
+    );
 
     const dummyDataFiltered = dummyData.data.filter(
       (postalCode) => postalCode.place === "Sarajevo",
@@ -47,7 +72,7 @@ describe("GET /postal-codes/:searchTerm", () => {
 
   test("responds with status 404 and No postal code found for /postal-codes/non-existent-code", async () => {
     const response = await request(app).get(
-      "/api/v1/postal-codes/non-existent-code",
+      "/api/v1/postal-codes/search?searchTerm=non-existent-code",
     );
 
     expect(response.headers["content-type"]).toMatch(/json/);
