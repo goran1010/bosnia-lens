@@ -13,7 +13,7 @@ afterEach(async () => {
 });
 
 describe("authRouter", () => {
-  test("responds with status 200 and User is authenticated if logged in", async () => {
+  test("responds with status 200 and user data if logged in", async () => {
     const newUserData = createNewUserData({
       username: "test_user_auth",
       email: "test_user_auth@mail.com",
@@ -21,15 +21,15 @@ describe("authRouter", () => {
 
     const responseData = await createAndLoginUser(newUserData);
 
-    const loggedInResponse = { message: "User is authenticated" };
-
     const response = await request(app)
       .get("/auth/me")
       .set("Authorization", `Token ${responseData.body.data.accessToken}`);
 
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(200);
-    expect(response.body.message).toEqual(loggedInResponse.message);
+    expect(response.body).toEqual({
+      data: { username: newUserData.username, email: newUserData.email },
+    });
   });
 });
 
