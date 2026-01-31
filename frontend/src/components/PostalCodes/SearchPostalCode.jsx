@@ -20,7 +20,7 @@ export default function SearchPostalCode({ setSearchResult, setLoading }) {
       e.preventDefault();
 
       const response = await fetch(
-        `${currentURL}/api/v1/postal-codes/${searchTerm}`
+        `${currentURL}/api/v1/postal-codes/${searchTerm}`,
       );
       const result = await response.json();
 
@@ -46,7 +46,7 @@ export default function SearchPostalCode({ setSearchResult, setLoading }) {
         htmlFor="search-term"
         className="block text-sm font-medium text-gray-700 mb-1"
       >
-        Postal Code or Municipality
+        Search by Postal Code or Municipality
       </label>
 
       <div className="flex gap-2">
