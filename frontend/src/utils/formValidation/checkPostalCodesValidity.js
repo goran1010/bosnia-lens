@@ -3,7 +3,7 @@ export default function checkPostalCodesValidity(searchInput) {
 
   if (Number.isInteger(Number(searchInputValue))) {
     if (searchInputValue.length !== 5) {
-      searchInput.current.setCustomValidity("Postal codes must have 6 numbers");
+      searchInput.current.setCustomValidity("Postal codes must have 5 numbers");
       searchInput.current.reportValidity();
     } else searchInput.current.setCustomValidity("");
   } else if (searchInputValue.length < 2) {
