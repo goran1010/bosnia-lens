@@ -32,16 +32,11 @@ describe("GET /me", () => {
     expect(response.body).toEqual(notLoggedInResponse);
   });
 
-  test("responds with status 200 and User is authenticated if logged in", async () => {
-    const accessToken = jwt.sign(
-      { email: "test_email@mail.com", username: "test_username" },
-      process.env.ACCESS_TOKEN_SECRET,
-      {
-        expiresIn: "30m",
-      },
-    );
-
-    const loggedInResponse = { message: "User is authenticated" };
+  test("responds with status 200 and user data if logged in", async () => {
+    const user = { email: "test_email@mail.com", username: "test_username" };
+    const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+      expiresIn: "30m",
+    });
 
     const response = await request(app)
       .get("/auth/me")
@@ -49,7 +44,7 @@ describe("GET /me", () => {
 
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(200);
-    expect(response.body.message).toEqual(loggedInResponse.message);
+    expect(response.body).toEqual({ data: user });
   });
 });
 

@@ -170,3 +170,7 @@ See also the list of [contributors](https://github.com/goran1010/bosnia-lens/con
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details. All data used will be public domain or properly attributed to its original source.
+
+## Acknowledgments
+
+- Initial PostalCode data sourced from [Spisak poštanskih brojeva u Bosni i Hercegovini](https://bs.wikipedia.org/wiki/Spisak_po%C5%A1tanskih_brojeva_u_Bosni_i_Hercegovini)

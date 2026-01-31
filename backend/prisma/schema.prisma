@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  output   = "../generated"
 }
 
 datasource db {
@@ -21,4 +21,19 @@ model User {
   password         String
 
   @@map("users")
+}
+
+enum postOperator {
+  BH_POSTA
+  POSTE_SRP
+  HP_MOSTAR
+}
+
+model PostalCode {
+  id   String        @id @default(uuid())
+  code Int           @unique
+  city String
+  post postOperator?
+
+  @@map("postal_codes")
 }

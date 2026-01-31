@@ -21,8 +21,8 @@
   },
   "homepage": "https://github.com/goran1010/bosnia-lens#readme",
   "dependencies": {
-    "@prisma/adapter-pg": "^7.2.0",
-    "@prisma/client": "^7.2.0",
+    "@prisma/adapter-pg": "^7.3.0",
+    "@prisma/client": "^7.3.0",
     "@quixo3/prisma-session-store": "^3.1.13",
     "axios": "^1.13.2",
     "bcryptjs": "^3.0.2",
@@ -46,7 +46,7 @@
     "eslint-config-prettier": "^10.1.5",
     "globals": "^16.3.0",
     "prettier": "3.6.2",
-    "prisma": "^7.2.0",
+    "prisma": "^7.3.0",
     "supertest": "^7.1.4",
     "vitest": "^4.0.15"
   }

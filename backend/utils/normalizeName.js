@@ -1,3 +1,3 @@
 export default function normalizeName(searchTerm) {
-  return searchTerm.trim().split(" ").join("").toLowerCase();
+  return searchTerm.trim().toLowerCase();
 }
