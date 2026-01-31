@@ -18,6 +18,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  * 
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
+/**
+ * Model PostalCode
+ * 
+ */
+export type PostalCode = $Result.DefaultSelection<Prisma.$PostalCodePayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -145,6 +150,16 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.postalCode`: Exposes CRUD operations for the **PostalCode** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PostalCodes
+    * const postalCodes = await prisma.postalCode.findMany()
+    * ```
+    */
+  get postalCode(): Prisma.PostalCodeDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -579,7 +594,8 @@ export namespace Prisma {
 
 
   export const ModelName: {
-    User: 'User'
+    User: 'User',
+    PostalCode: 'PostalCode'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -595,7 +611,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user"
+      modelProps: "user" | "postalCode"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -670,6 +686,80 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      PostalCode: {
+        payload: Prisma.$PostalCodePayload<ExtArgs>
+        fields: Prisma.PostalCodeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PostalCodeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostalCodePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PostalCodeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostalCodePayload>
+          }
+          findFirst: {
+            args: Prisma.PostalCodeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostalCodePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PostalCodeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostalCodePayload>
+          }
+          findMany: {
+            args: Prisma.PostalCodeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostalCodePayload>[]
+          }
+          create: {
+            args: Prisma.PostalCodeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostalCodePayload>
+          }
+          createMany: {
+            args: Prisma.PostalCodeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PostalCodeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostalCodePayload>[]
+          }
+          delete: {
+            args: Prisma.PostalCodeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostalCodePayload>
+          }
+          update: {
+            args: Prisma.PostalCodeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostalCodePayload>
+          }
+          deleteMany: {
+            args: Prisma.PostalCodeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PostalCodeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PostalCodeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostalCodePayload>[]
+          }
+          upsert: {
+            args: Prisma.PostalCodeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostalCodePayload>
+          }
+          aggregate: {
+            args: Prisma.PostalCodeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePostalCode>
+          }
+          groupBy: {
+            args: Prisma.PostalCodeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PostalCodeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PostalCodeCountArgs<ExtArgs>
+            result: $Utils.Optional<PostalCodeCountAggregateOutputType> | number
           }
         }
       }
@@ -782,6 +872,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     user?: UserOmit
+    postalCode?: PostalCodeOmit
   }
 
   /* Types for Logging */
@@ -1858,6 +1949,988 @@ export namespace Prisma {
 
 
   /**
+   * Model PostalCode
+   */
+
+  export type AggregatePostalCode = {
+    _count: PostalCodeCountAggregateOutputType | null
+    _min: PostalCodeMinAggregateOutputType | null
+    _max: PostalCodeMaxAggregateOutputType | null
+  }
+
+  export type PostalCodeMinAggregateOutputType = {
+    id: string | null
+    code: string | null
+    city: string | null
+    post: string | null
+  }
+
+  export type PostalCodeMaxAggregateOutputType = {
+    id: string | null
+    code: string | null
+    city: string | null
+    post: string | null
+  }
+
+  export type PostalCodeCountAggregateOutputType = {
+    id: number
+    code: number
+    city: number
+    post: number
+    _all: number
+  }
+
+
+  export type PostalCodeMinAggregateInputType = {
+    id?: true
+    code?: true
+    city?: true
+    post?: true
+  }
+
+  export type PostalCodeMaxAggregateInputType = {
+    id?: true
+    code?: true
+    city?: true
+    post?: true
+  }
+
+  export type PostalCodeCountAggregateInputType = {
+    id?: true
+    code?: true
+    city?: true
+    post?: true
+    _all?: true
+  }
+
+  export type PostalCodeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PostalCode to aggregate.
+     */
+    where?: PostalCodeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PostalCodes to fetch.
+     */
+    orderBy?: PostalCodeOrderByWithRelationInput | PostalCodeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PostalCodeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PostalCodes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PostalCodes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PostalCodes
+    **/
+    _count?: true | PostalCodeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PostalCodeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PostalCodeMaxAggregateInputType
+  }
+
+  export type GetPostalCodeAggregateType<T extends PostalCodeAggregateArgs> = {
+        [P in keyof T & keyof AggregatePostalCode]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePostalCode[P]>
+      : GetScalarType<T[P], AggregatePostalCode[P]>
+  }
+
+
+
+
+  export type PostalCodeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PostalCodeWhereInput
+    orderBy?: PostalCodeOrderByWithAggregationInput | PostalCodeOrderByWithAggregationInput[]
+    by: PostalCodeScalarFieldEnum[] | PostalCodeScalarFieldEnum
+    having?: PostalCodeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PostalCodeCountAggregateInputType | true
+    _min?: PostalCodeMinAggregateInputType
+    _max?: PostalCodeMaxAggregateInputType
+  }
+
+  export type PostalCodeGroupByOutputType = {
+    id: string
+    code: string
+    city: string
+    post: string | null
+    _count: PostalCodeCountAggregateOutputType | null
+    _min: PostalCodeMinAggregateOutputType | null
+    _max: PostalCodeMaxAggregateOutputType | null
+  }
+
+  type GetPostalCodeGroupByPayload<T extends PostalCodeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PostalCodeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PostalCodeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PostalCodeGroupByOutputType[P]>
+            : GetScalarType<T[P], PostalCodeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PostalCodeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    city?: boolean
+    post?: boolean
+  }, ExtArgs["result"]["postalCode"]>
+
+  export type PostalCodeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    city?: boolean
+    post?: boolean
+  }, ExtArgs["result"]["postalCode"]>
+
+  export type PostalCodeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    city?: boolean
+    post?: boolean
+  }, ExtArgs["result"]["postalCode"]>
+
+  export type PostalCodeSelectScalar = {
+    id?: boolean
+    code?: boolean
+    city?: boolean
+    post?: boolean
+  }
+
+  export type PostalCodeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "city" | "post", ExtArgs["result"]["postalCode"]>
+
+  export type $PostalCodePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PostalCode"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      code: string
+      city: string
+      post: string | null
+    }, ExtArgs["result"]["postalCode"]>
+    composites: {}
+  }
+
+  type PostalCodeGetPayload<S extends boolean | null | undefined | PostalCodeDefaultArgs> = $Result.GetResult<Prisma.$PostalCodePayload, S>
+
+  type PostalCodeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PostalCodeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PostalCodeCountAggregateInputType | true
+    }
+
+  export interface PostalCodeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PostalCode'], meta: { name: 'PostalCode' } }
+    /**
+     * Find zero or one PostalCode that matches the filter.
+     * @param {PostalCodeFindUniqueArgs} args - Arguments to find a PostalCode
+     * @example
+     * // Get one PostalCode
+     * const postalCode = await prisma.postalCode.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PostalCodeFindUniqueArgs>(args: SelectSubset<T, PostalCodeFindUniqueArgs<ExtArgs>>): Prisma__PostalCodeClient<$Result.GetResult<Prisma.$PostalCodePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PostalCode that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PostalCodeFindUniqueOrThrowArgs} args - Arguments to find a PostalCode
+     * @example
+     * // Get one PostalCode
+     * const postalCode = await prisma.postalCode.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PostalCodeFindUniqueOrThrowArgs>(args: SelectSubset<T, PostalCodeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PostalCodeClient<$Result.GetResult<Prisma.$PostalCodePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PostalCode that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostalCodeFindFirstArgs} args - Arguments to find a PostalCode
+     * @example
+     * // Get one PostalCode
+     * const postalCode = await prisma.postalCode.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PostalCodeFindFirstArgs>(args?: SelectSubset<T, PostalCodeFindFirstArgs<ExtArgs>>): Prisma__PostalCodeClient<$Result.GetResult<Prisma.$PostalCodePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PostalCode that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostalCodeFindFirstOrThrowArgs} args - Arguments to find a PostalCode
+     * @example
+     * // Get one PostalCode
+     * const postalCode = await prisma.postalCode.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PostalCodeFindFirstOrThrowArgs>(args?: SelectSubset<T, PostalCodeFindFirstOrThrowArgs<ExtArgs>>): Prisma__PostalCodeClient<$Result.GetResult<Prisma.$PostalCodePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PostalCodes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostalCodeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PostalCodes
+     * const postalCodes = await prisma.postalCode.findMany()
+     * 
+     * // Get first 10 PostalCodes
+     * const postalCodes = await prisma.postalCode.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const postalCodeWithIdOnly = await prisma.postalCode.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PostalCodeFindManyArgs>(args?: SelectSubset<T, PostalCodeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostalCodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PostalCode.
+     * @param {PostalCodeCreateArgs} args - Arguments to create a PostalCode.
+     * @example
+     * // Create one PostalCode
+     * const PostalCode = await prisma.postalCode.create({
+     *   data: {
+     *     // ... data to create a PostalCode
+     *   }
+     * })
+     * 
+     */
+    create<T extends PostalCodeCreateArgs>(args: SelectSubset<T, PostalCodeCreateArgs<ExtArgs>>): Prisma__PostalCodeClient<$Result.GetResult<Prisma.$PostalCodePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PostalCodes.
+     * @param {PostalCodeCreateManyArgs} args - Arguments to create many PostalCodes.
+     * @example
+     * // Create many PostalCodes
+     * const postalCode = await prisma.postalCode.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PostalCodeCreateManyArgs>(args?: SelectSubset<T, PostalCodeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PostalCodes and returns the data saved in the database.
+     * @param {PostalCodeCreateManyAndReturnArgs} args - Arguments to create many PostalCodes.
+     * @example
+     * // Create many PostalCodes
+     * const postalCode = await prisma.postalCode.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PostalCodes and only return the `id`
+     * const postalCodeWithIdOnly = await prisma.postalCode.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PostalCodeCreateManyAndReturnArgs>(args?: SelectSubset<T, PostalCodeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostalCodePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PostalCode.
+     * @param {PostalCodeDeleteArgs} args - Arguments to delete one PostalCode.
+     * @example
+     * // Delete one PostalCode
+     * const PostalCode = await prisma.postalCode.delete({
+     *   where: {
+     *     // ... filter to delete one PostalCode
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PostalCodeDeleteArgs>(args: SelectSubset<T, PostalCodeDeleteArgs<ExtArgs>>): Prisma__PostalCodeClient<$Result.GetResult<Prisma.$PostalCodePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PostalCode.
+     * @param {PostalCodeUpdateArgs} args - Arguments to update one PostalCode.
+     * @example
+     * // Update one PostalCode
+     * const postalCode = await prisma.postalCode.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PostalCodeUpdateArgs>(args: SelectSubset<T, PostalCodeUpdateArgs<ExtArgs>>): Prisma__PostalCodeClient<$Result.GetResult<Prisma.$PostalCodePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PostalCodes.
+     * @param {PostalCodeDeleteManyArgs} args - Arguments to filter PostalCodes to delete.
+     * @example
+     * // Delete a few PostalCodes
+     * const { count } = await prisma.postalCode.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PostalCodeDeleteManyArgs>(args?: SelectSubset<T, PostalCodeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PostalCodes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostalCodeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PostalCodes
+     * const postalCode = await prisma.postalCode.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PostalCodeUpdateManyArgs>(args: SelectSubset<T, PostalCodeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PostalCodes and returns the data updated in the database.
+     * @param {PostalCodeUpdateManyAndReturnArgs} args - Arguments to update many PostalCodes.
+     * @example
+     * // Update many PostalCodes
+     * const postalCode = await prisma.postalCode.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PostalCodes and only return the `id`
+     * const postalCodeWithIdOnly = await prisma.postalCode.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PostalCodeUpdateManyAndReturnArgs>(args: SelectSubset<T, PostalCodeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostalCodePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PostalCode.
+     * @param {PostalCodeUpsertArgs} args - Arguments to update or create a PostalCode.
+     * @example
+     * // Update or create a PostalCode
+     * const postalCode = await prisma.postalCode.upsert({
+     *   create: {
+     *     // ... data to create a PostalCode
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PostalCode we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PostalCodeUpsertArgs>(args: SelectSubset<T, PostalCodeUpsertArgs<ExtArgs>>): Prisma__PostalCodeClient<$Result.GetResult<Prisma.$PostalCodePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PostalCodes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostalCodeCountArgs} args - Arguments to filter PostalCodes to count.
+     * @example
+     * // Count the number of PostalCodes
+     * const count = await prisma.postalCode.count({
+     *   where: {
+     *     // ... the filter for the PostalCodes we want to count
+     *   }
+     * })
+    **/
+    count<T extends PostalCodeCountArgs>(
+      args?: Subset<T, PostalCodeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PostalCodeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PostalCode.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostalCodeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PostalCodeAggregateArgs>(args: Subset<T, PostalCodeAggregateArgs>): Prisma.PrismaPromise<GetPostalCodeAggregateType<T>>
+
+    /**
+     * Group by PostalCode.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostalCodeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PostalCodeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PostalCodeGroupByArgs['orderBy'] }
+        : { orderBy?: PostalCodeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PostalCodeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPostalCodeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PostalCode model
+   */
+  readonly fields: PostalCodeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PostalCode.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PostalCodeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PostalCode model
+   */
+  interface PostalCodeFieldRefs {
+    readonly id: FieldRef<"PostalCode", 'String'>
+    readonly code: FieldRef<"PostalCode", 'String'>
+    readonly city: FieldRef<"PostalCode", 'String'>
+    readonly post: FieldRef<"PostalCode", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PostalCode findUnique
+   */
+  export type PostalCodeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostalCode
+     */
+    select?: PostalCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostalCode
+     */
+    omit?: PostalCodeOmit<ExtArgs> | null
+    /**
+     * Filter, which PostalCode to fetch.
+     */
+    where: PostalCodeWhereUniqueInput
+  }
+
+  /**
+   * PostalCode findUniqueOrThrow
+   */
+  export type PostalCodeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostalCode
+     */
+    select?: PostalCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostalCode
+     */
+    omit?: PostalCodeOmit<ExtArgs> | null
+    /**
+     * Filter, which PostalCode to fetch.
+     */
+    where: PostalCodeWhereUniqueInput
+  }
+
+  /**
+   * PostalCode findFirst
+   */
+  export type PostalCodeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostalCode
+     */
+    select?: PostalCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostalCode
+     */
+    omit?: PostalCodeOmit<ExtArgs> | null
+    /**
+     * Filter, which PostalCode to fetch.
+     */
+    where?: PostalCodeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PostalCodes to fetch.
+     */
+    orderBy?: PostalCodeOrderByWithRelationInput | PostalCodeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PostalCodes.
+     */
+    cursor?: PostalCodeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PostalCodes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PostalCodes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PostalCodes.
+     */
+    distinct?: PostalCodeScalarFieldEnum | PostalCodeScalarFieldEnum[]
+  }
+
+  /**
+   * PostalCode findFirstOrThrow
+   */
+  export type PostalCodeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostalCode
+     */
+    select?: PostalCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostalCode
+     */
+    omit?: PostalCodeOmit<ExtArgs> | null
+    /**
+     * Filter, which PostalCode to fetch.
+     */
+    where?: PostalCodeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PostalCodes to fetch.
+     */
+    orderBy?: PostalCodeOrderByWithRelationInput | PostalCodeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PostalCodes.
+     */
+    cursor?: PostalCodeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PostalCodes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PostalCodes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PostalCodes.
+     */
+    distinct?: PostalCodeScalarFieldEnum | PostalCodeScalarFieldEnum[]
+  }
+
+  /**
+   * PostalCode findMany
+   */
+  export type PostalCodeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostalCode
+     */
+    select?: PostalCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostalCode
+     */
+    omit?: PostalCodeOmit<ExtArgs> | null
+    /**
+     * Filter, which PostalCodes to fetch.
+     */
+    where?: PostalCodeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PostalCodes to fetch.
+     */
+    orderBy?: PostalCodeOrderByWithRelationInput | PostalCodeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PostalCodes.
+     */
+    cursor?: PostalCodeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PostalCodes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PostalCodes.
+     */
+    skip?: number
+    distinct?: PostalCodeScalarFieldEnum | PostalCodeScalarFieldEnum[]
+  }
+
+  /**
+   * PostalCode create
+   */
+  export type PostalCodeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostalCode
+     */
+    select?: PostalCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostalCode
+     */
+    omit?: PostalCodeOmit<ExtArgs> | null
+    /**
+     * The data needed to create a PostalCode.
+     */
+    data: XOR<PostalCodeCreateInput, PostalCodeUncheckedCreateInput>
+  }
+
+  /**
+   * PostalCode createMany
+   */
+  export type PostalCodeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PostalCodes.
+     */
+    data: PostalCodeCreateManyInput | PostalCodeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PostalCode createManyAndReturn
+   */
+  export type PostalCodeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostalCode
+     */
+    select?: PostalCodeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostalCode
+     */
+    omit?: PostalCodeOmit<ExtArgs> | null
+    /**
+     * The data used to create many PostalCodes.
+     */
+    data: PostalCodeCreateManyInput | PostalCodeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PostalCode update
+   */
+  export type PostalCodeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostalCode
+     */
+    select?: PostalCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostalCode
+     */
+    omit?: PostalCodeOmit<ExtArgs> | null
+    /**
+     * The data needed to update a PostalCode.
+     */
+    data: XOR<PostalCodeUpdateInput, PostalCodeUncheckedUpdateInput>
+    /**
+     * Choose, which PostalCode to update.
+     */
+    where: PostalCodeWhereUniqueInput
+  }
+
+  /**
+   * PostalCode updateMany
+   */
+  export type PostalCodeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PostalCodes.
+     */
+    data: XOR<PostalCodeUpdateManyMutationInput, PostalCodeUncheckedUpdateManyInput>
+    /**
+     * Filter which PostalCodes to update
+     */
+    where?: PostalCodeWhereInput
+    /**
+     * Limit how many PostalCodes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PostalCode updateManyAndReturn
+   */
+  export type PostalCodeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostalCode
+     */
+    select?: PostalCodeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostalCode
+     */
+    omit?: PostalCodeOmit<ExtArgs> | null
+    /**
+     * The data used to update PostalCodes.
+     */
+    data: XOR<PostalCodeUpdateManyMutationInput, PostalCodeUncheckedUpdateManyInput>
+    /**
+     * Filter which PostalCodes to update
+     */
+    where?: PostalCodeWhereInput
+    /**
+     * Limit how many PostalCodes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PostalCode upsert
+   */
+  export type PostalCodeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostalCode
+     */
+    select?: PostalCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostalCode
+     */
+    omit?: PostalCodeOmit<ExtArgs> | null
+    /**
+     * The filter to search for the PostalCode to update in case it exists.
+     */
+    where: PostalCodeWhereUniqueInput
+    /**
+     * In case the PostalCode found by the `where` argument doesn't exist, create a new PostalCode with this data.
+     */
+    create: XOR<PostalCodeCreateInput, PostalCodeUncheckedCreateInput>
+    /**
+     * In case the PostalCode was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PostalCodeUpdateInput, PostalCodeUncheckedUpdateInput>
+  }
+
+  /**
+   * PostalCode delete
+   */
+  export type PostalCodeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostalCode
+     */
+    select?: PostalCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostalCode
+     */
+    omit?: PostalCodeOmit<ExtArgs> | null
+    /**
+     * Filter which PostalCode to delete.
+     */
+    where: PostalCodeWhereUniqueInput
+  }
+
+  /**
+   * PostalCode deleteMany
+   */
+  export type PostalCodeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PostalCodes to delete
+     */
+    where?: PostalCodeWhereInput
+    /**
+     * Limit how many PostalCodes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PostalCode without action
+   */
+  export type PostalCodeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostalCode
+     */
+    select?: PostalCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PostalCode
+     */
+    omit?: PostalCodeOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -1882,6 +2955,16 @@ export namespace Prisma {
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+  export const PostalCodeScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    city: 'city',
+    post: 'post'
+  };
+
+  export type PostalCodeScalarFieldEnum = (typeof PostalCodeScalarFieldEnum)[keyof typeof PostalCodeScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -1896,6 +2979,14 @@ export namespace Prisma {
   };
 
   export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+  export const NullsOrder: {
+    first: 'first',
+    last: 'last'
+  };
+
+  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
   /**
@@ -1993,6 +3084,53 @@ export namespace Prisma {
     password?: StringWithAggregatesFilter<"User"> | string
   }
 
+  export type PostalCodeWhereInput = {
+    AND?: PostalCodeWhereInput | PostalCodeWhereInput[]
+    OR?: PostalCodeWhereInput[]
+    NOT?: PostalCodeWhereInput | PostalCodeWhereInput[]
+    id?: StringFilter<"PostalCode"> | string
+    code?: StringFilter<"PostalCode"> | string
+    city?: StringFilter<"PostalCode"> | string
+    post?: StringNullableFilter<"PostalCode"> | string | null
+  }
+
+  export type PostalCodeOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    city?: SortOrder
+    post?: SortOrderInput | SortOrder
+  }
+
+  export type PostalCodeWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    AND?: PostalCodeWhereInput | PostalCodeWhereInput[]
+    OR?: PostalCodeWhereInput[]
+    NOT?: PostalCodeWhereInput | PostalCodeWhereInput[]
+    city?: StringFilter<"PostalCode"> | string
+    post?: StringNullableFilter<"PostalCode"> | string | null
+  }, "id" | "code">
+
+  export type PostalCodeOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    city?: SortOrder
+    post?: SortOrderInput | SortOrder
+    _count?: PostalCodeCountOrderByAggregateInput
+    _max?: PostalCodeMaxOrderByAggregateInput
+    _min?: PostalCodeMinOrderByAggregateInput
+  }
+
+  export type PostalCodeScalarWhereWithAggregatesInput = {
+    AND?: PostalCodeScalarWhereWithAggregatesInput | PostalCodeScalarWhereWithAggregatesInput[]
+    OR?: PostalCodeScalarWhereWithAggregatesInput[]
+    NOT?: PostalCodeScalarWhereWithAggregatesInput | PostalCodeScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PostalCode"> | string
+    code?: StringWithAggregatesFilter<"PostalCode"> | string
+    city?: StringWithAggregatesFilter<"PostalCode"> | string
+    post?: StringNullableWithAggregatesFilter<"PostalCode"> | string | null
+  }
+
   export type UserCreateInput = {
     id?: string
     username: string
@@ -2047,6 +3185,55 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     isEmailConfirmed?: BoolFieldUpdateOperationsInput | boolean
     password?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PostalCodeCreateInput = {
+    id?: string
+    code: string
+    city: string
+    post?: string | null
+  }
+
+  export type PostalCodeUncheckedCreateInput = {
+    id?: string
+    code: string
+    city: string
+    post?: string | null
+  }
+
+  export type PostalCodeUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    post?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PostalCodeUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    post?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PostalCodeCreateManyInput = {
+    id?: string
+    code: string
+    city: string
+    post?: string | null
+  }
+
+  export type PostalCodeUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    post?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PostalCodeUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    post?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -2119,12 +3306,75 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
+  export type PostalCodeCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    city?: SortOrder
+    post?: SortOrder
+  }
+
+  export type PostalCodeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    city?: SortOrder
+    post?: SortOrder
+  }
+
+  export type PostalCodeMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    city?: SortOrder
+    post?: SortOrder
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
 
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -2180,6 +3430,48 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
 
