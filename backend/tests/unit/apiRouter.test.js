@@ -9,9 +9,9 @@ beforeEach(() => {
 
 const dummyData = {
   data: [
-    { code: 71000, place: "Sarajevo" },
-    { code: 71001, place: "Sarajevo" },
-    { code: 78000, place: "Banja Luka" },
+    { code: 71000, city: "Sarajevo" },
+    { code: 71001, city: "Sarajevo" },
+    { code: 78000, city: "Banja Luka" },
   ],
 };
 
@@ -21,7 +21,7 @@ vi.spyOn(postalCodesModel, "getAllPostalCodes").mockResolvedValue(
 vi.spyOn(postalCodesModel, "getPostalCodesByCity").mockImplementation(
   async (city) => {
     return dummyData.data.filter(
-      (postalCode) => postalCode.place.toLowerCase() === city.toLowerCase(),
+      (postalCode) => postalCode.city.toLowerCase() === city.toLowerCase(),
     );
   },
 );
@@ -62,7 +62,7 @@ describe("GET /postal-codes/:searchTerm", () => {
     );
 
     const dummyDataFiltered = dummyData.data.filter(
-      (postalCode) => postalCode.place === "Sarajevo",
+      (postalCode) => postalCode.city === "Sarajevo",
     );
 
     expect(response.headers["content-type"]).toMatch(/json/);
