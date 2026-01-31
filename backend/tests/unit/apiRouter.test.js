@@ -70,7 +70,21 @@ describe("GET /postal-codes/:searchTerm", () => {
     expect(response.body.data).toEqual(dummyDataFiltered);
   });
 
-  test("responds with status 404 and No postal code found for /postal-codes/non-existent-code", async () => {
+  test("responds with status 200 and postal code for /postal-codes/search?searchTerm=71000", async () => {
+    const response = await request(app).get(
+      "/api/v1/postal-codes/search?searchTerm=71000",
+    );
+
+    const dummyDataFiltered = [
+      dummyData.data.find((postalCode) => postalCode.code === 71000),
+    ];
+
+    expect(response.headers["content-type"]).toMatch(/json/);
+    expect(response.status).toBe(200);
+    expect(response.body.data).toEqual(dummyDataFiltered);
+  });
+
+  test("responds with status 404 and No postal code found for /postal-codes/search?searchTerm=non-existent-code", async () => {
     const response = await request(app).get(
       "/api/v1/postal-codes/search?searchTerm=non-existent-code",
     );
@@ -78,5 +92,14 @@ describe("GET /postal-codes/:searchTerm", () => {
     expect(response.headers["content-type"]).toMatch(/json/);
     expect(response.status).toBe(404);
     expect(response.body).toEqual({ error: "Postal code not found" });
+  });
+
+  test("responds with status 400 and error message for missing searchTerm", async () => {
+    const response = await request(app).get("/api/v1/postal-codes/search");
+
+    expect(response.headers["content-type"]).toMatch(/json/);
+    expect(response.status).toBe(400);
+    expect(response.body.error).toEqual("Validation failed");
+    expect(response.body.details[0].msg).toEqual("Search term is required");
   });
 });
