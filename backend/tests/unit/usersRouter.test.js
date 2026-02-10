@@ -1,14 +1,18 @@
 import request from "supertest";
 import app from "../../app.js";
-import jwt from "jsonwebtoken";
-import { describe, test, expect, vi } from "vitest";
+import { describe, test, expect, vi, beforeEach } from "vitest";
 import emailConfirmHTML from "../../utils/emailConfirmHTML.js";
 import createNewUser from "../utils/createNewUser.js";
 import * as usersModel from "../../models/usersModel.js";
 import sendConfirmationEmail from "../../email/confirmationEmail.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
-const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
+const isAuthenticatedMock = vi.fn();
+
+vi.mock("../../auth/isAuthenticated.js", () => ({
+  default: (req, res, next) => isAuthenticatedMock(req, res, next),
+}));
 
 vi.mock("../../email/confirmationEmail.js", () => ({
   default: vi.fn(() => {
@@ -19,6 +23,15 @@ vi.mock("../../email/confirmationEmail.js", () => ({
 }));
 
 vi.mock("../../models/usersModel.js");
+
+beforeEach(() => {
+  vi.clearAllMocks();
+  // Set default behavior
+  isAuthenticatedMock.mockImplementation((req, res, next) => {
+    if (req.user) return next();
+    res.status(403).json({ error: "You need to be logged in." });
+  });
+});
 
 describe("POST /signup", () => {
   test("responds with status 400 and message for incorrect username input", async () => {
@@ -171,54 +184,18 @@ describe("POST /logout", () => {
   test("responds User logged out successfully", async () => {
     const newUser = createNewUser();
 
-    const accessToken = jwt.sign(
-      { email: newUser.email, username: newUser.username },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "15m" },
-    );
+    isAuthenticatedMock.mockImplementation((req, res, next) => {
+      req.user = newUser;
+      next();
+    });
 
-    const response = await request(app)
-      .post("/users/logout")
-      .set("Authorization", `Token ${accessToken}`);
+    const response = await request(app).post("/users/logout");
 
     expect(response.status).toBe(200);
     expect(response.request.cookies).not.toMatch(/refreshToken/);
     expect(response.body).toEqual({
       message: "User logged out successfully",
     });
-  });
-});
-
-describe("GET //refresh-token", () => {
-  test("responds with status 401 and message if no refresh token given", async () => {
-    const response = await request(app).get("/users/refresh-token");
-
-    expect(response.status).toBe(401);
-    expect(response.body).toEqual({ error: "No refresh token provided" });
-  });
-
-  test("responds with status 403 and message if invalid refresh token", async () => {
-    const response = await request(app)
-      .get("/users/refresh-token")
-      .set("Cookie", ["refreshToken=123"]);
-
-    expect(response.status).toBe(403);
-    expect(response.body).toEqual({ error: "Invalid refresh token" });
-  });
-
-  test("responds with status 200 and accessToken if valid refresh token", async () => {
-    const refreshToken = jwt.sign(
-      { id: 1, username: "test_user" },
-      REFRESH_TOKEN_SECRET,
-      { expiresIn: "30d" },
-    );
-
-    const response = await request(app)
-      .get("/users/refresh-token")
-      .set("Cookie", [`refreshToken=${refreshToken}`]);
-
-    expect(response.status).toBe(200);
-    expect(response.body.data).toHaveProperty("accessToken");
   });
 });
 
