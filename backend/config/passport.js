@@ -1,12 +1,12 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcryptjs";
-import prisma from "../db/prisma.js";
+import * as usersModel from "../models/usersModel.js";
 
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
-      const user = await prisma.user.findFirst({ where: { username } });
+      const user = await usersModel.find({ username });
       if (!user) return done(null, false, { message: "Incorrect username" });
 
       const match = await bcrypt.compare(password, user.password);
@@ -35,7 +35,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await prisma.user.findFirst({ where: { id } });
+    const user = await usersModel.find({ id });
     done(null, user);
   } catch (err) {
     done(err);
