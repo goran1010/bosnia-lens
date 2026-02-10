@@ -8,11 +8,8 @@ const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 
 export async function me(req, res) {
-  const token = req.token;
-  if (!token) {
-    return res.status(401).json({ error: "No token provided" });
-  }
-  const user = { email: token.email, username: token.username };
+  const user = req.user;
+  delete user.password;
 
   res.json({ data: user });
 }
