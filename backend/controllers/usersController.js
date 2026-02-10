@@ -3,6 +3,7 @@ import * as usersModel from "../models/usersModel.js";
 import jwt from "jsonwebtoken";
 import sendConfirmationEmail from "../email/confirmationEmail.js";
 import emailConfirmHTML from "../utils/emailConfirmHTML.js";
+import passport from "../config/passport.js";
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
@@ -53,7 +54,7 @@ export async function signup(req, res) {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Couldn't sign up" });
   }
 }
 
@@ -88,56 +89,53 @@ export async function confirmEmail(req, res) {
     if (err.name === "JsonWebTokenError" || err.name === "TokenExpiredError") {
       return res.status(400).json({ error: "Invalid or expired token" });
     }
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Couldn't confirm email" });
   }
 }
 
-export async function login(req, res) {
-  const { username, password } = req.body;
+export async function login(req, res, next) {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) return next(err);
+    if (!user) {
+      return res.status(401).json({ error: info.message });
+    }
 
-  const user = await usersModel.find({ username });
+    req.logIn(user, (err) => {
+      if (err) return next(err);
+      return res.json({
+        message: "Logged in successfully",
+        data: { user: { username: user.username, email: user.email } },
+      });
+    });
+  })(req, res, next);
 
-  if (!user) {
-    return res.status(400).json({ error: "Invalid username or password" });
-  }
+  // const accessToken = jwt.sign(
+  //   { email: user.email, username: user.username },
+  //   ACCESS_TOKEN_SECRET,
+  //   {
+  //     expiresIn: "30m",
+  //   },
+  // );
 
-  if (user.isEmailConfirmed === false) {
-    return res.status(400).json({ error: "Email not confirmed" });
-  }
+  // const refreshToken = jwt.sign(
+  //   { email: user.email, username: user.username },
+  //   REFRESH_TOKEN_SECRET,
+  //   { expiresIn: "30d" },
+  // );
 
-  const passwordMatch = bcrypt.compareSync(password, user.password);
-  if (!passwordMatch) {
-    return res.status(400).json({ error: "Invalid username or password" });
-  }
+  // res.cookie("refreshToken", refreshToken, {
+  //   httpOnly: true,
+  //   sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  //   secure: process.env.NODE_ENV === "production",
+  //   maxAge: 30 * 24 * 60 * 60 * 1000,
+  // });
 
-  const accessToken = jwt.sign(
-    { email: user.email, username: user.username },
-    ACCESS_TOKEN_SECRET,
-    {
-      expiresIn: "30m",
-    },
-  );
-
-  const refreshToken = jwt.sign(
-    { email: user.email, username: user.username },
-    REFRESH_TOKEN_SECRET,
-    { expiresIn: "30d" },
-  );
-
-  res.cookie("refreshToken", refreshToken, {
-    httpOnly: true,
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-  });
-
-  res.json({
-    message: `User ${username} logged in successfully`,
-    data: {
-      accessToken,
-      user: { username: user.username, email: user.email },
-    },
-  });
+  // res.json({
+  //   message: `User ${username} logged in successfully`,
+  //   data: {
+  //     user: { username: user.username, email: user.email },
+  //   },
+  // });
 }
 
 // Must set all clearCookie options to successfully clear the cookie
