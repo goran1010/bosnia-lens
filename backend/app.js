@@ -4,7 +4,7 @@ const app = express();
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import "./config/envCheck.js";
-import sessionMiddleware from "./config/session.js";
+import sessionMiddleware from "./config/sessionMiddleware.js";
 import passport from "./config/passport.js";
 
 const currentURL = process.env.URL;
