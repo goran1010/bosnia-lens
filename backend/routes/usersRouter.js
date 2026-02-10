@@ -20,11 +20,6 @@ usersRouter.post(
 );
 
 usersRouter.get(
-  "/refresh-token",
-  isNotAuthenticated,
-  usersController.refreshToken,
-);
-usersRouter.get(
   "/confirm/:token",
   isNotAuthenticated,
   usersController.confirmEmail,
