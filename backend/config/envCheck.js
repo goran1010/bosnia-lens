@@ -8,6 +8,7 @@ const allRequiredVars = [
   "RESEND_API_KEY",
   "CLIENT_ID",
   "CLIENT_SECRET",
+  "COOKIE_SECRET",
 ];
 
 export default function envCheck(requiredVars) {
