@@ -85,9 +85,7 @@ export async function confirmEmail(req, res) {
     res.send(emailConfirmHTML());
   } catch (err) {
     console.error(err);
-    if (err.name === "JsonWebTokenError" || err.name === "TokenExpiredError") {
-      return res.status(400).json({ error: "Invalid or expired token" });
-    }
+
     res.status(500).json({ error: "Couldn't confirm email" });
   }
 }
