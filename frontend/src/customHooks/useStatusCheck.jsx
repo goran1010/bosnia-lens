@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+const URL = import.meta.env.VITE_BACKEND_URL;
 
 export default function useStatusCheck(setUserData, setLoading) {
   useEffect(() => {
@@ -8,7 +9,7 @@ export default function useStatusCheck(setUserData, setLoading) {
       try {
         if (!isMounted) return;
 
-        const response = await fetch("/auth/me", {
+        const response = await fetch(`${URL}/auth/me`, {
           method: "GET",
           credentials: "include",
         });
