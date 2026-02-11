@@ -1,5 +1,5 @@
 import request from "supertest";
-import { describe, test, expect } from "vitest";
+import { describe, test, expect, vi } from "vitest";
 import app from "../../app.js";
 import createAndLoginUser from "../utils/createUserAndLogin.js";
 import createNewUserData from "../utils/createNewUser.js";
@@ -8,28 +8,51 @@ import * as usersModel from "../../models/usersModel.js";
 import jwt from "jsonwebtoken";
 import emailConfirmHTML from "../../utils/emailConfirmHTML.js";
 
+vi.mock("../../email/confirmationEmail.js", () => ({
+  default: async () => {
+    return { success: true };
+  },
+}));
+
 afterEach(async () => {
   await usersModel.deleteAll();
 });
 
 describe("authRouter", () => {
   test("responds with status 200 and user data if logged in", async () => {
-    const newUserData = createNewUserData({
+    const agent = request.agent(app);
+
+    const userData = {
       username: "test_user_auth",
-      email: "test_user_auth@mail.com",
+      password: "123123",
+      email: "test_user_auth@mailll.com",
+      ["confirm-password"]: "123123",
+    };
+    await agent.post("/users/signup").send(userData);
+
+    const accessToken = jwt.sign(
+      { email: userData.email, username: userData.username },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "1d" },
+    );
+
+    await agent.get(`/users/confirm/${accessToken}`);
+
+    await agent.post("/users/login").send({
+      username: userData.username,
+      password: userData.password,
     });
 
-    const responseData = await createAndLoginUser(newUserData);
-
-    const response = await request(app)
-      .get("/auth/me")
-      .set("Authorization", `Token ${responseData.body.data.accessToken}`);
+    const response = await agent.get("/auth/me");
 
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({
-      data: { username: newUserData.username, email: newUserData.email },
-    });
+    expect(response.body.data).toEqual(
+      expect.objectContaining({
+        username: userData.username,
+        email: userData.email,
+      }),
+    );
   });
 });
 
@@ -53,23 +76,38 @@ describe("usersRouter", () => {
     const response = await createAndLoginUser(newUserData);
 
     const expectedData = {
-      message: `User ${newUserData.username} logged in successfully`,
-      accessToken: "randomstring",
+      message: `Logged in successfully`,
     };
 
     expect(response.status).toBe(200);
     expect(response.body.message).toEqual(expectedData.message);
-
-    expect(response.body.data).toHaveProperty("accessToken");
   });
 
   test("responds User logged out successfully", async () => {
-    const newUserData = createNewUserData();
-    const responseData = await createAndLoginUser(newUserData);
+    const agent = request.agent(app);
 
-    const response = await request(app)
-      .post("/users/logout")
-      .set("Authorization", `Token ${responseData.body.data.accessToken}`);
+    const userData = {
+      username: "test_user_auth",
+      password: "123123",
+      email: "test_user_auth@mailll.com",
+      ["confirm-password"]: "123123",
+    };
+    await agent.post("/users/signup").send(userData);
+
+    const accessToken = jwt.sign(
+      { email: userData.email, username: userData.username },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "1d" },
+    );
+
+    await agent.get(`/users/confirm/${accessToken}`);
+
+    await agent.post("/users/login").send({
+      username: userData.username,
+      password: userData.password,
+    });
+
+    const response = await agent.post("/users/logout");
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
