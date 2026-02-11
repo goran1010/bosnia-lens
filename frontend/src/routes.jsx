@@ -6,7 +6,6 @@ import Universities from "./components/Universities";
 import Holidays from "./components/Holidays";
 import LogIn from "./components/LogIn/LogIn";
 import SignUp from "./components/SignUp/SignUp";
-import GitHubCallback from "./components/LogIn/GitHubCallback";
 
 const routes = [
   {
@@ -33,10 +32,6 @@ const routes = [
       {
         element: <LogIn />,
         path: "login",
-      },
-      {
-        element: <GitHubCallback />,
-        path: "auth/github-callback",
       },
       {
         element: <SignUp />,

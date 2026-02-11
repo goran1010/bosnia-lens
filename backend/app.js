@@ -4,6 +4,8 @@ const app = express();
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import "./config/envCheck.js";
+import sessionMiddleware from "./config/sessionMiddleware.js";
+import passport from "./config/passport.js";
 
 const currentURL = process.env.URL;
 
@@ -13,9 +15,6 @@ app.use(
   cors({
     origin: [currentURL, "http://localhost:5173", "http://127.0.0.1:5173"],
     credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization"],
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    exposedHeaders: ["Authorization"],
   }),
 );
 
@@ -30,6 +29,9 @@ app.use(express.static(assetsPath));
 import apiRouter from "./routes/apiRouter.js";
 import authRouter from "./routes/authRouter.js";
 import usersRouter from "./routes/usersRouter.js";
+
+app.use(sessionMiddleware);
+app.use(passport.session());
 
 app.use("/api/v1/", apiRouter);
 app.use("/auth", authRouter);

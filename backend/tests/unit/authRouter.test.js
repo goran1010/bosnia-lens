@@ -1,31 +1,30 @@
 import request from "supertest";
-import { describe, test, expect, vi } from "vitest";
+import { describe, test, expect, vi, beforeEach } from "vitest";
+
+const isAuthenticatedMock = vi.fn();
+
+vi.mock("../../auth/isAuthenticated.js", () => ({
+  default: (req, res, next) => isAuthenticatedMock(req, res, next),
+}));
+
 import app from "../../app.js";
-import axios from "axios";
-import jwt from "jsonwebtoken";
+
+beforeEach(() => {
+  vi.clearAllMocks();
+  // Set default behavior
+  isAuthenticatedMock.mockImplementation((req, res, next) => {
+    if (req.user) return next();
+    res.status(403).json({ error: "You need to be logged in." });
+  });
+});
 
 describe("GET /me", () => {
   test("responds with status 403 and Need to be logged in if not logged in", async () => {
     const notLoggedInResponse = {
-      error: "Need to be logged in",
+      error: "You need to be logged in.",
     };
 
     const response = await request(app).get("/auth/me");
-
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.status).toBe(401);
-    expect(response.body).toEqual(notLoggedInResponse);
-  });
-
-  test("responds with status 403 and Expired session token in if log in expired", async () => {
-    const notLoggedInResponse = {
-      error: "Incorrect or expired session token",
-    };
-    const expiredAccessToken =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJiZTU4NWUyLTdiOTktNDllMS1iZmE2LWZlODQzY2Y0YWJiNCIsInVzZXJuYW1lIjoibmV3VXNlciIsImlhdCI6MTc2MzY2NTM3NywiZXhwIjoxNzYzNjY2Mjc3fQ.nLmQyXxsvWSR4h6BUOzwy9zPL_JDoEJi57hiwiu5NTc";
-    const response = await request(app)
-      .get("/auth/me")
-      .set("Authorization", `Token ${expiredAccessToken}`);
 
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(403);
@@ -34,115 +33,16 @@ describe("GET /me", () => {
 
   test("responds with status 200 and user data if logged in", async () => {
     const user = { email: "test_email@mail.com", username: "test_username" };
-    const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: "30m",
+
+    isAuthenticatedMock.mockImplementation((req, res, next) => {
+      req.user = user;
+      next();
     });
 
-    const response = await request(app)
-      .get("/auth/me")
-      .set("Authorization", `Token ${accessToken}`);
+    const response = await request(app).get("/auth/me");
 
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ data: user });
-  });
-});
-
-describe("GitHub login", () => {
-  test("redirects to GitHub OAuth URL", async () => {
-    const response = await request(app).get("/auth/github");
-
-    expect(response.status).toBe(302);
-    expect(response.header.location).toMatch(
-      /^https:\/\/github\.com\/login\/oauth\/authorize\?/,
-    );
-    expect(response.header.location).toContain("scope=read%3Auser");
-    expect(response.header.location).toContain(
-      `client_id=${process.env.CLIENT_ID}`,
-    );
-  });
-});
-
-describe("GitHub callback", () => {
-  test("github-callback route responds with 302 and redirects if no code is provided", async () => {
-    const response = await request(app).get("/auth/github-callback");
-
-    expect(response.status).toBe(302);
-    expect(response.header.location).toMatch(/login\?error=no_code/);
-  });
-
-  test("github-callback?code= route responds with 500 and HTML if error is thrown", async () => {
-    const validCode = "valid_code";
-
-    const mockPost = vi.spyOn(axios, "post").mockResolvedValue({});
-
-    const response = await request(app).get(
-      `/auth/github-callback?code=${validCode}`,
-    );
-
-    expect(response.status).toBe(500);
-    expect(response.text).toMatch(/ <title>Authentication Error<\/title>/i);
-
-    mockPost.mockRestore();
-  });
-
-  test("github-callback?code= route responds with 302 and /login?error=no_token if no_access token", async () => {
-    const validCode = "valid_code";
-
-    const mockPost = vi.spyOn(axios, "post").mockResolvedValue({
-      data: {},
-    });
-
-    const response = await request(app).get(
-      `/auth/github-callback?code=${validCode}`,
-    );
-
-    expect(response.status).toBe(302);
-    expect(response.header.location).toMatch(/login\?error=no_token/i);
-
-    mockPost.mockRestore();
-  });
-
-  test("github-callback?code= route responds with 302 and /login?error=no_token if no_access token", async () => {
-    const validCode = "valid_code";
-
-    const mockPost = vi.spyOn(axios, "post").mockResolvedValue({
-      data: { access_token: "mock_github_access_token" },
-    });
-
-    const mockGet = vi.spyOn(axios, "get").mockResolvedValue({
-      data: { email: undefined, login: "testuser" },
-    });
-
-    const response = await request(app).get(
-      `/auth/github-callback?code=${validCode}`,
-    );
-
-    expect(response.status).toBe(302);
-    expect(response.header.location).toMatch(/login\?error=no_email/i);
-
-    mockPost.mockRestore();
-    mockGet.mockRestore();
-  });
-
-  test("github-callback?code= route responds with 200 and tokens if valid code is provided", async () => {
-    const validCode = "valid_code";
-
-    const mockPost = vi.spyOn(axios, "post").mockResolvedValue({
-      data: { access_token: "mock_github_access_token" },
-    });
-    const mockGet = vi.spyOn(axios, "get").mockResolvedValue({
-      data: { email: "test@example.com", login: "testuser" },
-    });
-
-    const response = await request(app).get(
-      `/auth/github-callback?code=${validCode}`,
-    );
-
-    expect(response.status).toBe(200);
-    expect(response.text).toMatch(/<title>Authentication Success<\/title>/i);
-
-    mockPost.mockRestore();
-    mockGet.mockRestore();
   });
 });

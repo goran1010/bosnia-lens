@@ -3,9 +3,9 @@ import * as usersModel from "../models/usersModel.js";
 import jwt from "jsonwebtoken";
 import sendConfirmationEmail from "../email/confirmationEmail.js";
 import emailConfirmHTML from "../utils/emailConfirmHTML.js";
+import passport from "../config/passport.js";
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
-const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 
 export async function signup(req, res) {
   try {
@@ -53,7 +53,7 @@ export async function signup(req, res) {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Couldn't sign up" });
   }
 }
 
@@ -85,89 +85,38 @@ export async function confirmEmail(req, res) {
     res.send(emailConfirmHTML());
   } catch (err) {
     console.error(err);
-    if (err.name === "JsonWebTokenError" || err.name === "TokenExpiredError") {
-      return res.status(400).json({ error: "Invalid or expired token" });
+
+    res.status(500).json({ error: "Couldn't confirm email" });
+  }
+}
+
+export async function login(req, res, next) {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) return next(err);
+    if (!user) {
+      return res.status(401).json({ error: info.message });
     }
-    res.status(500).json({ error: "Internal server error" });
-  }
+
+    req.logIn(user, (err) => {
+      if (err) return next(err);
+      return res.json({
+        message: "Logged in successfully",
+        data: { user: { username: user.username, email: user.email } },
+      });
+    });
+  })(req, res, next);
 }
 
-export async function login(req, res) {
-  const { username, password } = req.body;
-
-  const user = await usersModel.find({ username });
-
-  if (!user) {
-    return res.status(400).json({ error: "Invalid username or password" });
-  }
-
-  if (user.isEmailConfirmed === false) {
-    return res.status(400).json({ error: "Email not confirmed" });
-  }
-
-  const passwordMatch = bcrypt.compareSync(password, user.password);
-  if (!passwordMatch) {
-    return res.status(400).json({ error: "Invalid username or password" });
-  }
-
-  const accessToken = jwt.sign(
-    { email: user.email, username: user.username },
-    ACCESS_TOKEN_SECRET,
-    {
-      expiresIn: "30m",
-    },
-  );
-
-  const refreshToken = jwt.sign(
-    { email: user.email, username: user.username },
-    REFRESH_TOKEN_SECRET,
-    { expiresIn: "30d" },
-  );
-
-  res.cookie("refreshToken", refreshToken, {
-    httpOnly: true,
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-  });
-
-  res.json({
-    message: `User ${username} logged in successfully`,
-    data: {
-      accessToken,
-      user: { username: user.username, email: user.email },
-    },
-  });
-}
-
-// Must set all clearCookie options to successfully clear the cookie
 export function logout(req, res) {
-  res.clearCookie("refreshToken", {
-    httpOnly: true,
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-  });
-  res.json({ message: "User logged out successfully" });
-}
-
-export function refreshToken(req, res) {
-  const token = req.cookies.refreshToken;
-  if (!token) {
-    return res.status(401).json({ error: "No refresh token provided" });
-  }
-
-  jwt.verify(token, REFRESH_TOKEN_SECRET, (err, decodedToken) => {
+  req.logout((err) => {
     if (err) {
-      return res.status(403).json({ error: "Invalid refresh token" });
+      console.error(err);
+      return res.status(500).json({ error: "Couldn't log out" });
     }
 
-    const accessToken = jwt.sign(
-      { email: decodedToken.email, username: decodedToken.username },
-      ACCESS_TOKEN_SECRET,
-      { expiresIn: "30m" },
-    );
-
-    res.json({ data: { user: decodedToken, accessToken } });
+    req.session.destroy(() => {
+      res.clearCookie("connect.sid");
+      res.json({ message: "User logged out successfully" });
+    });
   });
 }

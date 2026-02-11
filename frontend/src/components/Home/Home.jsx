@@ -39,7 +39,7 @@ export default function Home() {
       ) : (
         <WeatherCard weatherForecast={weatherForecast} />
       )}
-      <section className="flex flex-col items-center">
+      <section className="flex flex-col items-center  gap-8">
         <article className="flex flex-col items-center">
           <h2 className="font-bold">Tools</h2>
           <ul>
@@ -65,7 +65,7 @@ export default function Home() {
             </li>
           </ul>
         </article>
-        <div className="flex">
+        <div className="flex flex-col md:flex-row gap-8">
           <article className="flex flex-col items-center">
             <h2 className="font-bold">Contributing</h2>
             <article>

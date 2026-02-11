@@ -1,11 +1,11 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 import { useNavigate } from "react-router-dom";
 
-export default function useSignUpForm(
+export default function useLogInForm(
   setLoading,
   inputFields,
   setUserData,
-  setMessage
+  setMessage,
 ) {
   const navigate = useNavigate();
 

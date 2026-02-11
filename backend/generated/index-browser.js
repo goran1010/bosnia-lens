@@ -120,6 +120,13 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.SessionScalarFieldEnum = {
+  id: 'id',
+  sid: 'sid',
+  data: 'data',
+  expiresAt: 'expiresAt'
+};
+
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   username: 'username',
@@ -149,9 +156,14 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-
+exports.postOperator = exports.$Enums.postOperator = {
+  BH_POSTA: 'BH_POSTA',
+  POSTE_SRP: 'POSTE_SRP',
+  HP_MOSTAR: 'HP_MOSTAR'
+};
 
 exports.Prisma.ModelName = {
+  Session: 'Session',
   User: 'User',
   PostalCode: 'PostalCode'
 };
