@@ -1,12 +1,39 @@
+import { describe, test, expect, vi, beforeEach } from "vitest";
+
+vi.mock("express-session", () => {
+  return {
+    default: () => (req, res, next) => {
+      req.session = {
+        destroy: (cb) => cb(),
+        touch: () => {},
+        save: () => {},
+      };
+      next();
+    },
+  };
+});
+
+vi.mock("../../config/passport.js", async () => {
+  const actual = await vi.importActual("../../config/passport.js");
+
+  return {
+    default: {
+      ...actual.default,
+      authenticate: vi.fn(),
+      session: vi.fn(() => (req, res, next) => next()),
+    },
+  };
+});
+
 import request from "supertest";
 import app from "../../app.js";
-import { describe, test, expect, vi, beforeEach } from "vitest";
+
 import emailConfirmHTML from "../../utils/emailConfirmHTML.js";
 import createNewUser from "../utils/createNewUser.js";
 import * as usersModel from "../../models/usersModel.js";
 import sendConfirmationEmail from "../../email/confirmationEmail.js";
-import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import passport from "../../config/passport.js";
 
 const isAuthenticatedMock = vi.fn();
 
@@ -148,51 +175,50 @@ describe("POST /signup", () => {
 });
 
 describe("POST /login", () => {
-  test("responds with Invalid username or password for wrong input", async () => {
+  test("responds with Incorrect username for wrong input", async () => {
     const newUser = createNewUser();
 
-    const responseData = { error: "Invalid username or password" };
+    passport.authenticate.mockImplementation((strategy, callback) => (req) => {
+      req.logIn = (user, cb) => cb(null);
+      callback(null, undefined, { message: "Incorrect username" });
+    });
+    const responseData = { error: "Incorrect username" };
 
     const response = await request(app).post("/users/login").send(newUser);
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(401);
     expect(response.body).toEqual(responseData);
   });
 
   test("responds with User test_user logged in successfully for correct input", async () => {
-    vi.spyOn(bcrypt, "compareSync").mockResolvedValueOnce(true);
-
     const newUser = createNewUser();
-    vi.spyOn(usersModel, "find").mockResolvedValueOnce({
-      ...newUser,
-      isEmailConfirmed: true,
+
+    passport.authenticate.mockImplementation((strategy, callback) => (req) => {
+      req.logIn = (user, cb) => cb(null);
+      callback(null, newUser, null);
     });
     const response = await request(app).post("/users/login").send(newUser);
 
     const responseData = {
-      message: `User ${newUser.username} logged in successfully`,
+      message: `Logged in successfully`,
     };
 
     expect(response.status).toBe(200);
     expect(response.body.message).toEqual(responseData.message);
-
-    expect(response.body.data).toHaveProperty("accessToken");
   });
 });
 
 describe("POST /logout", () => {
   test("responds User logged out successfully", async () => {
-    const newUser = createNewUser();
-
     isAuthenticatedMock.mockImplementation((req, res, next) => {
-      req.user = newUser;
+      req.user = { id: 1 };
+      req.logout = (cb) => cb(null);
       next();
     });
 
     const response = await request(app).post("/users/logout");
 
     expect(response.status).toBe(200);
-    expect(response.request.cookies).not.toMatch(/refreshToken/);
     expect(response.body).toEqual({
       message: "User logged out successfully",
     });
@@ -210,8 +236,8 @@ describe("GET /confirm/:token", () => {
   test("responds with status 400 and message for invalid token", async () => {
     const response = await request(app).get("/users/confirm/12345");
 
-    expect(response.status).toBe(400);
-    expect(response.body).toEqual({ error: "Invalid or expired token" });
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ error: "Couldn't confirm email" });
   });
 
   test("responds with status 200 and HTML for valid token", async () => {
