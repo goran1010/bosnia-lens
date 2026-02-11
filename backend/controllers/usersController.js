@@ -113,7 +113,10 @@ export function logout(req, res) {
       console.error(err);
       return res.status(500).json({ error: "Couldn't log out" });
     }
-  });
 
-  res.json({ message: "User logged out successfully" });
+    req.session.destroy(() => {
+      res.clearCookie("connect.sid");
+      res.json({ message: "User logged out successfully" });
+    });
+  });
 }
