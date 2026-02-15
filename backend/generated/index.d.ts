@@ -2060,6 +2060,7 @@ export namespace Prisma {
     email: string | null
     isEmailConfirmed: boolean | null
     password: string | null
+    isAdmin: boolean | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -2068,6 +2069,7 @@ export namespace Prisma {
     email: string | null
     isEmailConfirmed: boolean | null
     password: string | null
+    isAdmin: boolean | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -2076,6 +2078,7 @@ export namespace Prisma {
     email: number
     isEmailConfirmed: number
     password: number
+    isAdmin: number
     _all: number
   }
 
@@ -2086,6 +2089,7 @@ export namespace Prisma {
     email?: true
     isEmailConfirmed?: true
     password?: true
+    isAdmin?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -2094,6 +2098,7 @@ export namespace Prisma {
     email?: true
     isEmailConfirmed?: true
     password?: true
+    isAdmin?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -2102,6 +2107,7 @@ export namespace Prisma {
     email?: true
     isEmailConfirmed?: true
     password?: true
+    isAdmin?: true
     _all?: true
   }
 
@@ -2183,6 +2189,7 @@ export namespace Prisma {
     email: string
     isEmailConfirmed: boolean
     password: string
+    isAdmin: boolean
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -2208,6 +2215,7 @@ export namespace Prisma {
     email?: boolean
     isEmailConfirmed?: boolean
     password?: boolean
+    isAdmin?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2216,6 +2224,7 @@ export namespace Prisma {
     email?: boolean
     isEmailConfirmed?: boolean
     password?: boolean
+    isAdmin?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2224,6 +2233,7 @@ export namespace Prisma {
     email?: boolean
     isEmailConfirmed?: boolean
     password?: boolean
+    isAdmin?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -2232,9 +2242,10 @@ export namespace Prisma {
     email?: boolean
     isEmailConfirmed?: boolean
     password?: boolean
+    isAdmin?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "email" | "isEmailConfirmed" | "password", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "email" | "isEmailConfirmed" | "password" | "isAdmin", ExtArgs["result"]["user"]>
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
@@ -2245,6 +2256,7 @@ export namespace Prisma {
       email: string
       isEmailConfirmed: boolean
       password: string
+      isAdmin: boolean
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2673,6 +2685,7 @@ export namespace Prisma {
     readonly email: FieldRef<"User", 'String'>
     readonly isEmailConfirmed: FieldRef<"User", 'Boolean'>
     readonly password: FieldRef<"User", 'String'>
+    readonly isAdmin: FieldRef<"User", 'Boolean'>
   }
     
 
@@ -4084,7 +4097,8 @@ export namespace Prisma {
     username: 'username',
     email: 'email',
     isEmailConfirmed: 'isEmailConfirmed',
-    password: 'password'
+    password: 'password',
+    isAdmin: 'isAdmin'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -4265,6 +4279,7 @@ export namespace Prisma {
     email?: StringFilter<"User"> | string
     isEmailConfirmed?: BoolFilter<"User"> | boolean
     password?: StringFilter<"User"> | string
+    isAdmin?: BoolFilter<"User"> | boolean
   }
 
   export type UserOrderByWithRelationInput = {
@@ -4273,6 +4288,7 @@ export namespace Prisma {
     email?: SortOrder
     isEmailConfirmed?: SortOrder
     password?: SortOrder
+    isAdmin?: SortOrder
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -4284,6 +4300,7 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     isEmailConfirmed?: BoolFilter<"User"> | boolean
     password?: StringFilter<"User"> | string
+    isAdmin?: BoolFilter<"User"> | boolean
   }, "id" | "username" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -4292,6 +4309,7 @@ export namespace Prisma {
     email?: SortOrder
     isEmailConfirmed?: SortOrder
     password?: SortOrder
+    isAdmin?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -4306,6 +4324,7 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"User"> | string
     isEmailConfirmed?: BoolWithAggregatesFilter<"User"> | boolean
     password?: StringWithAggregatesFilter<"User"> | string
+    isAdmin?: BoolWithAggregatesFilter<"User"> | boolean
   }
 
   export type PostalCodeWhereInput = {
@@ -4412,6 +4431,7 @@ export namespace Prisma {
     email: string
     isEmailConfirmed?: boolean
     password: string
+    isAdmin?: boolean
   }
 
   export type UserUncheckedCreateInput = {
@@ -4420,6 +4440,7 @@ export namespace Prisma {
     email: string
     isEmailConfirmed?: boolean
     password: string
+    isAdmin?: boolean
   }
 
   export type UserUpdateInput = {
@@ -4428,6 +4449,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     isEmailConfirmed?: BoolFieldUpdateOperationsInput | boolean
     password?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type UserUncheckedUpdateInput = {
@@ -4436,6 +4458,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     isEmailConfirmed?: BoolFieldUpdateOperationsInput | boolean
     password?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type UserCreateManyInput = {
@@ -4444,6 +4467,7 @@ export namespace Prisma {
     email: string
     isEmailConfirmed?: boolean
     password: string
+    isAdmin?: boolean
   }
 
   export type UserUpdateManyMutationInput = {
@@ -4452,6 +4476,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     isEmailConfirmed?: BoolFieldUpdateOperationsInput | boolean
     password?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -4460,6 +4485,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     isEmailConfirmed?: BoolFieldUpdateOperationsInput | boolean
     password?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type PostalCodeCreateInput = {
@@ -4601,6 +4627,7 @@ export namespace Prisma {
     email?: SortOrder
     isEmailConfirmed?: SortOrder
     password?: SortOrder
+    isAdmin?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -4609,6 +4636,7 @@ export namespace Prisma {
     email?: SortOrder
     isEmailConfirmed?: SortOrder
     password?: SortOrder
+    isAdmin?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -4617,6 +4645,7 @@ export namespace Prisma {
     email?: SortOrder
     isEmailConfirmed?: SortOrder
     password?: SortOrder
+    isAdmin?: SortOrder
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
