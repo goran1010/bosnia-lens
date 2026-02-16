@@ -15,11 +15,11 @@ export default function useStatusCheck(setUserData, setLoading) {
           credentials: "include",
         });
 
+        const result = await response.json();
         if (!response.ok) {
-          console.warn(response.statusText);
+          console.warn(result.error);
           return;
         }
-        const result = await response.json();
         setUserData(result.data);
       } catch (err) {
         console.error(err);
