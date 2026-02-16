@@ -22,6 +22,7 @@ export default function Status() {
         return console.warn(result.error);
       }
       setUserData(null);
+      console.log(result.message);
     } catch (err) {
       console.error(err);
     }
