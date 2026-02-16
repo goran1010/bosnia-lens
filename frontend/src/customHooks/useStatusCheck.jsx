@@ -10,6 +10,7 @@ export default function useStatusCheck(setUserData, setLoading) {
         if (!isMounted) return;
 
         const response = await fetch(`${URL}/auth/me`, {
+          mode: "cors",
           method: "GET",
           credentials: "include",
         });
