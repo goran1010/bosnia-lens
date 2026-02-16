@@ -23,7 +23,6 @@ export default function Status() {
       }
       setUserData(null);
       console.log(result);
-      console.log(result.message);
     } catch (err) {
       console.error(err);
     }

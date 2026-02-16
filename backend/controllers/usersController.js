@@ -5,6 +5,8 @@ import sendConfirmationEmail from "../email/confirmationEmail.js";
 import emailConfirmHTML from "../utils/emailConfirmHTML.js";
 import passport from "../config/passport.js";
 
+const NUMBER_OF_DAYS = 30;
+
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 
 export async function signup(req, res) {
@@ -115,7 +117,13 @@ export function logout(req, res) {
     }
 
     req.session.destroy(() => {
-      res.clearCookie("connect.sid");
+      res.clearCookie("connect.sid", {
+        maxAge: NUMBER_OF_DAYS * 24 * 60 * 60 * 1000,
+        sameSite: "none",
+        secure: true,
+        httpOnly: true,
+        path: "/",
+      });
       res.json({ message: "User logged out successfully" });
     });
   });
