@@ -118,6 +118,7 @@ export function logout(req, res) {
 
     req.session.destroy(() => {
       res.clearCookie("connect.sid", {
+        // Must set clearCookie options to match cookie set options, otherwise client will not clear cookie
         maxAge: NUMBER_OF_DAYS * 24 * 60 * 60 * 1000,
         sameSite: "none",
         secure: true,

@@ -22,7 +22,6 @@ export default function Status() {
         return console.warn(result.error);
       }
       setUserData(null);
-      console.log(result);
     } catch (err) {
       console.error(err);
     }

@@ -9,7 +9,7 @@ import passport from "./config/passport.js";
 const currentURL = process.env.URL;
 
 // Trust first proxy (required for Koyeb)
-app.set("trust proxy", 1);
+// app.set("trust proxy", 1);
 
 app.use(
   cors({
