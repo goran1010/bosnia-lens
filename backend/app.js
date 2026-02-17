@@ -2,14 +2,14 @@ import "dotenv/config";
 import express from "express";
 const app = express();
 import cors from "cors";
-import cookieParser from "cookie-parser";
 import "./config/envCheck.js";
 import sessionMiddleware from "./config/sessionMiddleware.js";
 import passport from "./config/passport.js";
 
 const currentURL = process.env.URL;
 
-app.use(cookieParser());
+// Trust first proxy (required for Koyeb)
+app.set("trust proxy", 1);
 
 app.use(
   cors({
