@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import Status from "./Status";
+import { useContext } from "react";
+import UserDataContext from "../../utils/UserDataContext";
 
 export default function Navbar() {
+  const { userData } = useContext(UserDataContext);
   return (
     <nav className="relative min-w-130">
       <div>
@@ -43,6 +46,16 @@ export default function Navbar() {
             Universities
           </Link>
         </li>
+        {userData && (
+          <li>
+            <Link
+              className="block py-3 px-2 hover:bg-gray-400"
+              to="/admin-dashboard"
+            >
+              Admin Dashboard
+            </Link>
+          </li>
+        )}
       </ul>
       <Status />
     </nav>
