@@ -1,10 +1,9 @@
-import checkLoginFormClickValidity from "../../utils/formValidation/checkLoginFormClickValidity";
-// import useLogInForm from "../../utils/handleForm/handleLogInForm";
-import checkLoginFormValidity from "../../utils/formValidation/checkLoginFormValidity";
-import { useRef, useState } from "react";
-import { useContext } from "react";
-import UserDataContext from "../../utils/UserDataContext";
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
+
+import checkLoginFormClickValidity from "../../utils/formValidation/checkLoginFormClickValidity";
+import checkLoginFormValidity from "../../utils/formValidation/checkLoginFormValidity";
+import { useRef, useState, useContext } from "react";
+import UserDataContext from "../../utils/UserDataContext";
 import { useNavigate } from "react-router-dom";
 
 export default function LogInForm({ setLoading }) {
@@ -56,7 +55,6 @@ export default function LogInForm({ setLoading }) {
       setLoading(false);
     }
   }
-  // const handleSubmit =  useLogInForm(setLoading, inputFields);
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">

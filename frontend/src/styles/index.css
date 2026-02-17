@@ -10,6 +10,12 @@
 }
 @import "tailwindcss";
 
+#root {
+  min-width: 520px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 body {
   text-align: center;
 }
