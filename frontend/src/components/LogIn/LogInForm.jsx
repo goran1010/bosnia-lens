@@ -1,11 +1,14 @@
 import checkLoginFormClickValidity from "../../utils/formValidation/checkLoginFormClickValidity";
-import useLogInForm from "../../utils/handleForm/handleLogInForm";
+// import useLogInForm from "../../utils/handleForm/handleLogInForm";
 import checkLoginFormValidity from "../../utils/formValidation/checkLoginFormValidity";
 import { useRef, useState } from "react";
 import { useContext } from "react";
 import UserDataContext from "../../utils/UserDataContext";
+const currentUrl = import.meta.env.VITE_BACKEND_URL;
+import { useNavigate } from "react-router-dom";
 
 export default function LogInForm({ setLoading }) {
+  const navigate = useNavigate();
   const { setUserData, setMessage } = useContext(UserDataContext);
 
   const [inputFields, setInputFields] = useState({
@@ -21,12 +24,39 @@ export default function LogInForm({ setLoading }) {
     setInputFields({ ...inputFields, [e.target.name]: e.target.value });
   }
 
-  const handleSubmit = useLogInForm(
-    setLoading,
-    inputFields,
-    setUserData,
-    setMessage
-  );
+  async function handleSubmit(e) {
+    try {
+      setLoading(true);
+      e.preventDefault();
+
+      const response = await fetch(`${currentUrl}/users/login`, {
+        mode: "cors",
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: inputFields.username,
+          password: inputFields.password,
+        }),
+      });
+
+      const result = await response.json();
+      if (!response.ok) {
+        setMessage([result.error, result.details]);
+        return console.warn(result.error, result.details);
+      }
+
+      setUserData(result.data);
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }
+  // const handleSubmit =  useLogInForm(setLoading, inputFields);
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">

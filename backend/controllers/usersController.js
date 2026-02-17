@@ -103,7 +103,7 @@ export async function login(req, res, next) {
       if (err) return next(err);
       return res.json({
         message: "Logged in successfully",
-        data: { user: { username: user.username, email: user.email } },
+        data: user,
       });
     });
   })(req, res, next);
