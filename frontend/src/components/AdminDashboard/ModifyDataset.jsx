@@ -1,0 +1,51 @@
+const currentUrl = import.meta.env.VITE_BACKEND_URL;
+
+function ModifyDataset({ datasetSelect }) {
+  async function handleCreateData(e) {
+    try {
+      e.preventDefault();
+      const response = await fetch(`${currentUrl}/admin/`, {
+        mode: "cors",
+        method: "get",
+      });
+      const result = await response.json();
+
+      console.log(result);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  if (datasetSelect === "postal-codes")
+    return (
+      <form onSubmit={handleCreateData}>
+        <div>
+          <h2>Add new data row:</h2>
+          <div>
+            <label htmlFor="new-data-row">City name: </label>
+            <input type="text" />
+          </div>
+          <div>
+            <label htmlFor="new-data-row">Postal Code: </label>
+            <input type="text" />
+          </div>
+          <div>
+            <label htmlFor="new-data-row">Postal Carrier: </label>
+            <input type="text" />
+          </div>
+          <div>
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 hover:cursor-pointer active:scale-98"
+            >
+              Add row
+            </button>
+          </div>
+        </div>
+      </form>
+    );
+
+  if (datasetSelect === "holidays") return <form>{datasetSelect}</form>;
+}
+
+export { ModifyDataset };

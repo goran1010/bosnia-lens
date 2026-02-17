@@ -1,3 +1,5 @@
-function getPostalCodes(req, res) {}
+function getPostalCodes(req, res) {
+  res.json("test");
+}
 
 export { getPostalCodes };

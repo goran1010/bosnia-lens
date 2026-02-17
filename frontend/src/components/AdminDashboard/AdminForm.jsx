@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ModifyDataset } from "./ModifyDataset";
 
 function AdminForm() {
   const [datasetSelect, setDatasetSelect] = useState("");
@@ -8,8 +9,8 @@ function AdminForm() {
   }
 
   return (
-    <form>
-      <div>
+    <div>
+      <form>
         <label htmlFor="dataset">Choose dataset: </label>
         <select name="dataset" id="dataset" onChange={handleDataset}>
           <option default value="">
@@ -18,13 +19,13 @@ function AdminForm() {
           <option value="postal-codes">Postal Codes</option>
           <option value="holidays">Holidays</option>
         </select>
-      </div>
+      </form>
       {datasetSelect ? (
-        <div>Hey</div>
+        <ModifyDataset datasetSelect={datasetSelect} />
       ) : (
         <div>You need to select a dataset.</div>
       )}
-    </form>
+    </div>
   );
 }
 
