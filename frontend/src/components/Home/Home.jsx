@@ -1,7 +1,7 @@
-import useWeatherCheck from "../../customHooks/useWeatherCheck.jsx";
+import useWeatherCheck from "../../customHooks/useWeatherCheck";
 import { useState } from "react";
 import Spinner from "@goran1010/spinner";
-import WeatherCard from "./WeatherCard.jsx";
+import WeatherCard from "./WeatherCard";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);

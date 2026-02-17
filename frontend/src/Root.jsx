@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "./components/Navbar/Navbar.jsx";
+import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer";
 import { useState } from "react";
 import UserDataContext from "./utils/UserDataContext";
 import Spinner from "@goran1010/spinner";
-import useStatusCheck from "./customHooks/useStatusCheck.jsx";
+import useStatusCheck from "./customHooks/useStatusCheck";
 
 function Root() {
   const [userData, setUserData] = useState(null);

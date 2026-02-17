@@ -1,7 +1,7 @@
 import checkFormValidity from "../../utils/formValidation/checkFormValidity";
 import checkFormValidityClick from "../../utils/formValidation/checkFormValidityClick";
 import UserDataContext from "../../utils/UserDataContext";
-import useSignUpForm from "../../utils/handleForm/handleSignUpForm";
+import useSignUpForm from "../../customHooks/useSignUpForm";
 import { useState, useRef, useContext } from "react";
 
 export default function SignUpForm({ setLoading }) {
@@ -27,7 +27,7 @@ export default function SignUpForm({ setLoading }) {
       usernameInput,
       passwordInput,
       confirmPasswordInput,
-      emailInput
+      emailInput,
     );
 
     setInputFields({ ...inputFields, [e.target.name]: e.target.value });
@@ -106,7 +106,7 @@ export default function SignUpForm({ setLoading }) {
               usernameInput,
               passwordInput,
               confirmPasswordInput,
-              emailInput
+              emailInput,
             )
           }
           type="submit"
