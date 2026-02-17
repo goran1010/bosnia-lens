@@ -4,10 +4,15 @@ function ModifyDataset({ datasetSelect }) {
   async function handleCreateData(e) {
     try {
       e.preventDefault();
-      const response = await fetch(`${currentUrl}/admin/`, {
-        mode: "cors",
-        method: "get",
-      });
+      const [city, postalCode, postalCarrier] = e.target;
+
+      const response = await fetch(
+        `${currentUrl}/admin/postal-codes?city=${city.value}&code=${postalCode.value}&post=${postalCarrier.value}`,
+        {
+          mode: "cors",
+          method: "post",
+        },
+      );
       const result = await response.json();
 
       console.log(result);

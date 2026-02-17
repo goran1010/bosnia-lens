@@ -3,6 +3,6 @@ const adminRouter = Router();
 
 import * as adminController from "../controllers/adminController.js";
 
-adminRouter.get("/", adminController.getPostalCodes);
+adminRouter.post("/postal-codes", adminController.getPostalCodes);
 
 export { adminRouter };
