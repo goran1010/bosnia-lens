@@ -46,7 +46,7 @@ export default function Navbar() {
             Universities
           </Link>
         </li>
-        {userData && (
+        {userData?.isAdmin && (
           <li>
             <Link
               className="block py-3 px-2 hover:bg-gray-400"
