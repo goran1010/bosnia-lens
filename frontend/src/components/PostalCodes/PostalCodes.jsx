@@ -12,8 +12,6 @@ export default function PostalCodes() {
   const [loading, setLoading] = useState(false);
   const { userData } = useContext(UserDataContext);
 
-  console.log(userData);
-
   return (
     <>
       <section className="relative flex flex-col justify-center items-center gap-4 p-4">

@@ -12,6 +12,7 @@ function ModifyDataset({ datasetSelect }) {
         {
           mode: "cors",
           method: "post",
+          credentials: "include",
         },
       );
       await response.json();
