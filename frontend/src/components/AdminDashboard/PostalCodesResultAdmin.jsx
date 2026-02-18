@@ -1,19 +1,30 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 
-function PostalCodesResultAdmin({ searchResult }) {
+function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
   async function handleDelete(e) {
-    const code = e.target.dataset.postalcode;
-    const response = await fetch(
-      `${currentUrl}/admin/postal-codes/?code=${code}`,
-      {
-        mode: "cors",
-        method: "delete",
-        credentials: "include",
-      },
-    );
-    const result = await response.json();
+    try {
+      const code = e.target.dataset.postalcode;
+      const response = await fetch(
+        `${currentUrl}/admin/postal-codes/?code=${code}`,
+        {
+          mode: "cors",
+          method: "delete",
+          credentials: "include",
+        },
+      );
+      const result = await response.json();
 
-    console.log(result);
+      if (response.ok) {
+        const filteredSearchResult = searchResult.filter((result) => {
+          return result.code !== Number(code);
+        });
+        setSearchResult(filteredSearchResult);
+        return;
+      }
+      console.warn(result.error);
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   if (searchResult.length === 0) {

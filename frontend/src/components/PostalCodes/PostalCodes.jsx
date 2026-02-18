@@ -26,7 +26,10 @@ export default function PostalCodes() {
       </section>
       <div>{loading && <Spinner />}</div>
       {userData.isAdmin ? (
-        <PostalCodesResultAdmin searchResult={searchResult} />
+        <PostalCodesResultAdmin
+          searchResult={searchResult}
+          setSearchResult={setSearchResult}
+        />
       ) : (
         <PostalCodesResult searchResult={searchResult} />
       )}
