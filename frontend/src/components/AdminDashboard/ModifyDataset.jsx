@@ -14,9 +14,7 @@ function ModifyDataset({ datasetSelect }) {
           method: "post",
         },
       );
-      const result = await response.json();
-
-      console.log(result);
+      await response.json();
     } catch (err) {
       console.error(err);
     }
