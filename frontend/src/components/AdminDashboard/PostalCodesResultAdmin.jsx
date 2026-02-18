@@ -26,7 +26,6 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
           }
           return row;
         });
-        console.log(filteredSearchResult);
         setSearchResult(filteredSearchResult);
         return;
       }
@@ -90,8 +89,8 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
               <div className="flex justify-center items-center">
                 {result.code}
               </div>
-              <input type="text" defaultValue={result.city} id="city" />
-              <input type="text" defaultValue={result.post} id="post" />
+              <input type="text" defaultValue={result.city} />
+              <input type="text" defaultValue={result.post} />
               <div>
                 <button
                   type="submit"
