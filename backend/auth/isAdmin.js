@@ -1,6 +1,7 @@
-function isAuthenticated(req, res, next) {
+function isAdmin(req, res, next) {
   try {
     if (req.user.isAdmin) return next();
+
     res
       .status(403)
       .json({ error: "You need to be admin to access this route." });
@@ -9,4 +10,4 @@ function isAuthenticated(req, res, next) {
   }
 }
 
-export { isAuthenticated };
+export { isAdmin };
