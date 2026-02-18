@@ -53,10 +53,32 @@ export function createNew(city, code, post) {
   });
 }
 
+function edit(city, code, post) {
+  let capitalizedCity = city
+    .split(" ")
+    .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+
+  code = Number(code);
+
+  const allowedPosts = ["BH_POSTA", "POSTE_SRP", "HP_MOSTAR"];
+
+  if (allowedPosts.includes(post)) {
+    return prisma.postalCode.update({
+      where: { code },
+      data: { city: capitalizedCity, post },
+    });
+  }
+  return prisma.postalCode.update({
+    where: { code },
+    data: { city: capitalizedCity },
+  });
+}
+
 function deleteCode(code) {
   code = Number(code);
 
   return prisma.postalCode.delete({ where: { code } });
 }
 
-export { deleteCode };
+export { deleteCode, edit };

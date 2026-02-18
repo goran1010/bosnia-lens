@@ -5,6 +5,8 @@ import * as adminController from "../controllers/adminController.js";
 
 adminRouter.post("/postal-codes", adminController.createPostalCode);
 
+adminRouter.put("/postal-codes", adminController.editPostalCode);
+
 adminRouter.delete("/postal-codes", adminController.deletePostalCode);
 
 export { adminRouter };

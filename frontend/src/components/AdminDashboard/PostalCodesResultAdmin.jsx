@@ -81,12 +81,9 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
         {searchResult.map((result) => {
           return (
             <li className="grid gap-1 w-full p-1 grid-cols-5" key={result.code}>
-              <input
-                type="text"
-                defaultValue={result.code}
-                id="code"
-                ref={codeInput}
-              />
+              <div className="flex justify-center items-center">
+                {result.code}
+              </div>
               <input
                 type="text"
                 defaultValue={result.city}
