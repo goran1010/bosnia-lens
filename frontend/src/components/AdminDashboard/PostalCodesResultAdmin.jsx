@@ -2,9 +2,9 @@ const currentUrl = import.meta.env.VITE_BACKEND_URL;
 
 function PostalCodesResultAdmin({ searchResult }) {
   async function handleDelete(e) {
-    const post = e.target.dataset.postalcode;
+    const code = e.target.dataset.postalcode;
     const response = await fetch(
-      `${currentUrl}/admin/postal-codes/?post=${post}`,
+      `${currentUrl}/admin/postal-codes/?code=${code}`,
       {
         mode: "cors",
         method: "delete",

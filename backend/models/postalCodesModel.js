@@ -52,3 +52,11 @@ export function createNew(city, code, post) {
     data: { city: capitalizedCity, code },
   });
 }
+
+function deleteCode(code) {
+  code = Number(code);
+
+  return prisma.postalCode.delete({ where: { code } });
+}
+
+export { deleteCode };

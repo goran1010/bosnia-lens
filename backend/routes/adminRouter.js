@@ -3,10 +3,8 @@ const adminRouter = Router();
 
 import * as adminController from "../controllers/adminController.js";
 
-adminRouter.post("/postal-codes", adminController.getPostalCodes);
+adminRouter.post("/postal-codes", adminController.createPostalCode);
 
-adminRouter.put("/postal-codes", adminController.getPostalCodes);
-
-adminRouter.delete("/postal-codes", adminController.getPostalCodes);
+adminRouter.delete("/postal-codes", adminController.deletePostalCode);
 
 export { adminRouter };
