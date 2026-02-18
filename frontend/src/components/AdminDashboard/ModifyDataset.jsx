@@ -51,7 +51,7 @@ function ModifyDataset({ datasetSelect }) {
             <div>
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 hover:cursor-pointer active:scale-98"
+                className=" bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 hover:cursor-pointer active:scale-98"
               >
                 Add row
               </button>
