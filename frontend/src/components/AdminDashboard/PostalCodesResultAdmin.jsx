@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -7,9 +7,9 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
   const cityInput = useRef();
   const postInput = useRef();
 
-  async function handleEdit(e) {
+  async function handleEdit() {
     try {
-      const code = codeInput.current.value;
+      const code = codeInput.current.textContent;
       const city = cityInput.current.value;
       const post = postInput.current.value;
 
@@ -23,6 +23,8 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
       );
       const result = await response.json();
 
+      console.log(result);
+
       //   if (response.ok) {
       //     const filteredSearchResult = searchResult.filter((result) => {
       //       return result.code !== Number(code);
@@ -30,7 +32,7 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
       //     setSearchResult(filteredSearchResult);
       //     return;
       //   }
-      console.warn(result.error);
+      //   console.warn(result.error);
     } catch (err) {
       console.error(err);
     }
@@ -81,7 +83,7 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
         {searchResult.map((result) => {
           return (
             <li className="grid gap-1 w-full p-1 grid-cols-5" key={result.code}>
-              <div className="flex justify-center items-center">
+              <div className="flex justify-center items-center" ref={codeInput}>
                 {result.code}
               </div>
               <input

@@ -17,8 +17,8 @@ async function editPostalCode(req, res) {
 async function deletePostalCode(req, res) {
   const { code } = req.query;
 
-  await getPostalCodesModel.deleteCode(code);
-  res.json({ message: "Postal code row deleted." });
+  const result = await getPostalCodesModel.deleteCode(code);
+  res.json({ message: "Postal code row deleted.", data: result });
 }
 
 export { createPostalCode, deletePostalCode, editPostalCode };
