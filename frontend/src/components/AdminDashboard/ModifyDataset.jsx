@@ -1,7 +1,9 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 import PostalCodes from "../PostalCodes/PostalCodes";
+import { useState } from "react";
 
 function ModifyDataset({ datasetSelect }) {
+  const [searchResult, setSearchResult] = useState([]);
   async function handleCreateData(e) {
     try {
       e.preventDefault();
@@ -15,7 +17,14 @@ function ModifyDataset({ datasetSelect }) {
           credentials: "include",
         },
       );
-      await response.json();
+      const result = await response.json();
+
+      if (response.ok) {
+        const newResult = [...searchResult];
+        newResult.unshift(result.data);
+
+        setSearchResult(newResult);
+      }
     } catch (err) {
       console.error(err);
     }
@@ -51,7 +60,10 @@ function ModifyDataset({ datasetSelect }) {
         </form>
         <div>
           <h2>View and edit all data:</h2>
-          <PostalCodes />
+          <PostalCodes
+            searchResult={searchResult}
+            setSearchResult={setSearchResult}
+          />
         </div>
       </>
     );
