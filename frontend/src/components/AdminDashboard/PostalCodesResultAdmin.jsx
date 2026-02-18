@@ -1,17 +1,12 @@
-import { useRef } from "react";
-
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 
 function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
-  const codeInput = useRef();
-  const cityInput = useRef();
-  const postInput = useRef();
-
-  async function handleEdit() {
+  async function handleEdit(e) {
     try {
-      const code = codeInput.current.textContent;
-      const city = cityInput.current.value;
-      const post = postInput.current.value;
+      e.preventDefault();
+      const code = e.target.children[0].textContent;
+      const city = e.target[0].value;
+      const post = e.target[1].value;
 
       const response = await fetch(
         `${currentUrl}/admin/postal-codes/?city=${city}&code=${code}&post=${post}`,
@@ -23,16 +18,20 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
       );
       const result = await response.json();
 
-      console.log(result);
+      if (response.ok) {
+        const filteredSearchResult = searchResult.map((row) => {
+          if (row.code === Number(code)) {
+            row.city = result.data.city;
+            row.post = result.data.post;
+          }
+          return row;
+        });
+        console.log(filteredSearchResult);
+        setSearchResult(filteredSearchResult);
+        return;
+      }
 
-      //   if (response.ok) {
-      //     const filteredSearchResult = searchResult.filter((result) => {
-      //       return result.code !== Number(code);
-      //     });
-      //     setSearchResult(filteredSearchResult);
-      //     return;
-      //   }
-      //   console.warn(result.error);
+      console.warn(result.error);
     } catch (err) {
       console.error(err);
     }
@@ -40,6 +39,7 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
 
   async function handleDelete(e) {
     try {
+      e.preventDefault();
       const code = e.target.dataset.postalcode;
 
       const response = await fetch(
@@ -53,8 +53,8 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
       const result = await response.json();
 
       if (response.ok) {
-        const filteredSearchResult = searchResult.filter((result) => {
-          return result.code !== Number(code);
+        const filteredSearchResult = searchResult.filter((row) => {
+          return row.code !== Number(code);
         });
         setSearchResult(filteredSearchResult);
         return;
@@ -82,25 +82,19 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
         </li>
         {searchResult.map((result) => {
           return (
-            <li className="grid gap-1 w-full p-1 grid-cols-5" key={result.code}>
-              <div className="flex justify-center items-center" ref={codeInput}>
+            <form
+              onSubmit={handleEdit}
+              className="grid gap-1 w-full p-1 grid-cols-5"
+              key={result.code}
+            >
+              <div className="flex justify-center items-center">
                 {result.code}
               </div>
-              <input
-                type="text"
-                defaultValue={result.city}
-                id="city"
-                ref={cityInput}
-              />
-              <input
-                type="text"
-                defaultValue={result.post}
-                id="post"
-                ref={postInput}
-              />
+              <input type="text" defaultValue={result.city} id="city" />
+              <input type="text" defaultValue={result.post} id="post" />
               <div>
                 <button
-                  onClick={handleEdit}
+                  type="submit"
                   className="bg-blue-400 text-white p-2 rounded-md hover:bg-blue-700 hover:cursor-pointer active:scale-98"
                 >
                   Save Edit
@@ -108,6 +102,7 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
               </div>
               <div>
                 <button
+                  type="button"
                   data-postalcode={result.code}
                   onClick={handleDelete}
                   className="bg-red-400 text-white p-2 rounded-md hover:bg-red-700 hover:cursor-pointer active:scale-98"
@@ -115,7 +110,7 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
                   Delete
                 </button>
               </div>
-            </li>
+            </form>
           );
         })}
       </ul>
