@@ -8,6 +8,10 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
 
   const [inputValues, setInputValues] = useState([]);
 
+  useEffect(() => {
+    setInputValues(searchResult);
+  }, [searchResult]);
+
   function handlePostChange(e) {
     const changedInput = inputValues.map((result) => {
       if (result.code === Number(e.target.dataset.code)) {
@@ -18,10 +22,6 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
 
     setInputValues(changedInput);
   }
-
-  useEffect(() => {
-    setInputValues(searchResult);
-  }, [searchResult]);
 
   function handleCityChange(e) {
     const changedInput = inputValues.map((result) => {
