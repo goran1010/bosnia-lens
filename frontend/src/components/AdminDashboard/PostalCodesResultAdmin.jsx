@@ -1,6 +1,39 @@
+import { useEffect, useState } from "react";
+
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 
 function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
+  // Refactor this component to improve performance
+  // Now it re-creates entire array for each letter changed in input
+
+  const [inputValues, setInputValues] = useState([]);
+
+  function handlePostChange(e) {
+    const changedInput = inputValues.map((result) => {
+      if (result.code === Number(e.target.dataset.code)) {
+        result[e.target.name] = e.target.value;
+      }
+      return result;
+    });
+
+    setInputValues(changedInput);
+  }
+
+  useEffect(() => {
+    setInputValues(searchResult);
+  }, [searchResult]);
+
+  function handleCityChange(e) {
+    const changedInput = inputValues.map((result) => {
+      if (result.code === Number(e.target.dataset.code)) {
+        result[e.target.name] = e.target.value;
+      }
+      return result;
+    });
+
+    setInputValues(changedInput);
+  }
+
   async function handleEdit(e) {
     try {
       e.preventDefault();
@@ -64,7 +97,7 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
     }
   }
 
-  if (searchResult.length === 0) {
+  if (inputValues.length === 0) {
     return (
       <section className="flex justify-center items-center p-4">
         <p className="text-gray-500">No results to display.</p>
@@ -79,7 +112,7 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
           <div>City</div>
           <div>Post</div>
         </li>
-        {searchResult.map((result) => {
+        {inputValues.map((result) => {
           return (
             <form
               onSubmit={handleEdit}
@@ -89,8 +122,20 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
               <div className="flex justify-center items-center">
                 {result.code}
               </div>
-              <input type="text" defaultValue={result.city} />
-              <input type="text" defaultValue={result.post} />
+              <input
+                name="city"
+                type="text"
+                value={result.city}
+                onChange={handleCityChange}
+                data-code={result.code}
+              />
+              <input
+                data-code={result.code}
+                name="post"
+                type="text"
+                value={result.post}
+                onChange={handlePostChange}
+              />
               <div>
                 <button
                   type="submit"

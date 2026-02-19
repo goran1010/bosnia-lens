@@ -37,16 +37,16 @@ function ModifyDataset({ datasetSelect }) {
           <div>
             <h2>Add new data row:</h2>
             <div>
-              <label htmlFor="new-data-row">City name: </label>
-              <input type="text" />
+              <label htmlFor="new-city">City name: </label>
+              <input type="text" id="new-city" />
             </div>
             <div>
-              <label htmlFor="new-data-row">Postal Code: </label>
-              <input type="text" />
+              <label htmlFor="new-code">Postal Code: </label>
+              <input type="text" id="new-city" />
             </div>
             <div>
-              <label htmlFor="new-data-row">Postal Carrier: </label>
-              <input type="text" />
+              <label htmlFor="new-post">Postal Carrier: </label>
+              <input type="text" id="new-city" />
             </div>
             <div>
               <button
