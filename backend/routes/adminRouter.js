@@ -6,7 +6,11 @@ import * as adminPostalCodeValidation from "../validation/adminPostalCodeVal.js"
 
 adminRouter.post("/postal-codes", adminController.createPostalCode);
 
-adminRouter.put("/postal-codes", adminController.editPostalCode);
+adminRouter.put(
+  "/postal-codes",
+  adminPostalCodeValidation.editPostalCode,
+  adminController.editPostalCode,
+);
 
 adminRouter.delete(
   "/postal-codes",
