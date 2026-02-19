@@ -23,8 +23,9 @@ function ModifyDataset({ datasetSelect }) {
         const newResult = [...searchResult];
         newResult.unshift(result.data);
 
-        setSearchResult(newResult);
+        return setSearchResult(newResult);
       }
+      console.warn(result.error);
     } catch (err) {
       console.error(err);
     }

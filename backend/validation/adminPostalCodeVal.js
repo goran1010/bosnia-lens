@@ -1,4 +1,6 @@
 import { query, validationResult } from "express-validator";
+import * as postalModel from "../models/postalCodesModel.js";
+
 const validPosts = ["BH_POSTA", "POSTE_SRP", "HP_MOSTAR"];
 
 export const createPostalCode = [
@@ -10,6 +12,13 @@ export const createPostalCode = [
       }
     } else {
       throw new Error("Must be a number");
+    }
+    return true;
+  }),
+  query("code").custom(async (value) => {
+    const codeExists = await postalModel.getPostalCodeByCode(Number(value));
+    if (codeExists) {
+      throw new Error("Code already exists");
     }
     return true;
   }),
@@ -53,6 +62,14 @@ export const editPostalCode = [
   query("post").custom((value) => {
     if (!validPosts.includes(value) && value !== "") {
       throw new Error("Invalid post");
+    }
+    return true;
+  }),
+
+  query("code").custom(async (value) => {
+    const codeExists = await postalModel.getPostalCodeByCode(Number(value));
+    if (!codeExists) {
+      throw new Error("Code doesn't exist");
     }
     return true;
   }),
