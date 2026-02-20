@@ -1,11 +1,13 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import checkPostalCodesValidity from "../../utils/formValidation/checkPostalCodesValidity";
+import NotificationContext from "../../utils/NotificationContext";
 
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 
 export default function SearchPostalCode({ setSearchResult, setLoading }) {
   const [searchTerm, setSearchTerm] = useState("");
   const searchInput = useRef();
+  const { addNotification } = useContext(NotificationContext);
 
   function handleSearch(e) {
     checkPostalCodesValidity(searchInput);
@@ -23,10 +25,23 @@ export default function SearchPostalCode({ setSearchResult, setLoading }) {
       const result = await response.json();
 
       if (!response.ok) {
-        return console.warn(result.error, result.details);
+        addNotification({
+          type: "error",
+          message: result.error,
+        });
+        console.warn(result.error);
+        return;
       }
+      addNotification({
+        type: "success",
+        message: "Postal codes retrieved successfully.",
+      });
       setSearchResult(result.data);
     } catch (err) {
+      addNotification({
+        type: "error",
+        message: "An error occurred while searching for postal codes.",
+      });
       console.error(err);
     } finally {
       setLoading(false);
