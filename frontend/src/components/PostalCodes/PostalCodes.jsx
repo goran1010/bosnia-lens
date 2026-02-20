@@ -6,8 +6,9 @@ import PostalCodesResult from "./PostalCodesResult";
 import { PostalCodesResultAdmin } from "../AdminDashboard/PostalCodesResultAdmin";
 import UserDataContext from "../../utils/UserDataContext";
 
-export default function PostalCodes({ searchResult, setSearchResult }) {
+export default function PostalCodes() {
   const [loading, setLoading] = useState(false);
+  const [searchResult, setSearchResult] = useState([]);
   const { userData } = useContext(UserDataContext);
 
   return (

@@ -11,7 +11,7 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
   const { addNotification } = useContext(NotificationContext);
 
   useEffect(() => {
-    setInputValues(searchResult);
+    setInputValues(searchResult || []);
   }, [searchResult]);
 
   function handlePostChange(e) {
