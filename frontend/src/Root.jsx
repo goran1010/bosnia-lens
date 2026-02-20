@@ -14,9 +14,9 @@ function Root() {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useStatusCheck(setUserData, setLoading);
-
   const notificationValue = useNotification(notifications, setNotifications);
+
+  useStatusCheck(setUserData, setLoading, notificationValue);
 
   return (
     <NotificationContext
