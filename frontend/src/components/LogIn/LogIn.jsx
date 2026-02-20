@@ -1,35 +1,11 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
+import { useState } from "react";
 import Spinner from "@goran1010/spinner";
 import MessageCard from "../MessageCard.jsx";
 import LogInForm from "./LogInForm.jsx";
-import UserDataContext from "../../utils/UserDataContext";
 
 export default function LogIn() {
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const { setUserData, setMessage } = useContext(UserDataContext);
-
-  useEffect(() => {
-    const handleMessage = (event) => {
-      // Verify origin
-      if (event.origin !== import.meta.env.VITE_BACKEND_URL) {
-        return;
-      }
-
-      if (event.data.type === "github-auth-success") {
-        const { accessToken, user, message } = event.data.data;
-        setUserData([{ accessToken, user }]);
-        setMessage(["Success!", [message]]);
-        navigate("/");
-      } else if (event.data.type === "github-auth-error") {
-        setMessage(["Authentication failed", [event.data.error]]);
-      }
-    };
-
-    window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
-  }, [navigate, setUserData, setMessage]);
 
   return (
     <div className="relative min-h-full flex items-center justify-center bg-gray-50 ">

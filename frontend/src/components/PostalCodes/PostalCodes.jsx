@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Spinner from "@goran1010/spinner";
 import MessageCard from "../MessageCard";
 import SearchPostalCode from "./SearchPostalCode";
 import GetAllPostalCodes from "./GetAllPostalCodes";
 import PostalCodesResult from "./PostalCodesResult";
+import { PostalCodesResultAdmin } from "../AdminDashboard/PostalCodesResultAdmin";
+import UserDataContext from "../../utils/UserDataContext";
 
-export default function PostalCodes() {
-  const [searchResult, setSearchResult] = useState([]);
+export default function PostalCodes({ searchResult, setSearchResult }) {
   const [loading, setLoading] = useState(false);
+  const { userData } = useContext(UserDataContext);
 
   return (
     <>
@@ -22,8 +24,14 @@ export default function PostalCodes() {
         />
       </section>
       <div>{loading && <Spinner />}</div>
-      <PostalCodesResult searchResult={searchResult} />
-
+      {userData.isAdmin ? (
+        <PostalCodesResultAdmin
+          searchResult={searchResult}
+          setSearchResult={setSearchResult}
+        />
+      ) : (
+        <PostalCodesResult searchResult={searchResult} />
+      )}
       <div className="relative">
         <MessageCard />
       </div>

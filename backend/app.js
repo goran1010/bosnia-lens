@@ -29,6 +29,8 @@ app.use(express.static(assetsPath));
 import apiRouter from "./routes/apiRouter.js";
 import authRouter from "./routes/authRouter.js";
 import usersRouter from "./routes/usersRouter.js";
+import { adminRouter } from "./routes/adminRouter.js";
+import { isAdmin } from "./auth/isAdmin.js";
 
 app.use(sessionMiddleware);
 app.use(passport.session());
@@ -36,6 +38,7 @@ app.use(passport.session());
 app.use("/api/v1/", apiRouter);
 app.use("/auth", authRouter);
 app.use("/users", usersRouter);
+app.use("/admin", isAdmin, adminRouter);
 
 app.use((req, res) => {
   res.status(404).json({ error: "No resource found" });
