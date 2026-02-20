@@ -18,6 +18,13 @@ function Root() {
       duration: 5000,
       createdAt: Date.now(),
     },
+    {
+      id: crypto.randomUUID(),
+      type: "info",
+      message: "Welcome to Bosnia Lens!",
+      duration: 10000,
+      createdAt: Date.now(),
+    },
   ]);
   const [loading, setLoading] = useState(true);
 
@@ -49,7 +56,13 @@ function Root() {
   );
 
   return (
-    <NotificationContext value={{ notificationValue }}>
+    <NotificationContext
+      value={{
+        notifications: notificationValue.notifications,
+        addNotification: notificationValue.addNotification,
+        removeNotification: notificationValue.removeNotification,
+      }}
+    >
       <UserDataContext value={{ userData, setUserData }}>
         <>
           <Navbar />

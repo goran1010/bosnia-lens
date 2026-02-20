@@ -1,9 +1,22 @@
 import { useContext, useEffect } from "react";
 import NotificationContext from "../utils/NotificationContext";
 
+function getNotificationStyles(type) {
+  switch (type) {
+    case "success":
+      return "bg-green-500";
+    case "error":
+      return "bg-red-500";
+    case "warning":
+      return "bg-yellow-500 text-black";
+    case "info":
+    default:
+      return "bg-blue-500";
+  }
+}
+
 export default function Notifications() {
-  const { notificationValue } = useContext(NotificationContext);
-  const { notifications, removeNotification } = notificationValue;
+  const { notifications, removeNotification } = useContext(NotificationContext);
 
   useEffect(() => {
     const timers = notifications.map((notification) => {
@@ -42,18 +55,4 @@ export default function Notifications() {
       ))}
     </div>
   );
-}
-
-function getNotificationStyles(type) {
-  switch (type) {
-    case "success":
-      return "bg-green-500";
-    case "error":
-      return "bg-red-500";
-    case "warning":
-      return "bg-yellow-500 text-black";
-    case "info":
-    default:
-      return "bg-blue-500";
-  }
 }
