@@ -1,10 +1,12 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import UserDataContext from "../../utils/UserDataContext";
+import NotificationContext from "../../utils/NotificationContext";
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 
 export default function Status() {
   const { userData, setUserData } = useContext(UserDataContext);
+  const { addNotification } = useContext(NotificationContext);
 
   async function handleLogout() {
     try {
@@ -19,10 +21,22 @@ export default function Status() {
 
       const result = await response.json();
       if (!response.ok) {
+        addNotification({
+          type: "error",
+          message: result.error,
+        });
         return console.warn(result.error);
       }
+      addNotification({
+        type: "success",
+        message: result.message,
+      });
       setUserData(null);
     } catch (err) {
+      addNotification({
+        type: "error",
+        message: "An error occurred while logging out.",
+      });
       console.error(err);
     }
   }
