@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Spinner from "@goran1010/spinner";
+import SignUpForm from "./SignUpForm";
 
 export default function SignUp() {
   const [loading, setLoading] = useState(false);
