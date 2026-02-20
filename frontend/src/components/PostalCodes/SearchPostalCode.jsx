@@ -1,11 +1,9 @@
-import { useState, useRef, useContext } from "react";
+import { useState, useRef } from "react";
 import checkPostalCodesValidity from "../../utils/formValidation/checkPostalCodesValidity";
-import UserDataContext from "../../utils/UserDataContext";
 
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 
 export default function SearchPostalCode({ setSearchResult, setLoading }) {
-  const { setMessage } = useContext(UserDataContext);
   const [searchTerm, setSearchTerm] = useState("");
   const searchInput = useRef();
 
@@ -25,12 +23,10 @@ export default function SearchPostalCode({ setSearchResult, setLoading }) {
       const result = await response.json();
 
       if (!response.ok) {
-        setMessage([result.error, result.details]);
         return console.warn(result.error, result.details);
       }
       setSearchResult(result.data);
     } catch (err) {
-      setMessage([err]);
       console.error(err);
     } finally {
       setLoading(false);

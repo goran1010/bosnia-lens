@@ -23,7 +23,7 @@ export default function PostalCodes({ searchResult, setSearchResult }) {
         />
       </section>
       <div>{loading && <Spinner />}</div>
-      {userData.isAdmin ? (
+      {userData?.isAdmin ? (
         <PostalCodesResultAdmin
           searchResult={searchResult}
           setSearchResult={setSearchResult}

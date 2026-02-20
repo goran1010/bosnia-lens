@@ -9,7 +9,7 @@ import NotificationContext from "../../utils/NotificationContext";
 
 export default function LogInForm({ setLoading }) {
   const navigate = useNavigate();
-  const { setUserData, setMessage } = useContext(UserDataContext);
+  const { setUserData } = useContext(UserDataContext);
   const { addNotification } = useContext(NotificationContext);
 
   const [inputFields, setInputFields] = useState({
@@ -45,7 +45,6 @@ export default function LogInForm({ setLoading }) {
 
       const result = await response.json();
       if (!response.ok) {
-        setMessage([result.error, result.details]);
         addNotification({
           type: "error",
           message: result.error,

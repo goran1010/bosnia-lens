@@ -1,10 +1,10 @@
 import { useContext } from "react";
-import UserDataContext from "../../utils/UserDataContext";
+import NotificationContext from "../../utils/NotificationContext";
 
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 
 export default function GetAllPostalCodes({ setSearchResult, setLoading }) {
-  const { setMessage } = useContext(UserDataContext);
+  const { addNotification } = useContext(NotificationContext);
 
   async function handleGetAll(e) {
     try {
@@ -17,12 +17,23 @@ export default function GetAllPostalCodes({ setSearchResult, setLoading }) {
       const result = await response.json();
 
       if (!response.ok) {
-        setMessage([result.error, result.details]);
+        addNotification({
+          type: "error",
+          message: result.error,
+        });
         return console.warn(result.error, result.details);
       }
+      addNotification({
+        type: "success",
+        message: "Postal codes and municipalities retrieved successfully.",
+      });
       setSearchResult(result.data);
     } catch (err) {
-      setMessage([err]);
+      addNotification({
+        type: "error",
+        message:
+          "An error occurred while fetching postal codes and municipalities.",
+      });
       console.error(err);
     } finally {
       setLoading(false);

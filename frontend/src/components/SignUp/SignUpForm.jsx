@@ -1,16 +1,13 @@
 import checkFormValidity from "../../utils/formValidation/checkFormValidity";
 import checkFormValidityClick from "../../utils/formValidation/checkFormValidityClick";
-import UserDataContext from "../../utils/UserDataContext";
 import useSignUpForm from "../../customHooks/useSignUpForm";
-import { useState, useRef, useContext } from "react";
+import { useState, useRef } from "react";
 
 export default function SignUpForm({ setLoading }) {
   const usernameInput = useRef();
   const passwordInput = useRef();
   const confirmPasswordInput = useRef();
   const emailInput = useRef();
-
-  const { setMessage } = useContext(UserDataContext);
 
   const [inputFields, setInputFields] = useState({
     username: "",
@@ -19,7 +16,7 @@ export default function SignUpForm({ setLoading }) {
     ["confirm-password"]: "",
   });
 
-  const handleSubmit = useSignUpForm(setLoading, setMessage, inputFields);
+  const handleSubmit = useSignUpForm(setLoading, inputFields);
 
   function handleInputFields(e) {
     checkFormValidity(

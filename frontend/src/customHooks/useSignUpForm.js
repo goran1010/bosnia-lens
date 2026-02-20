@@ -1,7 +1,7 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 import { useNavigate } from "react-router-dom";
 
-export default function useSignUpForm(setLoading, setMessage, inputFields) {
+export default function useSignUpForm(setLoading, inputFields) {
   const navigate = useNavigate();
 
   return async function handleSubmit(event) {
@@ -26,10 +26,8 @@ export default function useSignUpForm(setLoading, setMessage, inputFields) {
 
       const result = await response.json();
       if (!response.ok) {
-        setMessage([result.error, result.details]);
         return console.warn(result.error, result.details);
       }
-      setMessage([result.message]);
 
       navigate("/login");
     } catch (err) {
