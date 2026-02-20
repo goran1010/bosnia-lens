@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import Spinner from "@goran1010/spinner";
-import MessageCard from "../MessageCard.jsx";
 import LogInForm from "./LogInForm.jsx";
 
 export default function LogIn() {
@@ -9,7 +8,6 @@ export default function LogIn() {
 
   return (
     <div className="relative min-h-full flex items-center justify-center bg-gray-50 ">
-      <MessageCard />
       <div className="w-full max-w-md p-6 flex flex-col gap-3">
         <h1 className="text-5xl mb-8 text-center font-bold text-gray-900">
           Please log in

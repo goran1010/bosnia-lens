@@ -10,7 +10,15 @@ import NotificationContext from "./utils/NotificationContext";
 
 function Root() {
   const [userData, setUserData] = useState(null);
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState([
+    {
+      id: crypto.randomUUID(),
+      type: "success",
+      message: "Welcome to Bosnia Lens!",
+      duration: 5000,
+      createdAt: Date.now(),
+    },
+  ]);
   const [loading, setLoading] = useState(true);
 
   useStatusCheck(setUserData, setLoading);

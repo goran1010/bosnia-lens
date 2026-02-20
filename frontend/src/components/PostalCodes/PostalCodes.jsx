@@ -1,6 +1,5 @@
 import { useContext, useState } from "react";
 import Spinner from "@goran1010/spinner";
-import MessageCard from "../MessageCard";
 import SearchPostalCode from "./SearchPostalCode";
 import GetAllPostalCodes from "./GetAllPostalCodes";
 import PostalCodesResult from "./PostalCodesResult";
@@ -32,9 +31,7 @@ export default function PostalCodes({ searchResult, setSearchResult }) {
       ) : (
         <PostalCodesResult searchResult={searchResult} />
       )}
-      <div className="relative">
-        <MessageCard />
-      </div>
+      <div className="relative"></div>
     </>
   );
 }
