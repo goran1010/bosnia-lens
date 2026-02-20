@@ -5,10 +5,12 @@ import checkLoginFormValidity from "../../utils/formValidation/checkLoginFormVal
 import { useRef, useState, useContext } from "react";
 import UserDataContext from "../../utils/UserDataContext";
 import { useNavigate } from "react-router-dom";
+import NotificationContext from "../../utils/NotificationContext";
 
 export default function LogInForm({ setLoading }) {
   const navigate = useNavigate();
   const { setUserData, setMessage } = useContext(UserDataContext);
+  const { addNotification } = useContext(NotificationContext);
 
   const [inputFields, setInputFields] = useState({
     username: "",
@@ -44,12 +46,23 @@ export default function LogInForm({ setLoading }) {
       const result = await response.json();
       if (!response.ok) {
         setMessage([result.error, result.details]);
+        addNotification({
+          type: "error",
+          message: result.error,
+        });
         return console.warn(result.error, result.details);
       }
-
+      addNotification({
+        type: "success",
+        message: result.message,
+      });
       setUserData(result.data);
       navigate("/");
     } catch (err) {
+      addNotification({
+        type: "error",
+        message: "An error occurred while logging in.",
+      });
       console.error(err);
     } finally {
       setLoading(false);
