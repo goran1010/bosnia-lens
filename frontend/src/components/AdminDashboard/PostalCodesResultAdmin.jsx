@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import NotificationContext from "../../utils/NotificationContext";
 
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -7,6 +8,7 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
   // Now it re-creates entire array for each letter changed in input
 
   const [inputValues, setInputValues] = useState([]);
+  const { addNotification } = useContext(NotificationContext);
 
   useEffect(() => {
     setInputValues(searchResult);
@@ -60,11 +62,22 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
           return row;
         });
         setSearchResult(filteredSearchResult);
+        addNotification({
+          type: "success",
+          message: `Postal code updated successfully!`,
+        });
         return;
       }
-
+      addNotification({
+        type: "error",
+        message: result.error,
+      });
       console.warn(result.error);
     } catch (err) {
+      addNotification({
+        type: "error",
+        message: "An error occurred while updating the postal code.",
+      });
       console.error(err);
     }
   }
@@ -89,10 +102,22 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
           return row.code !== Number(code);
         });
         setSearchResult(filteredSearchResult);
+        addNotification({
+          type: "success",
+          message: `Postal code deleted successfully!`,
+        });
         return;
       }
+      addNotification({
+        type: "error",
+        message: result.error,
+      });
       console.warn(result.error);
     } catch (err) {
+      addNotification({
+        type: "error",
+        message: "An error occurred while deleting the postal code.",
+      });
       console.error(err);
     }
   }
