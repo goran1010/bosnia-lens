@@ -1,8 +1,11 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import NotificationContext from "../utils/NotificationContext";
 
 export default function useSignUpForm(setLoading, inputFields) {
   const navigate = useNavigate();
+  const { addNotification } = useContext(NotificationContext);
 
   return async function handleSubmit(event) {
     try {
@@ -26,11 +29,23 @@ export default function useSignUpForm(setLoading, inputFields) {
 
       const result = await response.json();
       if (!response.ok) {
-        return console.warn(result.error, result.details);
+        addNotification({
+          type: "error",
+          message: result.error,
+        });
+        console.warn(result.error, result.details);
+        return;
       }
-
+      addNotification({
+        type: "success",
+        message: "Registration successful! Please log in.",
+      });
       navigate("/login");
     } catch (err) {
+      addNotification({
+        type: "error",
+        message: "An error occurred during registration. Please try again.",
+      });
       console.error(err);
     } finally {
       setLoading(false);
