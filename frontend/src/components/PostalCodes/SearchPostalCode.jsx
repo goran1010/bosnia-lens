@@ -1,10 +1,10 @@
 import { useState, useRef, useContext } from "react";
-import checkPostalCodesValidity from "../../utils/formValidation/checkPostalCodesValidity";
-import NotificationContext from "../../utils/NotificationContext";
+import { checkPostalCodesValidity } from "../../utils/formValidation/checkPostalCodesValidity";
+import { NotificationContext } from "../../utils/NotificationContext";
 
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 
-export default function SearchPostalCode({ setSearchResult, setLoading }) {
+function SearchPostalCode({ setSearchResult, setLoading }) {
   const [searchTerm, setSearchTerm] = useState("");
   const searchInput = useRef();
   const { addNotification } = useContext(NotificationContext);
@@ -83,3 +83,5 @@ export default function SearchPostalCode({ setSearchResult, setLoading }) {
     </form>
   );
 }
+
+export { SearchPostalCode };

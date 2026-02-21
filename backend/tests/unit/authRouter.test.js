@@ -7,7 +7,7 @@ vi.mock("../../auth/isAuthenticated.js", () => ({
   default: (req, res, next) => isAuthenticatedMock(req, res, next),
 }));
 
-import app from "../../app.js";
+import { app } from "../../app.js";
 
 beforeEach(() => {
   vi.clearAllMocks();

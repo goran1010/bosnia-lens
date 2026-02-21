@@ -4,7 +4,7 @@ const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
 import expressSession from "express-session";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
-import prisma from "../db/prisma.js";
+import { prisma } from "../db/prisma.js";
 
 const sessionMiddleware = expressSession({
   name: "connect.sid",
@@ -25,4 +25,4 @@ const sessionMiddleware = expressSession({
   }),
 });
 
-export default sessionMiddleware;
+export { sessionMiddleware };

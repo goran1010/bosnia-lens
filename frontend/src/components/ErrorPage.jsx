@@ -10,4 +10,4 @@ function ErrorPage() {
     </div>
   );
 }
-export default ErrorPage;
+export { ErrorPage };

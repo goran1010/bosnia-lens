@@ -1,8 +1,8 @@
 import { test, describe, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
-import routes from "../../src/routes";
-import UserDataContext from "../../src/utils/UserDataContext";
+import { routes } from "../../src/routes";
+import { UserDataContext } from "../../src/utils/UserDataContext";
 
 vi.mock("../../src/customHooks/useWeatherCheck", () => ({
   default: (setWeatherForecast, setLoading) => {
@@ -41,7 +41,7 @@ describe("Loading components when visiting an address", () => {
     render(
       <UserDataContext value={{ message: [], setMessage: () => {} }}>
         <RouterProvider router={router} />
-      </UserDataContext>
+      </UserDataContext>,
     );
 
     const linkElement = await screen.findByText(/Postal Code or Municipality/i);
@@ -80,7 +80,7 @@ describe("Loading components when visiting an address", () => {
       const footerAuthor = screen.getByText(/Goran Jović/i);
       expect(footerEmail).toBeInTheDocument();
       expect(footerAuthor).toBeInTheDocument();
-    }
+    },
   );
 
   test.each(["/", "/postal-codes", "/universities", "/holidays"])(
@@ -104,6 +104,6 @@ describe("Loading components when visiting an address", () => {
       expect(universitiesLink).toBeInTheDocument();
       expect(postalCodesLink).toBeInTheDocument();
       expect(holidaysLink).toBeInTheDocument();
-    }
+    },
   );
 });

@@ -2,9 +2,9 @@ import { describe, test, expect, beforeEach, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
-import UserDataContext from "../../src/utils/UserDataContext";
-import LogIn from "../../src/components/LogIn/LogIn";
-import Home from "../../src/components/Home/Home";
+import { UserDataContext } from "../../src/utils/UserDataContext";
+import { LogIn } from "../../src/components/LogIn/LogIn";
+import { Home } from "../../src/components/Home/Home";
 import { useState } from "react";
 
 const user = userEvent.setup();
@@ -142,7 +142,7 @@ describe("LogIn Form Submit", () => {
 
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(
-      await screen.findByText(/Invalid username or password/i)
+      await screen.findByText(/Invalid username or password/i),
     ).toBeInTheDocument();
   });
 
@@ -164,7 +164,7 @@ describe("LogIn Form Submit", () => {
 
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(
-      await screen.findByText(/A free, open-source project/i)
+      await screen.findByText(/A free, open-source project/i),
     ).toBeInTheDocument();
   });
 });

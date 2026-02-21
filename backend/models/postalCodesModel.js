@@ -1,6 +1,6 @@
-import prisma from "../db/prisma.js";
+import { prisma } from "../db/prisma.js";
 
-export function createMany(postalCodesData) {
+function createMany(postalCodesData) {
   return prisma.postalCode.createMany({
     data: postalCodesData.map((postalCode) => ({
       code: postalCode.postalCode,
@@ -11,17 +11,17 @@ export function createMany(postalCodesData) {
   });
 }
 
-export function getAllPostalCodes() {
+function getAllPostalCodes() {
   return prisma.postalCode.findMany({ orderBy: { code: "asc" } });
 }
 
-export function getPostalCodeByCode(code) {
+function getPostalCodeByCode(code) {
   return prisma.postalCode.findUnique({
     where: { code },
   });
 }
 
-export function getPostalCodesByCity(city) {
+function getPostalCodesByCity(city) {
   let capitalizedCity = city
     .split(" ")
     .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
@@ -33,7 +33,7 @@ export function getPostalCodesByCity(city) {
   });
 }
 
-export function createNew(city, code, post) {
+function createNew(city, code, post) {
   let capitalizedCity = city
     .split(" ")
     .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
@@ -81,4 +81,12 @@ function deleteCode(code) {
   return prisma.postalCode.delete({ where: { code } });
 }
 
-export { deleteCode, edit };
+export {
+  deleteCode,
+  edit,
+  getAllPostalCodes,
+  getPostalCodeByCode,
+  getPostalCodesByCity,
+  createMany,
+  createNew,
+};

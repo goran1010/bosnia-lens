@@ -1,7 +1,7 @@
 import { body, validationResult } from "express-validator";
 import * as usersModel from "../models/usersModel.js";
 
-export const signupValidationRules = [
+const signupValidationRules = [
   body("username")
     .trim()
     .isLength({ min: 6 })
@@ -50,7 +50,7 @@ export const signupValidationRules = [
   },
 ];
 
-export const loginValidationRules = [
+const loginValidationRules = [
   body("username").trim().notEmpty().withMessage("Username is required"),
   body("password").trim().notEmpty().withMessage("Password is required"),
   (req, res, next) => {
@@ -64,3 +64,5 @@ export const loginValidationRules = [
     next();
   },
 ];
+
+export { signupValidationRules, loginValidationRules };

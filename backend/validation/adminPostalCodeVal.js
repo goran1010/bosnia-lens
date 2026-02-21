@@ -3,7 +3,7 @@ import * as postalModel from "../models/postalCodesModel.js";
 
 const validPosts = ["BH_POSTA", "POSTE_SRP", "HP_MOSTAR"];
 
-export const createPostalCode = [
+const createPostalCode = [
   query("code").trim().notEmpty().withMessage("Code is required"),
   query("code").custom((value) => {
     if (Number.isInteger(Number(value))) {
@@ -44,7 +44,7 @@ export const createPostalCode = [
   },
 ];
 
-export const editPostalCode = [
+const editPostalCode = [
   query("code").trim().notEmpty().withMessage("Code is required"),
   query("code").custom((value) => {
     if (Number.isInteger(Number(value))) {
@@ -86,7 +86,7 @@ export const editPostalCode = [
   },
 ];
 
-export const deletePostalCode = [
+const deletePostalCode = [
   query("code").trim().notEmpty().withMessage("Search term is required"),
 
   (req, res, next) => {
@@ -100,3 +100,5 @@ export const deletePostalCode = [
     next();
   },
 ];
+
+export { createPostalCode, editPostalCode, deletePostalCode };

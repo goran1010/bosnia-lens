@@ -3,8 +3,8 @@ import express from "express";
 const app = express();
 import cors from "cors";
 import "./config/envCheck.js";
-import sessionMiddleware from "./config/sessionMiddleware.js";
-import passport from "./config/passport.js";
+import { sessionMiddleware } from "./config/sessionMiddleware.js";
+import { passport } from "./config/passport.js";
 
 const currentURL = process.env.URL;
 
@@ -26,9 +26,9 @@ import path from "node:path";
 const assetsPath = path.join(import.meta.dirname, "public");
 app.use(express.static(assetsPath));
 
-import apiRouter from "./routes/apiRouter.js";
-import authRouter from "./routes/authRouter.js";
-import usersRouter from "./routes/usersRouter.js";
+import { apiRouter } from "./routes/apiRouter.js";
+import { authRouter } from "./routes/authRouter.js";
+import { usersRouter } from "./routes/usersRouter.js";
 import { adminRouter } from "./routes/adminRouter.js";
 import { isAdmin } from "./auth/isAdmin.js";
 
@@ -50,4 +50,4 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: err.message || "Internal Server Error" });
 });
 
-export default app;
+export { app };

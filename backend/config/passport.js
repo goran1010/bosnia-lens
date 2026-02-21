@@ -42,4 +42,4 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-export default passport;
+export { passport };

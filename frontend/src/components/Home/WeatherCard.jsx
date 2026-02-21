@@ -1,6 +1,6 @@
-import getDayInWeek from "../../utils/getDayInWeek";
+import { getDayInWeek } from "../../utils/getDayInWeek";
 
-export default function WeatherCard({ weatherForecast }) {
+function WeatherCard({ weatherForecast }) {
   if (!weatherForecast || weatherForecast.length === 0) {
     return (
       <section>
@@ -35,3 +35,5 @@ export default function WeatherCard({ weatherForecast }) {
     </section>
   );
 }
+
+export { WeatherCard };

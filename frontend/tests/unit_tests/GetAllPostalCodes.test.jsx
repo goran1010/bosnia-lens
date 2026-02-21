@@ -1,8 +1,8 @@
 import { describe, test, expect, beforeEach, vi, afterEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import GetAllPostalCodes from "../../src/components/PostalCodes/GetAllPostalCodes";
-import UserDataContext from "../../src/utils/UserDataContext";
+import { GetAllPostalCodes } from "../../src/components/PostalCodes/GetAllPostalCodes";
+import { UserDataContext } from "../../src/utils/UserDataContext";
 
 const user = userEvent.setup();
 

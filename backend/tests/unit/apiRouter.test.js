@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../../app.js";
+import { app } from "../../app.js";
 import { describe, test, expect, vi, beforeEach } from "vitest";
 import * as postalCodesModel from "../../models/postalCodesModel.js";
 

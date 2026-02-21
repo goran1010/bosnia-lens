@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import Status from "./Status";
+import { Status } from "./Status";
 import { useContext } from "react";
-import UserDataContext from "../../utils/UserDataContext";
+import { UserDataContext } from "../../utils/UserDataContext";
 
-export default function Navbar() {
+function Navbar() {
   const { userData } = useContext(UserDataContext);
   return (
     <nav className="relative min-w-130">
@@ -61,3 +61,5 @@ export default function Navbar() {
     </nav>
   );
 }
+
+export { Navbar };

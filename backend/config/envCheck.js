@@ -11,7 +11,7 @@ const allRequiredVars = [
   "COOKIE_SECRET",
 ];
 
-export default function envCheck(requiredVars) {
+function envCheck(requiredVars) {
   const missingVars = requiredVars.filter((varName) => !process.env[varName]);
 
   if (missingVars.length > 0) {

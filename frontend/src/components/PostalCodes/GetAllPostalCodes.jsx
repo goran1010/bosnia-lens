@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import NotificationContext from "../../utils/NotificationContext";
+import { NotificationContext } from "../../utils/NotificationContext";
 
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 
-export default function GetAllPostalCodes({ setSearchResult, setLoading }) {
+function GetAllPostalCodes({ setSearchResult, setLoading }) {
   const { addNotification } = useContext(NotificationContext);
 
   async function handleGetAll(e) {
@@ -52,3 +52,5 @@ export default function GetAllPostalCodes({ setSearchResult, setLoading }) {
     </form>
   );
 }
+
+export { GetAllPostalCodes };

@@ -1,3 +1,5 @@
-export default function Holidays() {
+function Holidays() {
   return <>Holidays</>;
 }
+
+export { Holidays };

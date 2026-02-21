@@ -1,9 +1,9 @@
-import checkFormValidity from "../../utils/formValidation/checkFormValidity";
-import checkFormValidityClick from "../../utils/formValidation/checkFormValidityClick";
-import useSignUpForm from "../../customHooks/useSignUpForm";
+import { checkFormValidity } from "../../utils/formValidation/checkFormValidity";
+import { checkFormValidityClick } from "../../utils/formValidation/checkFormValidityClick";
+import { useSignUpForm } from "../../customHooks/useSignUpForm";
 import { useState, useRef } from "react";
 
-export default function SignUpForm({ setLoading }) {
+function SignUpForm({ setLoading }) {
   const usernameInput = useRef();
   const passwordInput = useRef();
   const confirmPasswordInput = useRef();
@@ -115,3 +115,5 @@ export default function SignUpForm({ setLoading }) {
     </form>
   );
 }
+
+export { SignUpForm };

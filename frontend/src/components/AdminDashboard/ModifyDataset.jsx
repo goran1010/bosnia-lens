@@ -1,7 +1,7 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
-import PostalCodes from "../PostalCodes/PostalCodes";
+import { PostalCodes } from "../PostalCodes/PostalCodes";
 import { useState, useContext } from "react";
-import NotificationContext from "../../utils/NotificationContext";
+import { NotificationContext } from "../../utils/NotificationContext";
 
 function ModifyDataset({ datasetSelect }) {
   // Refactor this component to improve performance

@@ -1,7 +1,7 @@
 import { useEffect, useContext } from "react";
-import NotificationContext from "../utils/NotificationContext";
+import { NotificationContext } from "../utils/NotificationContext";
 
-export default function useWeatherCheck(setWeatherForecast, setLoading) {
+function useWeatherCheck(setWeatherForecast, setLoading) {
   const { addNotification } = useContext(NotificationContext);
   const URL = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/bosnia?unitGroup=metric&include=current&key=RK9QGT68LJC4A8CZLA785FREP&contentType=json`;
 
@@ -40,3 +40,5 @@ export default function useWeatherCheck(setWeatherForecast, setLoading) {
     getWeather();
   }, [URL, setLoading, setWeatherForecast]);
 }
+
+export { useWeatherCheck };

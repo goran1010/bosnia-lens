@@ -1,12 +1,12 @@
 import { useContext, useState } from "react";
 import Spinner from "@goran1010/spinner";
-import SearchPostalCode from "./SearchPostalCode";
-import GetAllPostalCodes from "./GetAllPostalCodes";
-import PostalCodesResult from "./PostalCodesResult";
+import { SearchPostalCode } from "./SearchPostalCode";
+import { GetAllPostalCodes } from "./GetAllPostalCodes";
+import { PostalCodesResult } from "./PostalCodesResult";
 import { PostalCodesResultAdmin } from "../AdminDashboard/PostalCodesResultAdmin";
-import UserDataContext from "../../utils/UserDataContext";
+import { UserDataContext } from "../../utils/UserDataContext";
 
-export default function PostalCodes() {
+function PostalCodes() {
   const [loading, setLoading] = useState(false);
   const [searchResult, setSearchResult] = useState([]);
   const { userData } = useContext(UserDataContext);
@@ -36,3 +36,5 @@ export default function PostalCodes() {
     </>
   );
 }
+
+export { PostalCodes };

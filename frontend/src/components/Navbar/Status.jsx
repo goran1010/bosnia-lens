@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import UserDataContext from "../../utils/UserDataContext";
-import NotificationContext from "../../utils/NotificationContext";
+import { UserDataContext } from "../../utils/UserDataContext";
+import { NotificationContext } from "../../utils/NotificationContext";
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 
-export default function Status() {
+function Status() {
   const { userData, setUserData } = useContext(UserDataContext);
   const { addNotification } = useContext(NotificationContext);
 
@@ -64,3 +64,5 @@ export default function Status() {
     </div>
   );
 }
+
+export { Status };

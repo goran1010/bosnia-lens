@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import NotificationContext from "../utils/NotificationContext";
+import { NotificationContext } from "../utils/NotificationContext";
 
 function getNotificationStyles(type) {
   switch (type) {
@@ -14,8 +14,7 @@ function getNotificationStyles(type) {
       return "bg-blue-500";
   }
 }
-
-export default function Notifications() {
+function Notifications() {
   const { notifications, removeNotification } = useContext(NotificationContext);
 
   useEffect(() => {
@@ -59,3 +58,5 @@ export default function Notifications() {
     </div>
   );
 }
+
+export { Notifications };

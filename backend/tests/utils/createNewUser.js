@@ -1,4 +1,4 @@
-export default function createNewUser(user = {}) {
+function createNewUser(user = {}) {
   const newUser = {};
 
   newUser.username = user.username || "test_user";
@@ -8,3 +8,5 @@ export default function createNewUser(user = {}) {
 
   return newUser;
 }
+
+export { createNewUser };

@@ -1,4 +1,4 @@
-export default function PostalCodesResult({ searchResult }) {
+function PostalCodesResult({ searchResult }) {
   if (!searchResult || searchResult.length === 0) {
     return (
       <section className="flex justify-center items-center p-4">
@@ -26,3 +26,5 @@ export default function PostalCodesResult({ searchResult }) {
     </section>
   );
 }
+
+export { PostalCodesResult };

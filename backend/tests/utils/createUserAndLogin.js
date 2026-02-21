@@ -1,8 +1,8 @@
 import request from "supertest";
 import * as usersModel from "../../models/usersModel.js";
-import app from "../../app";
+import { app } from "../../app";
 
-export default async function createAndLoginUser(newUser) {
+async function createAndLoginUser(newUser) {
   const createUserData = {
     username: newUser.username,
     password: "123123",
@@ -26,3 +26,5 @@ export default async function createAndLoginUser(newUser) {
 
   return responseData;
 }
+
+export { createAndLoginUser };

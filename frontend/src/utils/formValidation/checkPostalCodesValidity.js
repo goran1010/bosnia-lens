@@ -1,4 +1,4 @@
-export default function checkPostalCodesValidity(searchInput) {
+function checkPostalCodesValidity(searchInput) {
   const searchInputValue = searchInput.current.value.trim();
 
   if (Number.isInteger(Number(searchInputValue))) {
@@ -13,3 +13,5 @@ export default function checkPostalCodesValidity(searchInput) {
     searchInput.current.reportValidity();
   } else searchInput.current.setCustomValidity("");
 }
+
+export { checkPostalCodesValidity };

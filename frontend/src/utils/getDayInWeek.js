@@ -1,4 +1,4 @@
-export default function getDayInWeek(dayNumber) {
+function getDayInWeek(dayNumber) {
   const day = new Date(dayNumber).getDay();
   const DAY_IN_WEEK = [
     "Sunday",
@@ -11,3 +11,5 @@ export default function getDayInWeek(dayNumber) {
   ];
   return DAY_IN_WEEK[day];
 }
+
+export { getDayInWeek };
