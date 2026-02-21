@@ -148,7 +148,7 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
               <input
                 name="city"
                 type="text"
-                value={result.city}
+                value={result.city || ""}
                 onChange={handleCityChange}
                 data-code={result.code}
               />
@@ -156,7 +156,7 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
                 data-code={result.code}
                 name="post"
                 type="text"
-                value={result.post}
+                value={result.post || ""}
                 onChange={handlePostChange}
               />
               <div>
