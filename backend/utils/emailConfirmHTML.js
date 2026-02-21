@@ -1,4 +1,4 @@
-export default function emailConfirmHTML() {
+function emailConfirmHTML() {
   return `    <html>
       <head>
         <title>Email Confirmed</title>
@@ -10,3 +10,5 @@ export default function emailConfirmHTML() {
     </html>
    `;
 }
+
+export { emailConfirmHTML };

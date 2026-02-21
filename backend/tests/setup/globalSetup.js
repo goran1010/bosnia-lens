@@ -1,1 +1,3 @@
-export async function setup() {}
+async function setup() {}
+
+export { setup };

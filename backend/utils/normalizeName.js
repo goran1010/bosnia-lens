@@ -1,3 +1,5 @@
-export default function normalizeName(searchTerm) {
+function normalizeName(searchTerm) {
   return searchTerm.trim().toLowerCase();
 }
+
+export { normalizeName };

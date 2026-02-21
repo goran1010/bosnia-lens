@@ -26,14 +26,14 @@ vi.mock("../../config/passport.js", async () => {
 });
 
 import request from "supertest";
-import app from "../../app.js";
+import { app } from "../../app.js";
 
-import emailConfirmHTML from "../../utils/emailConfirmHTML.js";
-import createNewUser from "../utils/createNewUser.js";
+import { emailConfirmHTML } from "../../utils/emailConfirmHTML.js";
+import { createNewUser } from "../utils/createNewUser.js";
 import * as usersModel from "../../models/usersModel.js";
-import sendConfirmationEmail from "../../email/confirmationEmail.js";
+import { sendConfirmationEmail } from "../../email/confirmationEmail.js";
 import jwt from "jsonwebtoken";
-import passport from "../../config/passport.js";
+import { passport } from "../../config/passport.js";
 
 const isAuthenticatedMock = vi.fn();
 

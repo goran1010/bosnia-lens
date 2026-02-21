@@ -1,15 +1,15 @@
 import bcrypt from "bcryptjs";
 import * as usersModel from "../models/usersModel.js";
 import jwt from "jsonwebtoken";
-import sendConfirmationEmail from "../email/confirmationEmail.js";
-import emailConfirmHTML from "../utils/emailConfirmHTML.js";
-import passport from "../config/passport.js";
+import { sendConfirmationEmail } from "../email/confirmationEmail.js";
+import { emailConfirmHTML } from "../utils/emailConfirmHTML.js";
+import { passport } from "../config/passport.js";
 
 const NUMBER_OF_DAYS = 30;
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 
-export async function signup(req, res) {
+async function signup(req, res) {
   try {
     const { username, email, password } = req.body;
     const hashedPassword = bcrypt.hashSync(password, 10);
@@ -67,7 +67,7 @@ export async function signup(req, res) {
   }
 }
 
-export async function confirmEmail(req, res) {
+async function confirmEmail(req, res) {
   const { token } = req.params;
 
   if (!token) {
@@ -108,16 +108,14 @@ export async function confirmEmail(req, res) {
   }
 }
 
-export async function login(req, res, next) {
+async function login(req, res, next) {
   passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
     if (!user) {
-      return res
-        .status(401)
-        .json({
-          error: "Login unsuccessful",
-          details: [{ msg: info.message }],
-        });
+      return res.status(401).json({
+        error: "Login unsuccessful",
+        details: [{ msg: info.message }],
+      });
     }
 
     req.logIn(user, (err) => {
@@ -130,7 +128,7 @@ export async function login(req, res, next) {
   })(req, res, next);
 }
 
-export function logout(req, res) {
+function logout(req, res) {
   req.logout((err) => {
     if (err) {
       console.error(err);
@@ -152,3 +150,5 @@ export function logout(req, res) {
     });
   });
 }
+
+export { signup, confirmEmail, login, logout };

@@ -1,6 +1,6 @@
 import { query, validationResult } from "express-validator";
 
-export const postalCodeSearchValidationRules = [
+const postalCodeSearchValidationRules = [
   query("searchTerm").trim().notEmpty().withMessage("Search term is required"),
   query("searchTerm").custom((value) => {
     if (Number.isInteger(Number(value))) {
@@ -25,3 +25,5 @@ export const postalCodeSearchValidationRules = [
     next();
   },
 ];
+
+export { postalCodeSearchValidationRules };

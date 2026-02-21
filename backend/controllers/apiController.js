@@ -1,11 +1,11 @@
-import normalizeName from "../utils/normalizeName.js";
+import { normalizeName } from "../utils/normalizeName.js";
 import * as postalCodesModel from "../models/postalCodesModel.js";
 
-export function status(req, res) {
+function status(req, res) {
   res.json({ message: "Server is running" });
 }
 
-export async function getPostalCodes(req, res) {
+async function getPostalCodes(req, res) {
   const postalCodes = await postalCodesModel.getAllPostalCodes();
   res.json({
     message: "Postal codes retrieved successfully",
@@ -13,7 +13,7 @@ export async function getPostalCodes(req, res) {
   });
 }
 
-export async function getPostalCodeByCode(req, res) {
+async function getPostalCodeByCode(req, res) {
   let { searchTerm } = req.query;
 
   const numericSearchTerm = Number(searchTerm);
@@ -39,3 +39,5 @@ export async function getPostalCodeByCode(req, res) {
       .json({ error: "Postal code not found", details: [{ msg: null }] });
   }
 }
+
+export { status, getPostalCodes, getPostalCodeByCode };

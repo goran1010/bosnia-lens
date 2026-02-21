@@ -12,4 +12,4 @@ apiRouter.get(
 );
 apiRouter.get("/postal-codes", apiController.getPostalCodes);
 
-export default apiRouter;
+export { apiRouter };

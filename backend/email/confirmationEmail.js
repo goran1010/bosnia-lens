@@ -4,11 +4,7 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
 const resend = new Resend(RESEND_API_KEY);
 
-export default async function sendConfirmationEmail(
-  userEmail,
-  userName,
-  confirmationLink,
-) {
+async function sendConfirmationEmail(userEmail, userName, confirmationLink) {
   try {
     const email = await resend.emails.send({
       from: "Bosnia Lens <onboarding@resend.dev>",
@@ -42,3 +38,5 @@ export default async function sendConfirmationEmail(
     return { success: false, error: error.message };
   }
 }
+
+export { sendConfirmationEmail };
