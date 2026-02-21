@@ -48,12 +48,13 @@ export default function LogInForm({ setLoading }) {
         addNotification({
           type: "error",
           message: result.error,
+          details: result.details[0].msg,
         });
         return;
       }
       addNotification({
         type: "success",
-        message: result.message,
+        message: "Logged in successfully!",
       });
       setUserData(result.data);
       navigate("/");

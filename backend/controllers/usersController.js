@@ -17,7 +17,10 @@ export async function signup(req, res) {
     const userExists = await usersModel.find({ username });
 
     if (userExists) {
-      return res.status(400).json({ error: "Username already taken" });
+      return res.status(400).json({
+        error: "Username already taken",
+        details: [{ msg: "Username already taken" }],
+      });
     }
 
     const confirmationToken = jwt.sign(
@@ -42,7 +45,10 @@ export async function signup(req, res) {
       });
 
       if (!user) {
-        return res.status(400).json({ error: "User could not be created" });
+        return res.status(400).json({
+          error: "User could not be created",
+          details: [{ msg: null }],
+        });
       }
 
       return res.status(201).json({
@@ -55,7 +61,9 @@ export async function signup(req, res) {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Couldn't sign up" });
+    res
+      .status(500)
+      .json({ error: "Couldn't sign up", details: [{ msg: null }] });
   }
 }
 
@@ -63,7 +71,9 @@ export async function confirmEmail(req, res) {
   const { token } = req.params;
 
   if (!token) {
-    return res.status(400).json({ error: "No token provided" });
+    return res
+      .status(400)
+      .json({ error: "No token provided", details: [{ msg: null }] });
   }
 
   try {
@@ -72,11 +82,15 @@ export async function confirmEmail(req, res) {
     const user = await usersModel.find({ username: decoded.username });
 
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res
+        .status(404)
+        .json({ error: "User not found", details: [{ msg: null }] });
     }
 
     if (user.isEmailConfirmed) {
-      return res.status(400).json({ error: "Email already confirmed" });
+      return res
+        .status(400)
+        .json({ error: "Email already confirmed", details: [{ msg: null }] });
     }
 
     await usersModel.update(
@@ -88,7 +102,9 @@ export async function confirmEmail(req, res) {
   } catch (err) {
     console.error(err);
 
-    res.status(500).json({ error: "Couldn't confirm email" });
+    res
+      .status(500)
+      .json({ error: "Couldn't confirm email", details: [{ msg: null }] });
   }
 }
 
@@ -96,7 +112,9 @@ export async function login(req, res, next) {
   passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
     if (!user) {
-      return res.status(401).json({ error: info.message });
+      return res
+        .status(401)
+        .json({ error: info.message, details: [{ msg: null }] });
     }
 
     req.logIn(user, (err) => {
@@ -113,7 +131,9 @@ export function logout(req, res) {
   req.logout((err) => {
     if (err) {
       console.error(err);
-      return res.status(500).json({ error: "Couldn't log out" });
+      return res
+        .status(500)
+        .json({ error: "Couldn't log out", details: [{ msg: null }] });
     }
 
     req.session.destroy(() => {
