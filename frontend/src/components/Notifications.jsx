@@ -35,19 +35,22 @@ export default function Notifications() {
   if (!notifications.length) return null;
 
   return (
-    <div className="fixed top-10 z-50 flex flex-col gap-3 right-10 select-none">
+    <div className="fixed top-10 z-50 flex flex-col gap-3 right-10 select-none opacity-80 hover:opacity-100">
       {notifications.map((notification) => (
         <div
           key={notification.id}
-          className={`px-4 py-3 rounded-lg shadow-lg text-white min-w-[250px] flex justify-between items-center ${getNotificationStyles(
+          className={`relative px-4 py-3 rounded-lg shadow-lg text-white min-w-[250px] flex flex-col justify-center items-center ${getNotificationStyles(
             notification.type,
           )}`}
         >
-          <span>{notification.message}</span>
+          <p>{notification.message}</p>
+          {notification.details && (
+            <p className="text-sm opacity-80">{notification.details}</p>
+          )}
 
           <button
             onClick={() => removeNotification(notification.id)}
-            className="ml-4 text-sm opacity-80 hover:opacity-100 cursor-pointer"
+            className="absolute top-2 right-2 text-sm opacity-80 hover:opacity-100 cursor-pointer"
           >
             ✕
           </button>

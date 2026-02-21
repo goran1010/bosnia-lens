@@ -2,17 +2,22 @@ import { useCallback, useMemo } from "react";
 
 export default function useNotification(notifications, setNotifications) {
   const addNotification = useCallback(
-    ({ type = "info", message, duration = 3000 }) => {
+    ({ type = "info", message, duration = 3000, details = null }) => {
       const newNotification = {
         id: crypto.randomUUID(),
         type,
         message,
+        details,
         duration,
         createdAt: Date.now(),
       };
+      if (notifications.length >= 5) {
+        setNotifications((prev) => [...prev.slice(1), newNotification]);
+        return;
+      }
       setNotifications((prev) => [...prev, newNotification]);
     },
-    [setNotifications],
+    [setNotifications, notifications.length],
   );
 
   const removeNotification = useCallback(
