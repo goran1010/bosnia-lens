@@ -25,7 +25,7 @@ export default function Status() {
           type: "error",
           message: result.error,
         });
-        return console.warn(result.error);
+        return;
       }
       addNotification({
         type: "success",

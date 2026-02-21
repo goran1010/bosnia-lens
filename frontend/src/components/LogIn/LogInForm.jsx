@@ -49,7 +49,7 @@ export default function LogInForm({ setLoading }) {
           type: "error",
           message: result.error,
         });
-        return console.warn(result.error, result.details);
+        return;
       }
       addNotification({
         type: "success",

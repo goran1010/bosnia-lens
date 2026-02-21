@@ -29,7 +29,6 @@ export default function SearchPostalCode({ setSearchResult, setLoading }) {
           type: "error",
           message: result.error,
         });
-        console.warn(result.error);
         return;
       }
       addNotification({

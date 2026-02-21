@@ -26,7 +26,6 @@ export default function useStatusCheck(
             type: "error",
             message: result.error,
           });
-          console.warn(result.error);
           return;
         }
         addNotification({

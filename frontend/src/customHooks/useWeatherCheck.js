@@ -14,7 +14,7 @@ export default function useWeatherCheck(setWeatherForecast, setLoading) {
             type: "error",
             message: "Failed to fetch weather data. Please try again later.",
           });
-          return console.warn(response);
+          return;
         }
 
         const data = await response.json();

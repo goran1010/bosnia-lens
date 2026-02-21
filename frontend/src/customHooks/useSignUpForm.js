@@ -33,7 +33,6 @@ export default function useSignUpForm(setLoading, inputFields) {
           type: "error",
           message: result.error,
         });
-        console.warn(result.error, result.details);
         return;
       }
       addNotification({

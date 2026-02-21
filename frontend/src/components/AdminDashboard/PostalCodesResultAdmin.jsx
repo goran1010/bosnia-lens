@@ -72,7 +72,6 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
         type: "error",
         message: result.error,
       });
-      console.warn(result.error);
     } catch (err) {
       addNotification({
         type: "error",
@@ -112,7 +111,6 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
         type: "error",
         message: result.error,
       });
-      console.warn(result.error);
     } catch (err) {
       addNotification({
         type: "error",

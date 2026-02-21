@@ -21,7 +21,7 @@ export default function GetAllPostalCodes({ setSearchResult, setLoading }) {
           type: "error",
           message: result.error,
         });
-        return console.warn(result.error, result.details);
+        return;
       }
       addNotification({
         type: "success",
