@@ -38,5 +38,5 @@ export default function useWeatherCheck(setWeatherForecast, setLoading) {
       }
     }
     getWeather();
-  }, [URL, setLoading, setWeatherForecast, addNotification]);
+  }, [URL, setLoading, setWeatherForecast]);
 }

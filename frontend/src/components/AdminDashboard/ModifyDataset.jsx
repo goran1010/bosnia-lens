@@ -43,6 +43,7 @@ function ModifyDataset({ datasetSelect }) {
       addNotification({
         type: "error",
         message: result.error,
+        details: result.details[0].msg,
       });
     } catch (err) {
       console.error(err);
