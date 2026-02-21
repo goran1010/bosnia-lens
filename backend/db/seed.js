@@ -40,14 +40,16 @@ function covertPostNamesToEnum() {
 }
 covertPostNamesToEnum();
 
-function filterOutInvalidPosts() {
+function replaceInvalidPostsWithNull() {
   const validPosts = ["BH_POSTA", "POSTE_SRP", "HP_MOSTAR"];
 
-  postalCodes = postalCodes.filter((postalCode) =>
-    validPosts.includes(postalCode.post),
-  );
+  postalCodes = postalCodes.map((postalCode) => ({
+    ...postalCode,
+    post: validPosts.includes(postalCode.post) ? postalCode.post : null,
+  }));
 }
-filterOutInvalidPosts();
+
+replaceInvalidPostsWithNull();
 
 async function seedPostalCodes() {
   try {
