@@ -1,4 +1,4 @@
-export default function isAuthenticated(req, res, next) {
+function isAuthenticated(req, res, next) {
   try {
     if (req.user) return next();
     res
@@ -8,3 +8,5 @@ export default function isAuthenticated(req, res, next) {
     next(err);
   }
 }
+
+export { isAuthenticated };

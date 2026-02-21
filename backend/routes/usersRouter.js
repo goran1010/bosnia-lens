@@ -2,8 +2,8 @@ import { Router } from "express";
 const usersRouter = Router();
 import * as usersController from "../controllers/usersController.js";
 import * as userValidation from "../validation/userValidation.js";
-import isNotAuthenticated from "../auth/isNotAuthenticated.js";
-import isAuthenticated from "../auth/isAuthenticated.js";
+import { isNotAuthenticated } from "../auth/isNotAuthenticated.js";
+import { isAuthenticated } from "../auth/isAuthenticated.js";
 
 usersRouter.post(
   "/signup",
