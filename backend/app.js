@@ -41,13 +41,18 @@ app.use("/users", usersRouter);
 app.use("/admin", isAdmin, adminRouter);
 
 app.use((req, res) => {
-  res.status(404).json({ error: "No resource found" });
+  res
+    .status(404)
+    .json({ error: "No resource found", details: [{ msg: null }] });
 });
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   console.error(err);
-  res.status(500).json({ error: err.message || "Internal Server Error" });
+  res.status(500).json({
+    error: "Internal Server Error",
+    details: [{ msg: err.message || "An unexpected error occurred." }],
+  });
 });
 
 export { app };
