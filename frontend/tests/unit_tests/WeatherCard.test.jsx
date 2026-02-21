@@ -1,6 +1,6 @@
 import { describe, test, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import WeatherCard from "../../src/components/Home/WeatherCard";
+import { WeatherCard } from "../../src/components/Home/WeatherCard";
 
 describe("WeatherCard Component", () => {
   const mockWeatherForecast = [

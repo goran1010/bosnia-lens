@@ -1,11 +1,11 @@
-import Root from "./Root";
-import ErrorPage from "./components/ErrorPage";
-import PostalCodes from "./components/PostalCodes/PostalCodes";
-import Home from "./components/Home/Home";
-import Universities from "./components/Universities";
-import Holidays from "./components/Holidays";
-import LogIn from "./components/LogIn/LogIn";
-import SignUp from "./components/SignUp/SignUp";
+import { Root } from "./Root";
+import { ErrorPage } from "./components/ErrorPage";
+import { PostalCodes } from "./components/PostalCodes/PostalCodes";
+import { Home } from "./components/Home/Home";
+import { Universities } from "./components/Universities";
+import { Holidays } from "./components/Holidays";
+import { LogIn } from "./components/LogIn/LogIn";
+import { SignUp } from "./components/SignUp/SignUp";
 import { AdminDashboard } from "./components/AdminDashboard/AdminDashboard";
 
 const routes = [
@@ -46,4 +46,4 @@ const routes = [
   },
 ];
 
-export default routes;
+export { routes };

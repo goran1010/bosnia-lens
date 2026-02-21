@@ -1,13 +1,13 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 
-import checkLoginFormClickValidity from "../../utils/formValidation/checkLoginFormClickValidity";
-import checkLoginFormValidity from "../../utils/formValidation/checkLoginFormValidity";
+import { checkLoginFormClickValidity } from "../../utils/formValidation/checkLoginFormClickValidity";
+import { checkLoginFormValidity } from "../../utils/formValidation/checkLoginFormValidity";
 import { useRef, useState, useContext } from "react";
-import UserDataContext from "../../utils/UserDataContext";
+import { UserDataContext } from "../../utils/UserDataContext";
 import { useNavigate } from "react-router-dom";
-import NotificationContext from "../../utils/NotificationContext";
+import { NotificationContext } from "../../utils/NotificationContext";
 
-export default function LogInForm({ setLoading }) {
+function LogInForm({ setLoading }) {
   const navigate = useNavigate();
   const { setUserData } = useContext(UserDataContext);
   const { addNotification } = useContext(NotificationContext);
@@ -117,3 +117,5 @@ export default function LogInForm({ setLoading }) {
     </form>
   );
 }
+
+export { LogInForm };

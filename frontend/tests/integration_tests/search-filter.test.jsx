@@ -1,7 +1,7 @@
 import { test, describe, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
-import routes from "../../src/routes";
+import { routes } from "../../src/routes";
 import userEvent from "@testing-library/user-event";
 
 describe("Search and Filter Tests", () => {
@@ -13,7 +13,7 @@ describe("Search and Filter Tests", () => {
     render(<RouterProvider router={router} />);
 
     const searchInput = await screen.findByLabelText(
-      /Postal Code or Municipality/i
+      /Postal Code or Municipality/i,
     );
     expect(searchInput).toBeInTheDocument();
 

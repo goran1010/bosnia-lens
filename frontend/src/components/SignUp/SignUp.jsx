@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Spinner from "@goran1010/spinner";
-import SignUpForm from "./SignUpForm";
+import { SignUpForm } from "./SignUpForm";
 
-export default function SignUp() {
+function SignUp() {
   const [loading, setLoading] = useState(false);
 
   return (
@@ -34,3 +34,5 @@ export default function SignUp() {
     </div>
   );
 }
+
+export { SignUp };

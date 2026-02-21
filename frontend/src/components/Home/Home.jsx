@@ -1,9 +1,9 @@
-import useWeatherCheck from "../../customHooks/useWeatherCheck";
+import { useWeatherCheck } from "../../customHooks/useWeatherCheck";
 import { useState } from "react";
 import Spinner from "@goran1010/spinner";
-import WeatherCard from "./WeatherCard";
+import { WeatherCard } from "./WeatherCard";
 
-export default function Home() {
+function Home() {
   const [loading, setLoading] = useState(true);
   const [weatherForecast, setWeatherForecast] = useState([]);
 
@@ -108,3 +108,5 @@ export default function Home() {
     </>
   );
 }
+
+export { Home };

@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import Spinner from "@goran1010/spinner";
-import LogInForm from "./LogInForm.jsx";
+import { LogInForm } from "./LogInForm.jsx";
 
-export default function LogIn() {
+function LogIn() {
   const [loading, setLoading] = useState(false);
 
   return (
@@ -39,3 +39,5 @@ export default function LogIn() {
     </div>
   );
 }
+
+export { LogIn };

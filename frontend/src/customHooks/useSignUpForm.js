@@ -1,9 +1,9 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import NotificationContext from "../utils/NotificationContext";
+import { NotificationContext } from "../utils/NotificationContext";
 
-export default function useSignUpForm(setLoading, inputFields) {
+function useSignUpForm(setLoading, inputFields) {
   const navigate = useNavigate();
   const { addNotification } = useContext(NotificationContext);
 
@@ -52,3 +52,5 @@ export default function useSignUpForm(setLoading, inputFields) {
     }
   };
 }
+
+export { useSignUpForm };

@@ -1,14 +1,14 @@
 import { test, describe, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import Home from "../../src/components/Home/Home";
-import Holidays from "../../src/components/Holidays";
-import PostalCodes from "../../src/components/PostalCodes/PostalCodes";
-import Universities from "../../src/components/Universities";
-import Footer from "../../src/components/Footer";
-import Navbar from "../../src/components/Navbar/Navbar";
+import { Home } from "../../src/components/Home/Home";
+import { Holidays } from "../../src/components/Holidays";
+import { PostalCodes } from "../../src/components/PostalCodes/PostalCodes";
+import { Universities } from "../../src/components/Universities";
+import { Footer } from "../../src/components/Footer";
+import { Navbar } from "../../src/components/Navbar/Navbar";
 import { MemoryRouter } from "react-router-dom";
-import ErrorPage from "../../src/components/ErrorPage";
-import UserDataContext from "../../src/utils/UserDataContext";
+import { ErrorPage } from "../../src/components/ErrorPage";
+import { UserDataContext } from "../../src/utils/UserDataContext";
 
 describe("Render Components", () => {
   test("Home component", () => {
@@ -27,7 +27,7 @@ describe("Render Components", () => {
     render(
       <UserDataContext value={{ message: [], setMessage: () => {} }}>
         <PostalCodes />
-      </UserDataContext>
+      </UserDataContext>,
     );
     const linkElement = screen.getByText(/Postal Code or Municipality/i);
     expect(linkElement).toBeInTheDocument();
@@ -52,7 +52,7 @@ describe("Render Components", () => {
         <UserDataContext value={{ userData }}>
           <Navbar />
         </UserDataContext>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
     const home = screen.getByText(/Home/i);
     const universities = screen.getByText(/Universities/i);
@@ -68,7 +68,7 @@ describe("Render Components", () => {
     render(
       <MemoryRouter>
         <ErrorPage />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
     const linkElement = screen.getByText(/There is nothing here, sorry./i);
     expect(linkElement).toBeInTheDocument();

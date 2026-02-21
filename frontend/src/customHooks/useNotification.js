@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from "react";
 
-export default function useNotification(notifications, setNotifications) {
+function useNotification(notifications, setNotifications) {
   const addNotification = useCallback(
     ({ type = "info", message, duration = 3000, details = null }) => {
       const newNotification = {
@@ -37,3 +37,5 @@ export default function useNotification(notifications, setNotifications) {
   );
   return notificationValue;
 }
+
+export { useNotification };

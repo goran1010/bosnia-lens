@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeEach, vi, afterEach } from "vitest";
-import useWeatherCheck from "../../src/customHooks/useWeatherCheck";
+import { useWeatherCheck } from "../../src/customHooks/useWeatherCheck";
 import { renderHook, waitFor } from "@testing-library/react";
 
 let mockSetWeatherForecast;

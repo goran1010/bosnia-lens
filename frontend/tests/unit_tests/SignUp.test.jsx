@@ -1,11 +1,11 @@
 import { test, describe, expect, beforeEach, vi } from "vitest";
-import SignUp from "../../src/components/SignUp/SignUp";
+import { SignUp } from "../../src/components/SignUp/SignUp";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
-import UserDataContext from "../../src/utils/UserDataContext";
+import { UserDataContext } from "../../src/utils/UserDataContext";
 import { userEvent } from "@testing-library/user-event";
 import { useState } from "react";
-import LogIn from "../../src/components/LogIn/LogIn";
+import { LogIn } from "../../src/components/LogIn/LogIn";
 
 const user = userEvent.setup();
 
@@ -92,17 +92,17 @@ describe("SignUp Form Validation on input", () => {
     await user.type(emailField, "te");
     expect(emailField).toHaveValue("te");
     expect(emailField.validationMessage).toMatch(
-      /Email must have at least 3 characters/i
+      /Email must have at least 3 characters/i,
     );
     await user.type(emailField, "st");
     expect(emailField).toHaveValue("test");
     expect(emailField.validationMessage).toMatch(
-      /Please include an '@' in the email address. 'test' is missing an '@'./i
+      /Please include an '@' in the email address. 'test' is missing an '@'./i,
     );
     await user.type(emailField, "@");
     expect(emailField).toHaveValue("test@");
     expect(emailField.validationMessage).toMatch(
-      /Please enter a part following '@'. test@ is incomplete./i
+      /Please enter a part following '@'. test@ is incomplete./i,
     );
     await user.type(emailField, "mail");
     expect(emailField).toHaveValue("test@mail");
@@ -156,19 +156,19 @@ describe("SignUp Form Validation on Create button click", () => {
     expect(emailField).toHaveValue("te");
     await user.click(signUpButton);
     expect(emailField.validationMessage).toMatch(
-      /Email must have at least 3 characters/i
+      /Email must have at least 3 characters/i,
     );
     await user.type(emailField, "st");
     expect(emailField).toHaveValue("test");
     await user.click(signUpButton);
     expect(emailField.validationMessage).toMatch(
-      /Please include an '@' in the email address. 'test' is missing an '@'./i
+      /Please include an '@' in the email address. 'test' is missing an '@'./i,
     );
     await user.type(emailField, "@");
     expect(emailField).toHaveValue("test@");
     await user.click(signUpButton);
     expect(emailField.validationMessage).toMatch(
-      /Please enter a part following '@'. test@ is incomplete./i
+      /Please enter a part following '@'. test@ is incomplete./i,
     );
     await user.type(emailField, "mail");
     expect(emailField).toHaveValue("test@mail");
@@ -240,10 +240,10 @@ describe("SignUp Form Submit", () => {
 
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(
-      await screen.findByText(/Username already in use/i)
+      await screen.findByText(/Username already in use/i),
     ).toBeInTheDocument();
     expect(
-      await screen.findByText(/Email already in use/i)
+      await screen.findByText(/Email already in use/i),
     ).toBeInTheDocument();
   });
 
@@ -274,7 +274,7 @@ describe("SignUp Form Submit", () => {
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(await screen.findByText(/Please log in/i)).toBeInTheDocument();
     expect(
-      await screen.findByText(/Registration successful! Check your email./i)
+      await screen.findByText(/Registration successful! Check your email./i),
     ).toBeInTheDocument();
   });
 });

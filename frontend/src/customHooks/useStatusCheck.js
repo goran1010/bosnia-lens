@@ -1,11 +1,7 @@
 import { useEffect } from "react";
 const URL = import.meta.env.VITE_BACKEND_URL;
 
-export default function useStatusCheck(
-  setUserData,
-  setLoading,
-  notificationValue,
-) {
+function useStatusCheck(setUserData, setLoading, notificationValue) {
   const { addNotification } = notificationValue;
   useEffect(() => {
     let isMounted = true;
@@ -54,3 +50,5 @@ export default function useStatusCheck(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }
+
+export { useStatusCheck };
