@@ -114,7 +114,10 @@ export async function login(req, res, next) {
     if (!user) {
       return res
         .status(401)
-        .json({ error: info.message, details: [{ msg: null }] });
+        .json({
+          error: "Login unsuccessful",
+          details: [{ msg: info.message }],
+        });
     }
 
     req.logIn(user, (err) => {
