@@ -1,10 +1,14 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 import PostalCodes from "../PostalCodes/PostalCodes";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import NotificationContext from "../../utils/NotificationContext";
 
 function ModifyDataset({ datasetSelect }) {
+  // Refactor this component to improve performance
+
   const [searchResult, setSearchResult] = useState([]);
   const [input, setInput] = useState({ city: "", code: "", post: "" });
+  const { addNotification } = useContext(NotificationContext);
 
   function handleInput(e) {
     const newInput = { ...input };
@@ -30,12 +34,23 @@ function ModifyDataset({ datasetSelect }) {
       if (response.ok) {
         const newResult = [...searchResult];
         newResult.unshift(result.data);
-
+        addNotification({
+          type: "success",
+          message: "Data added successfully",
+        });
         return setSearchResult(newResult);
       }
-      console.warn(result.error);
+      addNotification({
+        type: "error",
+        message: result.error,
+        details: result.details[0].msg,
+      });
     } catch (err) {
       console.error(err);
+      addNotification({
+        type: "error",
+        message: "An unexpected error occurred",
+      });
     }
   }
 

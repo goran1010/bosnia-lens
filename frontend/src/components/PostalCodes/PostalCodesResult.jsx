@@ -1,5 +1,5 @@
 export default function PostalCodesResult({ searchResult }) {
-  if (searchResult.length === 0) {
+  if (!searchResult || searchResult.length === 0) {
     return (
       <section className="flex justify-center items-center p-4">
         <p className="text-gray-500">No results to display.</p>

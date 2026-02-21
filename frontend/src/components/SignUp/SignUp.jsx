@@ -1,15 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Spinner from "@goran1010/spinner";
-import MessageCard from "../MessageCard.jsx";
-import SignUpForm from "./SignUpForm.jsx";
+import SignUpForm from "./SignUpForm";
 
 export default function SignUp() {
   const [loading, setLoading] = useState(false);
 
   return (
     <div className="relative min-h-full flex items-center justify-center bg-gray-50 ">
-      <MessageCard />
       <div className="w-full max-w-md p-6 flex flex-col gap-3">
         <div>
           <h1 className="text-5xl mb-8 text-center font-bold text-gray-900">

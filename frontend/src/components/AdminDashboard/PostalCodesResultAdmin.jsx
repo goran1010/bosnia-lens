@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import NotificationContext from "../../utils/NotificationContext";
 
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -7,9 +8,10 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
   // Now it re-creates entire array for each letter changed in input
 
   const [inputValues, setInputValues] = useState([]);
+  const { addNotification } = useContext(NotificationContext);
 
   useEffect(() => {
-    setInputValues(searchResult);
+    setInputValues(searchResult || []);
   }, [searchResult]);
 
   function handlePostChange(e) {
@@ -60,11 +62,22 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
           return row;
         });
         setSearchResult(filteredSearchResult);
+        addNotification({
+          type: "success",
+          message: `Postal code updated successfully!`,
+        });
         return;
       }
-
-      console.warn(result.error);
+      addNotification({
+        type: "error",
+        message: result.error,
+        details: result.details[0].msg,
+      });
     } catch (err) {
+      addNotification({
+        type: "error",
+        message: "An error occurred while updating the postal code.",
+      });
       console.error(err);
     }
   }
@@ -89,10 +102,22 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
           return row.code !== Number(code);
         });
         setSearchResult(filteredSearchResult);
+        addNotification({
+          type: "success",
+          message: `Postal code deleted successfully!`,
+        });
         return;
       }
-      console.warn(result.error);
+      addNotification({
+        type: "error",
+        message: result.error,
+        details: result.details[0].msg,
+      });
     } catch (err) {
+      addNotification({
+        type: "error",
+        message: "An error occurred while deleting the postal code.",
+      });
       console.error(err);
     }
   }
@@ -125,7 +150,7 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
               <input
                 name="city"
                 type="text"
-                value={result.city}
+                value={result.city || ""}
                 onChange={handleCityChange}
                 data-code={result.code}
               />
@@ -133,7 +158,7 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
                 data-code={result.code}
                 name="post"
                 type="text"
-                value={result.post}
+                value={result.post || ""}
                 onChange={handlePostChange}
               />
               <div>

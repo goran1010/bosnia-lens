@@ -7,7 +7,10 @@ export function status(req, res) {
 
 export async function getPostalCodes(req, res) {
   const postalCodes = await postalCodesModel.getAllPostalCodes();
-  res.json({ data: postalCodes });
+  res.json({
+    message: "Postal codes retrieved successfully",
+    data: postalCodes,
+  });
 }
 
 export async function getPostalCodeByCode(req, res) {
@@ -29,8 +32,10 @@ export async function getPostalCodeByCode(req, res) {
   }
 
   if (result.length > 0) {
-    res.json({ data: result });
+    res.json({ message: "Postal codes retrieved successfully", data: result });
   } else {
-    res.status(404).json({ error: "Postal code not found" });
+    res
+      .status(404)
+      .json({ error: "Postal code not found", details: [{ msg: null }] });
   }
 }
