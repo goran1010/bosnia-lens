@@ -4,7 +4,10 @@ function isAdmin(req, res, next) {
 
     res
       .status(403)
-      .json({ error: "You need to be admin to access this route." });
+      .json({
+        error: "You need to be admin to access this route.",
+        details: [{ msg: null }],
+      });
   } catch (err) {
     next(err);
   }
