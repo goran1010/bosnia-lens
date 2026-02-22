@@ -2,16 +2,16 @@ import request from "supertest";
 import { describe, test, expect, vi } from "vitest";
 import { app } from "../../app.js";
 import { createAndLoginUser } from "../utils/createUserAndLogin.js";
-import { createNewUserData } from "../utils/createNewUser.js";
+import { createNewUser } from "../utils/createNewUser.js";
 import { afterEach } from "vitest";
 import * as usersModel from "../../models/usersModel.js";
 import jwt from "jsonwebtoken";
 import { emailConfirmHTML } from "../../utils/emailConfirmHTML.js";
 
 vi.mock("../../email/confirmationEmail.js", () => ({
-  default: async () => {
+  sendConfirmationEmail: vi.fn(async () => {
     return { success: true };
-  },
+  }),
 }));
 
 afterEach(async () => {
@@ -62,7 +62,7 @@ describe("usersRouter", () => {
       message: "Registration successful! Check your email.",
     };
 
-    const newUserData = createNewUserData();
+    const newUserData = createNewUser();
 
     const response = await request(app).post("/users/signup").send(newUserData);
 
@@ -71,7 +71,7 @@ describe("usersRouter", () => {
   });
 
   test("responds with 200 and User test_user logged in successfully for correct login input", async () => {
-    const newUserData = createNewUserData();
+    const newUserData = createNewUser();
 
     const response = await createAndLoginUser(newUserData);
 
@@ -116,7 +116,7 @@ describe("usersRouter", () => {
   });
 
   test("responds with status 200 and HTML for valid token", async () => {
-    const { username, password, email } = createNewUserData();
+    const { username, password, email } = createNewUser();
     const userInDB = await usersModel.create({
       username,
       password,

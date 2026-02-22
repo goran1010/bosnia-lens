@@ -51,7 +51,10 @@ describe("GET /postal-codes", () => {
 
     expect(response.headers["content-type"]).toMatch(/json/);
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(dummyData);
+    expect(response.body).toEqual({
+      message: "Postal codes retrieved successfully",
+      data: dummyData.data,
+    });
   });
 });
 
@@ -91,7 +94,10 @@ describe("GET /postal-codes/:searchTerm", () => {
 
     expect(response.headers["content-type"]).toMatch(/json/);
     expect(response.status).toBe(404);
-    expect(response.body).toEqual({ error: "Postal code not found" });
+    expect(response.body).toEqual({
+      error: "Postal code not found",
+      details: [{ msg: null }],
+    });
   });
 
   test("responds with status 400 and error message for missing searchTerm", async () => {
