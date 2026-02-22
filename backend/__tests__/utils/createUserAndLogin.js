@@ -1,6 +1,6 @@
 import request from "supertest";
 import * as usersModel from "../../models/usersModel.js";
-import { app } from "../../app";
+import { app } from "../../app.js";
 
 async function createAndLoginUser(newUser) {
   const createUserData = {
