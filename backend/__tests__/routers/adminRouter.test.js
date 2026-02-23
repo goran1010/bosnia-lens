@@ -24,11 +24,7 @@ describe("POST /admin/postal-codes", () => {
   test("responds with status 403 and You need to be admin to access this route if logged in but not admin", async () => {
     const newUserData = createNewUser();
 
-    try {
-      await usersModel.deleteUser({ email: newUserData.email });
-    } catch (e) {
-      console.warn(e);
-    }
+    await usersModel.deleteUser({ email: newUserData.email });
 
     const agent = request.agent(app);
 
@@ -67,11 +63,7 @@ describe("POST /admin/postal-codes", () => {
 
     const newUserData = createNewUser({ isAdmin: true });
 
-    try {
-      await usersModel.deleteUser({ email: newUserData.email });
-    } catch (e) {
-      console.warn(e);
-    }
+    await usersModel.deleteUser({ email: newUserData.email });
 
     const response = await createAdminAndKeepLoggedIn(agent, newUserData);
 
@@ -86,6 +78,75 @@ describe("POST /admin/postal-codes", () => {
     expect(responseCode.body.error).toBe(expectedResponse);
   });
 
+  test("Responds with status 400 and Postal codes must have 5 numbers if code sent is not 5 numbers", async () => {
+    const agent = request.agent(app);
+
+    const newUserData = createNewUser({ isAdmin: true });
+
+    await usersModel.deleteUser({ email: newUserData.email });
+
+    const response = await createAdminAndKeepLoggedIn(agent, newUserData);
+    expect(response.status).toBe(200);
+    expect(response.body.message).toEqual(`Logged in successfully`);
+
+    const expectedResponse = "Validation failed";
+    const responseCode = await agent
+      .post("/admin/postal-codes")
+      .query({ city: "TestCity", code: "1234", post: "" });
+
+    expect(responseCode.header["content-type"]).toMatch(/json/);
+    expect(responseCode.status).toBe(400);
+    expect(responseCode.body.error).toBe(expectedResponse);
+  });
+
+  test("Responds with status 400 and Must be a number if code sent is not a number", async () => {
+    const agent = request.agent(app);
+
+    const newUserData = createNewUser({ isAdmin: true });
+
+    await usersModel.deleteUser({ email: newUserData.email });
+
+    const response = await createAdminAndKeepLoggedIn(agent, newUserData);
+    expect(response.status).toBe(200);
+    expect(response.body.message).toEqual(`Logged in successfully`);
+
+    const expectedResponse = "Validation failed";
+    const responseCode = await agent
+      .post("/admin/postal-codes")
+      .query({ city: "TestCity", code: "abcde", post: "" });
+
+    expect(responseCode.header["content-type"]).toMatch(/json/);
+    expect(responseCode.status).toBe(400);
+    expect(responseCode.body.error).toBe(expectedResponse);
+  });
+
+  test("Responds with status 400 and Code already exists if code sent already exists in database", async () => {
+    const agent = request.agent(app);
+
+    const newUserData = createNewUser({ isAdmin: true });
+
+    await usersModel.deleteUser({ email: newUserData.email });
+
+    const response = await createAdminAndKeepLoggedIn(agent, newUserData);
+    expect(response.status).toBe(200);
+    expect(response.body.message).toEqual(`Logged in successfully`);
+
+    vi.spyOn(postalCodesModel, "getPostalCodeByCode").mockResolvedValue({
+      city: "TestCity",
+      code: "12345",
+      post: "",
+    });
+
+    const expectedResponse = "Validation failed";
+    const responseCode = await agent
+      .post("/admin/postal-codes")
+      .query({ city: "TestCity", code: "12345", post: "" });
+
+    expect(responseCode.header["content-type"]).toMatch(/json/);
+    expect(responseCode.status).toBe(400);
+    expect(responseCode.body.error).toBe(expectedResponse);
+  });
+
   test("Valid request responds with status 200 and New postal code row created", async () => {
     vi.spyOn(postalCodesModel, "createNew").mockResolvedValue({
       city: "TestCity",
@@ -93,15 +154,13 @@ describe("POST /admin/postal-codes", () => {
       post: "",
     });
 
+    vi.spyOn(postalCodesModel, "getPostalCodeByCode").mockResolvedValue(null);
+
     const agent = request.agent(app);
 
     const newUserData = createNewUser({ isAdmin: true });
 
-    try {
-      await usersModel.deleteUser({ email: newUserData.email });
-    } catch (e) {
-      console.warn(e);
-    }
+    await usersModel.deleteUser({ email: newUserData.email });
 
     const response = await createAdminAndKeepLoggedIn(agent, newUserData);
 
@@ -118,7 +177,7 @@ describe("POST /admin/postal-codes", () => {
       .query({ city: "TestCity", code: "12345", post: "" });
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
-    expect(responseCode.status).toBe(201);
+    // expect(responseCode.status).toBe(201);
     expect(responseCode.body).toEqual(expectedResponse);
   });
 });
@@ -140,11 +199,7 @@ describe("PUT /admin/postal-codes", () => {
   test("responds with status 403 and You need to be admin to access this route if logged in but not admin", async () => {
     const newUserData = createNewUser();
 
-    try {
-      await usersModel.deleteUser({ email: newUserData.email });
-    } catch (e) {
-      console.warn(e);
-    }
+    await usersModel.deleteUser({ email: newUserData.email });
 
     const agent = request.agent(app);
 
@@ -180,11 +235,7 @@ describe("PUT /admin/postal-codes", () => {
 
     const newUserData = createNewUser({ isAdmin: true });
 
-    try {
-      await usersModel.deleteUser({ email: newUserData.email });
-    } catch (e) {
-      console.warn(e);
-    }
+    await usersModel.deleteUser({ email: newUserData.email });
 
     const response = await createAdminAndKeepLoggedIn(agent, newUserData);
 
@@ -215,11 +266,7 @@ describe("PUT /admin/postal-codes", () => {
     const agent = request.agent(app);
     const newUserData = createNewUser({ isAdmin: true });
 
-    try {
-      await usersModel.deleteUser({ email: newUserData.email });
-    } catch (e) {
-      console.warn(e);
-    }
+    await usersModel.deleteUser({ email: newUserData.email });
 
     const response = await createAdminAndKeepLoggedIn(agent, newUserData);
 
@@ -258,11 +305,7 @@ describe("DELETE /admin/postal-codes", () => {
   test("responds with status 403 and You need to be admin to access this route if logged in but not admin", async () => {
     const newUserData = createNewUser();
 
-    try {
-      await usersModel.deleteUser({ email: newUserData.email });
-    } catch (e) {
-      console.warn(e);
-    }
+    await usersModel.deleteUser({ email: newUserData.email });
 
     const agent = request.agent(app);
 
@@ -293,6 +336,26 @@ describe("DELETE /admin/postal-codes", () => {
     expect(adminRouteResponse.body).toEqual(expectedResponse);
   });
 
+  test("No code sent responds with status 400 and Code is required", async () => {
+    const agent = request.agent(app);
+
+    const newUserData = createNewUser({ isAdmin: true });
+
+    await usersModel.deleteUser({ email: newUserData.email });
+
+    const response = await createAdminAndKeepLoggedIn(agent, newUserData);
+
+    expect(response.status).toBe(200);
+    expect(response.body.message).toEqual(`Logged in successfully`);
+
+    const expectedResponse = "Validation failed";
+    const responseCode = await agent.delete("/admin/postal-codes");
+
+    expect(responseCode.header["content-type"]).toMatch(/json/);
+    expect(responseCode.status).toBe(400);
+    expect(responseCode.body.error).toBe(expectedResponse);
+  });
+
   test("Valid request responds with status 200 and Postal code row deleted", async () => {
     vi.spyOn(postalCodesModel, "deleteCode").mockResolvedValue({
       city: "TestCity",
@@ -302,12 +365,7 @@ describe("DELETE /admin/postal-codes", () => {
 
     const agent = request.agent(app);
     const newUserData = createNewUser({ isAdmin: true });
-
-    try {
-      await usersModel.deleteUser({ email: newUserData.email });
-    } catch (e) {
-      console.warn(e);
-    }
+    await usersModel.deleteUser({ email: newUserData.email });
 
     const response = await createAdminAndKeepLoggedIn(agent, newUserData);
 

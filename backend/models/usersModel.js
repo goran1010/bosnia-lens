@@ -24,7 +24,7 @@ function deleteAll() {
 }
 
 function deleteUser(where) {
-  return prisma.user.delete({
+  return prisma.user.deleteMany({
     where: { ...where },
   });
 }
