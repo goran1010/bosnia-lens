@@ -3,7 +3,6 @@ import { describe, test, expect, vi } from "vitest";
 import { app } from "../../app.js";
 import { createAndLoginUser } from "../utils/createUserAndLogin.js";
 import { createNewUser } from "../utils/createNewUser.js";
-import { afterEach } from "vitest";
 import * as usersModel from "../../models/usersModel.js";
 import jwt from "jsonwebtoken";
 import { emailConfirmHTML } from "../../utils/emailConfirmHTML.js";

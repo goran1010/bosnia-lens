@@ -1,11 +1,12 @@
 import request from "supertest";
-import { describe, test, expect } from "vitest";
+import { describe, test, expect, vi } from "vitest";
 import jwt from "jsonwebtoken";
 import { createNewUser } from "../utils/createNewUser.js";
 import { createAdminAndKeepLoggedIn } from "../utils/createAndKeepLoggedIn.js";
 import * as usersModel from "../../models/usersModel.js";
-
+import * as postalCodesModel from "../../models/postalCodesModel.js";
 import { app } from "../../app.js";
+
 describe("POST /admin/postal-codes", () => {
   test("responds with status 401 and You need to be logged in and an admin to access this route if not logged in", async () => {
     const notLoggedInResponse = {
@@ -83,5 +84,41 @@ describe("POST /admin/postal-codes", () => {
     expect(responseCode.header["content-type"]).toMatch(/json/);
     expect(responseCode.status).toBe(400);
     expect(responseCode.body.error).toBe(expectedResponse);
+  });
+
+  test("Valid request responds with status 200 and New postal code row created", async () => {
+    vi.spyOn(postalCodesModel, "createNew").mockResolvedValue({
+      city: "TestCity",
+      code: "12345",
+      post: "",
+    });
+
+    const agent = request.agent(app);
+
+    const newUserData = createNewUser({ isAdmin: true });
+
+    try {
+      await usersModel.deleteUser({ email: newUserData.email });
+    } catch (e) {
+      console.warn(e);
+    }
+
+    const response = await createAdminAndKeepLoggedIn(agent, newUserData);
+
+    expect(response.status).toBe(200);
+    expect(response.body.message).toEqual(`Logged in successfully`);
+
+    const expectedResponse = {
+      message: "New postal code row created.",
+      data: { city: "TestCity", code: "12345", post: "" },
+    };
+
+    const responseCode = await agent
+      .post("/admin/postal-codes")
+      .query({ city: "TestCity", code: "12345", post: "" });
+
+    expect(responseCode.header["content-type"]).toMatch(/json/);
+    expect(responseCode.status).toBe(201);
+    expect(responseCode.body).toEqual(expectedResponse);
   });
 });
