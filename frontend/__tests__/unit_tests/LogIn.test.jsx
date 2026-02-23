@@ -27,8 +27,8 @@ beforeEach(async () => {
     const notificationValue = useNotification(notifications, setNotifications);
 
     return (
-      <NotificationContext.Provider value={notificationValue}>
-        <UserDataContext.Provider value={{ userData, setUserData }}>
+      <NotificationContext value={notificationValue}>
+        <UserDataContext value={{ userData, setUserData }}>
           <MemoryRouter initialEntries={["/login"]}>
             <Notifications />
             <Routes>
@@ -36,8 +36,8 @@ beforeEach(async () => {
               <Route path="/login" element={<LogIn />} />
             </Routes>
           </MemoryRouter>
-        </UserDataContext.Provider>
-      </NotificationContext.Provider>
+        </UserDataContext>
+      </NotificationContext>
     );
   }
 
