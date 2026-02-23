@@ -236,7 +236,95 @@ describe("PUT /admin/postal-codes", () => {
       .query({ city: "TestCity", code: "12345", post: "" });
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
-    // expect(responseCode.status).toBe(201);
+    expect(responseCode.status).toBe(201);
+    expect(responseCode.body).toEqual(expectedResponse);
+  });
+});
+
+describe("DELETE /admin/postal-codes", () => {
+  test("responds with status 401 and You need to be logged in and an admin to access this route if not logged in", async () => {
+    const notLoggedInResponse = {
+      error: "You need to be logged in and an admin to access this route.",
+      details: [{ msg: null }],
+    };
+
+    const response = await request(app).delete("/admin/postal-codes");
+
+    expect(response.header["content-type"]).toMatch(/json/);
+    expect(response.status).toBe(401);
+    expect(response.body).toEqual(notLoggedInResponse);
+  });
+
+  test("responds with status 403 and You need to be admin to access this route if logged in but not admin", async () => {
+    const newUserData = createNewUser();
+
+    try {
+      await usersModel.deleteUser({ email: newUserData.email });
+    } catch (e) {
+      console.warn(e);
+    }
+
+    const agent = request.agent(app);
+
+    await agent.post("/users/signup").send(newUserData);
+    const accessToken = jwt.sign(
+      { email: newUserData.email, username: newUserData.username },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "1d" },
+    );
+    await agent.get(`/users/confirm/${accessToken}`);
+    const response = await agent.post("/users/login").send({
+      username: newUserData.username,
+      password: newUserData.password,
+    });
+
+    const expectedResponse = {
+      error: "You need to be admin to access this route.",
+      details: [{ msg: null }],
+    };
+
+    expect(response.status).toBe(200);
+    expect(response.body.message).toEqual(`Logged in successfully`);
+
+    const adminRouteResponse = await agent.delete("/admin/postal-codes");
+
+    expect(adminRouteResponse.header["content-type"]).toMatch(/json/);
+    expect(adminRouteResponse.status).toBe(403);
+    expect(adminRouteResponse.body).toEqual(expectedResponse);
+  });
+
+  test("Valid request responds with status 200 and Postal code row deleted", async () => {
+    vi.spyOn(postalCodesModel, "deleteCode").mockResolvedValue({
+      city: "TestCity",
+      code: "12345",
+      post: "",
+    });
+
+    const agent = request.agent(app);
+    const newUserData = createNewUser({ isAdmin: true });
+
+    try {
+      await usersModel.deleteUser({ email: newUserData.email });
+    } catch (e) {
+      console.warn(e);
+    }
+
+    const response = await createAdminAndKeepLoggedIn(agent, newUserData);
+
+    expect(response.status).toBe(200);
+    expect(response.body.message).toEqual(`Logged in successfully`);
+
+    const expectedResponse = {
+      message: "Postal code row deleted.",
+      data: { city: "TestCity", code: "12345", post: "" },
+    };
+
+    const responseCode = await agent
+      .delete("/admin/postal-codes")
+      .query({ code: "12345" });
+
+    expect(responseCode.header["content-type"]).toMatch(/json/);
+    expect(responseCode.status).toBe(200);
     expect(responseCode.body).toEqual(expectedResponse);
   });
 });
