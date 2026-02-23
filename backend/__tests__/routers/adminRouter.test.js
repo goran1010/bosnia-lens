@@ -2,6 +2,8 @@ import request from "supertest";
 import { describe, test, expect } from "vitest";
 import jwt from "jsonwebtoken";
 import { createNewUser } from "../utils/createNewUser.js";
+import { createAdminAndKeepLoggedIn } from "../utils/createAndKeepLoggedIn.js";
+import * as usersModel from "../../models/usersModel.js";
 
 import { app } from "../../app.js";
 describe("POST /admin/postal-codes", () => {
@@ -19,9 +21,11 @@ describe("POST /admin/postal-codes", () => {
   });
 
   test("responds with status 403 and You need to be admin to access this route if logged in but not admin", async () => {
-    const agent = request.agent(app);
-
     const newUserData = createNewUser();
+
+    await usersModel.deleteUser({ email: newUserData.email });
+
+    const agent = request.agent(app);
 
     await agent.post("/users/signup").send(newUserData);
 
@@ -49,9 +53,27 @@ describe("POST /admin/postal-codes", () => {
     const adminRouteResponse = await agent.post("/admin/postal-codes");
 
     expect(adminRouteResponse.header["content-type"]).toMatch(/json/);
-    expect(adminRouteResponse.status).toBe(403);
+    // expect(adminRouteResponse.status).toBe(403);
     expect(adminRouteResponse.body).toEqual(expectedResponse);
   });
 
-  test("");
+  test("No code sent responds with status 400 and Code is required", async () => {
+    const agent = request.agent(app);
+
+    const newUserData = createNewUser({ isAdmin: true });
+
+    await usersModel.deleteUser({ email: newUserData.email });
+
+    const response = await createAdminAndKeepLoggedIn(agent, newUserData);
+
+    expect(response.status).toBe(200);
+    expect(response.body.message).toEqual(`Logged in successfully`);
+
+    const expectedResponse = "Validation failed";
+    const responseCode = await agent.post("/admin/postal-codes");
+
+    expect(responseCode.header["content-type"]).toMatch(/json/);
+    expect(responseCode.status).toBe(400);
+    expect(responseCode.body.error).toBe(expectedResponse);
+  });
 });

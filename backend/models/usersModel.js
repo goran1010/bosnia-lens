@@ -23,4 +23,10 @@ function deleteAll() {
   return prisma.user.deleteMany();
 }
 
-export { find, update, create, deleteAll };
+function deleteUser(where) {
+  return prisma.user.delete({
+    where: { ...where },
+  });
+}
+
+export { find, update, create, deleteAll, deleteUser };
