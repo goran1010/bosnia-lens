@@ -1,6 +1,6 @@
 import request from "supertest";
 import * as usersModel from "../../models/usersModel.js";
-import { app } from "../../app";
+import { app } from "../../app.js";
 
 async function createAndLoginUser(newUser) {
   const createUserData = {
@@ -8,6 +8,7 @@ async function createAndLoginUser(newUser) {
     password: "123123",
     email: newUser.email,
     ["confirm-password"]: "123123",
+    isAdmin: newUser.isAdmin || false,
   };
   await request(app).post("/users/signup").send(createUserData);
 

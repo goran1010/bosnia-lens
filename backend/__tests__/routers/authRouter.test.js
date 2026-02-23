@@ -4,7 +4,7 @@ import { describe, test, expect, vi, beforeEach } from "vitest";
 const isAuthenticatedMock = vi.fn();
 
 vi.mock("../../auth/isAuthenticated.js", () => ({
-  default: (req, res, next) => isAuthenticatedMock(req, res, next),
+  isAuthenticated: (req, res, next) => isAuthenticatedMock(req, res, next),
 }));
 
 import { app } from "../../app.js";
@@ -43,6 +43,9 @@ describe("GET /me", () => {
 
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({ data: user });
+    expect(response.body).toEqual({
+      message: "User info retrieved",
+      data: user,
+    });
   });
 });

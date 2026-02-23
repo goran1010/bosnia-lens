@@ -17,8 +17,8 @@ vi.mock("../../config/passport.js", async () => {
   const actual = await vi.importActual("../../config/passport.js");
 
   return {
-    default: {
-      ...actual.default,
+    passport: {
+      ...actual.passport,
       authenticate: vi.fn(),
       session: vi.fn(() => (req, res, next) => next()),
     },
@@ -38,11 +38,11 @@ import { passport } from "../../config/passport.js";
 const isAuthenticatedMock = vi.fn();
 
 vi.mock("../../auth/isAuthenticated.js", () => ({
-  default: (req, res, next) => isAuthenticatedMock(req, res, next),
+  isAuthenticated: (req, res, next) => isAuthenticatedMock(req, res, next),
 }));
 
 vi.mock("../../email/confirmationEmail.js", () => ({
-  default: vi.fn(() => {
+  sendConfirmationEmail: vi.fn(() => {
     return {
       success: true,
     };
@@ -182,7 +182,10 @@ describe("POST /login", () => {
       req.logIn = (user, cb) => cb(null);
       callback(null, undefined, { message: "Incorrect username" });
     });
-    const responseData = { error: "Incorrect username" };
+    const responseData = {
+      error: "Login unsuccessful",
+      details: [{ msg: "Incorrect username" }],
+    };
 
     const response = await request(app).post("/users/login").send(newUser);
 
@@ -230,14 +233,20 @@ describe("GET /confirm/:token", () => {
     const response = await request(app).get("/users/confirm/");
 
     expect(response.status).toBe(404);
-    expect(response.body).toEqual({ error: "No resource found" });
+    expect(response.body).toEqual({
+      error: "No resource found",
+      details: [{ msg: null }],
+    });
   });
 
   test("responds with status 400 and message for invalid token", async () => {
     const response = await request(app).get("/users/confirm/12345");
 
     expect(response.status).toBe(500);
-    expect(response.body).toEqual({ error: "Couldn't confirm email" });
+    expect(response.body).toEqual({
+      error: "Couldn't confirm email",
+      details: [{ msg: null }],
+    });
   });
 
   test("responds with status 200 and HTML for valid token", async () => {
