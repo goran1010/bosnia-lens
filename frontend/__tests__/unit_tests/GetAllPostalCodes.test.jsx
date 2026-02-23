@@ -29,12 +29,12 @@ describe("GetAllPostalCodes Component", () => {
     };
 
     return render(
-      <NotificationContext.Provider value={contextValue}>
+      <NotificationContext value={contextValue}>
         <GetAllPostalCodes
           setSearchResult={mockSetSearchResult}
           setLoading={mockSetLoading}
         />
-      </NotificationContext.Provider>,
+      </NotificationContext>,
     );
   };
 

@@ -2,10 +2,13 @@ import { describe, test, expect, beforeEach, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
-import { UserDataContext } from "../../src/utils/UserDataContext";
+import { NotificationContext } from "../../src/utils/NotificationContext";
 import { LogIn } from "../../src/components/LogIn/LogIn";
 import { Home } from "../../src/components/Home/Home";
 import { useState } from "react";
+import { UserDataContext } from "../../src/utils/UserDataContext";
+import { useNotification } from "../../src/customHooks/useNotification";
+import { Notifications } from "../../src/components/Notifications";
 
 const user = userEvent.setup();
 
@@ -19,18 +22,22 @@ function createFormElements() {
 
 beforeEach(async () => {
   function Wrapper() {
-    const [message, setMessage] = useState([]);
-    const [userData, setUserData] = useState([]);
+    const [userData, setUserData] = useState(null);
+    const [notifications, setNotifications] = useState([]);
+    const notificationValue = useNotification(notifications, setNotifications);
 
     return (
-      <UserDataContext value={{ message, setMessage, userData, setUserData }}>
-        <MemoryRouter initialEntries={["/login"]}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<LogIn />} />
-          </Routes>
-        </MemoryRouter>
-      </UserDataContext>
+      <NotificationContext.Provider value={notificationValue}>
+        <UserDataContext.Provider value={{ userData, setUserData }}>
+          <MemoryRouter initialEntries={["/login"]}>
+            <Notifications />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<LogIn />} />
+            </Routes>
+          </MemoryRouter>
+        </UserDataContext.Provider>
+      </NotificationContext.Provider>
     );
   }
 
