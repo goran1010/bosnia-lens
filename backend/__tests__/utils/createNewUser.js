@@ -5,6 +5,7 @@ function createNewUser(user = {}) {
   newUser.password = user.password || "123123";
   newUser.email = user.email || "test_user@mail.com";
   newUser["confirm-password"] = user["confirm-password"] || "123123";
+  newUser.isAdmin = user.isAdmin || false;
 
   return newUser;
 }

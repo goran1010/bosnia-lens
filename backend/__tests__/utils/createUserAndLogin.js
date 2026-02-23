@@ -8,6 +8,7 @@ async function createAndLoginUser(newUser) {
     password: "123123",
     email: newUser.email,
     ["confirm-password"]: "123123",
+    isAdmin: newUser.isAdmin || false,
   };
   await request(app).post("/users/signup").send(createUserData);
 
