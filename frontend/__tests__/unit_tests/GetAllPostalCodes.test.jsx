@@ -2,20 +2,20 @@ import { describe, test, expect, beforeEach, vi, afterEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { GetAllPostalCodes } from "../../src/components/PostalCodes/GetAllPostalCodes";
-import { UserDataContext } from "../../src/utils/UserDataContext";
+import { NotificationContext } from "../../src/utils/NotificationContext";
 
 const user = userEvent.setup();
 
 describe("GetAllPostalCodes Component", () => {
   let mockSetSearchResult;
   let mockSetLoading;
-  let mockSetMessage;
+  let mockAddNotification;
   let fetchSpy;
 
   beforeEach(() => {
     mockSetSearchResult = vi.fn();
     mockSetLoading = vi.fn();
-    mockSetMessage = vi.fn();
+    mockAddNotification = vi.fn();
     fetchSpy = vi.spyOn(globalThis, "fetch");
   });
 
@@ -25,18 +25,16 @@ describe("GetAllPostalCodes Component", () => {
 
   const renderComponent = () => {
     const contextValue = {
-      setMessage: mockSetMessage,
-      userData: [],
-      message: [],
+      addNotification: mockAddNotification,
     };
 
     return render(
-      <UserDataContext value={contextValue}>
+      <NotificationContext.Provider value={contextValue}>
         <GetAllPostalCodes
           setSearchResult={mockSetSearchResult}
           setLoading={mockSetLoading}
         />
-      </UserDataContext>,
+      </NotificationContext.Provider>,
     );
   };
 
@@ -116,15 +114,11 @@ describe("GetAllPostalCodes Component", () => {
 
   describe("Failed API call", () => {
     test("handles server error response", async () => {
-      const consoleWarnSpy = vi
-        .spyOn(console, "warn")
-        .mockImplementation(() => {});
-
       fetchSpy.mockResolvedValueOnce({
         ok: false,
         json: async () => ({
           error: "Server Error",
-          details: ["Unable to fetch postal codes"],
+          details: [{ msg: "Unable to fetch postal codes" }],
         }),
       });
 
@@ -133,30 +127,21 @@ describe("GetAllPostalCodes Component", () => {
       const button = screen.getByRole("button");
       await user.click(button);
 
-      expect(mockSetMessage).toHaveBeenCalledWith([
-        "Server Error",
-        ["Unable to fetch postal codes"],
-      ]);
-
-      expect(consoleWarnSpy).toHaveBeenCalledWith("Server Error", [
-        "Unable to fetch postal codes",
-      ]);
+      expect(mockAddNotification).toHaveBeenCalledWith({
+        type: "error",
+        message: "Server Error",
+        details: "Unable to fetch postal codes",
+      });
       expect(mockSetLoading).toHaveBeenCalledWith(false);
-
-      consoleWarnSpy.mockRestore();
     });
 
     test("handles 404 not found error", async () => {
-      const consoleWarnSpy = vi
-        .spyOn(console, "warn")
-        .mockImplementation(() => {});
-
       fetchSpy.mockResolvedValueOnce({
         ok: false,
         status: 404,
         json: async () => ({
           error: "Not Found",
-          details: ["Postal codes endpoint not found"],
+          details: [{ msg: "Postal codes endpoint not found" }],
         }),
       });
 
@@ -166,25 +151,20 @@ describe("GetAllPostalCodes Component", () => {
       await user.click(button);
 
       await waitFor(() => {
-        expect(mockSetMessage).toHaveBeenCalledWith([
-          "Not Found",
-          ["Postal codes endpoint not found"],
-        ]);
+        expect(mockAddNotification).toHaveBeenCalledWith({
+          type: "error",
+          message: "Not Found",
+          details: "Postal codes endpoint not found",
+        });
       });
-
-      consoleWarnSpy.mockRestore();
     });
 
     test("does not update search result on error", async () => {
-      const consoleWarnSpy = vi
-        .spyOn(console, "warn")
-        .mockImplementation(() => {});
-
       fetchSpy.mockResolvedValueOnce({
         ok: false,
         json: async () => ({
           error: "Error",
-          details: ["Error details"],
+          details: [{ msg: "Error details" }],
         }),
       });
 
@@ -193,11 +173,9 @@ describe("GetAllPostalCodes Component", () => {
       const button = screen.getByRole("button");
       await user.click(button);
 
-      expect(mockSetMessage).toHaveBeenCalled();
+      expect(mockAddNotification).toHaveBeenCalled();
 
       expect(mockSetSearchResult).not.toHaveBeenCalled();
-
-      consoleWarnSpy.mockRestore();
     });
   });
 
@@ -215,7 +193,11 @@ describe("GetAllPostalCodes Component", () => {
       const button = screen.getByRole("button");
       await user.click(button);
 
-      expect(mockSetMessage).toHaveBeenCalledWith([networkError]);
+      expect(mockAddNotification).toHaveBeenCalledWith({
+        type: "error",
+        message:
+          "An error occurred while fetching postal codes and municipalities.",
+      });
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(networkError);
       expect(mockSetLoading).toHaveBeenCalledWith(false);
