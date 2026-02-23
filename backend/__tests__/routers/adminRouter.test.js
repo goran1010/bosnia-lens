@@ -23,7 +23,11 @@ describe("POST /admin/postal-codes", () => {
   test("responds with status 403 and You need to be admin to access this route if logged in but not admin", async () => {
     const newUserData = createNewUser();
 
-    await usersModel.deleteUser({ email: newUserData.email });
+    try {
+      await usersModel.deleteUser({ email: newUserData.email });
+    } catch (e) {
+      console.warn(e);
+    }
 
     const agent = request.agent(app);
 
@@ -62,7 +66,11 @@ describe("POST /admin/postal-codes", () => {
 
     const newUserData = createNewUser({ isAdmin: true });
 
-    await usersModel.deleteUser({ email: newUserData.email });
+    try {
+      await usersModel.deleteUser({ email: newUserData.email });
+    } catch (e) {
+      console.warn(e);
+    }
 
     const response = await createAdminAndKeepLoggedIn(agent, newUserData);
 
