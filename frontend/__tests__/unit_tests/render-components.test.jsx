@@ -9,25 +9,42 @@ import { Navbar } from "../../src/components/Navbar/Navbar";
 import { MemoryRouter } from "react-router-dom";
 import { ErrorPage } from "../../src/components/ErrorPage";
 import { UserDataContext } from "../../src/utils/UserDataContext";
+import { NotificationContext } from "../../src/utils/NotificationContext";
 
 describe("Render Components", () => {
+  const contextValue = {
+    notifications: [],
+    addNotification: () => {},
+    removeNotification: () => {},
+  };
+
   test("Home component", () => {
-    render(<Home />);
+    render(
+      <NotificationContext value={contextValue}>
+        <Home />
+      </NotificationContext>,
+    );
     const linkElement = screen.getByText(/Bosnia Lens/i);
     expect(linkElement).toBeInTheDocument();
   });
 
   test("Holidays component", () => {
-    render(<Holidays />);
+    render(
+      <NotificationContext value={contextValue}>
+        <Holidays />
+      </NotificationContext>,
+    );
     const linkElement = screen.getByText(/Holidays/i);
     expect(linkElement).toBeInTheDocument();
   });
 
   test("PostalCodes component", () => {
     render(
-      <UserDataContext value={{ message: [], setMessage: () => {} }}>
-        <PostalCodes />
-      </UserDataContext>,
+      <NotificationContext value={contextValue}>
+        <UserDataContext value={{ userData: null, setUserData: () => {} }}>
+          <PostalCodes />
+        </UserDataContext>
+      </NotificationContext>,
     );
     const linkElement = screen.getByText(/Postal Code or Municipality/i);
     expect(linkElement).toBeInTheDocument();
@@ -50,7 +67,9 @@ describe("Render Components", () => {
     render(
       <MemoryRouter>
         <UserDataContext value={{ userData }}>
-          <Navbar />
+          <NotificationContext value={contextValue}>
+            <Navbar />
+          </NotificationContext>
         </UserDataContext>
       </MemoryRouter>,
     );

@@ -3,25 +3,33 @@ import { SignUp } from "../../src/components/SignUp/SignUp";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { UserDataContext } from "../../src/utils/UserDataContext";
-import { userEvent } from "@testing-library/user-event";
+import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { LogIn } from "../../src/components/LogIn/LogIn";
+import { NotificationContext } from "../../src/utils/NotificationContext";
+import { useNotification } from "../../src/customHooks/useNotification";
+import { Notifications } from "../../src/components/Notifications";
 
 const user = userEvent.setup();
 
 beforeEach(async () => {
   function Wrapper() {
-    const [message, setMessage] = useState([]);
+    const [userData, setUserData] = useState(null);
+    const [notifications, setNotifications] = useState([]);
+    const notificationValue = useNotification(notifications, setNotifications);
 
     return (
-      <UserDataContext value={{ message, setMessage }}>
-        <MemoryRouter initialEntries={["/signup"]}>
-          <Routes>
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/login" element={<LogIn />} />
-          </Routes>
-        </MemoryRouter>
-      </UserDataContext>
+      <NotificationContext value={notificationValue}>
+        <UserDataContext value={{ userData, setUserData }}>
+          <MemoryRouter initialEntries={["/signup"]}>
+            <Notifications />
+            <Routes>
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/login" element={<LogIn />} />
+            </Routes>
+          </MemoryRouter>
+        </UserDataContext>
+      </NotificationContext>
     );
   }
 
@@ -239,11 +247,9 @@ describe("SignUp Form Submit", () => {
     await user.click(signUpButton);
 
     expect(fetch).toHaveBeenCalledTimes(1);
+    expect(await screen.findByText(/Validation failed/i)).toBeInTheDocument();
     expect(
       await screen.findByText(/Username already in use/i),
-    ).toBeInTheDocument();
-    expect(
-      await screen.findByText(/Email already in use/i),
     ).toBeInTheDocument();
   });
 
@@ -274,7 +280,7 @@ describe("SignUp Form Submit", () => {
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(await screen.findByText(/Please log in/i)).toBeInTheDocument();
     expect(
-      await screen.findByText(/Registration successful! Check your email./i),
+      await screen.findByText(/Registration successful! Please log in./i),
     ).toBeInTheDocument();
   });
 });
