@@ -1,15 +1,33 @@
 import { describe, test, expect, beforeEach, vi, afterEach } from "vitest";
 import { useWeatherCheck } from "../../src/customHooks/useWeatherCheck";
 import { renderHook, waitFor } from "@testing-library/react";
+import { NotificationContext } from "../../src/utils/NotificationContext";
 
 let mockSetWeatherForecast;
 let mockSetLoading;
 let fetchSpy;
+let wrapper;
+let addNotificationMock;
 
 beforeEach(() => {
   mockSetWeatherForecast = vi.fn();
   mockSetLoading = vi.fn();
+  addNotificationMock = vi.fn();
+
   fetchSpy = vi.spyOn(globalThis, "fetch");
+  wrapper = function Wrapper({ children }) {
+    const mockNotificationValue = {
+      notifications: [],
+      addNotification: addNotificationMock,
+      removeNotification: vi.fn(),
+    };
+
+    return (
+      <NotificationContext value={mockNotificationValue}>
+        {children}
+      </NotificationContext>
+    );
+  };
 });
 
 afterEach(() => {
@@ -46,7 +64,9 @@ describe("Weather fetch", () => {
       json: async () => mockWeatherData,
     });
 
-    renderHook(() => useWeatherCheck(mockSetWeatherForecast, mockSetLoading));
+    renderHook(() => useWeatherCheck(mockSetWeatherForecast, mockSetLoading), {
+      wrapper,
+    });
 
     expect(fetchSpy).toHaveBeenCalledTimes(1);
 
@@ -76,7 +96,9 @@ describe("Weather fetch", () => {
       json: async () => mockWeatherData,
     });
 
-    renderHook(() => useWeatherCheck(mockSetWeatherForecast, mockSetLoading));
+    renderHook(() => useWeatherCheck(mockSetWeatherForecast, mockSetLoading), {
+      wrapper,
+    });
 
     await waitFor(() => {
       expect(mockSetLoading).toHaveBeenCalledWith(false);
@@ -84,10 +106,6 @@ describe("Weather fetch", () => {
   });
 
   test("handles non-ok response", async () => {
-    const consoleWarnSpy = vi
-      .spyOn(console, "warn")
-      .mockImplementation(() => {});
-
     const mockResponse = {
       ok: false,
       status: 404,
@@ -95,36 +113,32 @@ describe("Weather fetch", () => {
 
     fetchSpy.mockResolvedValueOnce(mockResponse);
 
-    renderHook(() => useWeatherCheck(mockSetWeatherForecast, mockSetLoading));
+    renderHook(() => useWeatherCheck(mockSetWeatherForecast, mockSetLoading), {
+      wrapper,
+    });
 
     await waitFor(() => {
-      expect(consoleWarnSpy).toHaveBeenCalledWith(mockResponse);
+      expect(addNotificationMock).toHaveBeenCalled();
     });
 
     expect(mockSetWeatherForecast).not.toHaveBeenCalled();
     expect(mockSetLoading).toHaveBeenCalledWith(false);
-
-    consoleWarnSpy.mockRestore();
   });
 });
 describe("Network errors", () => {
   test("handles network error", async () => {
-    const consoleErrorSpy = vi
-      .spyOn(console, "error")
-      .mockImplementation(() => {});
-
     const networkError = new Error("Network error");
     fetchSpy.mockRejectedValueOnce(networkError);
 
-    renderHook(() => useWeatherCheck(mockSetWeatherForecast, mockSetLoading));
+    renderHook(() => useWeatherCheck(mockSetWeatherForecast, mockSetLoading), {
+      wrapper,
+    });
 
     await waitFor(() => {
-      expect(consoleErrorSpy).toHaveBeenCalledWith(networkError);
+      expect(addNotificationMock).toHaveBeenCalled();
     });
 
     expect(mockSetWeatherForecast).not.toHaveBeenCalled();
     expect(mockSetLoading).toHaveBeenCalledWith(false);
-
-    consoleErrorSpy.mockRestore();
   });
 });
