@@ -7,13 +7,19 @@ import { NotificationContext } from "../../src/utils/NotificationContext";
 
 const user = userEvent.setup();
 
+function Wrapper(userData = null, addNotification = () => {}) {
+  return (
+    <NotificationContext value={{ addNotification }}>
+      <UserDataContext value={{ userData }}>
+        <AdminDashboard />
+      </UserDataContext>
+    </NotificationContext>
+  );
+}
+
 describe("render AdminDashboard component", () => {
   test("when user not logged in", () => {
-    render(
-      <UserDataContext value={{ userData: null }}>
-        <AdminDashboard />
-      </UserDataContext>,
-    );
+    render(Wrapper());
 
     const linkElement = screen.getByText(
       /User needs to an admin to see the dashboard./i,
@@ -22,11 +28,7 @@ describe("render AdminDashboard component", () => {
   });
 
   test("when user logged in but not admin", () => {
-    render(
-      <UserDataContext value={{ userData: { isAdmin: false } }}>
-        <AdminDashboard />
-      </UserDataContext>,
-    );
+    render(Wrapper({ isAdmin: false }));
 
     const linkElement = screen.getByText(
       /User needs to an admin to see the dashboard./i,
@@ -35,11 +37,7 @@ describe("render AdminDashboard component", () => {
   });
 
   test("when user logged in and is admin", () => {
-    render(
-      <UserDataContext value={{ userData: { isAdmin: true } }}>
-        <AdminDashboard />
-      </UserDataContext>,
-    );
+    render(Wrapper({ isAdmin: true }));
 
     const dataSetLabel = screen.getByLabelText(/Choose dataset:/i);
     expect(dataSetLabel).toBeInTheDocument();
@@ -49,29 +47,16 @@ describe("render AdminDashboard component", () => {
     );
     expect(linkElement).not.toBeInTheDocument();
   });
-});
 
-describe("render AdminDashboard page when no dataset is selected", () => {
   test("when no dataset is selected", () => {
-    render(
-      <UserDataContext value={{ userData: { isAdmin: true } }}>
-        <AdminDashboard />
-      </UserDataContext>,
-    );
+    render(Wrapper({ isAdmin: true }));
 
     const linkElement = screen.getByText(/You need to select a dataset./i);
     expect(linkElement).toBeInTheDocument();
   });
 
   test("when postal-codes dataset is selected", async () => {
-    render(
-      <NotificationContext value={{ addNotification: () => {} }}>
-        <UserDataContext value={{ userData: { isAdmin: true } }}>
-          <AdminDashboard />
-        </UserDataContext>
-        ,
-      </NotificationContext>,
-    );
+    render(Wrapper({ isAdmin: true }));
 
     const selectElement = screen.getByRole("combobox");
     expect(selectElement).toBeInTheDocument();
@@ -80,5 +65,8 @@ describe("render AdminDashboard page when no dataset is selected", () => {
 
     const linkElement = screen.queryByText(/You need to select a dataset./i);
     expect(linkElement).not.toBeInTheDocument();
+
+    const postalCodeLabel = screen.getByText(/Postal Code:/i);
+    expect(postalCodeLabel).toBeInTheDocument();
   });
 });
