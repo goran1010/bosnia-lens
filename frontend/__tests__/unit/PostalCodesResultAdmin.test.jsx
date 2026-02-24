@@ -123,3 +123,68 @@ describe("render PostalCodesResultAdmin component", () => {
     });
   });
 });
+
+describe("handleDelete function in PostalCodesResultAdmin component", () => {
+  test("handles successful deletion of postal code", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      json: async () => ({}),
+    });
+    const mockSetSearchResult = vi.fn();
+    const mockAddNotification = vi.fn();
+
+    const searchResult = [{ code: 71000, city: "Sarajevo", post: "71000" }];
+
+    render(Wrapper(searchResult, mockSetSearchResult, mockAddNotification));
+
+    const deleteButton = screen.getByRole("button", { name: /Delete/i });
+    await user.click(deleteButton);
+
+    expect(mockSetSearchResult).toHaveBeenCalledWith([]);
+    expect(mockAddNotification).toHaveBeenCalledWith({
+      type: "success",
+      message: "Postal code deleted successfully!",
+    });
+  });
+
+  test("handles API error during deletion", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: false,
+      json: async () => ({
+        error: "Failed to delete postal code.",
+        details: [{ msg: null }],
+      }),
+    });
+    const mockAddNotification = vi.fn();
+
+    const searchResult = [{ code: 71000, city: "Sarajevo", post: "71000" }];
+
+    render(Wrapper(searchResult, () => {}, mockAddNotification));
+
+    const deleteButton = screen.getByRole("button", { name: /Delete/i });
+    await user.click(deleteButton);
+
+    expect(mockAddNotification).toHaveBeenCalledWith({
+      type: "error",
+      message: "Failed to delete postal code.",
+      details: null,
+    });
+  });
+
+  test("handles fetch error during deletion", async () => {
+    vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error());
+    const mockAddNotification = vi.fn();
+
+    const searchResult = [{ code: 71000, city: "Sarajevo", post: "71000" }];
+
+    render(Wrapper(searchResult, () => {}, mockAddNotification));
+
+    const deleteButton = screen.getByRole("button", { name: /Delete/i });
+    await user.click(deleteButton);
+
+    expect(mockAddNotification).toHaveBeenCalledWith({
+      type: "error",
+      message: "An error occurred while deleting the postal code.",
+    });
+  });
+});
