@@ -70,3 +70,24 @@ describe("render AdminDashboard component", () => {
     expect(postalCodeLabel).toBeInTheDocument();
   });
 });
+
+describe("AdminDashboard component user input", () => {
+  test("handles user input in postal-codes dataset form", async () => {
+    render(Wrapper({ isAdmin: true }));
+
+    const selectElement = screen.getByRole("combobox");
+    await user.selectOptions(selectElement, "postal-codes");
+
+    const cityInput = screen.getByLabelText(/City name:/i);
+    const postalCodeInput = screen.getByLabelText(/Postal Code:/i);
+    const postalCarrierInput = screen.getByLabelText(/Postal Carrier:/i);
+
+    await user.type(cityInput, "Test City");
+    await user.type(postalCodeInput, "12345");
+    await user.type(postalCarrierInput, "Test Carrier");
+
+    expect(cityInput).toHaveValue("Test City");
+    expect(postalCodeInput).toHaveValue("12345");
+    expect(postalCarrierInput).toHaveValue("Test Carrier");
+  });
+});
