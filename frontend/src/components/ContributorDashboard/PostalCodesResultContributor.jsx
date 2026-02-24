@@ -3,7 +3,7 @@ import { NotificationContext } from "../../utils/NotificationContext";
 
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 
-function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
+function PostalCodesResultContributor({ searchResult, setSearchResult }) {
   // Refactor this component to improve performance
   // Now it re-creates entire array for each letter changed in input
 
@@ -187,4 +187,4 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
   );
 }
 
-export { PostalCodesResultAdmin };
+export { PostalCodesResultContributor };

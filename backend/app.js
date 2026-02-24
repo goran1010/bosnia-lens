@@ -31,6 +31,8 @@ import { authRouter } from "./routes/authRouter.js";
 import { usersRouter } from "./routes/usersRouter.js";
 import { adminRouter } from "./routes/adminRouter.js";
 import { isAdmin } from "./auth/isAdmin.js";
+import { contributorRouter } from "./routes/contributorRouter.js";
+import { isContributor } from "./auth/isContributor.js";
 
 app.use(sessionMiddleware);
 app.use(passport.session());
@@ -39,6 +41,7 @@ app.use("/api/v1/", apiRouter);
 app.use("/auth", authRouter);
 app.use("/users", usersRouter);
 app.use("/admin", isAdmin, adminRouter);
+app.use("/contributor", isContributor, contributorRouter);
 
 app.use((req, res) => {
   res

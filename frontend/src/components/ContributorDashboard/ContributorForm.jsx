@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ModifyDataset } from "./ModifyDataset";
 
-function AdminForm() {
+function ContributorForm() {
   const [datasetSelect, setDatasetSelect] = useState("");
 
   function handleDataset(e) {
@@ -29,4 +29,4 @@ function AdminForm() {
   );
 }
 
-export { AdminForm };
+export { ContributorForm };

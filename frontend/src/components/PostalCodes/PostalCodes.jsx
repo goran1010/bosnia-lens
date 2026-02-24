@@ -3,7 +3,7 @@ import Spinner from "@goran1010/spinner";
 import { SearchPostalCode } from "./SearchPostalCode";
 import { GetAllPostalCodes } from "./GetAllPostalCodes";
 import { PostalCodesResult } from "./PostalCodesResult";
-import { PostalCodesResultAdmin } from "../AdminDashboard/PostalCodesResultAdmin";
+import { PostalCodesResultContributor } from "../ContributorDashboard/PostalCodesResultContributor";
 import { UserDataContext } from "../../utils/UserDataContext";
 
 function PostalCodes() {
@@ -24,8 +24,8 @@ function PostalCodes() {
         />
       </section>
       <div>{loading && <Spinner />}</div>
-      {userData?.isAdmin ? (
-        <PostalCodesResultAdmin
+      {userData?.isContributor || userData?.isAdmin ? (
+        <PostalCodesResultContributor
           searchResult={searchResult}
           setSearchResult={setSearchResult}
         />

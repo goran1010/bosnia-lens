@@ -50,9 +50,9 @@ function Navbar() {
           <li>
             <Link
               className="block py-3 px-2 hover:bg-gray-400"
-              to="/admin-dashboard"
+              to="/contributor-dashboard"
             >
-              Admin Dashboard
+              Contributor Dashboard
             </Link>
           </li>
         )}
