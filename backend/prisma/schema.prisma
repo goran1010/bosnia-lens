@@ -29,6 +29,7 @@ model User {
   isEmailConfirmed Boolean @default(false)
   password         String
   isAdmin          Boolean @default(false)
+  isContributor    Boolean @default(false)
 
   @@map("users")
 }
