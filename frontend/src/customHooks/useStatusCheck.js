@@ -28,7 +28,6 @@ function useStatusCheck(setUserData, setLoading, notificationValue) {
           type: "success",
           message: "Login status checked successfully.",
         });
-        console.log(result.data);
         setUserData(result.data);
       } catch (err) {
         addNotification({
