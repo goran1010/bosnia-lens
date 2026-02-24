@@ -61,7 +61,7 @@ function ModifyDataset({ datasetSelect }) {
           <div>
             <h2>Add new data row:</h2>
             <div>
-              <label htmlFor="new-city">City name: </label>
+              <label htmlFor="city">City name: </label>
               <input
                 type="text"
                 id="city"
@@ -72,7 +72,7 @@ function ModifyDataset({ datasetSelect }) {
               />
             </div>
             <div>
-              <label htmlFor="new-code">Postal Code: </label>
+              <label htmlFor="code">Postal Code: </label>
               <input
                 type="text"
                 id="code"
@@ -85,7 +85,7 @@ function ModifyDataset({ datasetSelect }) {
               />
             </div>
             <div>
-              <label htmlFor="new-post">Postal Carrier: </label>
+              <label htmlFor="post">Postal Carrier: </label>
               <input
                 type="text"
                 id="post"
