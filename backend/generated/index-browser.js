@@ -134,7 +134,8 @@ exports.Prisma.UserScalarFieldEnum = {
   isEmailConfirmed: 'isEmailConfirmed',
   password: 'password',
   isAdmin: 'isAdmin',
-  isContributor: 'isContributor'
+  isContributor: 'isContributor',
+  requestedContributor: 'requestedContributor'
 };
 
 exports.Prisma.PostalCodeScalarFieldEnum = {
