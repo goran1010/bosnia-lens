@@ -127,4 +127,65 @@ describe("AdminDashboard component API interaction", () => {
       message: "Data added successfully",
     });
   });
+
+  test("handles API error response when creating new postal code data", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
+      ok: false,
+      json: async () => ({
+        error: "Invalid data",
+        details: [{ msg: "Code already exists" }],
+      }),
+    });
+
+    const mockAddNotification = vi.fn();
+
+    render(Wrapper({ isAdmin: true }, mockAddNotification));
+
+    const selectElement = screen.getByRole("combobox");
+    await user.selectOptions(selectElement, "postal-codes");
+
+    const cityInput = screen.getByLabelText(/City name:/i);
+    const postalCodeInput = screen.getByLabelText(/Postal Code:/i);
+    const postalCarrierInput = screen.getByLabelText(/Postal Carrier:/i);
+    const submitButton = screen.getByRole("button", { name: /Add/i });
+
+    await user.type(cityInput, "Banja Luka");
+    await user.type(postalCodeInput, "12345");
+    await user.type(postalCarrierInput, "Test Carrier");
+    await user.click(submitButton);
+
+    expect(mockAddNotification).toHaveBeenCalledWith({
+      type: "error",
+      message: "Invalid data",
+      details: "Code already exists",
+    });
+  });
+
+  test("handles unexpected API errors when creating new postal code data", async () => {
+    vi.spyOn(globalThis, "fetch").mockRejectedValueOnce(
+      new Error("Network error"),
+    );
+
+    const mockAddNotification = vi.fn();
+
+    render(Wrapper({ isAdmin: true }, mockAddNotification));
+
+    const selectElement = screen.getByRole("combobox");
+    await user.selectOptions(selectElement, "postal-codes");
+
+    const cityInput = screen.getByLabelText(/City name:/i);
+    const postalCodeInput = screen.getByLabelText(/Postal Code:/i);
+    const postalCarrierInput = screen.getByLabelText(/Postal Carrier:/i);
+    const submitButton = screen.getByRole("button", { name: /Add/i });
+
+    await user.type(cityInput, "Test City");
+    await user.type(postalCodeInput, "12345");
+    await user.type(postalCarrierInput, "Test Carrier");
+    await user.click(submitButton);
+
+    expect(mockAddNotification).toHaveBeenCalledWith({
+      type: "error",
+      message: "An unexpected error occurred",
+    });
+  });
 });
