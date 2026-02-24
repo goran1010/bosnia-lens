@@ -35,4 +35,40 @@ describe("render PostalCodesResultAdmin component", () => {
     expect(sarajevoInput).toBeInTheDocument();
     expect(tuzlaInput).toBeInTheDocument();
   });
+
+  test("render search if search result is empty", () => {
+    render(Wrapper());
+
+    const paragraphElement = screen.getByText(/No results to display./i);
+    expect(paragraphElement).toBeInTheDocument();
+  });
+
+  test("handle edit", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: { code: 71000, city: "New Sarajevo", post: "71000" },
+      }),
+    });
+    const mockSetSearchResult = vi.fn();
+    const mockAddNotification = vi.fn();
+
+    const searchResult = [{ code: 71000, city: "Sarajevo", post: "71000" }];
+
+    render(Wrapper(searchResult, mockSetSearchResult, mockAddNotification));
+
+    const cityInput = screen.getByDisplayValue("Sarajevo");
+    await user.clear(cityInput);
+    await user.type(cityInput, "New Sarajevo");
+
+    const editButton = screen.getByRole("button", { name: /Save Edit/i });
+    await user.click(editButton);
+
+    expect(cityInput).toHaveValue("New Sarajevo");
+    expect(mockSetSearchResult).toHaveBeenCalled();
+    expect(mockAddNotification).toHaveBeenCalledWith({
+      type: "success",
+      message: "Postal code updated successfully!",
+    });
+  });
 });
