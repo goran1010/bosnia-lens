@@ -22,7 +22,7 @@ function ModifyDataset({ datasetSelect }) {
       const [city, postalCode, postalCarrier] = e.target;
 
       const response = await fetch(
-        `${currentUrl}/admin/postal-codes?city=${city.value}&code=${postalCode.value}&post=${postalCarrier.value}`,
+        `${currentUrl}/contributor/postal-codes?city=${city.value}&code=${postalCode.value}&post=${postalCarrier.value}`,
         {
           mode: "cors",
           method: "post",

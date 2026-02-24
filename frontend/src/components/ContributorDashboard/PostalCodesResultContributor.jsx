@@ -44,7 +44,7 @@ function PostalCodesResultContributor({ searchResult, setSearchResult }) {
       const post = e.target[1].value;
 
       const response = await fetch(
-        `${currentUrl}/admin/postal-codes/?city=${city}&code=${code}&post=${post}`,
+        `${currentUrl}/contributor/postal-codes/?city=${city}&code=${code}&post=${post}`,
         {
           mode: "cors",
           method: "put",
@@ -88,7 +88,7 @@ function PostalCodesResultContributor({ searchResult, setSearchResult }) {
       const code = e.target.dataset.postalcode;
 
       const response = await fetch(
-        `${currentUrl}/admin/postal-codes/?code=${code}`,
+        `${currentUrl}/contributor/postal-codes/?code=${code}`,
         {
           mode: "cors",
           method: "delete",
