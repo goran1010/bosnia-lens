@@ -71,4 +71,33 @@ describe("render PostalCodesResultAdmin component", () => {
       message: "Postal code updated successfully!",
     });
   });
+
+  test("handle edit with API error", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: false,
+      json: async () => ({
+        error: "Failed to update postal code.",
+        details: [{ msg: null }],
+      }),
+    });
+    const mockAddNotification = vi.fn();
+
+    const searchResult = [{ code: 71000, city: "Sarajevo", post: "71000" }];
+
+    render(Wrapper(searchResult, () => {}, mockAddNotification));
+
+    const cityInput = screen.getByDisplayValue("Sarajevo");
+    await user.clear(cityInput);
+    await user.type(cityInput, "New Sarajevo");
+
+    const editButton = screen.getByRole("button", { name: /Save Edit/i });
+    await user.click(editButton);
+
+    expect(cityInput).toHaveValue("New Sarajevo");
+    expect(mockAddNotification).toHaveBeenCalledWith({
+      type: "error",
+      message: "Failed to update postal code.",
+      details: null,
+    });
+  });
 });
