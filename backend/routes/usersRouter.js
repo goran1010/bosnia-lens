@@ -13,6 +13,12 @@ usersRouter.post(
 );
 
 usersRouter.post(
+  "become-contributor",
+  isAuthenticated,
+  usersController.becomeContributor,
+);
+
+usersRouter.post(
   "/login",
   isNotAuthenticated,
   userValidation.loginValidationRules,

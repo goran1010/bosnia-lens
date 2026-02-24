@@ -151,4 +151,26 @@ function logout(req, res) {
   });
 }
 
-export { signup, confirmEmail, login, logout };
+async function becomeContributor(req, res) {
+  const userId = req.user.id;
+
+  const updatedUser = await usersModel.update(
+    { id: userId },
+    { requestedContributor: true },
+  );
+
+  if (!updatedUser) {
+    return res.status(400).json({
+      error: "Could not request contributor status",
+      details: [{ msg: null }],
+    });
+  }
+
+  res.json({
+    message:
+      "You've asked to become a contributor! An admin will review your request soon.",
+    data: updatedUser,
+  });
+}
+
+export { signup, confirmEmail, login, logout, becomeContributor };
