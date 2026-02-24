@@ -1,4 +1,4 @@
-import { describe, test, expect } from "vitest";
+import { describe, test, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { AdminDashboard } from "../../src/components/AdminDashboard/AdminDashboard";
@@ -89,5 +89,42 @@ describe("AdminDashboard component user input", () => {
     expect(cityInput).toHaveValue("Test City");
     expect(postalCodeInput).toHaveValue("12345");
     expect(postalCarrierInput).toHaveValue("Test Carrier");
+  });
+});
+
+describe("AdminDashboard component API interaction", () => {
+  test("handles API response when creating new postal code data", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        data: {
+          city: "Test City",
+          code: "12345",
+          post: "Test Carrier",
+        },
+      }),
+    });
+
+    const mockAddNotification = vi.fn();
+
+    render(Wrapper({ isAdmin: true }, mockAddNotification));
+
+    const selectElement = screen.getByRole("combobox");
+    await user.selectOptions(selectElement, "postal-codes");
+
+    const cityInput = screen.getByLabelText(/City name:/i);
+    const postalCodeInput = screen.getByLabelText(/Postal Code:/i);
+    const postalCarrierInput = screen.getByLabelText(/Postal Carrier:/i);
+    const submitButton = screen.getByRole("button", { name: /Add/i });
+
+    await user.type(cityInput, "Test City");
+    await user.type(postalCodeInput, "12345");
+    await user.type(postalCarrierInput, "Test Carrier");
+    await user.click(submitButton);
+
+    expect(mockAddNotification).toHaveBeenCalledWith({
+      type: "success",
+      message: "Data added successfully",
+    });
   });
 });
