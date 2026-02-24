@@ -46,13 +46,13 @@ function Navbar() {
             Universities
           </Link>
         </li>
-        {userData?.isAdmin && (
+        {(userData?.isAdmin || userData?.isContributor) && (
           <li>
             <Link
               className="block py-3 px-2 hover:bg-gray-400"
               to="/contributor-dashboard"
             >
-              Contributor Dashboard
+              Contributor
             </Link>
           </li>
         )}
