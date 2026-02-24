@@ -43,6 +43,21 @@ describe("render PostalCodesResultAdmin component", () => {
     expect(paragraphElement).toBeInTheDocument();
   });
 
+  test("input change updates state", async () => {
+    const searchResult = [{ code: 71000, city: "Sarajevo", post: "71000" }];
+    render(Wrapper(searchResult));
+
+    const cityInput = screen.getByDisplayValue("Sarajevo");
+    await user.clear(cityInput);
+    await user.type(cityInput, "New Sarajevo");
+
+    const postInput = screen.getByDisplayValue("71000");
+    await user.clear(postInput);
+    await user.type(postInput, "71000");
+
+    expect(cityInput).toHaveValue("New Sarajevo");
+  });
+
   test("handle edit", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue({
       ok: true,
