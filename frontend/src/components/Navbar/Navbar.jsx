@@ -56,6 +56,16 @@ function Navbar() {
             </Link>
           </li>
         )}
+        {userData?.isAdmin && (
+          <li>
+            <Link
+              className="block py-3 px-2 hover:bg-gray-400"
+              to="/admin-dashboard"
+            >
+              Admin
+            </Link>
+          </li>
+        )}
       </ul>
       <Status />
     </nav>
