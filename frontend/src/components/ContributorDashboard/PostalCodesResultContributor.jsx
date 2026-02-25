@@ -3,7 +3,7 @@ import { NotificationContext } from "../../utils/NotificationContext";
 
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 
-function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
+function PostalCodesResultContributor({ searchResult, setSearchResult }) {
   // Refactor this component to improve performance
   // Now it re-creates entire array for each letter changed in input
 
@@ -44,7 +44,7 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
       const post = e.target[1].value;
 
       const response = await fetch(
-        `${currentUrl}/admin/postal-codes/?city=${city}&code=${code}&post=${post}`,
+        `${currentUrl}/contributor/postal-codes/?city=${city}&code=${code}&post=${post}`,
         {
           mode: "cors",
           method: "put",
@@ -88,7 +88,7 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
       const code = e.target.dataset.postalcode;
 
       const response = await fetch(
-        `${currentUrl}/admin/postal-codes/?code=${code}`,
+        `${currentUrl}/contributor/postal-codes/?code=${code}`,
         {
           mode: "cors",
           method: "delete",
@@ -187,4 +187,4 @@ function PostalCodesResultAdmin({ searchResult, setSearchResult }) {
   );
 }
 
-export { PostalCodesResultAdmin };
+export { PostalCodesResultContributor };

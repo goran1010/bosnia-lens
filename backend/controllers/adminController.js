@@ -1,26 +1,57 @@
-import * as getPostalCodesModel from "../models/postalCodesModel.js";
+import * as usersModel from "../models/usersModel.js";
 
-async function createPostalCode(req, res) {
-  const { city, code, post } = req.query;
+async function getAllContributors(req, res) {
+  const contributors = await usersModel.findMany({
+    isContributor: true,
+  });
+  res.json({
+    message: "Contributors fetched successfully.",
+    data: contributors,
+  });
+}
 
-  const result = await getPostalCodesModel.createNew(city, code, post);
+async function getRequestedContributors(req, res) {
+  const requestedContributors = await usersModel.findMany({
+    isContributor: false,
+    requestedContributor: true,
+  });
+  res.json({
+    message: "Requested contributors fetched successfully.",
+    data: requestedContributors,
+  });
+}
+
+async function addContributor(req, res) {
+  const { userId } = req.params;
+  await usersModel.create({ id: userId });
   res
     .status(201)
-    .json({ message: "New postal code row created.", data: result });
+    .json({ message: "User promoted to contributor successfully." });
 }
 
-async function editPostalCode(req, res) {
-  const { city, code, post } = req.query;
-
-  const result = await getPostalCodesModel.edit(city, code, post);
-  res.status(201).json({ message: "Postal code row edited.", data: result });
+async function removeContributor(req, res) {
+  const { userId } = req.params;
+  await usersModel.update(
+    { id: userId },
+    { isContributor: false, requestedContributor: false },
+  );
+  res
+    .status(201)
+    .json({ message: "User removed from contributors successfully." });
 }
 
-async function deletePostalCode(req, res) {
-  const { code } = req.query;
-
-  const result = await getPostalCodesModel.deleteCode(code);
-  res.json({ message: "Postal code row deleted.", data: result });
+async function declineContributor(req, res) {
+  const { userId } = req.params;
+  await usersModel.update({ id: userId }, { requestedContributor: false });
+  res
+    .status(201)
+    .json({ message: "User's contributor request declined successfully." });
 }
 
-export { createPostalCode, deletePostalCode, editPostalCode };
+export {
+  getAllContributors,
+  getRequestedContributors,
+  addContributor,
+  removeContributor,
+  declineContributor,
+};

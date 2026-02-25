@@ -6,6 +6,7 @@ import { Universities } from "./components/Universities";
 import { Holidays } from "./components/Holidays";
 import { LogIn } from "./components/LogIn/LogIn";
 import { SignUp } from "./components/SignUp/SignUp";
+import { ContributorDashboard } from "./components/ContributorDashboard/ContributorDashboard";
 import { AdminDashboard } from "./components/AdminDashboard/AdminDashboard";
 
 const routes = [
@@ -29,6 +30,10 @@ const routes = [
       {
         element: <Universities />,
         path: "universities",
+      },
+      {
+        element: <ContributorDashboard />,
+        path: "contributor-dashboard",
       },
       {
         element: <AdminDashboard />,

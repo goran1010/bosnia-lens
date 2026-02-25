@@ -2,24 +2,24 @@ import { Router } from "express";
 const adminRouter = Router();
 
 import * as adminController from "../controllers/adminController.js";
-import * as adminPostalCodeValidation from "../validation/adminPostalCodeVal.js";
 
-adminRouter.post(
-  "/postal-codes",
-  adminPostalCodeValidation.createPostalCode,
-  adminController.createPostalCode,
+adminRouter.get("/contributors", adminController.getAllContributors);
+
+adminRouter.get(
+  "/requested-contributors",
+  adminController.getRequestedContributors,
 );
 
-adminRouter.put(
-  "/postal-codes",
-  adminPostalCodeValidation.editPostalCode,
-  adminController.editPostalCode,
+adminRouter.post("/add-contributor/:userId", adminController.addContributor);
+
+adminRouter.post(
+  "/decline-contributor/:userId",
+  adminController.declineContributor,
 );
 
 adminRouter.delete(
-  "/postal-codes",
-  adminPostalCodeValidation.deletePostalCode,
-  adminController.deletePostalCode,
+  "/remove-contributor/:userId",
+  adminController.removeContributor,
 );
 
 export { adminRouter };

@@ -4,6 +4,10 @@ function find(where) {
   return prisma.user.findUnique({ where: { ...where } });
 }
 
+function findMany(where) {
+  return prisma.user.findMany({ where: { ...where } });
+}
+
 function update(where, data) {
   return prisma.user.update({
     where: { ...where },
@@ -29,4 +33,4 @@ function deleteUser(where) {
   });
 }
 
-export { find, update, create, deleteAll, deleteUser };
+export { find, update, create, deleteAll, deleteUser, findMany };
