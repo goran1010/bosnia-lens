@@ -7,39 +7,43 @@ function AdminForm() {
   const [currentContributors, setCurrentContributors] = useState([]);
   const { addNotification } = useContext(NotificationContext);
 
-  async function handleGetAllContributors() {
-    try {
-      const response = await fetch(`${BACKEND_URL}/admin/contributors`, {
-        method: "GET",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-      const result = await response.json();
-
-      if (response.ok) {
-        setCurrentContributors(result.data);
-        addNotification({
-          type: "success",
-          message: "Fetched current contributors successfully.",
+  useEffect(() => {
+    async function handleGetAllContributors() {
+      try {
+        const response = await fetch(`${BACKEND_URL}/admin/contributors`, {
+          method: "GET",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
         });
-        return;
+        const result = await response.json();
+
+        if (response.ok) {
+          setCurrentContributors(result.data);
+          addNotification({
+            type: "success",
+            message: "Fetched current contributors successfully.",
+          });
+          return;
+        }
+        addNotification({
+          type: "error",
+          message: result.error,
+          details: result.details[0].msg,
+        });
+      } catch (error) {
+        addNotification({
+          type: "error",
+          message: "Failed to fetch current contributors.",
+        });
+        console.error("Error fetching current contributors:", error);
       }
-      addNotification({
-        type: "error",
-        message: result.error,
-        details: result.details[0].msg,
-      });
-    } catch (error) {
-      addNotification({
-        type: "error",
-        message: "Failed to fetch current contributors.",
-      });
-      console.error("Error fetching current contributors:", error);
     }
-  }
+    handleGetAllContributors();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function handleConfirm(user) {
     try {
@@ -60,6 +64,7 @@ function AdminForm() {
         setPendingRequests((prev) =>
           prev.filter((request) => request._id !== user._id),
         );
+        setCurrentContributors((prev) => [...prev, user]);
         addNotification({
           type: "success",
           message: `User ${user.username} is now a contributor.`,
@@ -247,12 +252,6 @@ function AdminForm() {
             </span>
             Current Contributors
           </h2>
-          <button
-            className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-sm hover:shadow-md"
-            onClick={handleGetAllContributors}
-          >
-            Show All Contributors
-          </button>
         </div>
         <ul className="space-y-3">
           {currentContributors.length > 0 ? (

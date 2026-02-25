@@ -67,8 +67,8 @@ function Profile() {
         type: "success",
         message: result.message,
       });
-      setUserData(null);
       navigate("/");
+      setUserData(null);
     } catch (err) {
       addNotification({
         type: "error",
@@ -90,7 +90,7 @@ function Profile() {
   }, [userData, navigate]);
   return (
     <>
-      <div className="max-w-3xl p-5">
+      <div className="max-w-2xl min-w-md p-5">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           <div className="bg-linear-to-r from-blue-600 to-indigo-600 p-10">
             <h1 className="text-4xl font-bold text-white mb-2">My Profile</h1>
