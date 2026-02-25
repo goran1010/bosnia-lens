@@ -8,6 +8,7 @@ import { LogIn } from "./components/LogIn/LogIn";
 import { SignUp } from "./components/SignUp/SignUp";
 import { ContributorDashboard } from "./components/ContributorDashboard/ContributorDashboard";
 import { AdminDashboard } from "./components/AdminDashboard/AdminDashboard";
+import { Profile } from "./components/Profile/Profile";
 
 const routes = [
   {
@@ -39,6 +40,7 @@ const routes = [
         element: <AdminDashboard />,
         path: "admin-dashboard",
       },
+      { element: <Profile />, path: "profile" },
       {
         element: <LogIn />,
         path: "login",
