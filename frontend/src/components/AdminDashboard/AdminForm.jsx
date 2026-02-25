@@ -119,6 +119,35 @@ function AdminForm() {
     }
   }
 
+  async function handleRemoveContributor(user) {
+    try {
+      await fetch(`${BACKEND_URL}/admin/remove-contributor/${user.id}`, {
+        method: "DELETE",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      setCurrentContributors((prev) =>
+        prev.filter((contributor) => contributor.id !== user.id),
+      );
+      addNotification({
+        type: "success",
+        message: `User ${user.username} removed from contributors.`,
+      });
+    } catch (error) {
+      addNotification({
+        type: "error",
+        message: `Failed to remove ${user.username} from contributors.`,
+      });
+      console.error(
+        `Error removing ${user.username} from contributors:`,
+        error,
+      );
+    }
+  }
+
   useEffect(() => {
     const fetchPendingRequests = async () => {
       try {
@@ -210,6 +239,12 @@ function AdminForm() {
               <li key={user.id} className="mb-2">
                 <span className="font-bold">{user.username}</span> -{" "}
                 {user.email}
+                <button
+                  className="ml-2 bg-red-500 text-white px-2 py-1 rounded"
+                  onClick={() => handleRemoveContributor(user)}
+                >
+                  Remove contributor
+                </button>
               </li>
             ))
           ) : (

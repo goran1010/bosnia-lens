@@ -4,6 +4,10 @@ function find(where) {
   return prisma.user.findUnique({ where: { ...where } });
 }
 
+function findMany(where) {
+  return prisma.user.findMany({ where: { ...where } });
+}
+
 function update(where, data) {
   return prisma.user.update({
     where: { ...where },
@@ -29,45 +33,4 @@ function deleteUser(where) {
   });
 }
 
-function findRequestedContributors(where) {
-  return prisma.user.findMany({
-    where: { ...where },
-  });
-}
-
-function addContributor(where) {
-  return prisma.user.update({
-    where: { ...where },
-    data: {
-      isContributor: true,
-      requestedContributor: false,
-    },
-  });
-}
-
-function declineContributor(where) {
-  return prisma.user.update({
-    where: { ...where },
-    data: {
-      requestedContributor: false,
-    },
-  });
-}
-
-function findAllContributors(where) {
-  return prisma.user.findMany({
-    where: { ...where },
-  });
-}
-
-export {
-  find,
-  update,
-  create,
-  deleteAll,
-  deleteUser,
-  findRequestedContributors,
-  addContributor,
-  declineContributor,
-  findAllContributors,
-};
+export { find, update, create, deleteAll, deleteUser, findMany };

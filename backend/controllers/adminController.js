@@ -1,7 +1,7 @@
 import * as usersModel from "../models/usersModel.js";
 
 async function getAllContributors(req, res) {
-  const contributors = await usersModel.findAllContributors({
+  const contributors = await usersModel.findMany({
     isContributor: true,
   });
   res.json({
@@ -11,7 +11,7 @@ async function getAllContributors(req, res) {
 }
 
 async function getRequestedContributors(req, res) {
-  const requestedContributors = await usersModel.findRequestedContributors({
+  const requestedContributors = await usersModel.findMany({
     isContributor: false,
     requestedContributor: true,
   });
@@ -23,19 +23,28 @@ async function getRequestedContributors(req, res) {
 
 async function addContributor(req, res) {
   const { userId } = req.params;
-  await usersModel.addContributor({ id: userId });
+  await usersModel.create({ id: userId });
   res
     .status(201)
     .json({ message: "User promoted to contributor successfully." });
 }
 
-function removeContributor(req, res) {}
+async function removeContributor(req, res) {
+  const { userId } = req.params;
+  await usersModel.update(
+    { id: userId },
+    { isContributor: false, requestedContributor: false },
+  );
+  res
+    .status(201)
+    .json({ message: "User removed from contributors successfully." });
+}
 
 async function declineContributor(req, res) {
   const { userId } = req.params;
-  await usersModel.declineContributor({ id: userId });
+  await usersModel.update({ id: userId }, { requestedContributor: false });
   res
-    .status(200)
+    .status(201)
     .json({ message: "User's contributor request declined successfully." });
 }
 
