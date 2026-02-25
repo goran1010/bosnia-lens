@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { NotificationContext } from "../utils/NotificationContext";
 
 function getNotificationStyles(type) {
@@ -16,18 +16,33 @@ function getNotificationStyles(type) {
 }
 function Notifications() {
   const { notifications, removeNotification } = useContext(NotificationContext);
+  const timerMapRef = useRef(new Map());
 
   useEffect(() => {
-    const timers = notifications.map((notification) => {
-      if (!notification.duration) return null;
+    let newTimerRef = timerMapRef.current;
+    // Set timers for new notifications only
+    notifications.forEach((notification) => {
+      if (notification.duration && !newTimerRef.has(notification.id)) {
+        const timer = setTimeout(() => {
+          removeNotification(notification.id);
+          newTimerRef.delete(notification.id);
+        }, notification.duration);
 
-      return setTimeout(() => {
-        removeNotification(notification.id);
-      }, notification.duration);
+        newTimerRef.set(notification.id, timer);
+      }
     });
 
+    // Clean up timers for notifications that were removed
     return () => {
-      timers.forEach((timer) => timer && clearTimeout(timer));
+      newTimerRef.forEach((timer, id) => {
+        const stillExists = notifications.some(
+          (notification) => notification.id === id,
+        );
+        if (!stillExists) {
+          clearTimeout(timer);
+          newTimerRef.delete(id);
+        }
+      });
     };
   }, [notifications, removeNotification]);
 
