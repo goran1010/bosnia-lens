@@ -35,7 +35,9 @@ function Notifications() {
     // Clean up timers for notifications that were removed
     return () => {
       newTimerRef.forEach((timer, id) => {
-        const stillExists = notifications.some((n) => n.id === id);
+        const stillExists = notifications.some(
+          (notification) => notification.id === id,
+        );
         if (!stillExists) {
           clearTimeout(timer);
           newTimerRef.delete(id);
