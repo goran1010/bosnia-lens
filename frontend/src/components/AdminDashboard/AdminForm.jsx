@@ -4,6 +4,7 @@ import { NotificationContext } from "../../utils/NotificationContext";
 
 function AdminForm() {
   const [pendingRequests, setPendingRequests] = useState([]);
+  const [currentContributors, setCurrentContributors] = useState([]);
   const { addNotification } = useContext(NotificationContext);
 
   async function handleGetAllContributors() {
@@ -16,9 +17,10 @@ function AdminForm() {
         },
         credentials: "include",
       });
-      const data = await response.json();
+      const result = await response.json();
 
       if (response.ok) {
+        setCurrentContributors(result.data);
         addNotification({
           type: "success",
           message: "Fetched current contributors successfully.",
@@ -27,8 +29,8 @@ function AdminForm() {
       }
       addNotification({
         type: "error",
-        message: data.error,
-        details: data.details[0].msg,
+        message: result.error,
+        details: result.details[0].msg,
       });
     } catch (error) {
       addNotification({
@@ -131,10 +133,10 @@ function AdminForm() {
             credentials: "include",
           },
         );
-        const data = await response.json();
+        const result = await response.json();
 
         if (response.ok) {
-          setPendingRequests(data);
+          setPendingRequests(result.data);
           addNotification({
             type: "success",
             message: "Fetched pending requests successfully.",
@@ -143,12 +145,12 @@ function AdminForm() {
         }
         addNotification({
           type: "error",
-          message: data.error,
-          details: data.details[0].msg,
+          message: result.error,
+          details: result.details[0].msg,
         });
         console.warn(
           "Failed to fetch pending requests:",
-          data.error || "Unknown error",
+          result.error || "Unknown error",
         );
       } catch (error) {
         console.error("Error fetching pending requests:", error);
@@ -202,6 +204,18 @@ function AdminForm() {
             Get current contributors
           </button>
         </div>
+        <ul>
+          {currentContributors.length > 0 ? (
+            currentContributors.map((user) => (
+              <li key={user.id} className="mb-2">
+                <span className="font-bold">{user.username}</span> -{" "}
+                {user.email}
+              </li>
+            ))
+          ) : (
+            <li className="text-gray-500">No contributors found</li>
+          )}
+        </ul>
       </div>
     </div>
   );

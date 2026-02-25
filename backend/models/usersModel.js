@@ -54,6 +54,12 @@ function declineContributor(where) {
   });
 }
 
+function findAllContributors(where) {
+  return prisma.user.findMany({
+    where: { ...where },
+  });
+}
+
 export {
   find,
   update,
@@ -63,4 +69,5 @@ export {
   findRequestedContributors,
   addContributor,
   declineContributor,
+  findAllContributors,
 };

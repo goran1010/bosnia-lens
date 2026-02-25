@@ -3,7 +3,7 @@ const adminRouter = Router();
 
 import * as adminController from "../controllers/adminController.js";
 
-adminRouter.get("/contributors", adminController.getContributors);
+adminRouter.get("/contributors", adminController.getAllContributors);
 
 adminRouter.get(
   "/requested-contributors",
