@@ -29,4 +29,17 @@ function deleteUser(where) {
   });
 }
 
-export { find, update, create, deleteAll, deleteUser };
+function findRequestedContributors(where) {
+  return prisma.user.findMany({
+    where: { ...where },
+  });
+}
+
+export {
+  find,
+  update,
+  create,
+  deleteAll,
+  deleteUser,
+  findRequestedContributors,
+};

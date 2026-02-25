@@ -1,6 +1,14 @@
+import * as usersModel from "../models/usersModel.js";
+
 function getContributors(req, res) {}
 
-function getRequestedContributors(req, res) {}
+async function getRequestedContributors(req, res) {
+  const requestedContributors = await usersModel.findRequestedContributors({
+    isContributor: false,
+    requestedContributor: true,
+  });
+  res.json(requestedContributors);
+}
 
 function addContributor(req, res) {}
 
