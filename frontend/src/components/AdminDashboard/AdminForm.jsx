@@ -6,6 +6,41 @@ function AdminForm() {
   const [pendingRequests, setPendingRequests] = useState([]);
   const { addNotification } = useContext(NotificationContext);
 
+  async function handleConfirm(user) {
+    try {
+      const response = await fetch(
+        `${BACKEND_URL}/admin/add-contributor/${user._id}`,
+        {
+          method: "POST",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        },
+      );
+      const data = await response.json();
+
+      if (response.ok) {
+        setPendingRequests((prev) =>
+          prev.filter((request) => request._id !== user._id),
+        );
+        addNotification({
+          type: "success",
+          message: `User ${user.username} is now a contributor.`,
+        });
+        return;
+      }
+      addNotification({
+        type: "error",
+        message: data.error,
+        details: data.details[0].msg,
+      });
+    } catch (error) {
+      console.error(`Error confirming ${user.username}'s request:`, error);
+    }
+  }
+
   useEffect(() => {
     const fetchPendingRequests = async () => {
       try {
@@ -25,13 +60,13 @@ function AdminForm() {
         if (response.ok) {
           setPendingRequests(data);
           addNotification({
-            status: "success",
+            type: "success",
             message: "Fetched pending requests successfully.",
           });
           return;
         }
         addNotification({
-          status: "error",
+          type: "error",
           message: data.error,
           details: data.details[0].msg,
         });
@@ -44,6 +79,7 @@ function AdminForm() {
       }
     };
     fetchPendingRequests();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -54,9 +90,25 @@ function AdminForm() {
         <ul>
           {pendingRequests.length > 0 ? (
             pendingRequests.map((user) => (
-              <li key={user._id} className="mb-2">
+              <li key={user.id} className="mb-2">
                 <span className="font-bold">{user.username}</span> -{" "}
                 {user.email}
+                <button
+                  className="ml-2 bg-green-500 text-white px-2 py-1 rounded"
+                  onClick={() => {
+                    handleConfirm(user);
+                  }}
+                >
+                  Confirm
+                </button>
+                <button
+                  className="ml-2 bg-red-500 text-white px-2 py-1 rounded"
+                  onClick={() => {
+                    handleDecline(user);
+                  }}
+                >
+                  Decline
+                </button>
               </li>
             ))
           ) : (
