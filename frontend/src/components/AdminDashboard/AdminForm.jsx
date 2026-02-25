@@ -6,10 +6,43 @@ function AdminForm() {
   const [pendingRequests, setPendingRequests] = useState([]);
   const { addNotification } = useContext(NotificationContext);
 
+  async function handleGetAllContributors() {
+    try {
+      const response = await fetch(`${BACKEND_URL}/admin/contributors`, {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        addNotification({
+          type: "success",
+          message: "Fetched current contributors successfully.",
+        });
+        return;
+      }
+      addNotification({
+        type: "error",
+        message: data.error,
+        details: data.details[0].msg,
+      });
+    } catch (error) {
+      addNotification({
+        type: "error",
+        message: "Failed to fetch current contributors.",
+      });
+      console.error("Error fetching current contributors:", error);
+    }
+  }
+
   async function handleConfirm(user) {
     try {
       const response = await fetch(
-        `${BACKEND_URL}/admin/add-contributor/${user._id}`,
+        `${BACKEND_URL}/admin/add-contributor/${user.id}`,
         {
           method: "POST",
           mode: "cors",
@@ -37,7 +70,50 @@ function AdminForm() {
         details: data.details[0].msg,
       });
     } catch (error) {
-      console.error(`Error confirming ${user.username}'s request:`, error);
+      addNotification({
+        type: "error",
+        message: `Failed to promote ${user.username} to contributor.`,
+      });
+      console.error(`Error promoting ${user.username} to contributor:`, error);
+    }
+  }
+
+  async function handleDecline(user) {
+    try {
+      const response = await fetch(
+        `${BACKEND_URL}/admin/decline-contributor/${user.id}`,
+        {
+          method: "POST",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        },
+      );
+      const data = await response.json();
+
+      if (response.ok) {
+        setPendingRequests((prev) =>
+          prev.filter((request) => request._id !== user._id),
+        );
+        addNotification({
+          type: "success",
+          message: `User ${user.username}'s request declined.`,
+        });
+        return;
+      }
+      addNotification({
+        type: "error",
+        message: data.error,
+        details: data.details[0].msg,
+      });
+    } catch (error) {
+      addNotification({
+        type: "error",
+        message: `Failed to decline ${user.username}'s request.`,
+      });
+      console.error(`Error declining ${user.username}'s request:`, error);
     }
   }
 
@@ -115,6 +191,17 @@ function AdminForm() {
             <li className="text-gray-500">No pending requests</li>
           )}
         </ul>
+      </div>
+      <div>
+        <h2>Current Contributors:</h2>
+        <div>
+          <button
+            className=" bg-blue-500 text-white px-2 py-1 rounded"
+            onClick={handleGetAllContributors}
+          >
+            Get current contributors
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -10,8 +10,16 @@ adminRouter.get(
   adminController.getRequestedContributors,
 );
 
-adminRouter.post("/add-contributor", adminController.addContributor);
+adminRouter.post("/add-contributor/:userId", adminController.addContributor);
 
-adminRouter.delete("/remove-contributor", adminController.removeContributor);
+adminRouter.post(
+  "/decline-contributor/:userId",
+  adminController.declineContributor,
+);
+
+adminRouter.delete(
+  "/remove-contributor/:userId",
+  adminController.removeContributor,
+);
 
 export { adminRouter };

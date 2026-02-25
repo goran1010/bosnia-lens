@@ -10,13 +10,24 @@ async function getRequestedContributors(req, res) {
   res.json(requestedContributors);
 }
 
-function addContributor(req, res) {}
+async function addContributor(req, res) {
+  const { userId } = req.params;
+  await usersModel.addContributor({ id: userId });
+  res.json({ message: "User promoted to contributor successfully." });
+}
 
 function removeContributor(req, res) {}
+
+async function declineContributor(req, res) {
+  const { userId } = req.params;
+  await usersModel.declineContributor({ id: userId });
+  res.json({ message: "User's contributor request declined successfully." });
+}
 
 export {
   getContributors,
   getRequestedContributors,
   addContributor,
   removeContributor,
+  declineContributor,
 };

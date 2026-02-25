@@ -35,6 +35,25 @@ function findRequestedContributors(where) {
   });
 }
 
+function addContributor(where) {
+  return prisma.user.update({
+    where: { ...where },
+    data: {
+      isContributor: true,
+      requestedContributor: false,
+    },
+  });
+}
+
+function declineContributor(where) {
+  return prisma.user.update({
+    where: { ...where },
+    data: {
+      requestedContributor: false,
+    },
+  });
+}
+
 export {
   find,
   update,
@@ -42,4 +61,6 @@ export {
   deleteAll,
   deleteUser,
   findRequestedContributors,
+  addContributor,
+  declineContributor,
 };
