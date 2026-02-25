@@ -177,10 +177,6 @@ function AdminForm() {
           message: result.error,
           details: result.details[0].msg,
         });
-        console.warn(
-          "Failed to fetch pending requests:",
-          result.error || "Unknown error",
-        );
       } catch (error) {
         console.error("Error fetching pending requests:", error);
       }
@@ -190,65 +186,100 @@ function AdminForm() {
   }, []);
 
   return (
-    <div>
-      <h1>Admin Form</h1>
-      <div>
-        <h2>Pending Contributor requests</h2>
-        <ul>
+    <div className="flex flex-col gap-10 p-8 max-w-4xl">
+      <h1 className="text-4xl font-bold text-gray-800 mb-8 pb-4 border-b-2 border-gray-200">
+        Admin Dashboard
+      </h1>
+      <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+          <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-bold mr-3">
+            {pendingRequests.length}
+          </span>
+          Pending Contributor Requests
+        </h2>
+        <ul className="space-y-3">
           {pendingRequests.length > 0 ? (
             pendingRequests.map((user) => (
-              <li key={user.id} className="mb-2">
-                <span className="font-bold">{user.username}</span> -{" "}
-                {user.email}
-                <button
-                  className="ml-2 bg-green-500 text-white px-2 py-1 rounded"
-                  onClick={() => {
-                    handleConfirm(user);
-                  }}
-                >
-                  Confirm
-                </button>
-                <button
-                  className="ml-2 bg-red-500 text-white px-2 py-1 rounded"
-                  onClick={() => {
-                    handleDecline(user);
-                  }}
-                >
-                  Decline
-                </button>
+              <li
+                key={user.id}
+                className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors duration-200"
+              >
+                <div className="flex-1">
+                  <span className="font-bold text-gray-800 text-lg">
+                    {user.username}
+                  </span>
+                  <span className="text-gray-500 mx-2">•</span>
+                  <span className="text-gray-600">{user.email}</span>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-sm hover:shadow-md"
+                    onClick={() => {
+                      handleConfirm(user);
+                    }}
+                  >
+                    Confirm
+                  </button>
+                  <button
+                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-sm hover:shadow-md"
+                    onClick={() => {
+                      handleDecline(user);
+                    }}
+                  >
+                    Decline
+                  </button>
+                </div>
               </li>
             ))
           ) : (
-            <li className="text-gray-500">No pending requests</li>
+            <li className="text-gray-500 italic text-center py-8 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+              No pending requests
+            </li>
           )}
         </ul>
       </div>
-      <div>
-        <h2>Current Contributors:</h2>
-        <div>
+
+      <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-semibold text-gray-800 flex items-center">
+            <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-bold mr-3">
+              {currentContributors.length}
+            </span>
+            Current Contributors
+          </h2>
           <button
-            className=" bg-blue-500 text-white px-2 py-1 rounded"
+            className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-sm hover:shadow-md"
             onClick={handleGetAllContributors}
           >
-            Get current contributors
+            Show All Contributors
           </button>
         </div>
-        <ul>
+        <ul className="space-y-3">
           {currentContributors.length > 0 ? (
             currentContributors.map((user) => (
-              <li key={user.id} className="mb-2">
-                <span className="font-bold">{user.username}</span> -{" "}
-                {user.email}
+              <li
+                key={user.id}
+                className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200 hover:bg-blue-100 transition-colors duration-200"
+              >
+                <div className="flex-1">
+                  <span className="font-bold text-gray-800 text-lg">
+                    {user.username}
+                  </span>
+                  <span className="text-gray-500 mx-2">•</span>
+                  <span className="text-gray-600">{user.email}</span>
+                </div>
                 <button
-                  className="ml-2 bg-red-500 text-white px-2 py-1 rounded"
+                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-sm hover:shadow-md"
                   onClick={() => handleRemoveContributor(user)}
                 >
-                  Remove contributor
+                  Remove
                 </button>
               </li>
             ))
           ) : (
-            <li className="text-gray-500">No contributors found</li>
+            <li className="text-gray-500 italic text-center py-8 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+              No contributors found. Click refresh to load.
+            </li>
           )}
         </ul>
       </div>
