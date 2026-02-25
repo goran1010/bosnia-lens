@@ -23,7 +23,10 @@ async function getRequestedContributors(req, res) {
 
 async function addContributor(req, res) {
   const { userId } = req.params;
-  await usersModel.create({ id: userId });
+  await usersModel.update(
+    { id: userId },
+    { isContributor: true, requestedContributor: false },
+  );
   res
     .status(201)
     .json({ message: "User promoted to contributor successfully." });

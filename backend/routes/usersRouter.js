@@ -13,7 +13,7 @@ usersRouter.post(
 );
 
 usersRouter.post(
-  "become-contributor",
+  "/become-contributor",
   isAuthenticated,
   usersController.becomeContributor,
 );

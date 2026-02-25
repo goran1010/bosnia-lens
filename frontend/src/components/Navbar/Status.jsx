@@ -1,55 +1,18 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { UserDataContext } from "../../utils/UserDataContext";
-import { NotificationContext } from "../../utils/NotificationContext";
-const currentURL = import.meta.env.VITE_BACKEND_URL;
 
 function Status() {
-  const { userData, setUserData } = useContext(UserDataContext);
-  const { addNotification } = useContext(NotificationContext);
-
-  async function handleLogout() {
-    try {
-      const response = await fetch(`${currentURL}/users/logout`, {
-        mode: "cors",
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const result = await response.json();
-      if (!response.ok) {
-        addNotification({
-          type: "error",
-          message: result.error,
-          details: result.details[0].msg,
-        });
-        return;
-      }
-      addNotification({
-        type: "success",
-        message: result.message,
-      });
-      setUserData(null);
-    } catch (err) {
-      addNotification({
-        type: "error",
-        message: "An error occurred while logging out.",
-      });
-      console.error(err);
-    }
-  }
+  const { userData } = useContext(UserDataContext);
 
   if (userData) {
     return (
-      <li
+      <Link
         className="block absolute top-0 right-0 py-3 px-2 hover:bg-gray-400 cursor-pointer"
-        onClick={handleLogout}
+        to="/profile"
       >
-        Log out
-      </li>
+        Profile
+      </Link>
     );
   }
 
