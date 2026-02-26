@@ -1,6 +1,6 @@
 # Bosnia Lens
 
-A free, open-source project providing structured public data about Bosnia and Herzegovina through a REST API and web interface. Access comprehensive information about cities, municipalities, postal codes, holidays, universities (and their programs), and more - making Bosnian public data open, searchable, and developer-friendly.
+A free, open-source project providing structured public data about Bosnia and Herzegovina through a REST API and web interface. The primary goal is access to university programs and university data; today it includes postal codes, and it may expand to holidays and other public datasets.
 
 ## Features
 
@@ -11,10 +11,10 @@ A free, open-source project providing structured public data about Bosnia and He
 
 ## Data Coverage
 
-- Cities and municipalities
-- Postal codes
-- Holidays and observances
-- Universities and their programs
+- Universities and their programs (target focus)
+- Postal codes (currently available)
+- Holidays and observances (planned)
+- Other public datasets (planned)
 
 ## Getting Started
 
