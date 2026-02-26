@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-function useGetAllContributors(setCurrentContributors, addNotification) {
+function useGetAllContributors(addNotification) {
+  const [currentContributors, setCurrentContributors] = useState([]);
   useEffect(() => {
     async function handleGetAllContributors() {
       try {
@@ -37,8 +38,9 @@ function useGetAllContributors(setCurrentContributors, addNotification) {
       }
     }
     handleGetAllContributors();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [addNotification]);
+
+  return { currentContributors, setCurrentContributors };
 }
 
 export { useGetAllContributors };

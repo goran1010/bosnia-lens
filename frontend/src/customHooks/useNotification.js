@@ -11,13 +11,15 @@ function useNotification(notifications, setNotifications) {
         duration,
         createdAt: Date.now(),
       };
-      if (notifications.length >= 5) {
-        setNotifications((prev) => [...prev.slice(1), newNotification]);
-        return;
-      }
-      setNotifications((prev) => [...prev, newNotification]);
+
+      setNotifications((prev) => {
+        if (prev.length >= 5) {
+          return [...prev.slice(1), newNotification];
+        }
+        return [...prev, newNotification];
+      });
     },
-    [setNotifications, notifications.length],
+    [setNotifications],
   );
 
   const removeNotification = useCallback(
