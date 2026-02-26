@@ -1,16 +1,15 @@
 import { useState } from "react";
 import Spinner from "@goran1010/spinner";
-import { SearchPostalCode } from "./SearchPostalCode";
-import { GetAllPostalCodes } from "./GetAllPostalCodes";
-import { PostalCodesResult } from "./PostalCodesResult";
-import { PostalCodesResultContributor } from "../ContributorDashboard/PostalCodesResultContributor";
-import { UserDataContext } from "../../utils/UserDataContext";
+import { SearchPostalCode } from "../PostalCodes/SearchPostalCode";
+import { GetAllPostalCodes } from "../PostalCodes/GetAllPostalCodes";
+import { PostalCodesResultContributor } from "./PostalCodesResultContributor";
 
-function ShowResult({ searchResult, setSearchResult }) {
+function ContributorPostalCodes({ searchResult, setSearchResult }) {
   const [loading, setLoading] = useState(false);
 
   return (
-    <>
+    <div>
+      <h2>View and edit all data:</h2>
       <section className="relative flex flex-col justify-center items-center gap-4 p-4">
         <SearchPostalCode
           setSearchResult={setSearchResult}
@@ -29,8 +28,8 @@ function ShowResult({ searchResult, setSearchResult }) {
       />
 
       <div className="relative"></div>
-    </>
+    </div>
   );
 }
 
-export { ShowResult };
+export { ContributorPostalCodes };
