@@ -6,8 +6,7 @@ import { NotificationContext } from "../../utils/NotificationContext";
 
 function PendingRequests({ setCurrentContributors }) {
   const { addNotification } = useContext(NotificationContext);
-  const { pendingRequests, setPendingRequests } =
-    useGetPendingRequests(addNotification);
+  const { pendingRequests, setPendingRequests } = useGetPendingRequests();
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
