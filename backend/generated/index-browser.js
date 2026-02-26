@@ -127,6 +127,11 @@ exports.Prisma.SessionScalarFieldEnum = {
   expiresAt: 'expiresAt'
 };
 
+exports.Prisma.TestingScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+};
+
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   username: 'username',
@@ -167,6 +172,7 @@ exports.postOperator = exports.$Enums.postOperator = {
 
 exports.Prisma.ModelName = {
   Session: 'Session',
+  Testing: 'Testing',
   User: 'User',
   PostalCode: 'PostalCode'
 };
