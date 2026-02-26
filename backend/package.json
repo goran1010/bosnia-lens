@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "REST API backend for Bosnia Lens - providing open data about Bosnia and Herzegovina",
   "main": "index.js",
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "build": "npx prisma generate",
     "test": "NODE_ENV=test vitest",
