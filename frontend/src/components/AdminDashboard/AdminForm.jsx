@@ -1,13 +1,10 @@
-import { useContext } from "react";
-import { NotificationContext } from "../../utils/NotificationContext";
 import { useGetAllContributors } from "../../customHooks/AdminDashboard/useGetAllContributors";
 import { PendingRequests } from "./PendingRequests";
 import { CurrentContributors } from "./CurrentContributors";
 
 function AdminForm() {
-  const { addNotification } = useContext(NotificationContext);
   const { currentContributors, setCurrentContributors } =
-    useGetAllContributors(addNotification);
+    useGetAllContributors();
 
   return (
     <div className="flex flex-col gap-10 p-8 max-w-4xl">
@@ -18,7 +15,6 @@ function AdminForm() {
       <CurrentContributors
         currentContributors={currentContributors}
         setCurrentContributors={setCurrentContributors}
-        addNotification={addNotification}
       />
     </div>
   );

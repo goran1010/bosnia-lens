@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
+import { useContext } from "react";
+import { NotificationContext } from "../../utils/NotificationContext";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-function useGetAllContributors(addNotification) {
+function useGetAllContributors() {
+  const { addNotification } = useContext(NotificationContext);
   const [currentContributors, setCurrentContributors] = useState([]);
   useEffect(() => {
     async function handleGetAllContributors() {

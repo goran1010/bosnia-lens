@@ -1,10 +1,9 @@
 import { handleRemoveContributor } from "../../utils/AdminDashboard/handleRemoveContributor";
+import { useContext } from "react";
+import { NotificationContext } from "../../utils/NotificationContext";
 
-function CurrentContributors({
-  currentContributors,
-  setCurrentContributors,
-  addNotification,
-}) {
+function CurrentContributors({ currentContributors, setCurrentContributors }) {
+  const { addNotification } = useContext(NotificationContext);
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
       <div className="flex items-center justify-between mb-4">
