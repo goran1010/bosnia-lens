@@ -1,49 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 import { NotificationContext } from "../../utils/NotificationContext";
+import { useGetAllContributors } from "../../customHooks/AdminDashboard/useGetAllContributors";
 
 function AdminForm() {
   const [pendingRequests, setPendingRequests] = useState([]);
   const [currentContributors, setCurrentContributors] = useState([]);
   const { addNotification } = useContext(NotificationContext);
 
-  useEffect(() => {
-    async function handleGetAllContributors() {
-      try {
-        const response = await fetch(`${BACKEND_URL}/admin/contributors`, {
-          method: "GET",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
-        const result = await response.json();
-
-        if (response.ok) {
-          setCurrentContributors(result.data);
-          addNotification({
-            type: "success",
-            message: "Fetched current contributors successfully.",
-          });
-          return;
-        }
-        addNotification({
-          type: "error",
-          message: result.error,
-          details: result.details[0].msg,
-        });
-      } catch (error) {
-        addNotification({
-          type: "error",
-          message: "Failed to fetch current contributors.",
-        });
-        console.error("Error fetching current contributors:", error);
-      }
-    }
-    handleGetAllContributors();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useGetAllContributors(setCurrentContributors, addNotification);
 
   async function handleConfirm(user) {
     try {
