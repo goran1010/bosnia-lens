@@ -3,6 +3,7 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 import { NotificationContext } from "../../utils/NotificationContext";
 import { useGetAllContributors } from "../../customHooks/AdminDashboard/useGetAllContributors";
 import { handleConfirm } from "../../utils/AdminDashboard/handleConfirm";
+import { handleDecline } from "../../utils/AdminDashboard/handleDecline";
 
 function AdminForm() {
   const [pendingRequests, setPendingRequests] = useState([]);
@@ -10,45 +11,6 @@ function AdminForm() {
   const { addNotification } = useContext(NotificationContext);
 
   useGetAllContributors(setCurrentContributors, addNotification);
-
-  async function handleDecline(user) {
-    try {
-      const response = await fetch(
-        `${BACKEND_URL}/admin/decline-contributor/${user.id}`,
-        {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        },
-      );
-      const data = await response.json();
-
-      if (response.ok) {
-        setPendingRequests((prev) =>
-          prev.filter((request) => request._id !== user._id),
-        );
-        addNotification({
-          type: "success",
-          message: `User ${user.username}'s request declined.`,
-        });
-        return;
-      }
-      addNotification({
-        type: "error",
-        message: data.error,
-        details: data.details[0].msg,
-      });
-    } catch (error) {
-      addNotification({
-        type: "error",
-        message: `Failed to decline ${user.username}'s request.`,
-      });
-      console.error(`Error declining ${user.username}'s request:`, error);
-    }
-  }
 
   async function handleRemoveContributor(user) {
     try {
@@ -159,7 +121,7 @@ function AdminForm() {
                   <button
                     className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-sm hover:shadow-md"
                     onClick={() => {
-                      handleDecline(user);
+                      handleDecline(user, setPendingRequests, addNotification);
                     }}
                   >
                     Decline
