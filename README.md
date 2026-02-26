@@ -1,20 +1,20 @@
 # Bosnia Lens
 
-A free, open-source project providing structured public data about Bosnia and Herzegovina through a REST API and web interface. Access comprehensive information about cities, municipalities, postal codes, holidays, universities (and their programs), and more - making Bosnian public data open, searchable, and developer-friendly.
+A free, open-source project providing structured public data about Bosnia and Herzegovina through a REST API and web interface. The primary goal is access to university programs and university data; today it includes postal codes, and it may expand to holidays and other public datasets.
 
 ## Features
 
 - **REST API**: Access open data about Bosnia and Herzegovina
-- **User Authentication**: JWT-based authentication with email confirmation
+- **User Authentication**: Session-based auth (Passport) with email confirmation
 - **Web Interface**: React-based frontend for browsing and searching data
 - **Responsive Design**: Built with Tailwind CSS for all devices
 
 ## Data Coverage
 
-- Cities and municipalities
-- Postal codes
-- Holidays and observances
-- Universities and their programs
+- Universities and their programs (target focus)
+- Postal codes (currently available)
+- Holidays and observances (planned)
+- Other public datasets (planned)
 
 ## Getting Started
 
@@ -24,7 +24,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 Before running this project, you need to have the following installed:
 
-- Node.js (v22 or higher)
+- Node.js (v24.x - could work with older versions but v24 is used for development)
 - PostgreSQL database server
 - npm package manager
 
@@ -72,7 +72,16 @@ cp frontend/.env.example frontend/.env
 Initialize the database and run migrations:
 
 ```bash
-npm run db:test:deploy_generate
+npm run db:deploy_generate
+```
+
+Seed the database (optional):
+
+```bash
+npm run db:seed
+
+# Seed test database
+npm run db:test:seed
 ```
 
 End with running the development servers:
@@ -119,11 +128,11 @@ Vitest test coverage is by default provided by v8:
 
 ```bash
 # Run both backend and frontend coverage tests concurrently
-test:coverage:all
+npm run test:coverage:all
 
 # Run coverage tests individually
-test:coverage:backend
-test:coverage:frontend
+npm run test:coverage:backend
+npm run test:coverage:frontend
 ```
 
 ## Deployment
@@ -143,9 +152,9 @@ Configure production environment variables and run build commands for each servi
 - [Express.js](https://expressjs.com/)
 - [Prisma](https://www.prisma.io/)
 - [PostgreSQL](https://www.postgresql.org/)
-- [JSON Web Tokens](https://jwt.io/)
 - [bcryptjs](https://www.npmjs.com/package/bcryptjs)
 - [Express Validator](https://express-validator.github.io/)
+- [Passport](https://www.passportjs.org/) & [Express Session](https://github.com/expressjs/session)
 - [Resend](https://resend.com/)
 - [Vitest](https://vitest.dev/) & [Supertest](https://github.com/ladjs/supertest)
 

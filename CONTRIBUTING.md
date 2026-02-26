@@ -175,7 +175,6 @@ The review process focuses on:
 
 - **JSON format**: Use consistent field names and structures
 - **Source attribution**: Include `source`, `sourceUrl`, and `lastUpdated` fields
-- **Geographic data**: Use standard ISO codes where applicable
 - **Validation**: Ensure data integrity and completeness
 
 ## Commit Message Convention
