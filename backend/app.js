@@ -5,6 +5,9 @@ import cors from "cors";
 import "./config/envCheck.js";
 import { sessionMiddleware } from "./config/sessionMiddleware.js";
 import { passport } from "./config/passport.js";
+import helmet from "helmet";
+
+app.use(helmet());
 
 const currentURL = process.env.URL;
 

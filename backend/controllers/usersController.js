@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { sendConfirmationEmail } from "../email/confirmationEmail.js";
 import { emailConfirmHTML } from "../utils/emailConfirmHTML.js";
 import { passport } from "../config/passport.js";
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
 const NUMBER_OF_DAYS = 30;
 
@@ -138,11 +139,11 @@ function logout(req, res) {
     }
 
     req.session.destroy(() => {
-      res.clearCookie("connect.sid", {
+      res.clearCookie("sessionId", {
         // Must set clearCookie options to match cookie set options, otherwise client will not clear cookie
         maxAge: NUMBER_OF_DAYS * 24 * 60 * 60 * 1000,
-        sameSite: "none",
-        secure: true,
+        sameSite: IS_PRODUCTION ? "none" : "lax",
+        secure: IS_PRODUCTION,
         httpOnly: true,
         path: "/",
       });
