@@ -1,6 +1,6 @@
-import { NotificationContext } from "../../utils/NotificationContext";
+import { NotificationContext } from "../../contextData/NotificationContext";
 import { useContext, useEffect } from "react";
-import { UserDataContext } from "../../utils/UserDataContext";
+import { UserDataContext } from "../../contextData/UserDataContext";
 import { useNavigate } from "react-router-dom";
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 

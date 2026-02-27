@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { NotificationContext } from "../../utils/NotificationContext";
+import { NotificationContext } from "../../contextData/NotificationContext";
 import { handleSubmitAddData } from "./utils/handleSubmitAddData";
 
 function AddNewData({ setSearchResult }) {

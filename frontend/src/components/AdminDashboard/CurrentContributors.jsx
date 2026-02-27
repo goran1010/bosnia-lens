@@ -1,6 +1,6 @@
 import { handleRemoveContributor } from "./utils/handleRemoveContributor";
 import { useContext } from "react";
-import { NotificationContext } from "../../utils/NotificationContext";
+import { NotificationContext } from "../../contextData/NotificationContext";
 
 function CurrentContributors({ currentContributors, setCurrentContributors }) {
   const { addNotification } = useContext(NotificationContext);

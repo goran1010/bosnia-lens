@@ -2,11 +2,11 @@ import { Outlet } from "react-router-dom";
 import { Navbar } from "./components/Navbar/Navbar";
 import { Footer } from "./components/Footer";
 import { useState } from "react";
-import { UserDataContext } from "./utils/UserDataContext";
+import { UserDataContext } from "./contextData/UserDataContext";
 import Spinner from "@goran1010/spinner";
 import { useStatusCheck } from "./customHooks/useStatusCheck";
 import { Notifications } from "./components/Notifications";
-import { NotificationContext } from "./utils/NotificationContext";
+import { NotificationContext } from "./contextData/NotificationContext";
 import { useNotification } from "./customHooks/useNotification";
 
 function Root() {

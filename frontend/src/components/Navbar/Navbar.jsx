@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Status } from "./Status";
 import { useContext } from "react";
-import { UserDataContext } from "../../utils/UserDataContext";
+import { UserDataContext } from "../../contextData/UserDataContext";
 
 function Navbar() {
   const { userData } = useContext(UserDataContext);

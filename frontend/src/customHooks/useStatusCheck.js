@@ -47,8 +47,7 @@ function useStatusCheck(setUserData, setLoading, notificationValue) {
     return () => {
       isMounted = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [addNotification, setUserData, setLoading]);
 }
 
 export { useStatusCheck };

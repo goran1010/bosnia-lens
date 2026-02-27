@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { NotificationContext } from "../../utils/NotificationContext";
+import { NotificationContext } from "../../contextData/NotificationContext";
 
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 

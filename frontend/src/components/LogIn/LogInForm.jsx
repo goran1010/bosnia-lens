@@ -1,9 +1,9 @@
 import { checkLoginFormClickValidity } from "./utils/checkLoginFormClickValidity";
 import { checkLoginFormValidity } from "./utils/checkLoginFormValidity";
 import { useRef, useState, useContext } from "react";
-import { UserDataContext } from "../../utils/UserDataContext";
+import { UserDataContext } from "../../contextData/UserDataContext";
 import { useNavigate } from "react-router-dom";
-import { NotificationContext } from "../../utils/NotificationContext";
+import { NotificationContext } from "../../contextData/NotificationContext";
 import { handleSubmitLogIn } from "./utils/handleSubmitLogIn";
 
 function LogInForm({ setLoading }) {

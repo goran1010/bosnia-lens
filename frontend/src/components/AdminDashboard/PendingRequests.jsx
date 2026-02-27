@@ -2,7 +2,7 @@ import { handleConfirm } from "./utils/handleConfirm";
 import { handleDecline } from "./utils/handleDecline";
 import { useGetPendingRequests } from "./customHooks/useGetPendingRequests";
 import { useContext } from "react";
-import { NotificationContext } from "../../utils/NotificationContext";
+import { NotificationContext } from "../../contextData/NotificationContext";
 
 function PendingRequests({ setCurrentContributors }) {
   const { addNotification } = useContext(NotificationContext);

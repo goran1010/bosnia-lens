@@ -1,6 +1,6 @@
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 import { useContext, useEffect, useState } from "react";
-import { NotificationContext } from "../../../utils/NotificationContext";
+import { NotificationContext } from "../../../contextData/NotificationContext";
 
 function useGetPendingRequests() {
   const { addNotification } = useContext(NotificationContext);

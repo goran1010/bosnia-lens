@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useState } from "react";
-import { NotificationContext } from "../../utils/NotificationContext";
+import { NotificationContext } from "../../contextData/NotificationContext";
 import { handleEditContributor } from "./utils/handleEditContributor";
 import { handleDeleteContributor } from "./utils/handleDeleteContributor";
 import { PostalCodeRow } from "./PostalCodeRow";
