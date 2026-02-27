@@ -1,9 +1,11 @@
-import { useEffect, useContext } from "react";
-import { NotificationContext } from "../utils/NotificationContext";
+import { useEffect, useContext, useState } from "react";
+import { NotificationContext } from "../../../contextData/NotificationContext";
+const WEATHER_API = import.meta.env.VITE_WEATHER_API_KEY;
+const URL = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/bosnia?unitGroup=metric&include=current&key=${WEATHER_API}&contentType=json`;
 
-function useWeatherCheck(setWeatherForecast, setLoading) {
+function useWeatherCheck(setLoading) {
+  const [weatherForecast, setWeatherForecast] = useState([]);
   const { addNotification } = useContext(NotificationContext);
-  const URL = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/bosnia?unitGroup=metric&include=current&key=RK9QGT68LJC4A8CZLA785FREP&contentType=json`;
 
   useEffect(() => {
     async function getWeather() {
@@ -38,7 +40,9 @@ function useWeatherCheck(setWeatherForecast, setLoading) {
       }
     }
     getWeather();
-  }, [URL, setLoading, setWeatherForecast]);
+  }, [setLoading, addNotification]);
+
+  return { weatherForecast };
 }
 
 export { useWeatherCheck };

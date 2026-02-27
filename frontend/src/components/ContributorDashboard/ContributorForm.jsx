@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ModifyDataset } from "./ModifyDataset";
+import { PostalCodeData } from "./PostalCodeData";
 
 function ContributorForm() {
   const [datasetSelect, setDatasetSelect] = useState("");
@@ -18,13 +18,13 @@ function ContributorForm() {
           </option>
           <option value="postal-codes">Postal Codes</option>
           <option value="holidays">Holidays</option>
+          <option value="universities">Universities</option>
         </select>
       </form>
-      {datasetSelect ? (
-        <ModifyDataset datasetSelect={datasetSelect} />
-      ) : (
-        <div>You need to select a dataset.</div>
-      )}
+      {datasetSelect === "postal-codes" && <PostalCodeData />}
+      {datasetSelect === "holidays" && "Holidays"}
+      {datasetSelect === "universities" && "Universities"}
+      {datasetSelect === "" && <div>You need to select a dataset.</div>}
     </div>
   );
 }

@@ -1,9 +1,15 @@
-import { checkFormValidity } from "../../utils/formValidation/checkFormValidity";
-import { checkFormValidityClick } from "../../utils/formValidation/checkFormValidityClick";
-import { useSignUpForm } from "../../customHooks/useSignUpForm";
+import { checkFormValidity } from "./utils/checkFormValidity";
+import { checkFormValidityClick } from "./utils/checkFormValidityClick";
+import { handleSignUpSubmit } from "./utils/handleSignUpSubmit";
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { NotificationContext } from "../../contextData/NotificationContext";
 
 function SignUpForm({ setLoading }) {
+  const navigate = useNavigate();
+  const { addNotification } = useContext(NotificationContext);
+
   const usernameInput = useRef();
   const passwordInput = useRef();
   const confirmPasswordInput = useRef();
@@ -15,8 +21,6 @@ function SignUpForm({ setLoading }) {
     password: "",
     ["confirm-password"]: "",
   });
-
-  const handleSubmit = useSignUpForm(setLoading, inputFields);
 
   function handleInputFields(e) {
     checkFormValidity(
@@ -31,7 +35,18 @@ function SignUpForm({ setLoading }) {
   }
 
   return (
-    <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
+    <form
+      className="flex flex-col gap-3"
+      onSubmit={(e) =>
+        handleSignUpSubmit(
+          e,
+          setLoading,
+          inputFields,
+          addNotification,
+          navigate,
+        )
+      }
+    >
       <div>
         <label
           htmlFor="username"

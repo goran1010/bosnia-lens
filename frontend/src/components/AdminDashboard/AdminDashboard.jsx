@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { UserDataContext } from "../../utils/UserDataContext";
+import { UserDataContext } from "../../contextData/UserDataContext";
 import { AdminForm } from "./AdminForm";
 
 function AdminDashboard() {

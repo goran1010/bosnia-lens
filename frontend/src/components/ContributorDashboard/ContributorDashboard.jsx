@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { UserDataContext } from "../../utils/UserDataContext";
+import { UserDataContext } from "../../contextData/UserDataContext";
 import { ContributorForm } from "./ContributorForm";
 
 function ContributorDashboard() {

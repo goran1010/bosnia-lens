@@ -1,15 +1,22 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 const URL = import.meta.env.VITE_BACKEND_URL;
 
-function useStatusCheck(setUserData, setLoading, notificationValue) {
+function useStatusCheck(setLoading, notificationValue, setLongWait) {
   const { addNotification } = notificationValue;
+  const [userData, setUserData] = useState(null);
+  const userChecked = useRef(false);
+
   useEffect(() => {
-    let isMounted = true;
-
+    setLongWait(false);
     async function checkLogin() {
-      try {
-        if (!isMounted) return;
+      // Show long wait message after 4 seconds
+      setTimeout(() => {
+        if (userChecked.current === false) {
+          setLongWait(true);
+        }
+      }, 4000);
 
+      try {
         const response = await fetch(`${URL}/auth/me`, {
           mode: "cors",
           method: "GET",
@@ -36,19 +43,16 @@ function useStatusCheck(setUserData, setLoading, notificationValue) {
         });
         console.error(err);
       } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
+        userChecked.current = true;
+        setLoading(false);
+        setLongWait(false);
       }
     }
 
     checkLogin();
+  }, [addNotification, setUserData, setLoading, setLongWait]);
 
-    return () => {
-      isMounted = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  return { userData, setUserData };
 }
 
 export { useStatusCheck };

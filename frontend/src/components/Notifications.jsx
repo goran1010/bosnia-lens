@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef } from "react";
-import { NotificationContext } from "../utils/NotificationContext";
+import { NotificationContext } from "../contextData/NotificationContext";
 
 function getNotificationStyles(type) {
   switch (type) {
@@ -14,6 +14,7 @@ function getNotificationStyles(type) {
       return "bg-blue-500";
   }
 }
+
 function Notifications() {
   const { notifications, removeNotification } = useContext(NotificationContext);
   const timerMapRef = useRef(new Map());

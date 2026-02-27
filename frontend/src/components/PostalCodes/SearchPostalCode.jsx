@@ -1,6 +1,6 @@
 import { useState, useRef, useContext } from "react";
-import { checkPostalCodesValidity } from "../../utils/formValidation/checkPostalCodesValidity";
-import { NotificationContext } from "../../utils/NotificationContext";
+import { checkPostalCodesValidity } from "./utils/checkPostalCodesValidity";
+import { NotificationContext } from "../../contextData/NotificationContext";
 
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 
@@ -28,7 +28,7 @@ function SearchPostalCode({ setSearchResult, setLoading }) {
         addNotification({
           type: "error",
           message: result.error,
-          details: result.details[0].msg,
+          details: result.details?.[0]?.msg,
         });
         return;
       }

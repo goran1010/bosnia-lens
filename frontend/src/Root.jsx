@@ -2,21 +2,24 @@ import { Outlet } from "react-router-dom";
 import { Navbar } from "./components/Navbar/Navbar";
 import { Footer } from "./components/Footer";
 import { useState } from "react";
-import { UserDataContext } from "./utils/UserDataContext";
+import { UserDataContext } from "./contextData/UserDataContext";
 import Spinner from "@goran1010/spinner";
 import { useStatusCheck } from "./customHooks/useStatusCheck";
 import { Notifications } from "./components/Notifications";
-import { NotificationContext } from "./utils/NotificationContext";
+import { NotificationContext } from "./contextData/NotificationContext";
 import { useNotification } from "./customHooks/useNotification";
 
 function Root() {
-  const [userData, setUserData] = useState(null);
-  const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [longWait, setLongWait] = useState(false);
 
-  const notificationValue = useNotification(notifications, setNotifications);
+  const { notificationValue } = useNotification();
 
-  useStatusCheck(setUserData, setLoading, notificationValue);
+  const { userData, setUserData } = useStatusCheck(
+    setLoading,
+    notificationValue,
+    setLongWait,
+  );
 
   return (
     <NotificationContext
@@ -30,8 +33,18 @@ function Root() {
         <>
           <Navbar />
           <Notifications />
-          <main className="relative flex flex-col flex-auto max-w-230 m-auto gap-5">
+          <main className="relative flex flex-col flex-auto max-w-3xl m-auto gap-5">
             {loading ? <Spinner /> : <Outlet />}
+            {longWait && (
+              <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
+                <div className="bg-gray-500 p-4 rounded shadow">
+                  <p className="text-white font-bold">
+                    This is taking longer than expected (server might be waking
+                    up). Please wait...
+                  </p>
+                </div>
+              </div>
+            )}
           </main>
           <Footer />
         </>
