@@ -1,11 +1,15 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NotificationContext } from "../../utils/NotificationContext";
 
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 
 function PostalCodesResultContributor({ searchResult, setSearchResult }) {
-  const [inputValues, setInputValues] = useState(searchResult);
+  const [inputValues, setInputValues] = useState([]);
   const { addNotification } = useContext(NotificationContext);
+
+  useEffect(() => {
+    setInputValues(searchResult);
+  }, [searchResult]);
 
   function handlePostChange(e) {
     const changedInput = inputValues.map((result) => {

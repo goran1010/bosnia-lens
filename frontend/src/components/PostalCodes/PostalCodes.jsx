@@ -1,15 +1,12 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import Spinner from "@goran1010/spinner";
 import { SearchPostalCode } from "./SearchPostalCode";
 import { GetAllPostalCodes } from "./GetAllPostalCodes";
 import { PostalCodesResult } from "./PostalCodesResult";
-import { PostalCodesResultContributor } from "../ContributorDashboard/PostalCodesResultContributor";
-import { UserDataContext } from "../../utils/UserDataContext";
 
 function PostalCodes() {
   const [loading, setLoading] = useState(false);
   const [searchResult, setSearchResult] = useState([]);
-  const { userData } = useContext(UserDataContext);
 
   return (
     <>
@@ -24,14 +21,9 @@ function PostalCodes() {
         />
       </section>
       <div>{loading && <Spinner />}</div>
-      {userData?.isContributor || userData?.isAdmin ? (
-        <PostalCodesResultContributor
-          searchResult={searchResult}
-          setSearchResult={setSearchResult}
-        />
-      ) : (
-        <PostalCodesResult searchResult={searchResult} />
-      )}
+
+      <PostalCodesResult searchResult={searchResult} />
+
       <div className="relative"></div>
     </>
   );
