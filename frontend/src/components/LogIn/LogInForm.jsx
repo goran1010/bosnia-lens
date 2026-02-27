@@ -1,5 +1,5 @@
-import { checkLoginFormClickValidity } from "../../utils/formValidation/checkLoginFormClickValidity";
-import { checkLoginFormValidity } from "../../utils/formValidation/checkLoginFormValidity";
+import { checkLoginFormClickValidity } from "./utils/checkLoginFormClickValidity";
+import { checkLoginFormValidity } from "./utils/checkLoginFormValidity";
 import { useRef, useState, useContext } from "react";
 import { UserDataContext } from "../../utils/UserDataContext";
 import { useNavigate } from "react-router-dom";

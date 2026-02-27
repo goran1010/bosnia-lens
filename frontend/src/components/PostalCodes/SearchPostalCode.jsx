@@ -1,5 +1,5 @@
 import { useState, useRef, useContext } from "react";
-import { checkPostalCodesValidity } from "../../utils/formValidation/checkPostalCodesValidity";
+import { checkPostalCodesValidity } from "./utils/checkPostalCodesValidity";
 import { NotificationContext } from "../../utils/NotificationContext";
 
 const currentURL = import.meta.env.VITE_BACKEND_URL;

@@ -1,6 +1,6 @@
-import { checkFormValidity } from "../../utils/formValidation/checkFormValidity";
-import { checkFormValidityClick } from "../../utils/formValidation/checkFormValidityClick";
-import { useSignUpForm } from "../../customHooks/useSignUpForm";
+import { checkFormValidity } from "./utils/checkFormValidity";
+import { checkFormValidityClick } from "./utils/checkFormValidityClick";
+import { useSignUpForm } from "./customHooks/useSignUpForm";
 import { useState, useRef } from "react";
 
 function SignUpForm({ setLoading }) {

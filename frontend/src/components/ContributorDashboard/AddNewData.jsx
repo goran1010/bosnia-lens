@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { NotificationContext } from "../../utils/NotificationContext";
-import { handleSubmitAddData } from "../../utils/ContributorDashboard/handleSubmitAddData";
+import { handleSubmitAddData } from "./utils/handleSubmitAddData";
 
 function AddNewData({ setSearchResult }) {
   const [input, setInput] = useState({ city: "", code: "", post: "" });
