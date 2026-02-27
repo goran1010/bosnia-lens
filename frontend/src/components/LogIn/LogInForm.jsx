@@ -1,11 +1,10 @@
-const currentUrl = import.meta.env.VITE_BACKEND_URL;
-
 import { checkLoginFormClickValidity } from "../../utils/formValidation/checkLoginFormClickValidity";
 import { checkLoginFormValidity } from "../../utils/formValidation/checkLoginFormValidity";
 import { useRef, useState, useContext } from "react";
 import { UserDataContext } from "../../utils/UserDataContext";
 import { useNavigate } from "react-router-dom";
 import { NotificationContext } from "../../utils/NotificationContext";
+import { handleSubmitLogIn } from "./utils/handleSubmitLogIn";
 
 function LogInForm({ setLoading }) {
   const navigate = useNavigate();
@@ -25,52 +24,20 @@ function LogInForm({ setLoading }) {
     setInputFields({ ...inputFields, [e.target.name]: e.target.value });
   }
 
-  async function handleSubmit(e) {
-    try {
-      setLoading(true);
-      e.preventDefault();
-
-      const response = await fetch(`${currentUrl}/users/login`, {
-        mode: "cors",
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: inputFields.username,
-          password: inputFields.password,
-        }),
-      });
-
-      const result = await response.json();
-      if (!response.ok) {
-        addNotification({
-          type: "error",
-          message: result.error,
-          details: result.details[0].msg,
-        });
-        return;
-      }
-      addNotification({
-        type: "success",
-        message: "Logged in successfully!",
-      });
-      setUserData(result.data);
-      navigate("/");
-    } catch (err) {
-      addNotification({
-        type: "error",
-        message: "An error occurred while logging in.",
-      });
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  }
-
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+    <form
+      onSubmit={(e) =>
+        handleSubmitLogIn(
+          e,
+          inputFields,
+          setUserData,
+          addNotification,
+          setLoading,
+          navigate,
+        )
+      }
+      className="flex flex-col gap-5"
+    >
       <div>
         <label
           htmlFor="username"
