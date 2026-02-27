@@ -1,8 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 const URL = import.meta.env.VITE_BACKEND_URL;
 
-function useStatusCheck(setUserData, setLoading, notificationValue) {
+function useStatusCheck(setLoading, notificationValue) {
   const { addNotification } = notificationValue;
+  const [userData, setUserData] = useState(null);
+
   useEffect(() => {
     let isMounted = true;
 
@@ -48,6 +50,8 @@ function useStatusCheck(setUserData, setLoading, notificationValue) {
       isMounted = false;
     };
   }, [addNotification, setUserData, setLoading]);
+
+  return { userData, setUserData };
 }
 
 export { useStatusCheck };

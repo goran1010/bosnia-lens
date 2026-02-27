@@ -14,6 +14,7 @@ function getNotificationStyles(type) {
       return "bg-blue-500";
   }
 }
+
 function Notifications() {
   const { notifications, removeNotification } = useContext(NotificationContext);
   const timerMapRef = useRef(new Map());

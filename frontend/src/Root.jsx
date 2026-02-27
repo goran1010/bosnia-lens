@@ -10,13 +10,14 @@ import { NotificationContext } from "./contextData/NotificationContext";
 import { useNotification } from "./customHooks/useNotification";
 
 function Root() {
-  const [userData, setUserData] = useState(null);
-  const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const notificationValue = useNotification(notifications, setNotifications);
+  const { notificationValue } = useNotification();
 
-  useStatusCheck(setUserData, setLoading, notificationValue);
+  const { userData, setUserData } = useStatusCheck(
+    setLoading,
+    notificationValue,
+  );
 
   return (
     <NotificationContext
