@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { NotificationContext } from "../../utils/NotificationContext";
-
-const currentUrl = import.meta.env.VITE_BACKEND_URL;
+import { handleEditContributor } from "./utils/handleEditContributor";
+import { handleDeleteContributor } from "./utils/handleDeleteContributor";
 
 function PostalCodesResultContributor({ searchResult, setSearchResult }) {
   const [inputValues, setInputValues] = useState([]);
@@ -33,92 +33,6 @@ function PostalCodesResultContributor({ searchResult, setSearchResult }) {
     setInputValues(changedInput);
   }
 
-  async function handleEdit(e) {
-    try {
-      e.preventDefault();
-      const code = e.target.children[0].textContent;
-      const city = e.target[0].value;
-      const post = e.target[1].value;
-
-      const response = await fetch(
-        `${currentUrl}/contributor/postal-codes/?city=${city}&code=${code}&post=${post}`,
-        {
-          mode: "cors",
-          method: "put",
-          credentials: "include",
-        },
-      );
-      const result = await response.json();
-
-      if (response.ok) {
-        const filteredSearchResult = searchResult.map((row) => {
-          if (row.code === Number(code)) {
-            row.city = result.data.city;
-            row.post = result.data.post;
-          }
-          return row;
-        });
-        setSearchResult(filteredSearchResult);
-        addNotification({
-          type: "success",
-          message: `Postal code updated successfully!`,
-        });
-        return;
-      }
-      addNotification({
-        type: "error",
-        message: result.error,
-        details: result.details?.[0].msg,
-      });
-    } catch (err) {
-      addNotification({
-        type: "error",
-        message: "An error occurred while updating the postal code.",
-      });
-      console.error(err);
-    }
-  }
-
-  async function handleDelete(e) {
-    try {
-      e.preventDefault();
-      const code = e.target.dataset.postalcode;
-
-      const response = await fetch(
-        `${currentUrl}/contributor/postal-codes/?code=${code}`,
-        {
-          mode: "cors",
-          method: "delete",
-          credentials: "include",
-        },
-      );
-      const result = await response.json();
-
-      if (response.ok) {
-        const filteredSearchResult = searchResult.filter((row) => {
-          return row.code !== Number(code);
-        });
-        setSearchResult(filteredSearchResult);
-        addNotification({
-          type: "success",
-          message: `Postal code deleted successfully!`,
-        });
-        return;
-      }
-      addNotification({
-        type: "error",
-        message: result.error,
-        details: result.details[0].msg,
-      });
-    } catch (err) {
-      addNotification({
-        type: "error",
-        message: "An error occurred while deleting the postal code.",
-      });
-      console.error(err);
-    }
-  }
-
   if (inputValues.length === 0) {
     return (
       <section className="flex justify-center items-center p-4">
@@ -139,7 +53,9 @@ function PostalCodesResultContributor({ searchResult, setSearchResult }) {
         {inputValues.map((result) => {
           return (
             <form
-              onSubmit={handleEdit}
+              onSubmit={(e) => {
+                handleEditContributor(e, setSearchResult, addNotification);
+              }}
               className="grid gap-1 w-full p-1 grid-cols-5"
               key={result.code}
             >
@@ -172,7 +88,13 @@ function PostalCodesResultContributor({ searchResult, setSearchResult }) {
                 <button
                   type="button"
                   data-postalcode={result.code}
-                  onClick={handleDelete}
+                  onClick={(e) => {
+                    handleDeleteContributor(
+                      e,
+                      setSearchResult,
+                      addNotification,
+                    );
+                  }}
                   className="w-full bg-red-400 text-white p-2 rounded-md hover:bg-red-700 hover:cursor-pointer active:scale-98"
                 >
                   Delete
