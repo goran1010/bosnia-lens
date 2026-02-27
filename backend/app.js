@@ -6,11 +6,7 @@ import "./config/envCheck.js";
 import { sessionMiddleware } from "./config/sessionMiddleware.js";
 import { passport } from "./config/passport.js";
 import helmet from "helmet";
-import {
-  globalRateLimiter,
-  apiRateLimiter,
-  authRateLimiter,
-} from "./utils/rateLimiter.js";
+import * as rateLimiter from "./utils/rateLimiter.js";
 
 import { apiRouter } from "./routes/apiRouter.js";
 import { authRouter } from "./routes/authRouter.js";
@@ -19,6 +15,8 @@ import { adminRouter } from "./routes/adminRouter.js";
 import { isAdmin } from "./auth/isAdmin.js";
 import { contributorRouter } from "./routes/contributorRouter.js";
 import { isContributor } from "./auth/isContributor.js";
+import { isAuthenticated } from "./auth/isAuthenticated.js";
+import { isNotAuthenticated } from "./auth/isNotAuthenticated.js";
 
 const currentURL = process.env.URL;
 
@@ -34,7 +32,7 @@ app.use(
   }),
 );
 
-app.use(globalRateLimiter);
+app.use(rateLimiter.global);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -42,9 +40,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(sessionMiddleware);
 app.use(passport.session());
 
-app.use("/api/v1/", apiRateLimiter, apiRouter);
-app.use("/auth", authRouter);
-app.use("/users", authRateLimiter, usersRouter);
+app.use("/api/v1/", rateLimiter.api, apiRouter);
+app.use("/auth", rateLimiter.auth, isNotAuthenticated, authRouter);
+app.use("/users", rateLimiter.users, isAuthenticated, usersRouter);
 app.use("/admin", isAdmin, adminRouter);
 app.use("/contributor", isContributor, contributorRouter);
 

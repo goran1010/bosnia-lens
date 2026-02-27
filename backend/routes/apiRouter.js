@@ -3,7 +3,7 @@ const apiRouter = Router();
 import * as apiController from "../controllers/apiController.js";
 import { postalCodeSearchValidationRules } from "../validation/postalCodeValidation.js";
 
-apiRouter.get("/status", apiController.status);
+apiRouter.get("/", apiController.status);
 
 apiRouter.get(
   "/postal-codes/search",

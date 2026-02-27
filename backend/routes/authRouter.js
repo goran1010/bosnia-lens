@@ -1,8 +1,20 @@
 import { Router } from "express";
 const authRouter = Router();
+import * as userValidation from "../validation/userValidation.js";
 import * as authController from "../controllers/authController.js";
-import { isAuthenticated } from "../auth/isAuthenticated.js";
 
-authRouter.get("/me", isAuthenticated, authController.me);
+authRouter.post(
+  "/signup",
+  userValidation.signupValidationRules,
+  authController.signup,
+);
+
+authRouter.get("/confirm/:token", authController.confirmEmail);
+
+authRouter.post(
+  "/login",
+  userValidation.loginValidationRules,
+  authController.login,
+);
 
 export { authRouter };

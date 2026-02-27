@@ -1,36 +1,11 @@
 import { Router } from "express";
 const usersRouter = Router();
 import * as usersController from "../controllers/usersController.js";
-import * as userValidation from "../validation/userValidation.js";
-import { isNotAuthenticated } from "../auth/isNotAuthenticated.js";
-import { isAuthenticated } from "../auth/isAuthenticated.js";
 
-usersRouter.post(
-  "/signup",
-  isNotAuthenticated,
-  userValidation.signupValidationRules,
-  usersController.signup,
-);
+usersRouter.get("/me", usersController.me);
 
-usersRouter.post(
-  "/become-contributor",
-  isAuthenticated,
-  usersController.becomeContributor,
-);
+usersRouter.post("/become-contributor", usersController.becomeContributor);
 
-usersRouter.post(
-  "/login",
-  isNotAuthenticated,
-  userValidation.loginValidationRules,
-  usersController.login,
-);
-
-usersRouter.get(
-  "/confirm/:token",
-  isNotAuthenticated,
-  usersController.confirmEmail,
-);
-
-usersRouter.post("/logout", isAuthenticated, usersController.logout);
+usersRouter.post("/logout", usersController.logout);
 
 export { usersRouter };

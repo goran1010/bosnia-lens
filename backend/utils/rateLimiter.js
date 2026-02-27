@@ -1,6 +1,6 @@
 import rateLimit from "express-rate-limit";
 
-const globalRateLimiter = rateLimit({
+const global = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 500,
   message: {
@@ -10,7 +10,7 @@ const globalRateLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-const authRateLimiter = rateLimit({
+const auth = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 10,
   message: {
@@ -20,7 +20,7 @@ const authRateLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-const apiRateLimiter = rateLimit({
+const api = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100,
   message: {
@@ -30,4 +30,14 @@ const apiRateLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-export { globalRateLimiter, authRateLimiter, apiRateLimiter };
+const users = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100,
+  message: {
+    error: "Too many requests. Please wait 15 minutes, then try again.",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+export { global, auth, api, users };
