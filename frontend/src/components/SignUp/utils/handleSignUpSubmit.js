@@ -11,7 +11,7 @@ async function handleSignUpSubmit(
     setLoading(true);
     event.preventDefault();
 
-    const response = await fetch(`${currentUrl}/users/signup`, {
+    const response = await fetch(`${currentUrl}/auth/signup`, {
       mode: "cors",
       method: "POST",
       credentials: "include",

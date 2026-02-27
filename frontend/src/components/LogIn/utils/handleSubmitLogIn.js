@@ -12,7 +12,7 @@ async function handleSubmitLogIn(
     setLoading(true);
     e.preventDefault();
 
-    const response = await fetch(`${currentUrl}/users/login`, {
+    const response = await fetch(`${currentUrl}/auth/login`, {
       mode: "cors",
       method: "POST",
       credentials: "include",
