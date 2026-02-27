@@ -1,18 +1,11 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { NotificationContext } from "../../utils/NotificationContext";
 
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 
 function PostalCodesResultContributor({ searchResult, setSearchResult }) {
-  // Refactor this component to improve performance
-  // Now it re-creates entire array for each letter changed in input
-
-  const [inputValues, setInputValues] = useState([]);
+  const [inputValues, setInputValues] = useState(searchResult);
   const { addNotification } = useContext(NotificationContext);
-
-  useEffect(() => {
-    setInputValues(searchResult || []);
-  }, [searchResult]);
 
   function handlePostChange(e) {
     const changedInput = inputValues.map((result) => {
@@ -136,6 +129,8 @@ function PostalCodesResultContributor({ searchResult, setSearchResult }) {
           <div>Code</div>
           <div>City</div>
           <div>Post</div>
+          <div>Save</div>
+          <div>Delete</div>
         </li>
         {inputValues.map((result) => {
           return (
@@ -164,9 +159,9 @@ function PostalCodesResultContributor({ searchResult, setSearchResult }) {
               <div>
                 <button
                   type="submit"
-                  className="bg-blue-400 text-white p-2 rounded-md hover:bg-blue-700 hover:cursor-pointer active:scale-98"
+                  className="w-full bg-blue-400 text-white p-2 rounded-md hover:bg-blue-700 hover:cursor-pointer active:scale-98"
                 >
-                  Save Edit
+                  Save
                 </button>
               </div>
               <div>
@@ -174,7 +169,7 @@ function PostalCodesResultContributor({ searchResult, setSearchResult }) {
                   type="button"
                   data-postalcode={result.code}
                   onClick={handleDelete}
-                  className="bg-red-400 text-white p-2 rounded-md hover:bg-red-700 hover:cursor-pointer active:scale-98"
+                  className="w-full bg-red-400 text-white p-2 rounded-md hover:bg-red-700 hover:cursor-pointer active:scale-98"
                 >
                   Delete
                 </button>
