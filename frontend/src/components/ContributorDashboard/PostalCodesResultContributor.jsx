@@ -5,24 +5,23 @@ import { handleDeleteContributor } from "./utils/handleDeleteContributor";
 import { PostalCodeRow } from "./PostalCodeRow";
 
 function PostalCodesResultContributor({ searchResult, setSearchResult }) {
-  const [inputValuesByCode, setInputValuesByCode] = useState({});
+  const [inputValuesByCode, setInputValuesByCode] = useState(new Map());
   const { addNotification } = useContext(NotificationContext);
 
   useEffect(() => {
-    const nextValuesByCode = {};
+    const nextValuesByCode = new Map();
     searchResult.forEach((result) => {
-      nextValuesByCode[result.code] = result;
+      nextValuesByCode.set(result.code, result);
     });
     setInputValuesByCode(nextValuesByCode);
   }, [searchResult]);
 
   const handleInputChange = useCallback((code, name, value) => {
     setInputValuesByCode((prev) => {
-      const current = prev[code] || { code };
-      return {
-        ...prev,
-        [code]: { ...current, [name]: value },
-      };
+      const newMap = new Map(prev);
+      const current = newMap.get(code) || { code };
+      newMap.set(code, { ...current, [name]: value });
+      return newMap;
     });
   }, []);
 
@@ -58,7 +57,7 @@ function PostalCodesResultContributor({ searchResult, setSearchResult }) {
           <div>Delete</div>
         </li>
         {searchResult.map((result) => {
-          const rowValue = inputValuesByCode[result.code] || result;
+          const rowValue = inputValuesByCode.get(result.code) || result;
           return (
             <PostalCodeRow
               key={result.code}
