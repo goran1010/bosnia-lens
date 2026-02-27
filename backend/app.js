@@ -11,7 +11,6 @@ import {
   apiRateLimiter,
   authRateLimiter,
 } from "./utils/rateLimiter.js";
-import path from "node:path";
 
 import { apiRouter } from "./routes/apiRouter.js";
 import { authRouter } from "./routes/authRouter.js";
@@ -39,9 +38,6 @@ app.use(globalRateLimiter);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-const assetsPath = path.join(import.meta.dirname, "public");
-app.use(express.static(assetsPath));
 
 app.use(sessionMiddleware);
 app.use(passport.session());
