@@ -1,12 +1,11 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
-import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { NotificationContext } from "../../../contextData/NotificationContext";
 
-function useSignUpForm(setLoading, inputFields) {
-  const navigate = useNavigate();
-  const { addNotification } = useContext(NotificationContext);
-
+function handleSignUpSubmit(
+  setLoading,
+  inputFields,
+  addNotification,
+  navigate,
+) {
   return async function handleSubmit(event) {
     try {
       setLoading(true);
@@ -53,4 +52,4 @@ function useSignUpForm(setLoading, inputFields) {
   };
 }
 
-export { useSignUpForm };
+export { handleSignUpSubmit };
