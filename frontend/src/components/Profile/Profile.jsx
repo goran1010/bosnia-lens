@@ -86,8 +86,7 @@ function Profile() {
       });
       navigate("/login");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userData, navigate]);
+  }, [userData, navigate, addNotification]);
   return (
     <>
       <div className="max-w-2xl min-w-md p-5">
