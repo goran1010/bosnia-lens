@@ -1,4 +1,4 @@
-import { useGetAllContributors } from "../../customHooks/AdminDashboard/useGetAllContributors";
+import { useGetAllContributors } from "./customHooks/useGetAllContributors";
 import { PendingRequests } from "./PendingRequests";
 import { CurrentContributors } from "./CurrentContributors";
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useContext } from "react";
-import { NotificationContext } from "../../utils/NotificationContext";
+import { NotificationContext } from "../../../utils/NotificationContext";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 function useGetAllContributors() {

@@ -1,4 +1,4 @@
-import { handleRemoveContributor } from "../../utils/AdminDashboard/handleRemoveContributor";
+import { handleRemoveContributor } from "./utils/handleRemoveContributor";
 import { useContext } from "react";
 import { NotificationContext } from "../../utils/NotificationContext";
 

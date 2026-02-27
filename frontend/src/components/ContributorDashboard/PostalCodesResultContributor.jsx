@@ -11,25 +11,13 @@ function PostalCodesResultContributor({ searchResult, setSearchResult }) {
     setInputValues(searchResult);
   }, [searchResult]);
 
-  function handlePostChange(e) {
+  function handleInputChange(e) {
     const changedInput = inputValues.map((result) => {
       if (result.code === Number(e.target.dataset.code)) {
-        result[e.target.name] = e.target.value;
+        return { ...result, [e.target.name]: e.target.value };
       }
       return result;
     });
-
-    setInputValues(changedInput);
-  }
-
-  function handleCityChange(e) {
-    const changedInput = inputValues.map((result) => {
-      if (result.code === Number(e.target.dataset.code)) {
-        result[e.target.name] = e.target.value;
-      }
-      return result;
-    });
-
     setInputValues(changedInput);
   }
 
@@ -66,7 +54,7 @@ function PostalCodesResultContributor({ searchResult, setSearchResult }) {
                 name="city"
                 type="text"
                 value={result.city || ""}
-                onChange={handleCityChange}
+                onChange={handleInputChange}
                 data-code={result.code}
               />
               <input
@@ -74,7 +62,7 @@ function PostalCodesResultContributor({ searchResult, setSearchResult }) {
                 name="post"
                 type="text"
                 value={result.post || ""}
-                onChange={handlePostChange}
+                onChange={handleInputChange}
               />
               <div>
                 <button

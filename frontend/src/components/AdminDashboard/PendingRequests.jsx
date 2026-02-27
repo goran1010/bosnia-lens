@@ -1,6 +1,6 @@
-import { handleConfirm } from "../../utils/AdminDashboard/handleConfirm";
-import { handleDecline } from "../../utils/AdminDashboard/handleDecline";
-import { useGetPendingRequests } from "../../customHooks/AdminDashboard/useGetPendingRequests";
+import { handleConfirm } from "./utils/handleConfirm";
+import { handleDecline } from "./utils/handleDecline";
+import { useGetPendingRequests } from "./customHooks/useGetPendingRequests";
 import { useContext } from "react";
 import { NotificationContext } from "../../utils/NotificationContext";
 
