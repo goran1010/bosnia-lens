@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
   // Load env file based on `mode` in the current working directory.
   const env = loadEnv(mode, process.cwd(), "");
 
-  const requiredVars = ["VITE_BACKEND_URL"];
+  const requiredVars = ["VITE_BACKEND_URL", "VITE_WEATHER_API_KEY"];
   const missingVars = requiredVars.filter((varName) => !env[varName]);
 
   if (missingVars.length > 0) {
