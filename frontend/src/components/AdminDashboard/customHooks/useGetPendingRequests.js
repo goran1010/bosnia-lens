@@ -33,7 +33,7 @@ function useGetPendingRequests() {
         addNotification({
           type: "error",
           message: result.error,
-          details: result.details[0].msg,
+          details: result.details?.[0]?.msg,
         });
       } catch (error) {
         console.error("Error fetching pending requests:", error);

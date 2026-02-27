@@ -34,7 +34,7 @@ async function handleConfirm(
     addNotification({
       type: "error",
       message: data.error,
-      details: data.details[0].msg,
+      details: data.details?.[0]?.msg,
     });
   } catch (error) {
     addNotification({

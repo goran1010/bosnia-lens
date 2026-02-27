@@ -6,14 +6,29 @@ async function handleRemoveContributor(
   addNotification,
 ) {
   try {
-    await fetch(`${BACKEND_URL}/admin/remove-contributor/${user.id}`, {
-      method: "DELETE",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `${BACKEND_URL}/admin/remove-contributor/${user.id}`,
+      {
+        method: "DELETE",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
       },
-      credentials: "include",
-    });
+    );
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      addNotification({
+        type: "error",
+        message: result.error,
+        details: result.details?.[0].msg,
+      });
+      return;
+    }
+
     setCurrentContributors((prev) =>
       prev.filter((contributor) => contributor.id !== user.id),
     );
