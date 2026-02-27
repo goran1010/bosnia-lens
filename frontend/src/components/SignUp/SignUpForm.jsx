@@ -37,8 +37,14 @@ function SignUpForm({ setLoading }) {
   return (
     <form
       className="flex flex-col gap-3"
-      onSubmit={() =>
-        handleSignUpSubmit(setLoading, inputFields, addNotification, navigate)
+      onSubmit={(e) =>
+        handleSignUpSubmit(
+          e,
+          setLoading,
+          inputFields,
+          addNotification,
+          navigate,
+        )
       }
     >
       <div>
