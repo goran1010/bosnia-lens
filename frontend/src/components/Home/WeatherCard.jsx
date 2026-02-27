@@ -1,4 +1,4 @@
-import { getDayInWeek } from "../../utils/getDayInWeek";
+import { getDayInWeek } from "./utils/getDayInWeek";
 
 function WeatherCard({ weatherForecast }) {
   if (!weatherForecast || weatherForecast.length === 0) {
