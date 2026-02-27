@@ -1,27 +1,46 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { NotificationContext } from "../../utils/NotificationContext";
 import { handleEditContributor } from "./utils/handleEditContributor";
 import { handleDeleteContributor } from "./utils/handleDeleteContributor";
+import { PostalCodeRow } from "./PostalCodeRow";
 
 function PostalCodesResultContributor({ searchResult, setSearchResult }) {
-  const [inputValues, setInputValues] = useState([]);
+  const [inputValuesByCode, setInputValuesByCode] = useState({});
   const { addNotification } = useContext(NotificationContext);
 
   useEffect(() => {
-    setInputValues(searchResult);
+    const nextValuesByCode = {};
+    searchResult.forEach((result) => {
+      nextValuesByCode[result.code] = result;
+    });
+    setInputValuesByCode(nextValuesByCode);
   }, [searchResult]);
 
-  function handleInputChange(e) {
-    const changedInput = inputValues.map((result) => {
-      if (result.code === Number(e.target.dataset.code)) {
-        return { ...result, [e.target.name]: e.target.value };
-      }
-      return result;
+  const handleInputChange = useCallback((code, name, value) => {
+    setInputValuesByCode((prev) => {
+      const current = prev[code] || { code };
+      return {
+        ...prev,
+        [code]: { ...current, [name]: value },
+      };
     });
-    setInputValues(changedInput);
-  }
+  }, []);
 
-  if (inputValues.length === 0) {
+  const handleEdit = useCallback(
+    (e) => {
+      handleEditContributor(e, setSearchResult, addNotification);
+    },
+    [setSearchResult, addNotification],
+  );
+
+  const handleDelete = useCallback(
+    (e) => {
+      handleDeleteContributor(e, setSearchResult, addNotification);
+    },
+    [setSearchResult, addNotification],
+  );
+
+  if (searchResult.length === 0) {
     return (
       <section className="flex justify-center items-center p-4">
         <p className="text-gray-500">No results to display.</p>
@@ -38,57 +57,16 @@ function PostalCodesResultContributor({ searchResult, setSearchResult }) {
           <div>Save</div>
           <div>Delete</div>
         </li>
-        {inputValues.map((result) => {
+        {searchResult.map((result) => {
+          const rowValue = inputValuesByCode[result.code] || result;
           return (
-            <form
-              onSubmit={(e) => {
-                handleEditContributor(e, setSearchResult, addNotification);
-              }}
-              className="grid gap-1 w-full p-1 grid-cols-5"
+            <PostalCodeRow
               key={result.code}
-            >
-              <div className="flex justify-center items-center">
-                {result.code}
-              </div>
-              <input
-                name="city"
-                type="text"
-                value={result.city || ""}
-                onChange={handleInputChange}
-                data-code={result.code}
-              />
-              <input
-                data-code={result.code}
-                name="post"
-                type="text"
-                value={result.post || ""}
-                onChange={handleInputChange}
-              />
-              <div>
-                <button
-                  type="submit"
-                  className="w-full bg-blue-400 text-white p-2 rounded-md hover:bg-blue-700 hover:cursor-pointer active:scale-98"
-                >
-                  Save
-                </button>
-              </div>
-              <div>
-                <button
-                  type="button"
-                  data-postalcode={result.code}
-                  onClick={(e) => {
-                    handleDeleteContributor(
-                      e,
-                      setSearchResult,
-                      addNotification,
-                    );
-                  }}
-                  className="w-full bg-red-400 text-white p-2 rounded-md hover:bg-red-700 hover:cursor-pointer active:scale-98"
-                >
-                  Delete
-                </button>
-              </div>
-            </form>
+              result={rowValue}
+              onChange={handleInputChange}
+              onSubmit={handleEdit}
+              onDelete={handleDelete}
+            />
           );
         })}
       </ul>
