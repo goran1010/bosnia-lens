@@ -2,81 +2,13 @@ import { NotificationContext } from "../../contextData/NotificationContext";
 import { useContext, useEffect } from "react";
 import { UserDataContext } from "../../contextData/UserDataContext";
 import { useNavigate } from "react-router-dom";
-const currentURL = import.meta.env.VITE_BACKEND_URL;
+import { handleBecomeContributor } from "./utils/handleBecomeContributor";
+import { handleLogoutContributor } from "./utils/handleLogOutContributor";
 
 function Profile() {
   const { addNotification } = useContext(NotificationContext);
   const { userData, setUserData } = useContext(UserDataContext);
   const navigate = useNavigate();
-
-  async function handleBecomeContributor() {
-    try {
-      const response = await fetch(`${currentURL}/users/become-contributor`, {
-        mode: "cors",
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const result = await response.json();
-      if (!response.ok) {
-        addNotification({
-          type: "error",
-          message: result.error,
-          details: result.details[0].msg,
-        });
-        return;
-      }
-      setUserData(result.data);
-      addNotification({
-        type: "success",
-        message: result.message,
-      });
-    } catch (err) {
-      addNotification({
-        type: "error",
-        message: "An error occurred while requesting contributor status.",
-      });
-      console.error(err);
-    }
-  }
-
-  async function handleLogout() {
-    try {
-      const response = await fetch(`${currentURL}/users/logout`, {
-        mode: "cors",
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const result = await response.json();
-      if (!response.ok) {
-        addNotification({
-          type: "error",
-          message: result.error,
-          details: result.details[0].msg,
-        });
-        return;
-      }
-      addNotification({
-        type: "success",
-        message: result.message,
-      });
-      navigate("/");
-      setUserData(null);
-    } catch (err) {
-      addNotification({
-        type: "error",
-        message: "An error occurred while logging out.",
-      });
-      console.error(err);
-    }
-  }
 
   useEffect(() => {
     if (!userData) {
@@ -134,7 +66,9 @@ function Profile() {
             <div className="pt-4 space-y-4">
               {!userData?.isContributor && !userData?.requestedContributor && (
                 <button
-                  onClick={handleBecomeContributor}
+                  onClick={() =>
+                    handleBecomeContributor(addNotification, setUserData)
+                  }
                   className="cursor-pointer w-full bg-linear-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:from-blue-600 hover:to-indigo-700 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 >
                   Request Contributor Access
@@ -142,7 +76,13 @@ function Profile() {
               )}
 
               <button
-                onClick={handleLogout}
+                onClick={() =>
+                  handleLogoutContributor(
+                    addNotification,
+                    navigate,
+                    setUserData,
+                  )
+                }
                 className="cursor-pointer w-full bg-red-500 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-red-600 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
               >
                 Log Out
