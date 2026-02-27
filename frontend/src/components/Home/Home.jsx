@@ -5,9 +5,8 @@ import { WeatherCard } from "./WeatherCard";
 
 function Home() {
   const [loading, setLoading] = useState(true);
-  const [weatherForecast, setWeatherForecast] = useState([]);
 
-  useWeatherCheck(setWeatherForecast, setLoading);
+  const { weatherForecast } = useWeatherCheck(setLoading);
 
   return (
     <>
