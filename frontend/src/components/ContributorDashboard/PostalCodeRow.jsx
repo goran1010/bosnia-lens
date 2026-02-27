@@ -1,11 +1,6 @@
 import { memo } from "react";
 
-const PostalCodeRow = memo(function PostalCodeRow({
-  result,
-  onChange,
-  onSubmit,
-  onDelete,
-}) {
+const PostalCodeRow = memo(({ result, onChange, onSubmit, onDelete }) => {
   return (
     <form onSubmit={onSubmit} className="grid gap-1 w-full p-1 grid-cols-5">
       <div className="flex justify-center items-center">{result.code}</div>

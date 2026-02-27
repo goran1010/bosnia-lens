@@ -19,7 +19,9 @@ async function handleEditContributor(e, setSearchResult, addNotification) {
 
     if (response.ok) {
       setSearchResult((prevState) => {
-        return [...prevState, result.data];
+        return prevState.map((item) =>
+          item.code === result.data.code ? result.data : item,
+        );
       });
       addNotification({
         type: "success",
