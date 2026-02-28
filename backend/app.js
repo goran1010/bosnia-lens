@@ -1,12 +1,17 @@
 import "dotenv/config";
 import express from "express";
 const app = express();
+
 import cors from "cors";
 import "./config/envCheck.js";
 import { sessionMiddleware } from "./config/sessionMiddleware.js";
 import { passport } from "./config/passport.js";
+
 import helmet from "helmet";
 import * as rateLimiter from "./utils/rateLimiter.js";
+import { csrfSync } from "csrf-sync";
+import { csrfRouter } from "./routes/csrfRouter.js";
+const { csrfSynchronisedProtection } = csrfSync();
 
 import { apiRouter } from "./routes/apiRouter.js";
 import { authRouter } from "./routes/authRouter.js";
@@ -36,9 +41,23 @@ app.use(express.urlencoded({ extended: true }));
 app.use(sessionMiddleware);
 app.use(passport.session());
 
+app.get(csrfRouter);
+
 app.use("/api/v1/", rateLimiter.api, apiRouter);
-app.use("/auth", rateLimiter.auth, isNotAuthenticated, authRouter);
-app.use("/users", rateLimiter.users, isAuthenticated, usersRouter);
+app.use(
+  "/auth",
+  rateLimiter.auth,
+  csrfSynchronisedProtection,
+  isNotAuthenticated,
+  authRouter,
+);
+app.use(
+  "/users",
+  rateLimiter.users,
+  csrfSynchronisedProtection,
+  isAuthenticated,
+  usersRouter,
+);
 
 app.use((req, res) => {
   res
@@ -48,10 +67,10 @@ app.use((req, res) => {
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).json({
-    error: "Internal Server Error",
-    details: [{ msg: err.message || "An unexpected error occurred." }],
+  console.error(JSON.stringify(err));
+  res.status(err.status || 500).json({
+    error: "An unexpected error occurred.",
+    details: [{ msg: err.message }],
   });
 });
 
