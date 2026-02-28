@@ -1,13 +1,25 @@
 const currentURL = import.meta.env.VITE_BACKEND_URL;
+import { getCsrfToken } from "../../utils/getCsrfToken";
 
 async function handleLogoutContributor(addNotification, navigate, setUserData) {
   try {
+    const csrfToken = await getCsrfToken();
+
+    if (!csrfToken) {
+      addNotification({
+        type: "error",
+        message: "Failed to retrieve CSRF token.",
+      });
+      return;
+    }
+
     const response = await fetch(`${currentURL}/users/logout`, {
       mode: "cors",
       method: "POST",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        "x-csrf-token": csrfToken,
       },
     });
 

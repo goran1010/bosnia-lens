@@ -1,9 +1,20 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
+import { getCsrfToken } from "../../utils/getCsrfToken";
 
 async function handleSubmitAddData(e, input, setSearchResult, addNotification) {
   try {
     e.preventDefault();
     const { city, code, post } = input;
+
+    const csrfToken = await getCsrfToken();
+
+    if (!csrfToken) {
+      addNotification({
+        type: "error",
+        message: "Failed to retrieve CSRF token.",
+      });
+      return;
+    }
 
     const response = await fetch(
       `${currentUrl}/users/contributor/postal-codes?city=${city}&code=${code}&post=${post}`,
@@ -11,6 +22,7 @@ async function handleSubmitAddData(e, input, setSearchResult, addNotification) {
         mode: "cors",
         method: "post",
         credentials: "include",
+        headers: { "x-csrf-token": csrfToken },
       },
     );
     const result = await response.json();

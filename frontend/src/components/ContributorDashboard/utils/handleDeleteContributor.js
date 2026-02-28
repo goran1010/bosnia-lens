@@ -1,16 +1,30 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
+import { getCsrfToken } from "../../utils/getCsrfToken";
 
 async function handleDeleteContributor(e, setSearchResult, addNotification) {
   try {
     e.preventDefault();
     const code = e.target.dataset.postalcode;
 
+    const csrfToken = await getCsrfToken();
+
+    if (!csrfToken) {
+      addNotification({
+        type: "error",
+        message: "Failed to retrieve CSRF token.",
+      });
+      return;
+    }
+
     const response = await fetch(
       `${currentUrl}/users/contributor/postal-codes/?code=${code}`,
       {
         mode: "cors",
-        method: "delete",
+        method: "DELETE",
         credentials: "include",
+        headers: {
+          "x-csrf-token": csrfToken,
+        },
       },
     );
     const result = await response.json();

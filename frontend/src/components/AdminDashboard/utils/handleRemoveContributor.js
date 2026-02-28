@@ -1,4 +1,5 @@
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+import { getCsrfToken } from "../../utils/getCsrfToken";
 
 async function handleRemoveContributor(
   user,
@@ -6,6 +7,16 @@ async function handleRemoveContributor(
   addNotification,
 ) {
   try {
+    const csrfToken = await getCsrfToken();
+
+    if (!csrfToken) {
+      addNotification({
+        type: "error",
+        message: "Failed to retrieve CSRF token.",
+      });
+      return;
+    }
+
     const response = await fetch(
       `${BACKEND_URL}/users/admin/remove-contributor/${user.id}`,
       {
@@ -13,6 +24,7 @@ async function handleRemoveContributor(
         mode: "cors",
         headers: {
           "Content-Type": "application/json",
+          "x-csrf-token": csrfToken,
         },
         credentials: "include",
       },

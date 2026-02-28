@@ -1,7 +1,18 @@
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+import { getCsrfToken } from "../../utils/getCsrfToken";
 
 async function handleDecline(user, setPendingRequests, addNotification) {
   try {
+    const csrfToken = await getCsrfToken();
+
+    if (!csrfToken) {
+      addNotification({
+        type: "error",
+        message: "Failed to retrieve CSRF token.",
+      });
+      return;
+    }
+
     const response = await fetch(
       `${BACKEND_URL}/users/admin/decline-contributor/${user.id}`,
       {
@@ -9,6 +20,7 @@ async function handleDecline(user, setPendingRequests, addNotification) {
         mode: "cors",
         headers: {
           "Content-Type": "application/json",
+          "x-csrf-token": csrfToken,
         },
         credentials: "include",
       },

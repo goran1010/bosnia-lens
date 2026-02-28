@@ -1,4 +1,5 @@
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+import { getCsrfToken } from "../../utils/getCsrfToken";
 
 async function handleConfirm(
   user,
@@ -7,6 +8,16 @@ async function handleConfirm(
   addNotification,
 ) {
   try {
+    const csrfToken = await getCsrfToken();
+
+    if (!csrfToken) {
+      addNotification({
+        type: "error",
+        message: "Failed to retrieve CSRF token.",
+      });
+      return;
+    }
+
     const response = await fetch(
       `${BACKEND_URL}/users/admin/add-contributor/${user.id}`,
       {
@@ -14,6 +25,7 @@ async function handleConfirm(
         mode: "cors",
         headers: {
           "Content-Type": "application/json",
+          "x-csrf-token": csrfToken,
         },
         credentials: "include",
       },
