@@ -6,7 +6,7 @@ async function handleDeleteContributor(e, setSearchResult, addNotification) {
     const code = e.target.dataset.postalcode;
 
     const response = await fetch(
-      `${currentUrl}/contributor/postal-codes/?code=${code}`,
+      `${currentUrl}/users/contributor/postal-codes/?code=${code}`,
       {
         mode: "cors",
         method: "delete",

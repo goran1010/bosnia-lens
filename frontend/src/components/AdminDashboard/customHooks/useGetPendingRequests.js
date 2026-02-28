@@ -10,7 +10,7 @@ function useGetPendingRequests() {
     const fetchPendingRequests = async () => {
       try {
         const response = await fetch(
-          `${BACKEND_URL}/admin/requested-contributors`,
+          `${BACKEND_URL}/users/admin/requested-contributors`,
           {
             method: "GET",
             mode: "cors",

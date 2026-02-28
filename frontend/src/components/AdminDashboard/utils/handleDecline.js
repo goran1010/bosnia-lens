@@ -3,7 +3,7 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 async function handleDecline(user, setPendingRequests, addNotification) {
   try {
     const response = await fetch(
-      `${BACKEND_URL}/admin/decline-contributor/${user.id}`,
+      `${BACKEND_URL}/users/admin/decline-contributor/${user.id}`,
       {
         method: "POST",
         mode: "cors",

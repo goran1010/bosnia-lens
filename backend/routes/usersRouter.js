@@ -6,7 +6,7 @@ import { isAdmin } from "../auth/isAdmin.js";
 import { contributorRouter } from "./contributorRouter.js";
 import { isContributor } from "../auth/isContributor.js";
 
-usersRouter.get("/", usersController.user);
+usersRouter.get("/me", usersController.me);
 
 usersRouter.post("/become-contributor", usersController.becomeContributor);
 

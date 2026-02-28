@@ -48,11 +48,12 @@ async function becomeContributor(req, res) {
   });
 }
 
-async function user(req, res) {
-  const user = req.user;
-  delete user.password;
+async function me(req, res) {
+  const loggedInUser = req.user;
 
-  res.json({ message: "User info retrieved", data: user });
+  delete loggedInUser.password;
+
+  res.json({ message: "User info retrieved", data: loggedInUser });
 }
 
-export { logout, becomeContributor, user };
+export { logout, becomeContributor, me };

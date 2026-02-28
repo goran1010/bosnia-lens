@@ -8,7 +8,7 @@ async function handleConfirm(
 ) {
   try {
     const response = await fetch(
-      `${BACKEND_URL}/admin/add-contributor/${user.id}`,
+      `${BACKEND_URL}/users/admin/add-contributor/${user.id}`,
       {
         method: "POST",
         mode: "cors",

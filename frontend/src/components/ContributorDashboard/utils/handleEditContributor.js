@@ -8,7 +8,7 @@ async function handleEditContributor(e, setSearchResult, addNotification) {
     const post = e.target[1].value;
 
     const response = await fetch(
-      `${currentUrl}/contributor/postal-codes/?city=${city}&code=${code}&post=${post}`,
+      `${currentUrl}/users/contributor/postal-codes/?city=${city}&code=${code}&post=${post}`,
       {
         mode: "cors",
         method: "put",

@@ -6,7 +6,7 @@ async function handleSubmitAddData(e, input, setSearchResult, addNotification) {
     const { city, code, post } = input;
 
     const response = await fetch(
-      `${currentUrl}/contributor/postal-codes?city=${city}&code=${code}&post=${post}`,
+      `${currentUrl}/users/contributor/postal-codes?city=${city}&code=${code}&post=${post}`,
       {
         mode: "cors",
         method: "post",

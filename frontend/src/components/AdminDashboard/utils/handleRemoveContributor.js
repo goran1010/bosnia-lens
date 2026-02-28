@@ -7,7 +7,7 @@ async function handleRemoveContributor(
 ) {
   try {
     const response = await fetch(
-      `${BACKEND_URL}/admin/remove-contributor/${user.id}`,
+      `${BACKEND_URL}/users/admin/remove-contributor/${user.id}`,
       {
         method: "DELETE",
         mode: "cors",
