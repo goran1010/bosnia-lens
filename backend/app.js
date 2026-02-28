@@ -11,10 +11,6 @@ import * as rateLimiter from "./utils/rateLimiter.js";
 import { apiRouter } from "./routes/apiRouter.js";
 import { authRouter } from "./routes/authRouter.js";
 import { usersRouter } from "./routes/usersRouter.js";
-import { adminRouter } from "./routes/adminRouter.js";
-import { isAdmin } from "./auth/isAdmin.js";
-import { contributorRouter } from "./routes/contributorRouter.js";
-import { isContributor } from "./auth/isContributor.js";
 import { isAuthenticated } from "./auth/isAuthenticated.js";
 import { isNotAuthenticated } from "./auth/isNotAuthenticated.js";
 
@@ -43,8 +39,6 @@ app.use(passport.session());
 app.use("/api/v1/", rateLimiter.api, apiRouter);
 app.use("/auth", rateLimiter.auth, isNotAuthenticated, authRouter);
 app.use("/users", rateLimiter.users, isAuthenticated, usersRouter);
-app.use("/admin", isAdmin, adminRouter);
-app.use("/contributor", isContributor, contributorRouter);
 
 app.use((req, res) => {
   res
