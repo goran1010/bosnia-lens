@@ -17,7 +17,7 @@ function useStatusCheck(setLoading, notificationValue, setLongWait) {
       }, 4000);
 
       try {
-        const response = await fetch(`${URL}/auth/me`, {
+        const response = await fetch(`${URL}/users/me`, {
           mode: "cors",
           method: "GET",
           credentials: "include",

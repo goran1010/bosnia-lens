@@ -1,4 +1,5 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
+import { getCsrfToken } from "../../utils/getCsrfToken";
 
 async function handleSubmitLogIn(
   e,
@@ -12,11 +13,22 @@ async function handleSubmitLogIn(
     setLoading(true);
     e.preventDefault();
 
-    const response = await fetch(`${currentUrl}/users/login`, {
+    const csrfToken = await getCsrfToken();
+
+    if (!csrfToken) {
+      addNotification({
+        type: "error",
+        message: "Failed to retrieve CSRF token.",
+      });
+      return;
+    }
+
+    const response = await fetch(`${currentUrl}/auth/login`, {
       mode: "cors",
       method: "POST",
       credentials: "include",
       headers: {
+        "x-csrf-token": csrfToken,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

@@ -9,14 +9,17 @@ function useGetAllContributors() {
   useEffect(() => {
     async function handleGetAllContributors() {
       try {
-        const response = await fetch(`${BACKEND_URL}/admin/contributors`, {
-          method: "GET",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
+        const response = await fetch(
+          `${BACKEND_URL}/users/admin/contributors`,
+          {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
           },
-          credentials: "include",
-        });
+        );
         const result = await response.json();
 
         if (response.ok) {

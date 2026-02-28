@@ -7,7 +7,7 @@
     "node": "24.x"
   },
   "prisma": {
-    "seed": "node prisma/seed.js"
+    "seed": "node db/seed.js"
   },
   "scripts": {
     "build": "npx prisma generate",
@@ -35,10 +35,13 @@
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
+    "csrf-sync": "^4.2.1",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "express-rate-limit": "^8.2.1",
     "express-session": "^1.18.1",
     "express-validator": "^7.2.1",
+    "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.1",
     "passport": "^0.7.0",

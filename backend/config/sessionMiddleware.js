@@ -7,7 +7,8 @@ import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import { prisma } from "../db/prisma.js";
 
 const sessionMiddleware = expressSession({
-  name: "connect.sid",
+  name: "sessionId",
+  proxy: IS_PRODUCTION,
   cookie: {
     maxAge: NUMBER_OF_DAYS * 24 * 60 * 60 * 1000,
     sameSite: IS_PRODUCTION ? "none" : "lax",
