@@ -41,7 +41,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(sessionMiddleware);
 app.use(passport.session());
 
-app.get(csrfRouter);
+app.use(csrfRouter);
 
 app.use("/api/v1/", rateLimiter.api, apiRouter);
 app.use(
@@ -68,7 +68,7 @@ app.use((req, res) => {
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   console.error(JSON.stringify(err));
-  res.status(err.status || 500).json({
+  res.status(err.statusCode || 500).json({
     error: "An unexpected error occurred.",
     details: [{ msg: err.message }],
   });
