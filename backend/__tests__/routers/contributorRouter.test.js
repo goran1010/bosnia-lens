@@ -7,6 +7,12 @@ import * as usersModel from "../../models/usersModel.js";
 import * as postalCodesModel from "../../models/postalCodesModel.js";
 import { app } from "../../app.js";
 
+vi.mock("../../email/confirmationEmail.js", () => ({
+  sendConfirmationEmail: vi.fn(async () => {
+    return { success: true };
+  }),
+}));
+
 vi.mock("csrf-sync", () => {
   const originalModule = vi.importActual("csrf-sync");
   return {
