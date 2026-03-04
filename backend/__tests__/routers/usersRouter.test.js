@@ -60,6 +60,20 @@ beforeEach(() => {
   });
 });
 
+vi.mock("csrf-sync", () => {
+  const originalModule = vi.importActual("csrf-sync");
+  return {
+    ...originalModule,
+    csrfSync: () => {
+      return {
+        csrfSynchronisedProtection: (req, res, next) => {
+          next();
+        },
+      };
+    },
+  };
+});
+
 describe("POST /signup", () => {
   test("responds with status 400 and message for incorrect username input", async () => {
     const newUser = createNewUser({ username: "user" });
@@ -77,7 +91,7 @@ describe("POST /signup", () => {
       ],
     };
 
-    const response = await request(app).post("/users/signup").send(newUser);
+    const response = await request(app).post("/auth/signup").send(newUser);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual(responseData);
@@ -102,7 +116,7 @@ describe("POST /signup", () => {
       ],
     };
 
-    const response = await request(app).post("/users/signup").send(newUser);
+    const response = await request(app).post("/auth/signup").send(newUser);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual(responseData);
@@ -126,7 +140,7 @@ describe("POST /signup", () => {
       ],
     };
 
-    const response = await request(app).post("/users/signup").send(newUser);
+    const response = await request(app).post("/auth/signup").send(newUser);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual(responseData);
@@ -141,7 +155,7 @@ describe("POST /signup", () => {
 
     const newUser = createNewUser();
 
-    const response = await request(app).post("/users/signup").send(newUser);
+    const response = await request(app).post("/auth/signup").send(newUser);
 
     expect(sendConfirmationEmail).toHaveBeenCalled();
     expect(response.status).toBe(201);
@@ -167,7 +181,7 @@ describe("POST /signup", () => {
       ],
     };
 
-    const response = await request(app).post("/users/signup").send(newUser);
+    const response = await request(app).post("/auth/signup").send(newUser);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual(responseData);
@@ -187,7 +201,7 @@ describe("POST /login", () => {
       details: [{ msg: "Incorrect username" }],
     };
 
-    const response = await request(app).post("/users/login").send(newUser);
+    const response = await request(app).post("/auth/login").send(newUser);
 
     expect(response.status).toBe(401);
     expect(response.body).toEqual(responseData);
@@ -200,7 +214,7 @@ describe("POST /login", () => {
       req.logIn = (user, cb) => cb(null);
       callback(null, newUser, null);
     });
-    const response = await request(app).post("/users/login").send(newUser);
+    const response = await request(app).post("/auth/login").send(newUser);
 
     const responseData = {
       message: `Logged in successfully`,
@@ -230,7 +244,7 @@ describe("POST /logout", () => {
 
 describe("GET /confirm/:token", () => {
   test("responds with status 404 and message for no token provided", async () => {
-    const response = await request(app).get("/users/confirm/");
+    const response = await request(app).get("/auth/confirm/");
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({
@@ -240,7 +254,7 @@ describe("GET /confirm/:token", () => {
   });
 
   test("responds with status 400 and message for invalid token", async () => {
-    const response = await request(app).get("/users/confirm/12345");
+    const response = await request(app).get("/auth/confirm/12345");
 
     expect(response.status).toBe(500);
     expect(response.body).toEqual({
@@ -262,7 +276,7 @@ describe("GET /confirm/:token", () => {
       isEmailConfirmed: false,
     });
 
-    const response = await request(app).get(`/users/confirm/${accessToken}`);
+    const response = await request(app).get(`/auth/confirm/${accessToken}`);
 
     expect(response.status).toBe(200);
     expect(response.text).toContain(emailConfirmHTML());
