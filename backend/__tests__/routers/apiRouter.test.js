@@ -35,7 +35,7 @@ vi.spyOn(postalCodesModel, "getPostalCodeByCode").mockImplementation(
 
 describe("GET /status", () => {
   test("responds with status 200 when LIVE", async () => {
-    const response = await request(app).get("/api/v1/status");
+    const response = await request(app).get("/api/v1");
 
     expect(response.headers["content-type"]).toMatch(/json/);
     expect(response.body).toEqual({
