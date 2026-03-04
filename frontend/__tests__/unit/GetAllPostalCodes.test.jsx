@@ -2,7 +2,7 @@ import { describe, test, expect, beforeEach, vi, afterEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { GetAllPostalCodes } from "../../src/components/PostalCodes/GetAllPostalCodes";
-import { NotificationContext } from "../../src/utils/NotificationContext";
+import { NotificationContext } from "../../src/contextData/NotificationContext";
 
 const user = userEvent.setup();
 

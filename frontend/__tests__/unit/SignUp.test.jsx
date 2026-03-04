@@ -2,11 +2,11 @@ import { test, describe, expect, beforeEach, vi } from "vitest";
 import { SignUp } from "../../src/components/SignUp/SignUp";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
-import { UserDataContext } from "../../src/utils/UserDataContext";
+import { UserDataContext } from "../../src/contextData/UserDataContext";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { LogIn } from "../../src/components/LogIn/LogIn";
-import { NotificationContext } from "../../src/utils/NotificationContext";
+import { NotificationContext } from "../../src/contextData/NotificationContext";
 import { useNotification } from "../../src/customHooks/useNotification";
 import { Notifications } from "../../src/components/Notifications";
 
