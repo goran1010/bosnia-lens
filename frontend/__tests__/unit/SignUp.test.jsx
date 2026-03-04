@@ -10,13 +10,16 @@ import { NotificationContext } from "../../src/contextData/NotificationContext";
 import { useNotification } from "../../src/customHooks/useNotification";
 import { Notifications } from "../../src/components/Notifications";
 
+vi.mock("../../src/components/utils/getCsrfToken", () => ({
+  getCsrfToken: vi.fn().mockResolvedValue("mocked-csrf-token"),
+}));
+
 const user = userEvent.setup();
 
 beforeEach(async () => {
   function Wrapper() {
     const [userData, setUserData] = useState(null);
-    const [notifications, setNotifications] = useState([]);
-    const notificationValue = useNotification(notifications, setNotifications);
+    const { notificationValue } = useNotification();
 
     return (
       <NotificationContext value={notificationValue}>
