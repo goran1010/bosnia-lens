@@ -24,7 +24,7 @@ describe("GET /me", () => {
       error: "You need to be logged in.",
     };
 
-    const response = await request(app).get("/auth/me");
+    const response = await request(app).get("/users/me");
 
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(403);
@@ -39,7 +39,7 @@ describe("GET /me", () => {
       next();
     });
 
-    const response = await request(app).get("/auth/me");
+    const response = await request(app).get("/users/me");
 
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(200);
