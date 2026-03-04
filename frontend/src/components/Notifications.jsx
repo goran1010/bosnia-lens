@@ -22,7 +22,7 @@ function Notifications() {
   useEffect(() => {
     let newTimerRef = timerMapRef.current;
     // Set timers for new notifications only
-    notifications.forEach((notification) => {
+    notifications?.forEach((notification) => {
       if (notification.duration && !newTimerRef.has(notification.id)) {
         const timer = setTimeout(() => {
           removeNotification(notification.id);
@@ -36,7 +36,7 @@ function Notifications() {
     // Clean up timers for notifications that were removed
     return () => {
       newTimerRef.forEach((timer, id) => {
-        const stillExists = notifications.some(
+        const stillExists = notifications?.some(
           (notification) => notification.id === id,
         );
         if (!stillExists) {
@@ -47,7 +47,7 @@ function Notifications() {
     };
   }, [notifications, removeNotification]);
 
-  if (!notifications.length) return null;
+  if (!notifications?.length) return null;
 
   return (
     <div className="fixed top-10 z-50 flex flex-col gap-3 right-10 select-none opacity-80 hover:opacity-100">

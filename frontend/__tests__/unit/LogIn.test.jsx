@@ -10,6 +10,10 @@ import { UserDataContext } from "../../src/contextData/UserDataContext";
 import { useNotification } from "../../src/customHooks/useNotification";
 import { Notifications } from "../../src/components/Notifications";
 
+vi.mock("../../src/components/utils/getCsrfToken", () => ({
+  getCsrfToken: vi.fn().mockResolvedValue("mocked-csrf-token"),
+}));
+
 const user = userEvent.setup();
 
 function createFormElements() {
@@ -23,8 +27,7 @@ function createFormElements() {
 beforeEach(async () => {
   function Wrapper() {
     const [userData, setUserData] = useState(null);
-    const [notifications, setNotifications] = useState([]);
-    const notificationValue = useNotification(notifications, setNotifications);
+    const { notificationValue } = useNotification();
 
     return (
       <NotificationContext value={notificationValue}>
@@ -127,7 +130,7 @@ describe("LogIn for validation on button click", () => {
 
 describe("LogIn Form Submit", () => {
   test("Shows error message after clicking Create when fetching with wrong username/password", async () => {
-    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({
       ok: false,
       status: 400,
       json: async () => ({
@@ -154,7 +157,7 @@ describe("LogIn Form Submit", () => {
   });
 
   test("Redirects to Home on successful form submit", async () => {
-    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({
       ok: true,
       status: 200,
       json: async () => ({
