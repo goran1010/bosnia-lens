@@ -60,13 +60,13 @@ describe("authRouter", () => {
     const response = await agent.get("/users/me");
 
     expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.status).toBe(200);
     expect(response.body.data).toEqual(
       expect.objectContaining({
         username: userData.username,
         email: userData.email,
       }),
     );
+    expect(response.status).toBe(200);
   });
 });
 
@@ -80,8 +80,8 @@ describe("usersRouter", () => {
 
     const response = await request(app).post("/auth/signup").send(newUserData);
 
-    expect(response.status).toBe(201);
     expect(response.body).toEqual(responseData);
+    expect(response.status).toBe(201);
   });
 
   test("responds with 200 and User test_user logged in successfully for correct login input", async () => {
@@ -123,10 +123,10 @@ describe("usersRouter", () => {
 
     const response = await agent.post("/users/logout");
 
-    expect(response.status).toBe(200);
     expect(response.body).toEqual({
       message: "User logged out successfully",
     });
+    expect(response.status).toBe(200);
   });
 
   test("responds with status 200 and HTML for valid token", async () => {
@@ -145,7 +145,7 @@ describe("usersRouter", () => {
 
     const response = await request(app).get(`/auth/confirm/${accessToken}`);
 
-    expect(response.status).toBe(200);
     expect(response.text).toContain(emailConfirmHTML());
+    expect(response.status).toBe(200);
   });
 });

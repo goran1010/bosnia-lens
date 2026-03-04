@@ -31,8 +31,8 @@ describe("POST /users/contributor/postal-codes", () => {
     const response = await request(app).post("/users/contributor/postal-codes");
 
     expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.status).toBe(401);
     expect(response.body).toEqual(notLoggedInResponse);
+    expect(response.status).toBe(401);
   });
 
   test("responds with status 403 and You need to be a contributor to access this route if logged in but not a contributor", async () => {
@@ -92,8 +92,8 @@ describe("POST /users/contributor/postal-codes", () => {
     const responseCode = await agent.post("/users/contributor/postal-codes");
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
-    expect(responseCode.status).toBe(400);
     expect(responseCode.body.error).toBe(expectedResponse);
+    expect(responseCode.status).toBe(400);
   });
 
   test("Responds with status 400 and Postal codes must have 5 numbers if code sent is not 5 numbers", async () => {
@@ -113,8 +113,8 @@ describe("POST /users/contributor/postal-codes", () => {
       .query({ city: "TestCity", code: "1234", post: "" });
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
-    expect(responseCode.status).toBe(400);
     expect(responseCode.body.error).toBe(expectedResponse);
+    expect(responseCode.status).toBe(400);
   });
 
   test("Responds with status 400 and Must be a number if code sent is not a number", async () => {
@@ -134,8 +134,8 @@ describe("POST /users/contributor/postal-codes", () => {
       .query({ city: "TestCity", code: "abcde", post: "" });
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
-    expect(responseCode.status).toBe(400);
     expect(responseCode.body.error).toBe(expectedResponse);
+    expect(responseCode.status).toBe(400);
   });
 
   test("Responds with status 400 and Code already exists if code sent already exists in database", async () => {
@@ -161,8 +161,8 @@ describe("POST /users/contributor/postal-codes", () => {
       .query({ city: "TestCity", code: "12345", post: "" });
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
-    expect(responseCode.status).toBe(400);
     expect(responseCode.body.error).toBe(expectedResponse);
+    expect(responseCode.status).toBe(400);
   });
 
   test("Valid request responds with status 200 and New postal code row created", async () => {
@@ -195,7 +195,6 @@ describe("POST /users/contributor/postal-codes", () => {
       .query({ city: "TestCity", code: "12345", post: "" });
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
-    // expect(responseCode.status).toBe(201);
     expect(responseCode.body).toEqual(expectedResponse);
   });
 });
@@ -210,8 +209,8 @@ describe("PUT /users/contributor/postal-codes", () => {
     const response = await request(app).put("/users/contributor/postal-codes");
 
     expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.status).toBe(401);
     expect(response.body).toEqual(notLoggedInResponse);
+    expect(response.status).toBe(401);
   });
 
   test("responds with status 403 and You need to be a contributor to access this route if logged in but not a contributor", async () => {
@@ -246,8 +245,8 @@ describe("PUT /users/contributor/postal-codes", () => {
     );
 
     expect(adminRouteResponse.header["content-type"]).toMatch(/json/);
-    expect(adminRouteResponse.status).toBe(403);
     expect(adminRouteResponse.body).toEqual(expectedResponse);
+    expect(adminRouteResponse.status).toBe(403);
   });
 
   test("No code sent responds with status 400 and Code is required", async () => {
@@ -266,8 +265,8 @@ describe("PUT /users/contributor/postal-codes", () => {
     const responseCode = await agent.put("/users/contributor/postal-codes");
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
-    expect(responseCode.status).toBe(400);
     expect(responseCode.body.error).toBe(expectedResponse);
+    expect(responseCode.status).toBe(400);
   });
 
   test("Valid request responds with status 200 and Postal code row edited", async () => {
@@ -303,8 +302,8 @@ describe("PUT /users/contributor/postal-codes", () => {
       .query({ city: "TestCity", code: "12345", post: "" });
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
-    expect(responseCode.status).toBe(201);
     expect(responseCode.body).toEqual(expectedResponse);
+    expect(responseCode.status).toBe(201);
   });
 });
 
@@ -320,8 +319,8 @@ describe("DELETE /users/contributor/postal-codes", () => {
     );
 
     expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.status).toBe(401);
     expect(response.body).toEqual(notLoggedInResponse);
+    expect(response.status).toBe(401);
   });
 
   test("responds with status 403 and You need to be a contributor to access this route if logged in but not a contributor", async () => {
@@ -356,8 +355,8 @@ describe("DELETE /users/contributor/postal-codes", () => {
     );
 
     expect(adminRouteResponse.header["content-type"]).toMatch(/json/);
-    expect(adminRouteResponse.status).toBe(403);
     expect(adminRouteResponse.body).toEqual(expectedResponse);
+    expect(adminRouteResponse.status).toBe(403);
   });
 
   test("No code sent responds with status 400 and Code is required", async () => {
@@ -376,8 +375,8 @@ describe("DELETE /users/contributor/postal-codes", () => {
     const responseCode = await agent.delete("/users/contributor/postal-codes");
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
-    expect(responseCode.status).toBe(400);
     expect(responseCode.body.error).toBe(expectedResponse);
+    expect(responseCode.status).toBe(400);
   });
 
   test("Valid request responds with status 200 and Postal code row deleted", async () => {
@@ -406,7 +405,7 @@ describe("DELETE /users/contributor/postal-codes", () => {
       .query({ code: "12345" });
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
-    expect(responseCode.status).toBe(200);
     expect(responseCode.body).toEqual(expectedResponse);
+    expect(responseCode.status).toBe(200);
   });
 });
