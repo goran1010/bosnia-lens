@@ -35,7 +35,7 @@ vi.spyOn(postalCodesModel, "getPostalCodeByCode").mockImplementation(
 
 describe("GET /status", () => {
   test("responds with status 200 when LIVE", async () => {
-    const response = await request(app).get("/api/v1/status");
+    const response = await request(app).get("/api/v1");
 
     expect(response.headers["content-type"]).toMatch(/json/);
     expect(response.body).toEqual({
@@ -50,11 +50,11 @@ describe("GET /postal-codes", () => {
     const response = await request(app).get("/api/v1/postal-codes");
 
     expect(response.headers["content-type"]).toMatch(/json/);
-    expect(response.status).toBe(200);
     expect(response.body).toEqual({
       message: "Postal codes retrieved successfully",
       data: dummyData.data,
     });
+    expect(response.status).toBe(200);
   });
 });
 
@@ -69,8 +69,8 @@ describe("GET /postal-codes/:searchTerm", () => {
     );
 
     expect(response.headers["content-type"]).toMatch(/json/);
-    expect(response.status).toBe(200);
     expect(response.body.data).toEqual(dummyDataFiltered);
+    expect(response.status).toBe(200);
   });
 
   test("responds with status 200 and postal code for /postal-codes/search?searchTerm=71000", async () => {
@@ -83,8 +83,8 @@ describe("GET /postal-codes/:searchTerm", () => {
     ];
 
     expect(response.headers["content-type"]).toMatch(/json/);
-    expect(response.status).toBe(200);
     expect(response.body.data).toEqual(dummyDataFiltered);
+    expect(response.status).toBe(200);
   });
 
   test("responds with status 404 and No postal code found for /postal-codes/search?searchTerm=non-existent-code", async () => {
@@ -93,19 +93,19 @@ describe("GET /postal-codes/:searchTerm", () => {
     );
 
     expect(response.headers["content-type"]).toMatch(/json/);
-    expect(response.status).toBe(404);
     expect(response.body).toEqual({
       error: "Postal code not found",
       details: [{ msg: null }],
     });
+    expect(response.status).toBe(404);
   });
 
   test("responds with status 400 and error message for missing searchTerm", async () => {
     const response = await request(app).get("/api/v1/postal-codes/search");
 
     expect(response.headers["content-type"]).toMatch(/json/);
-    expect(response.status).toBe(400);
     expect(response.body.error).toEqual("Validation failed");
     expect(response.body.details[0].msg).toEqual("Search term is required");
+    expect(response.status).toBe(400);
   });
 });

@@ -10,7 +10,7 @@ async function createAndLoginUser(newUser) {
     ["confirm-password"]: "123123",
     isAdmin: newUser.isAdmin || false,
   };
-  await request(app).post("/users/signup").send(createUserData);
+  await request(app).post("/auth/signup").send(createUserData);
 
   await usersModel.update(
     { username: createUserData.username },
@@ -21,9 +21,7 @@ async function createAndLoginUser(newUser) {
     username: newUser.username,
     password: "123123",
   };
-  const responseData = await request(app)
-    .post("/users/login")
-    .send(requestData);
+  const responseData = await request(app).post("/auth/login").send(requestData);
 
   return responseData;
 }

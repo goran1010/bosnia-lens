@@ -24,11 +24,11 @@ describe("GET /me", () => {
       error: "You need to be logged in.",
     };
 
-    const response = await request(app).get("/auth/me");
+    const response = await request(app).get("/users/me");
 
     expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.status).toBe(403);
     expect(response.body).toEqual(notLoggedInResponse);
+    expect(response.status).toBe(403);
   });
 
   test("responds with status 200 and user data if logged in", async () => {
@@ -39,13 +39,13 @@ describe("GET /me", () => {
       next();
     });
 
-    const response = await request(app).get("/auth/me");
+    const response = await request(app).get("/users/me");
 
     expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.status).toBe(200);
     expect(response.body).toEqual({
       message: "User info retrieved",
       data: user,
     });
+    expect(response.status).toBe(200);
   });
 });

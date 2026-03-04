@@ -3,7 +3,7 @@ function createNewUser(user = {}) {
 
   newUser.username = user.username || "test_user";
   newUser.password = user.password || "123123";
-  newUser.email = user.email || "test_user@mail.com";
+  newUser.email = user.email || "test_user@nonexistentmail.comms";
   newUser["confirm-password"] = user["confirm-password"] || "123123";
 
   return newUser;
