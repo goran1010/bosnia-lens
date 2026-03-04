@@ -14,6 +14,20 @@ vi.mock("../../email/confirmationEmail.js", () => ({
   }),
 }));
 
+vi.mock("csrf-sync", () => {
+  const originalModule = vi.importActual("csrf-sync");
+  return {
+    ...originalModule,
+    csrfSync: () => {
+      return {
+        csrfSynchronisedProtection: (req, res, next) => {
+          next();
+        },
+      };
+    },
+  };
+});
+
 afterEach(async () => {
   await usersModel.deleteAll();
 });
@@ -28,7 +42,7 @@ describe("authRouter", () => {
       email: "test_user_auth@mailll.com",
       ["confirm-password"]: "123123",
     };
-    await agent.post("/users/signup").send(userData);
+    await agent.post("/auth/signup").send(userData);
 
     const accessToken = jwt.sign(
       { email: userData.email, username: userData.username },
@@ -36,14 +50,14 @@ describe("authRouter", () => {
       { expiresIn: "1d" },
     );
 
-    await agent.get(`/users/confirm/${accessToken}`);
+    await agent.get(`/auth/confirm/${accessToken}`);
 
-    await agent.post("/users/login").send({
+    await agent.post("/auth/login").send({
       username: userData.username,
       password: userData.password,
     });
 
-    const response = await agent.get("/auth/me");
+    const response = await agent.get("/users/me");
 
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(200);
@@ -64,7 +78,7 @@ describe("usersRouter", () => {
 
     const newUserData = createNewUser();
 
-    const response = await request(app).post("/users/signup").send(newUserData);
+    const response = await request(app).post("/auth/signup").send(newUserData);
 
     expect(response.status).toBe(201);
     expect(response.body).toEqual(responseData);
@@ -92,7 +106,7 @@ describe("usersRouter", () => {
       email: "test_user_auth@mailll.com",
       ["confirm-password"]: "123123",
     };
-    await agent.post("/users/signup").send(userData);
+    await agent.post("/auth/signup").send(userData);
 
     const accessToken = jwt.sign(
       { email: userData.email, username: userData.username },
@@ -100,9 +114,9 @@ describe("usersRouter", () => {
       { expiresIn: "1d" },
     );
 
-    await agent.get(`/users/confirm/${accessToken}`);
+    await agent.get(`/auth/confirm/${accessToken}`);
 
-    await agent.post("/users/login").send({
+    await agent.post("/auth/login").send({
       username: userData.username,
       password: userData.password,
     });
@@ -129,7 +143,7 @@ describe("usersRouter", () => {
       { expiresIn: "30d" },
     );
 
-    const response = await request(app).get(`/users/confirm/${accessToken}`);
+    const response = await request(app).get(`/auth/confirm/${accessToken}`);
 
     expect(response.status).toBe(200);
     expect(response.text).toContain(emailConfirmHTML());
