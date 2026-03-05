@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import * as usersModel from "../../models/usersModel.js";
 
 export async function setup() {
