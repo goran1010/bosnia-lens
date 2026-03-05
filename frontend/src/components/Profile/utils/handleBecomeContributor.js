@@ -1,13 +1,25 @@
-const currentURL = import.meta.env.VITE_API_URL;
+const currentURL = import.meta.env.VITE_BACKEND_URL;
+import { getCsrfToken } from "../../utils/getCsrfToken";
 
 async function handleBecomeContributor(addNotification, setUserData) {
   try {
+    const csrfToken = await getCsrfToken();
+
+    if (!csrfToken) {
+      addNotification({
+        type: "error",
+        message: "Failed to retrieve CSRF token.",
+      });
+      return;
+    }
+
     const response = await fetch(`${currentURL}/users/become-contributor`, {
       mode: "cors",
       method: "POST",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        "x-csrf-token": csrfToken,
       },
     });
 

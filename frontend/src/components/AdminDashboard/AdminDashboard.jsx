@@ -5,7 +5,7 @@ import { AdminForm } from "./AdminForm";
 function AdminDashboard() {
   const { userData } = useContext(UserDataContext);
 
-  if (userData?.isAdmin) {
+  if (userData?.role === "ADMIN") {
     return (
       <>
         <AdminForm />
