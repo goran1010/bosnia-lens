@@ -3,7 +3,6 @@ import { describe, test, expect, vi } from "vitest";
 import { app } from "../../app.js";
 import { createAndLoginUser } from "../utils/createUserAndLogin.js";
 import { createNewUser } from "../utils/createNewUser.js";
-import { afterEach } from "vitest";
 import * as usersModel from "../../models/usersModel.js";
 import jwt from "jsonwebtoken";
 import { emailConfirmHTML } from "../../utils/emailConfirmHTML.js";
@@ -28,20 +27,12 @@ vi.mock("csrf-sync", () => {
   };
 });
 
-afterEach(async () => {
-  await usersModel.deleteAll();
-});
-
 describe("authRouter", () => {
   test("responds with status 200 and user data if logged in", async () => {
     const agent = request.agent(app);
 
-    const userData = {
-      username: "test_user_auth",
-      password: "123123",
-      email: "test_user_auth@mailll.com",
-      ["confirm-password"]: "123123",
-    };
+    const userData = createNewUser();
+
     await agent.post("/auth/signup").send(userData);
 
     const accessToken = jwt.sign(
@@ -100,12 +91,8 @@ describe("usersRouter", () => {
   test("responds User logged out successfully", async () => {
     const agent = request.agent(app);
 
-    const userData = {
-      username: "test_user_auth",
-      password: "123123",
-      email: "test_user_auth@mailll.com",
-      ["confirm-password"]: "123123",
-    };
+    const userData = createNewUser();
+
     await agent.post("/auth/signup").send(userData);
 
     const accessToken = jwt.sign(
