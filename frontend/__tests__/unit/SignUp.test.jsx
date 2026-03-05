@@ -2,21 +2,24 @@ import { test, describe, expect, beforeEach, vi } from "vitest";
 import { SignUp } from "../../src/components/SignUp/SignUp";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
-import { UserDataContext } from "../../src/utils/UserDataContext";
+import { UserDataContext } from "../../src/contextData/UserDataContext";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { LogIn } from "../../src/components/LogIn/LogIn";
-import { NotificationContext } from "../../src/utils/NotificationContext";
+import { NotificationContext } from "../../src/contextData/NotificationContext";
 import { useNotification } from "../../src/customHooks/useNotification";
 import { Notifications } from "../../src/components/Notifications";
+
+vi.mock("../../src/components/utils/getCsrfToken", () => ({
+  getCsrfToken: vi.fn().mockResolvedValue("mocked-csrf-token"),
+}));
 
 const user = userEvent.setup();
 
 beforeEach(async () => {
   function Wrapper() {
     const [userData, setUserData] = useState(null);
-    const [notifications, setNotifications] = useState([]);
-    const notificationValue = useNotification(notifications, setNotifications);
+    const { notificationValue } = useNotification();
 
     return (
       <NotificationContext value={notificationValue}>

@@ -1,16 +1,14 @@
 import { describe, test, expect, beforeEach, vi, afterEach } from "vitest";
-import { useWeatherCheck } from "../../src/customHooks/useWeatherCheck";
+import { useWeatherCheck } from "../../src/components/Home/customHooks/useWeatherCheck";
 import { renderHook, waitFor } from "@testing-library/react";
-import { NotificationContext } from "../../src/utils/NotificationContext";
+import { NotificationContext } from "../../src/contextData/NotificationContext";
 
-let mockSetWeatherForecast;
 let mockSetLoading;
 let fetchSpy;
 let wrapper;
 let addNotificationMock;
 
 beforeEach(() => {
-  mockSetWeatherForecast = vi.fn();
   mockSetLoading = vi.fn();
   addNotificationMock = vi.fn();
 
@@ -64,25 +62,25 @@ describe("Weather fetch", () => {
       json: async () => mockWeatherData,
     });
 
-    renderHook(() => useWeatherCheck(mockSetWeatherForecast, mockSetLoading), {
+    const { result } = renderHook(() => useWeatherCheck(mockSetLoading), {
       wrapper,
     });
 
     expect(fetchSpy).toHaveBeenCalledTimes(1);
 
     await waitFor(() => {
-      expect(mockSetWeatherForecast).toHaveBeenCalled();
+      expect(result.current.weatherForecast).toHaveLength(3);
     });
 
-    const calledWithData = mockSetWeatherForecast.mock.calls[0][0];
-    expect(calledWithData).toHaveLength(3);
-    expect(calledWithData[0]).toMatchObject({
+    expect(result.current.weatherForecast[0]).toMatchObject({
       datetime: "2026-01-17",
       tempmin: 5,
       tempmax: 15,
       icon: "clear-day",
     });
-    expect(calledWithData[0].iconURL).toContain("clear-day.svg");
+    expect(result.current.weatherForecast[0].iconURL).toContain(
+      "clear-day.svg",
+    );
     expect(mockSetLoading).toHaveBeenCalledWith(false);
   });
 
@@ -96,7 +94,7 @@ describe("Weather fetch", () => {
       json: async () => mockWeatherData,
     });
 
-    renderHook(() => useWeatherCheck(mockSetWeatherForecast, mockSetLoading), {
+    renderHook(() => useWeatherCheck(mockSetLoading), {
       wrapper,
     });
 
@@ -113,7 +111,7 @@ describe("Weather fetch", () => {
 
     fetchSpy.mockResolvedValueOnce(mockResponse);
 
-    renderHook(() => useWeatherCheck(mockSetWeatherForecast, mockSetLoading), {
+    const { result } = renderHook(() => useWeatherCheck(mockSetLoading), {
       wrapper,
     });
 
@@ -121,7 +119,7 @@ describe("Weather fetch", () => {
       expect(addNotificationMock).toHaveBeenCalled();
     });
 
-    expect(mockSetWeatherForecast).not.toHaveBeenCalled();
+    expect(result.current.weatherForecast).toHaveLength(0);
     expect(mockSetLoading).toHaveBeenCalledWith(false);
   });
 });
@@ -130,7 +128,7 @@ describe("Network errors", () => {
     const networkError = new Error("Network error");
     fetchSpy.mockRejectedValueOnce(networkError);
 
-    renderHook(() => useWeatherCheck(mockSetWeatherForecast, mockSetLoading), {
+    const { result } = renderHook(() => useWeatherCheck(mockSetLoading), {
       wrapper,
     });
 
@@ -138,7 +136,7 @@ describe("Network errors", () => {
       expect(addNotificationMock).toHaveBeenCalled();
     });
 
-    expect(mockSetWeatherForecast).not.toHaveBeenCalled();
+    expect(result.current.weatherForecast).toHaveLength(0);
     expect(mockSetLoading).toHaveBeenCalledWith(false);
   });
 });

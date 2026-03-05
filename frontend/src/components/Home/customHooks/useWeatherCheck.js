@@ -20,15 +20,17 @@ function useWeatherCheck(setLoading) {
         }
 
         const data = await response.json();
-        for (let day of data.days) {
-          const URL = `https://raw.githubusercontent.com/visualcrossing/WeatherIcons/58c79610addf3d4d91471abbb95b05e96fb43019/SVG/1st%20Set%20-%20Color/${day.icon}.svg`;
-          day.iconURL = URL;
+        if (data.days && Array.isArray(data.days)) {
+          for (let day of data.days) {
+            const URL = `https://raw.githubusercontent.com/visualcrossing/WeatherIcons/58c79610addf3d4d91471abbb95b05e96fb43019/SVG/1st%20Set%20-%20Color/${day.icon}.svg`;
+            day.iconURL = URL;
+          }
+          addNotification({
+            type: "success",
+            message: "Weather data fetched successfully!",
+          });
+          setWeatherForecast(data.days);
         }
-        addNotification({
-          type: "success",
-          message: "Weather data fetched successfully!",
-        });
-        setWeatherForecast(data.days);
       } catch (err) {
         addNotification({
           type: "error",

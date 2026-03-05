@@ -8,8 +8,8 @@ import { Footer } from "../../src/components/Footer";
 import { Navbar } from "../../src/components/Navbar/Navbar";
 import { MemoryRouter } from "react-router-dom";
 import { ErrorPage } from "../../src/components/ErrorPage";
-import { UserDataContext } from "../../src/utils/UserDataContext";
-import { NotificationContext } from "../../src/utils/NotificationContext";
+import { UserDataContext } from "../../src/contextData/UserDataContext";
+import { NotificationContext } from "../../src/contextData/NotificationContext";
 
 describe("Render Components", () => {
   const contextValue = {
