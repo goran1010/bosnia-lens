@@ -1,4 +1,4 @@
-import * as usersModel from "../models/usersModel.js";
+import { usersModel } from "../models/usersModel.js";
 import jwt from "jsonwebtoken";
 import { emailConfirmHTML } from "../utils/emailConfirmHTML.js";
 import { passport } from "../config/passport.js";

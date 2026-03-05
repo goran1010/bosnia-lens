@@ -1,4 +1,4 @@
-import * as usersModel from "../models/usersModel.js";
+import { usersModel } from "../models/usersModel.js";
 
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 const NUMBER_OF_DAYS = 30;

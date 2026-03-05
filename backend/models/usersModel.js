@@ -1,36 +1,40 @@
 import { prisma } from "../db/prisma.js";
 
-function find(where) {
-  return prisma.user.findUnique({ where: { ...where } });
+class UsersModel {
+  find(where) {
+    return prisma.user.findUnique({ where: { ...where } });
+  }
+
+  findMany(where) {
+    return prisma.user.findMany({ where: { ...where } });
+  }
+
+  update(where, data) {
+    return prisma.user.update({
+      where: { ...where },
+      data: { ...data },
+    });
+  }
+
+  create(data) {
+    return prisma.user.create({
+      data: {
+        ...data,
+      },
+    });
+  }
+
+  deleteAll() {
+    return prisma.user.deleteMany();
+  }
+
+  deleteUser(where) {
+    return prisma.user.deleteMany({
+      where: { ...where },
+    });
+  }
 }
 
-function findMany(where) {
-  return prisma.user.findMany({ where: { ...where } });
-}
+const usersModel = new UsersModel();
 
-function update(where, data) {
-  return prisma.user.update({
-    where: { ...where },
-    data: { ...data },
-  });
-}
-
-function create(data) {
-  return prisma.user.create({
-    data: {
-      ...data,
-    },
-  });
-}
-
-function deleteAll() {
-  return prisma.user.deleteMany();
-}
-
-function deleteUser(where) {
-  return prisma.user.deleteMany({
-    where: { ...where },
-  });
-}
-
-export { find, update, create, deleteAll, deleteUser, findMany };
+export { usersModel };

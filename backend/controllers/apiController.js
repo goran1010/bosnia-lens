@@ -1,5 +1,5 @@
 import { normalizeName } from "../utils/normalizeName.js";
-import * as postalCodesModel from "../models/postalCodesModel.js";
+import { postalCodesModel } from "../models/postalCodesModel.js";
 
 function status(req, res) {
   res.json({ message: "Server is running" });

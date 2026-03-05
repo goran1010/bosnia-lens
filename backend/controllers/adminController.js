@@ -1,4 +1,4 @@
-import * as usersModel from "../models/usersModel.js";
+import { usersModel } from "../models/usersModel.js";
 
 async function getAllContributors(req, res) {
   const contributors = await usersModel.findMany({

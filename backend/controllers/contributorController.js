@@ -1,4 +1,4 @@
-import * as getPostalCodesModel from "../models/postalCodesModel.js";
+import { getPostalCodesModel } from "../models/postalCodesModel.js";
 
 async function createPostalCode(req, res) {
   const { city, code, post } = req.query;
