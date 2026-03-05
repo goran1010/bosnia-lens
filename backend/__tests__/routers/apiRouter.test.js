@@ -1,7 +1,7 @@
 import request from "supertest";
 import { app } from "../../app.js";
 import { describe, test, expect, vi, beforeEach } from "vitest";
-import * as postalCodesModel from "../../models/postalCodesModel.js";
+import {postalCodesModel} from "../../models/postalCodesModel.js";
 
 beforeEach(() => {
   vi.clearAllMocks();

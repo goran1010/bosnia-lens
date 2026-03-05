@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import * as usersModel from "../../models/usersModel.js";
+import { usersModel } from "../../models/usersModel.js";
 
 export async function setup() {
   process.env.NODE_ENV = "test";

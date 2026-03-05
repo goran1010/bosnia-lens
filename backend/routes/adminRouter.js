@@ -1,7 +1,7 @@
 import { Router } from "express";
 const adminRouter = Router();
 
-import * as adminController from "../controllers/adminController.js";
+import { adminController } from "../controllers/adminController.js";
 
 adminRouter.get("/contributors", adminController.getAllContributors);
 

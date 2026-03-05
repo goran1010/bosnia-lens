@@ -3,8 +3,8 @@ import { describe, test, expect, vi } from "vitest";
 import jwt from "jsonwebtoken";
 import { createNewUser } from "../utils/createNewUser.js";
 import { createContributorAndKeepLoggedIn } from "../utils/createContributorAndKeepLoggedIn.js";
-import * as usersModel from "../../models/usersModel.js";
-import * as postalCodesModel from "../../models/postalCodesModel.js";
+import { usersModel } from "../../models/usersModel.js";
+import { postalCodesModel } from "../../models/postalCodesModel.js";
 import { app } from "../../app.js";
 
 vi.mock("../../email/confirmationEmail.js", () => ({

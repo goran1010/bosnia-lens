@@ -1,26 +1,30 @@
-import { getPostalCodesModel } from "../models/postalCodesModel.js";
+import { postalCodesModel } from "../models/postalCodesModel.js";
 
-async function createPostalCode(req, res) {
-  const { city, code, post } = req.query;
+class ContributorController {
+  async createPostalCode(req, res) {
+    const { city, code, post } = req.query;
 
-  const result = await getPostalCodesModel.createNew(city, code, post);
-  res
-    .status(201)
-    .json({ message: "New postal code row created.", data: result });
+    const result = await postalCodesModel.createNew(city, code, post);
+    res
+      .status(201)
+      .json({ message: "New postal code row created.", data: result });
+  }
+
+  async editPostalCode(req, res) {
+    const { city, code, post } = req.query;
+
+    const result = await postalCodesModel.edit(city, code, post);
+    res.status(201).json({ message: "Postal code row edited.", data: result });
+  }
+
+  async deletePostalCode(req, res) {
+    const { code } = req.query;
+
+    const result = await postalCodesModel.deleteCode(code);
+    res.json({ message: "Postal code row deleted.", data: result });
+  }
 }
 
-async function editPostalCode(req, res) {
-  const { city, code, post } = req.query;
+const contributorController = new ContributorController();
 
-  const result = await getPostalCodesModel.edit(city, code, post);
-  res.status(201).json({ message: "Postal code row edited.", data: result });
-}
-
-async function deletePostalCode(req, res) {
-  const { code } = req.query;
-
-  const result = await getPostalCodesModel.deleteCode(code);
-  res.json({ message: "Postal code row deleted.", data: result });
-}
-
-export { createPostalCode, deletePostalCode, editPostalCode };
+export { contributorController };

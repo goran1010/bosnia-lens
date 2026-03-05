@@ -1,5 +1,5 @@
 import request from "supertest";
-import * as usersModel from "../../models/usersModel.js";
+import { usersModel } from "../../models/usersModel.js";
 import { app } from "../../app.js";
 
 async function createAndLoginUser(newUser) {

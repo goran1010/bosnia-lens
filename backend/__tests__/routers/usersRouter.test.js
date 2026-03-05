@@ -30,7 +30,7 @@ import { app } from "../../app.js";
 
 import { emailConfirmHTML } from "../../utils/emailConfirmHTML.js";
 import { createNewUser } from "../utils/createNewUser.js";
-import * as usersModel from "../../models/usersModel.js";
+import { usersModel } from "../../models/usersModel.js";
 import { sendConfirmationEmail } from "../../email/confirmationEmail.js";
 import jwt from "jsonwebtoken";
 import { passport } from "../../config/passport.js";
