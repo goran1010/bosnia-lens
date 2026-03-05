@@ -3,7 +3,7 @@ import { usersModel } from "../models/usersModel.js";
 class AdminController {
   async getAllContributors(req, res) {
     const contributors = await usersModel.findMany({
-      isContributor: true,
+      role: "CONTRIBUTOR",
     });
     res.json({
       message: "Contributors fetched successfully.",
@@ -13,7 +13,6 @@ class AdminController {
 
   async getRequestedContributors(req, res) {
     const requestedContributors = await usersModel.findMany({
-      isContributor: false,
       requestedContributor: true,
     });
     res.json({
@@ -26,7 +25,7 @@ class AdminController {
     const { userId } = req.params;
     await usersModel.update(
       { id: userId },
-      { isContributor: true, requestedContributor: false },
+      { role: "CONTRIBUTOR", requestedContributor: false },
     );
     res
       .status(201)
@@ -37,7 +36,7 @@ class AdminController {
     const { userId } = req.params;
     await usersModel.update(
       { id: userId },
-      { isContributor: false, requestedContributor: false },
+      { role: "USER", requestedContributor: false },
     );
     res
       .status(201)

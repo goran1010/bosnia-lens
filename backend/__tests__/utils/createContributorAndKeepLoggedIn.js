@@ -19,7 +19,7 @@ async function createContributorAndKeepLoggedIn(agent, userData) {
 
   await usersModel.update(
     { username: userData.username },
-    { isContributor: true },
+    { role: "CONTRIBUTOR", requestedContributor: false },
   );
   return response;
 }

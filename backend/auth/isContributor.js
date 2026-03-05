@@ -8,7 +8,8 @@ function isContributor(req, res, next) {
       });
     }
 
-    if (req.user.isContributor || req.user.isAdmin) return next();
+    if (req.user.role === "CONTRIBUTOR" || req.user.role === "ADMIN")
+      return next();
 
     res.status(403).json({
       error: "You need to be a contributor to access this route.",
