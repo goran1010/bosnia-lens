@@ -10,7 +10,7 @@ function useStatusCheck(setLoading, notificationValue, setLongWait) {
     setLongWait(false);
     async function checkLogin() {
       // Show long wait message after 4 seconds
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         if (userChecked.current === false) {
           setLongWait(true);
         }
@@ -44,6 +44,7 @@ function useStatusCheck(setLoading, notificationValue, setLongWait) {
         console.error(err);
       } finally {
         userChecked.current = true;
+        clearTimeout(timeoutId);
         setLoading(false);
         setLongWait(false);
       }
