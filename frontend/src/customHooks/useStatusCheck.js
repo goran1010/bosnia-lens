@@ -8,10 +8,13 @@ function useStatusCheck(setLoading, notificationValue, setLongWait) {
 
   useEffect(() => {
     setLongWait(false);
+    const abortController = new AbortController();
+    let isMounted = true;
+
     async function checkLogin() {
       // Show long wait message after 4 seconds
       const timeoutId = setTimeout(() => {
-        if (userChecked.current === false) {
+        if (userChecked.current === false && isMounted) {
           setLongWait(true);
         }
       }, 4000);
@@ -21,9 +24,12 @@ function useStatusCheck(setLoading, notificationValue, setLongWait) {
           mode: "cors",
           method: "GET",
           credentials: "include",
+          signal: abortController.signal,
         });
 
         const result = await response.json();
+        if (!isMounted) return;
+
         if (!response.ok) {
           addNotification({
             type: "error",
@@ -37,20 +43,28 @@ function useStatusCheck(setLoading, notificationValue, setLongWait) {
         });
         setUserData(result.data);
       } catch (err) {
+        if (err.name === "AbortError" || !isMounted) return;
         addNotification({
           type: "error",
           message: "An error occurred while checking login status.",
         });
         console.error(err);
       } finally {
-        userChecked.current = true;
-        clearTimeout(timeoutId);
-        setLoading(false);
-        setLongWait(false);
+        if (isMounted) {
+          userChecked.current = true;
+          clearTimeout(timeoutId);
+          setLoading(false);
+          setLongWait(false);
+        }
       }
     }
 
     checkLogin();
+
+    return () => {
+      isMounted = false;
+      abortController.abort();
+    };
   }, [addNotification, setUserData, setLoading, setLongWait]);
 
   return { userData, setUserData };
