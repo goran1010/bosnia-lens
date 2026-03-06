@@ -18,7 +18,14 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
-    plugins: [react(), tailwindcss()],
+    plugins: [
+      react({
+        babel: {
+          plugins: ["babel-plugin-react-compiler"],
+        },
+      }),
+      tailwindcss(),
+    ],
     test: {
       globals: true,
       environment: "jsdom",

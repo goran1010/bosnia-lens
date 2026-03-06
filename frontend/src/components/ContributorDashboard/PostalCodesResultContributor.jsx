@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { handleEditContributor } from "./utils/handleEditContributor";
 import { handleDeleteContributor } from "./utils/handleDeleteContributor";
@@ -16,28 +16,22 @@ function PostalCodesResultContributor({ searchResult, setSearchResult }) {
     setInputValuesByCode(nextValuesByCode);
   }, [searchResult]);
 
-  const handleInputChange = useCallback((code, name, value) => {
+  const handleInputChange = (code, name, value) => {
     setInputValuesByCode((prev) => {
       const newMap = new Map(prev);
       const current = newMap.get(code) || { code };
       newMap.set(code, { ...current, [name]: value });
       return newMap;
     });
-  }, []);
+  };
 
-  const handleEdit = useCallback(
-    (e) => {
-      handleEditContributor(e, setSearchResult, addNotification);
-    },
-    [setSearchResult, addNotification],
-  );
+  const handleEdit = (e) => {
+    handleEditContributor(e, setSearchResult, addNotification);
+  };
 
-  const handleDelete = useCallback(
-    (e) => {
-      handleDeleteContributor(e, setSearchResult, addNotification);
-    },
-    [setSearchResult, addNotification],
-  );
+  const handleDelete = (e) => {
+    handleDeleteContributor(e, setSearchResult, addNotification);
+  };
 
   if (searchResult.length === 0) {
     return (
