@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import * as usersModel from "../../models/usersModel.js";
+import { usersModel } from "../../models/usersModel.js";
 
 async function createContributorAndKeepLoggedIn(agent, userData) {
   await agent.post("/auth/signup").send(userData);
@@ -19,7 +19,7 @@ async function createContributorAndKeepLoggedIn(agent, userData) {
 
   await usersModel.update(
     { username: userData.username },
-    { isContributor: true },
+    { role: "CONTRIBUTOR", requestedContributor: false },
   );
   return response;
 }

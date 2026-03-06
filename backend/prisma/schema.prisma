@@ -22,14 +22,19 @@ model Session {
   @@map("sessions")
 }
 
+enum role {
+  ADMIN
+  CONTRIBUTOR
+  USER
+}
+
 model User {
   id                   String  @id @default(uuid())
   username             String  @unique
   email                String  @unique
   isEmailConfirmed     Boolean @default(false)
   password             String
-  isAdmin              Boolean @default(false)
-  isContributor        Boolean @default(false)
+  role                 role    @default(USER)
   requestedContributor Boolean @default(false)
 
   @@map("users")

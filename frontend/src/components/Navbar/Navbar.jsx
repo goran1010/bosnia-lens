@@ -46,7 +46,7 @@ function Navbar() {
             Universities
           </Link>
         </li>
-        {(userData?.isAdmin || userData?.isContributor) && (
+        {(userData?.role === "ADMIN" || userData?.role === "CONTRIBUTOR") && (
           <li>
             <Link
               className="block py-3 px-2 hover:bg-gray-400"
@@ -56,7 +56,7 @@ function Navbar() {
             </Link>
           </li>
         )}
-        {userData?.isAdmin && (
+        {userData?.role === "ADMIN" && (
           <li>
             <Link
               className="block py-3 px-2 hover:bg-gray-400"

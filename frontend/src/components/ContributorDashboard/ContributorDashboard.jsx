@@ -5,7 +5,7 @@ import { ContributorForm } from "./ContributorForm";
 function ContributorDashboard() {
   const { userData } = useContext(UserDataContext);
 
-  if (userData?.isContributor || userData?.isAdmin) {
+  if (userData?.role === "CONTRIBUTOR" || userData?.role === "ADMIN") {
     return (
       <>
         <ContributorForm />

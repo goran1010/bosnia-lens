@@ -1,7 +1,7 @@
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 import { getCsrfToken } from "../../utils/getCsrfToken";
 
-async function handleLogoutContributor(addNotification, navigate, setUserData) {
+async function handleLogout(addNotification, navigate, setUserData) {
   try {
     const csrfToken = await getCsrfToken();
 
@@ -47,4 +47,4 @@ async function handleLogoutContributor(addNotification, navigate, setUserData) {
   }
 }
 
-export { handleLogoutContributor };
+export { handleLogout };

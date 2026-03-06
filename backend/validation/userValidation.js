@@ -1,5 +1,5 @@
 import { body, validationResult } from "express-validator";
-import * as usersModel from "../models/usersModel.js";
+import { usersModel } from "../models/usersModel.js";
 
 const signupValidationRules = [
   body("username")

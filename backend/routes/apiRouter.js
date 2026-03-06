@@ -1,6 +1,6 @@
 import { Router } from "express";
 const apiRouter = Router();
-import * as apiController from "../controllers/apiController.js";
+import { apiController } from "../controllers/apiController.js";
 import { postalCodeSearchValidationRules } from "../validation/postalCodeValidation.js";
 
 apiRouter.get("/", apiController.status);

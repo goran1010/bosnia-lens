@@ -3,7 +3,7 @@ import { useContext, useEffect } from "react";
 import { UserDataContext } from "../../contextData/UserDataContext";
 import { useNavigate } from "react-router-dom";
 import { handleBecomeContributor } from "./utils/handleBecomeContributor";
-import { handleLogoutContributor } from "./utils/handleLogOutContributor";
+import { handleLogout } from "./utils/handleLogout";
 
 function Profile() {
   const { addNotification } = useContext(NotificationContext);
@@ -54,7 +54,7 @@ function Profile() {
                 <span
                   className={`items-center px-4 py-2 rounded-full text-sm font-bold bg-gray-200`}
                 >
-                  {userData?.isContributor
+                  {userData?.role === "CONTRIBUTOR"
                     ? "Active Contributor"
                     : userData?.requestedContributor
                       ? "Pending Approval"
@@ -64,24 +64,21 @@ function Profile() {
             </div>
 
             <div className="pt-4 space-y-4">
-              {!userData?.isContributor && !userData?.requestedContributor && (
-                <button
-                  onClick={() =>
-                    handleBecomeContributor(addNotification, setUserData)
-                  }
-                  className="cursor-pointer w-full bg-linear-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:from-blue-600 hover:to-indigo-700 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                >
-                  Request Contributor Access
-                </button>
-              )}
+              {userData?.role !== "CONTRIBUTOR" &&
+                !userData?.requestedContributor && (
+                  <button
+                    onClick={() =>
+                      handleBecomeContributor(addNotification, setUserData)
+                    }
+                    className="cursor-pointer w-full bg-linear-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:from-blue-600 hover:to-indigo-700 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  >
+                    Request Contributor Access
+                  </button>
+                )}
 
               <button
                 onClick={() =>
-                  handleLogoutContributor(
-                    addNotification,
-                    navigate,
-                    setUserData,
-                  )
+                  handleLogout(addNotification, navigate, setUserData)
                 }
                 className="cursor-pointer w-full bg-red-500 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-red-600 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
               >
