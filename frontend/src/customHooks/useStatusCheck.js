@@ -65,7 +65,7 @@ function useStatusCheck(setLoading, notificationValue, setLongWait) {
       isMounted = false;
       abortController.abort();
     };
-  }, [addNotification, setUserData, setLoading, setLongWait]);
+  }, [addNotification, setLoading, setLongWait]);
 
   return { userData, setUserData };
 }
