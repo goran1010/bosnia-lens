@@ -8,12 +8,15 @@ import { useStatusCheck } from "./customHooks/useStatusCheck";
 import { Notifications } from "./components/Notifications";
 import { NotificationContext } from "./contextData/NotificationContext";
 import { useNotification } from "./customHooks/useNotification";
+import { useTitle } from "./customHooks/useTitle";
 
 function Root() {
   const [loading, setLoading] = useState(true);
   const [longWait, setLongWait] = useState(false);
 
   const { notificationValue } = useNotification();
+
+  useTitle();
 
   const { userData, setUserData } = useStatusCheck(
     setLoading,
