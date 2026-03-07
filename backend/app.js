@@ -13,6 +13,8 @@ import { csrfSync } from "csrf-sync";
 import { csrfRouter } from "./routes/csrfRouter.js";
 const { csrfSynchronisedProtection } = csrfSync();
 
+import compression from "compression";
+
 import { apiRouter } from "./routes/apiRouter.js";
 import { authRouter } from "./routes/authRouter.js";
 import { usersRouter } from "./routes/usersRouter.js";
@@ -25,6 +27,7 @@ const frontendURL = process.env.URL;
 app.set("trust proxy", 1);
 
 app.use(helmet());
+app.use(compression());
 
 // Public API routes
 app.use("/api", cors(), rateLimiter.api, apiRouter);
