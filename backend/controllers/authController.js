@@ -11,7 +11,7 @@ class AuthController {
   async signup(req, res) {
     try {
       const { username, email, password } = req.body;
-      const hashedPassword = bcrypt.hashSync(password, 10);
+      const hashedPassword = await bcrypt.hash(password, 10);
 
       const userExists = await usersModel.find({ username });
 
