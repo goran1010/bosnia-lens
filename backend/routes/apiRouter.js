@@ -4,7 +4,7 @@ const apiRouter = Router();
 import { v1Router } from "./v1Router.js";
 import { apiController } from "../controllers/apiController.js";
 
-apiRouter.get("/status", apiController.status);
+apiRouter.get("/", apiController.status);
 
 apiRouter.use("/v1", v1Router);
 
