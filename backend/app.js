@@ -19,16 +19,20 @@ import { usersRouter } from "./routes/usersRouter.js";
 import { isAuthenticated } from "./auth/isAuthenticated.js";
 import { isNotAuthenticated } from "./auth/isNotAuthenticated.js";
 
-const currentURL = process.env.URL;
+const frontendURL = process.env.URL;
 
 // Trust first proxy (required for Koyeb)
 app.set("trust proxy", 1);
 
 app.use(helmet());
 
+// Public API routes
+app.use("/api", cors(), rateLimiter.api, apiRouter);
+// -----------------
+
 app.use(
   cors({
-    origin: [currentURL, "http://localhost:5173", "http://127.0.0.1:5173"],
+    origin: [frontendURL],
     credentials: true,
   }),
 );
@@ -43,7 +47,6 @@ app.use(passport.session());
 
 app.use(csrfRouter);
 
-app.use("/api/v1/", rateLimiter.api, apiRouter);
 app.use(
   "/auth",
   rateLimiter.auth,

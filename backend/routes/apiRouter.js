@@ -1,15 +1,11 @@
 import { Router } from "express";
 const apiRouter = Router();
+
+import { v1Router } from "./v1Router.js";
 import { apiController } from "../controllers/apiController.js";
-import { postalCodeSearchValidationRules } from "../validation/postalCodeValidation.js";
 
 apiRouter.get("/", apiController.status);
 
-apiRouter.get(
-  "/postal-codes/search",
-  postalCodeSearchValidationRules,
-  apiController.getPostalCodeByCode,
-);
-apiRouter.get("/postal-codes", apiController.getPostalCodes);
+apiRouter.use("/v1", v1Router);
 
 export { apiRouter };

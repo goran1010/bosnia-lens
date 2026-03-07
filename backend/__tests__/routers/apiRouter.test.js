@@ -1,7 +1,7 @@
 import request from "supertest";
 import { app } from "../../app.js";
 import { describe, test, expect, vi, beforeEach } from "vitest";
-import {postalCodesModel} from "../../models/postalCodesModel.js";
+import { postalCodesModel } from "../../models/postalCodesModel.js";
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -39,7 +39,7 @@ describe("GET /status", () => {
 
     expect(response.headers["content-type"]).toMatch(/json/);
     expect(response.body).toEqual({
-      message: "Server is running",
+      message: "API v1 server is running",
     });
     expect(response.status).toBe(200);
   });
