@@ -19,18 +19,20 @@ import { usersRouter } from "./routes/usersRouter.js";
 import { isAuthenticated } from "./auth/isAuthenticated.js";
 import { isNotAuthenticated } from "./auth/isNotAuthenticated.js";
 
-const currentURL = process.env.URL;
+const frontendURL = process.env.URL;
 
 // Trust first proxy (required for Koyeb)
 app.set("trust proxy", 1);
 
 app.use(helmet());
 
-app.use("/api/v1/", cors(), rateLimiter.api, apiRouter);
+// Public API routes
+app.use("/api", cors(), rateLimiter.api, apiRouter);
+// -----------------
 
 app.use(
   cors({
-    origin: [currentURL],
+    origin: [frontendURL],
     credentials: true,
   }),
 );

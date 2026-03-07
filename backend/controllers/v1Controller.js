@@ -1,9 +1,9 @@
 import { normalizeName } from "../utils/normalizeName.js";
 import { postalCodesModel } from "../models/postalCodesModel.js";
 
-class APIController {
+class V1Controller {
   status(req, res) {
-    res.json({ message: "API server is running" });
+    res.json({ message: "API v1 server is running" });
   }
 
   async getPostalCodes(req, res) {
@@ -45,6 +45,6 @@ class APIController {
   }
 }
 
-const apiController = new APIController();
+const v1Controller = new V1Controller();
 
-export { apiController };
+export { v1Controller };
