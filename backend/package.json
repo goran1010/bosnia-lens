@@ -32,6 +32,7 @@
     "@prisma/client": "^7.3.0",
     "@quixo3/prisma-session-store": "^3.1.13",
     "bcryptjs": "^3.0.2",
+    "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "csrf-sync": "^4.2.1",
@@ -46,6 +47,7 @@
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "pg": "^8.16.3",
+    "pino": "^10.3.1",
     "resend": "^6.5.2"
   },
   "devDependencies": {

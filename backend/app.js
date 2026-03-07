@@ -13,6 +13,13 @@ import { csrfSync } from "csrf-sync";
 import { csrfRouter } from "./routes/csrfRouter.js";
 const { csrfSynchronisedProtection } = csrfSync();
 
+import compression from "compression";
+import pino from "pino";
+
+const logger = pino({
+  timestamp: () => `,"time":"${new Date().toISOString()}"`,
+});
+
 import { apiRouter } from "./routes/apiRouter.js";
 import { authRouter } from "./routes/authRouter.js";
 import { usersRouter } from "./routes/usersRouter.js";
@@ -24,7 +31,13 @@ const frontendURL = process.env.URL;
 // Trust first proxy (required for Koyeb)
 app.set("trust proxy", 1);
 
+app.use((req, res, next) => {
+  logger.info(`${req.method} ${req.originalUrl} ${req.ip}`);
+  next();
+});
+
 app.use(helmet());
+app.use(compression());
 
 // Public API routes
 app.use("/api", cors(), rateLimiter.api, apiRouter);
@@ -32,7 +45,7 @@ app.use("/api", cors(), rateLimiter.api, apiRouter);
 
 app.use(
   cors({
-    origin: [frontendURL],
+    origin: frontendURL,
     credentials: true,
   }),
 );
@@ -70,7 +83,8 @@ app.use((req, res) => {
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  console.error(JSON.stringify(err));
+  logger.error(JSON.stringify(err));
+
   res.status(err.statusCode || 500).json({
     error: "An unexpected error occurred.",
     details: [{ msg: err.message }],

@@ -9,6 +9,7 @@ const allRequiredVars = [
   "CLIENT_ID",
   "CLIENT_SECRET",
   "COOKIE_SECRET",
+  "NODE_ENV",
 ];
 
 function envCheck(requiredVars) {
