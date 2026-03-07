@@ -26,9 +26,11 @@ app.set("trust proxy", 1);
 
 app.use(helmet());
 
+app.use("/api/v1/", rateLimiter.api, apiRouter);
+
 app.use(
   cors({
-    origin: [currentURL, "http://localhost:5173", "http://127.0.0.1:5173"],
+    origin: [currentURL],
     credentials: true,
   }),
 );
@@ -43,7 +45,6 @@ app.use(passport.session());
 
 app.use(csrfRouter);
 
-app.use("/api/v1/", rateLimiter.api, apiRouter);
 app.use(
   "/auth",
   rateLimiter.auth,
