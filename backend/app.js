@@ -26,7 +26,7 @@ app.set("trust proxy", 1);
 
 app.use(helmet());
 
-app.use("/api/v1/", rateLimiter.api, apiRouter);
+app.use("/api/v1/", cors(), rateLimiter.api, apiRouter);
 
 app.use(
   cors({
