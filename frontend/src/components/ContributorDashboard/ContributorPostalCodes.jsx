@@ -1,4 +1,3 @@
-import { Spinner } from "../../utils/Spinner";
 import { SearchPostalCode } from "../PostalCodes/SearchPostalCode";
 import { GetAllPostalCodes } from "../PostalCodes/GetAllPostalCodes";
 import { PostalCodesResultContributor } from "./PostalCodesResultContributor";
