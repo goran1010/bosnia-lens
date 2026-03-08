@@ -6,7 +6,6 @@ import { Spinner } from "../../utils/Spinner";
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 
 function SearchPostalCode({ setSearchResult, loading, setLoading }) {
-  loading = true;
   const [searchTerm, setSearchTerm] = useState("");
   const searchInput = useRef();
   const { addNotification } = useContext(NotificationContext);
@@ -78,9 +77,9 @@ function SearchPostalCode({ setSearchResult, loading, setLoading }) {
             checkPostalCodesValidity(searchInput);
           }}
           disabled={loading}
-          className="disabled:bg-blue-300 disabled:text-gray-300 disabled:cursor-not-allowed relative flex justify-center items-center gap-1 bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 hover:cursor-pointer active:scale-98"
+          className="btn-standard not-disabled:active:scale-95"
         >
-          <div className="h-100% w-100% flex justify-center items-center absolute">
+          <div className="h-full w-full flex justify-center items-center absolute">
             {loading && <Spinner />}
           </div>
           Search

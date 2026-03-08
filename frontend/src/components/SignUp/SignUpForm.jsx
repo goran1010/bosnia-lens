@@ -5,8 +5,9 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
+import { Spinner } from "../../utils/Spinner";
 
-function SignUpForm({ setLoading }) {
+function SignUpForm({ loading, setLoading }) {
   const navigate = useNavigate();
   const { addNotification } = useContext(NotificationContext);
 
@@ -122,8 +123,12 @@ function SignUpForm({ setLoading }) {
             )
           }
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 hover:cursor-pointer active:scale-98"
+          disabled={loading}
+          className="btn-standard not-disabled:active:scale-95 w-full"
         >
+          <div className="h-full w-full flex justify-center items-center absolute">
+            {loading && <Spinner />}
+          </div>
           Create
         </button>
       </div>

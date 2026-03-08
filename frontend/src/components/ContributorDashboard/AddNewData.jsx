@@ -1,8 +1,9 @@
 import { useState, useContext } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { handleSubmitAddData } from "./utils/handleSubmitAddData";
+import { Spinner } from "../../utils/Spinner";
 
-function AddNewData({ setSearchResult }) {
+function AddNewData({ setSearchResult, loading, setLoading }) {
   const [input, setInput] = useState({ city: "", code: "", post: "" });
   const { addNotification } = useContext(NotificationContext);
 
@@ -53,11 +54,21 @@ function AddNewData({ setSearchResult }) {
         <div>
           <button
             onClick={(e) =>
-              handleSubmitAddData(e, input, setSearchResult, addNotification)
+              handleSubmitAddData(
+                e,
+                input,
+                setSearchResult,
+                addNotification,
+                setLoading,
+              )
             }
             type="submit"
-            className=" bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 hover:cursor-pointer active:scale-98"
+            disabled={loading}
+            className="btn-standard not-disabled:active:scale-95 w-full"
           >
+            <div className="h-full w-full flex justify-center items-center absolute">
+              {loading && <Spinner />}
+            </div>
             Add row
           </button>
         </div>

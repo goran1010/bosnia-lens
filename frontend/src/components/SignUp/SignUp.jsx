@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Spinner } from "../../utils/Spinner";
 import { SignUpForm } from "./SignUpForm";
 
 function SignUp() {
@@ -14,7 +13,7 @@ function SignUp() {
             Create your account
           </h1>
         </div>
-        <SignUpForm setLoading={setLoading} />
+        <SignUpForm setLoading={setLoading} loading={loading} />
         <div className="relative">
           <p className="text-center">
             Already have an account ? Go back to the{" "}
@@ -26,9 +25,6 @@ function SignUp() {
             </Link>{" "}
             page.
           </p>
-          <div className="absolute left-1/2 -translate-x-1/2 h-12 bottom-0 translate-y-full">
-            {loading && <Spinner />}
-          </div>
         </div>
       </div>
     </div>

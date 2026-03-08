@@ -4,14 +4,21 @@ import { AddNewData } from "./AddNewData";
 
 function PostalCodeData() {
   const [searchResult, setSearchResult] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   return (
     <>
-      <AddNewData setSearchResult={setSearchResult} />
+      <AddNewData
+        setSearchResult={setSearchResult}
+        loading={loading}
+        setLoading={setLoading}
+      />
 
       <ContributorPostalCodes
         searchResult={searchResult}
         setSearchResult={setSearchResult}
+        loading={loading}
+        setLoading={setLoading}
       />
     </>
   );

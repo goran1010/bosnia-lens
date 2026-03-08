@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Spinner } from "../../utils/Spinner";
 import { SearchPostalCode } from "./SearchPostalCode";
 import { GetAllPostalCodes } from "./GetAllPostalCodes";
 import { PostalCodesResult } from "./PostalCodesResult";
@@ -22,8 +21,6 @@ function PostalCodes() {
           setLoading={setLoading}
         />
       </section>
-      <div>{loading && <Spinner />}</div>
-
       <PostalCodesResult searchResult={searchResult} />
 
       <div className="relative"></div>

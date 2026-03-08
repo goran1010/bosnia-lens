@@ -1,27 +1,29 @@
-import { useState } from "react";
 import { Spinner } from "../../utils/Spinner";
 import { SearchPostalCode } from "../PostalCodes/SearchPostalCode";
 import { GetAllPostalCodes } from "../PostalCodes/GetAllPostalCodes";
 import { PostalCodesResultContributor } from "./PostalCodesResultContributor";
 
-function ContributorPostalCodes({ searchResult, setSearchResult }) {
-  const [loading, setLoading] = useState(false);
-
+function ContributorPostalCodes({
+  searchResult,
+  setSearchResult,
+  loading,
+  setLoading,
+}) {
   return (
     <div>
       <h2>View and edit all data:</h2>
       <section className="relative flex flex-col justify-center items-center gap-4 p-4">
         <SearchPostalCode
           setSearchResult={setSearchResult}
+          loading={loading}
           setLoading={setLoading}
         />
         <GetAllPostalCodes
           setSearchResult={setSearchResult}
+          loading={loading}
           setLoading={setLoading}
         />
       </section>
-      <div>{loading && <Spinner />}</div>
-
       <PostalCodesResultContributor
         searchResult={searchResult}
         setSearchResult={setSearchResult}
