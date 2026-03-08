@@ -3,7 +3,7 @@ import { Navbar } from "./components/Navbar/Navbar";
 import { Footer } from "./components/Footer";
 import { useState } from "react";
 import { UserDataContext } from "./contextData/UserDataContext";
-import Spinner from "@goran1010/spinner";
+import { Spinner } from "./utils/Spinner";
 import { useStatusCheck } from "./customHooks/useStatusCheck";
 import { Notifications } from "./components/Notifications";
 import { NotificationContext } from "./contextData/NotificationContext";

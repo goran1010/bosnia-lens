@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import Spinner from "@goran1010/spinner";
+import { Spinner } from "../../utils/Spinner";
 import { SignUpForm } from "./SignUpForm";
 
 function SignUp() {
