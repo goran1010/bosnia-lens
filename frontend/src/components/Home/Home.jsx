@@ -1,6 +1,6 @@
 import { useWeatherCheck } from "./customHooks/useWeatherCheck";
 import { useState } from "react";
-import Spinner from "@goran1010/spinner";
+import { Spinner } from "../../utils/Spinner";
 import { WeatherCard } from "./WeatherCard";
 
 function Home() {

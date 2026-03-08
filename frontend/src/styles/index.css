@@ -41,11 +41,15 @@ body {
 }
 
 /* Component styles using @layer components to create new components using existing tailwind styles */
-/* @layer components {
-    .btn-primary {
-        @apply px-4 py-2 bg-blue-500 text-white rounded;
-    }
-} */
+@layer components {
+  .btn-standard {
+    @apply bg-blue-600 text-white p-2 rounded-md
+           hover:bg-blue-700 hover:cursor-pointer
+           disabled:bg-blue-500 disabled:text-gray-300 disabled:cursor-not-allowed
+           relative flex justify-center items-center gap-1
+           transition transform;
+  }
+}
 
 /* Utility styles using @layer utilities for creating new classes from vanilla css */
 /* @layer utilities {

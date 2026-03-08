@@ -1,7 +1,13 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 import { getCsrfToken } from "../../utils/getCsrfToken";
 
-async function handleSubmitAddData(e, input, setSearchResult, addNotification) {
+async function handleSubmitAddData(
+  e,
+  input,
+  setSearchResult,
+  addNotification,
+  setLoading,
+) {
   try {
     e.preventDefault();
     const { city, code, post } = input;
@@ -47,6 +53,8 @@ async function handleSubmitAddData(e, input, setSearchResult, addNotification) {
       type: "error",
       message: "An unexpected error occurred",
     });
+  } finally {
+    setLoading(false);
   }
 }
 

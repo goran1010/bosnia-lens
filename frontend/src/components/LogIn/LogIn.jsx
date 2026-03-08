@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import Spinner from "@goran1010/spinner";
 import { LogInForm } from "./LogInForm.jsx";
 
 function LogIn() {
@@ -12,7 +11,7 @@ function LogIn() {
         <h1 className="text-5xl mb-8 text-center font-bold text-gray-900">
           Please log in
         </h1>
-        <LogInForm setLoading={setLoading} />
+        <LogInForm setLoading={setLoading} loading={loading} />
 
         <div className="relative flex items-center my-4">
           <div className="grow border-t border-gray-300"></div>
@@ -31,9 +30,6 @@ function LogIn() {
             </Link>{" "}
             page.
           </p>
-          <div className="absolute left-1/2 -translate-x-1/2 h-12 bottom-0 translate-y-full">
-            {loading && <Spinner />}
-          </div>
         </div>
       </div>
     </div>

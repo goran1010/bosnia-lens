@@ -1,10 +1,11 @@
 import { useState, useRef, useContext } from "react";
 import { checkPostalCodesValidity } from "./utils/checkPostalCodesValidity";
 import { NotificationContext } from "../../contextData/NotificationContext";
+import { Spinner } from "../../utils/Spinner";
 
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 
-function SearchPostalCode({ setSearchResult, setLoading }) {
+function SearchPostalCode({ setSearchResult, loading, setLoading }) {
   const [searchTerm, setSearchTerm] = useState("");
   const searchInput = useRef();
   const { addNotification } = useContext(NotificationContext);
@@ -75,8 +76,12 @@ function SearchPostalCode({ setSearchResult, setLoading }) {
           onClick={() => {
             checkPostalCodesValidity(searchInput);
           }}
-          className="bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 hover:cursor-pointer active:scale-98"
+          disabled={loading}
+          className="btn-standard not-disabled:active:scale-95"
         >
+          <div className="h-full w-full flex justify-center items-center absolute">
+            {loading && <Spinner />}
+          </div>
           Search
         </button>
       </div>

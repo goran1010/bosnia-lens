@@ -5,8 +5,9 @@ import { UserDataContext } from "../../contextData/UserDataContext";
 import { useNavigate } from "react-router-dom";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { handleSubmitLogIn } from "./utils/handleSubmitLogIn";
+import { Spinner } from "../../utils/Spinner";
 
-function LogInForm({ setLoading }) {
+function LogInForm({ loading, setLoading }) {
   const navigate = useNavigate();
   const { setUserData } = useContext(UserDataContext);
   const { addNotification } = useContext(NotificationContext);
@@ -76,8 +77,12 @@ function LogInForm({ setLoading }) {
             checkLoginFormClickValidity(usernameInput, passwordInput)
           }
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 hover:cursor-pointer active:scale-98"
+          disabled={loading}
+          className="btn-standard not-disabled:active:scale-95 w-full"
         >
+          <div className="h-full w-full flex justify-center items-center absolute">
+            {loading && <Spinner />}
+          </div>
           Log in
         </button>
       </div>

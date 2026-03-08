@@ -1,9 +1,10 @@
 import { useContext } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
+import { Spinner } from "../../utils/Spinner";
 
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 
-function GetAllPostalCodes({ setSearchResult, setLoading }) {
+function GetAllPostalCodes({ setSearchResult, loading, setLoading }) {
   const { addNotification } = useContext(NotificationContext);
 
   async function handleGetAll(e) {
@@ -45,8 +46,12 @@ function GetAllPostalCodes({ setSearchResult, setLoading }) {
     <form onSubmit={handleGetAll}>
       <button
         type="submit"
-        className="bg-yellow-600 text-white p-2 rounded-md hover:bg-yellow-700 hover:cursor-pointer active:scale-98"
+        disabled={loading}
+        className="btn-standard not-disabled:active:scale-95 disabled:bg-yellow-500 bg-yellow-600 hover:bg-yellow-700"
       >
+        <div className="h-full w-full flex justify-center items-center absolute">
+          {loading && <Spinner />}
+        </div>
         Get All Postal Codes and Municipalities
       </button>
     </form>
