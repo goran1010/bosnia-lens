@@ -31,6 +31,8 @@ const frontendURL = process.env.URL;
 // Trust first proxy (required for Koyeb)
 app.set("trust proxy", 1);
 
+app.use(rateLimiter.global);
+
 app.use((req, res, next) => {
   logger.info(`${req.method} ${req.originalUrl} ${req.ip}`);
   next();
@@ -49,8 +51,6 @@ app.use(
     credentials: true,
   }),
 );
-
-app.use(rateLimiter.global);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
