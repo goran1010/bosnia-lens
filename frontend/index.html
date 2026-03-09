@@ -2,12 +2,12 @@
 <html lang="en">
   <head>
     <script>
-      document.documentElement.classList.toggle(
-        "dark",
-        localStorage.theme === "dark" ||
-          (!("theme" in localStorage) &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches),
-      );
+      const theme = localStorage.getItem("theme");
+      const dark =
+        theme === "dark" ||
+        (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+      if (dark) document.documentElement.classList.add("dark");
     </script>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
