@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 *,
 *::before,
 *::after {
@@ -21,13 +23,17 @@
 @import "tailwindcss";
 
 #root {
-  min-width: 520px;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
+html {
+  height: 100%;
+  font-size: clamp(1em, 17px + 0.24vw, 1.125em);
+}
 body {
   text-align: center;
+  height: 100%;
 }
 
 /* Base styles using @layer base to override default styles */

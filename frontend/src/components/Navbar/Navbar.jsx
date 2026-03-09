@@ -2,24 +2,35 @@ import { Link } from "react-router-dom";
 import { Status } from "./Status";
 import { useContext } from "react";
 import { UserDataContext } from "../../contextData/UserDataContext";
+import { useTheme } from "../../utils/useTheme";
+import { handleTheme } from "../../utils/handleTheme";
 
 function Navbar() {
+  const { theme, setMode } = useTheme();
   const { userData } = useContext(UserDataContext);
   return (
-    <nav className="relative min-w-130">
-      <div>
-        <Link
-          className="block absolute top-0 left-0 py-3 px-2 hover:bg-gray-400 font-bold"
-          to="/"
+    <nav className="px-4 bg-gray-200 w-full flex justify-between items-center dark:bg-gray-800 dark:text-white font-bold">
+      <div className="flex justify-center items-center">
+        <select
+          className="bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 p-2 rounded cursor-pointer"
+          defaultValue={theme}
+          name="theme-switcher"
+          id="theme-switcher"
+          onChange={(event) => handleTheme(event, setMode)}
         >
-          Bosnia Lens
-        </Link>
+          <option className="font-bold" value="system">
+            system
+          </option>
+          <option className="font-bold" value="light">
+            light
+          </option>
+          <option className="font-bold" value="dark">
+            dark
+          </option>
+        </select>
       </div>
-      <ul
-        className="
-        flex w-full bg-gray-200
-        justify-center"
-      >
+
+      <ul className="flex items-center justify-center">
         <li>
           <Link className="block py-3 px-2 hover:bg-gray-400" to="/">
             Home

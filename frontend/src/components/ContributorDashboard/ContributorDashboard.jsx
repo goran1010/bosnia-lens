@@ -6,11 +6,7 @@ function ContributorDashboard() {
   const { userData } = useContext(UserDataContext);
 
   if (userData?.role === "CONTRIBUTOR" || userData?.role === "ADMIN") {
-    return (
-      <>
-        <ContributorForm />
-      </>
-    );
+    return <ContributorForm />;
   }
   return <>User needs to be a contributor to see the dashboard.</>;
 }

@@ -6,11 +6,7 @@ function AdminDashboard() {
   const { userData } = useContext(UserDataContext);
 
   if (userData?.role === "ADMIN") {
-    return (
-      <>
-        <AdminForm />
-      </>
-    );
+    return <AdminForm />;
   }
   return <>User needs to be an admin to see the dashboard.</>;
 }
