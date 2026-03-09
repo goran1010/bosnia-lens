@@ -9,7 +9,7 @@ function Navbar() {
   const { theme, setMode } = useTheme();
   const { userData } = useContext(UserDataContext);
   return (
-    <nav className="bg-gray-200 w-full flex justify-between items-center dark:bg-gray-800 dark:text-white font-bold">
+    <nav className="px-4 bg-gray-200 w-full flex justify-between items-center dark:bg-gray-800 dark:text-white font-bold">
       <div className="flex justify-center items-center">
         <select
           className="bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 p-2 rounded cursor-pointer"

@@ -9,8 +9,8 @@ function PendingRequests({ setCurrentContributors }) {
   const { pendingRequests, setPendingRequests } = useGetPendingRequests();
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+    <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      <h2 className="text-2xl font-semibold mb-4 flex items-center">
         <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-bold mr-3">
           {pendingRequests.length}
         </span>

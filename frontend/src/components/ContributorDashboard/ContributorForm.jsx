@@ -16,7 +16,7 @@ function ContributorForm() {
           name="dataset"
           id="dataset"
           onChange={handleDataset}
-          className="dark:bg-gray-700 dark:text-white rounded-t-sm p-2"
+          className="bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 p-2 rounded cursor-pointer"
         >
           <option default value="">
             Select a dataset

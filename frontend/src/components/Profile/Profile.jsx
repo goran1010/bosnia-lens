@@ -20,7 +20,7 @@ function Profile() {
     }
   }, [userData, navigate, addNotification]);
   return (
-    <div className="bg-white rounded-2xl shadow-xl overflow-hidden w-2xl m-auto">
+    <div className="dark:bg-gray-800 dark:text-white rounded-2xl shadow-xl overflow-hidden min-w-lg">
       <div className="bg-linear-to-r from-blue-600 to-indigo-600 p-10">
         <h1 className="text-4xl font-bold text-white mb-2">My Profile</h1>
       </div>
@@ -30,14 +30,16 @@ function Profile() {
           <label className="block text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
             Email Address
           </label>
-          <p className="text-lg text-gray-900 font-bold">{userData?.email}</p>
+          <p className="text-lg text-gray-900 font-bold dark:text-white">
+            {userData?.email}
+          </p>
         </div>
 
         <div className="border-b border-gray-200 pb-6">
           <label className="block text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
             Username
           </label>
-          <p className="text-lg text-gray-900 font-bold">
+          <p className="text-lg text-gray-900 font-bold dark:text-white">
             {userData?.username}
           </p>
         </div>
