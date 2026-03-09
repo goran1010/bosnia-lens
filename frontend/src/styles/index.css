@@ -29,6 +29,7 @@
 }
 html {
   height: 100%;
+  font-size: clamp(1em, 17px + 0.24vw, 1.125em);
 }
 body {
   text-align: center;
