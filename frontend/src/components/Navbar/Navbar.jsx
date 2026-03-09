@@ -9,18 +9,24 @@ function Navbar() {
   const { theme, setMode } = useTheme();
   const { userData } = useContext(UserDataContext);
   return (
-    <nav className="w-full flex justify-between items-center dark:bg-gray-800 dark:text-white">
+    <nav className="bg-gray-200 w-full flex justify-between items-center dark:bg-gray-800 dark:text-white font-bold">
       <div className="flex justify-center items-center">
         <select
-          className="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 p-2 rounded"
+          className="bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 p-2 rounded cursor-pointer"
           defaultValue={theme}
           name="theme-switcher"
           id="theme-switcher"
           onChange={(event) => handleTheme(event, setMode)}
         >
-          <option value="system">system</option>
-          <option value="light">light</option>
-          <option value="dark">dark</option>
+          <option className="font-bold" value="system">
+            system
+          </option>
+          <option className="font-bold" value="light">
+            light
+          </option>
+          <option className="font-bold" value="dark">
+            dark
+          </option>
         </select>
       </div>
 
