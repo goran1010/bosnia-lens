@@ -12,7 +12,12 @@ function ContributorForm() {
     <div>
       <form>
         <label htmlFor="dataset">Choose dataset: </label>
-        <select name="dataset" id="dataset" onChange={handleDataset}>
+        <select
+          name="dataset"
+          id="dataset"
+          onChange={handleDataset}
+          className="dark:bg-gray-700 dark:text-white rounded-t-sm p-2"
+        >
           <option default value="">
             Select a dataset
           </option>
