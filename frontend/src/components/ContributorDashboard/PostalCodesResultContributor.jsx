@@ -41,9 +41,9 @@ function PostalCodesResultContributor({ searchResult, setSearchResult }) {
     );
   }
   return (
-    <section className="flex flex-col justify-center items-center">
-      <ul className=" min-w-m max-w-4xl max-h-96 overflow-y-auto border border-gray-300 rounded-md p-2">
-        <li className="grid gap-1 w-full p-2 border border-gray-300 rounded-md mb-4 grid-cols-5 font-bold">
+    <section className="flex flex-col justify-center items-center p-1 w-full">
+      <ul className=" min-w-m max-w-4xl max-h-96 overflow-auto border border-gray-300 rounded-md p-2">
+        <li className="text-center grid gap-1 w-full py-2 border border-gray-300 rounded-md grid-cols-5 font-bold">
           <div>Code</div>
           <div>City</div>
           <div>Post</div>

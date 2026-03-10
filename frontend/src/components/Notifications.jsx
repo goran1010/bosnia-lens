@@ -50,7 +50,7 @@ function Notifications() {
   if (!notifications?.length) return null;
 
   return (
-    <div className="fixed top-10 z-50 flex flex-col gap-3 right-10 select-none opacity-80 hover:opacity-100">
+    <div className="fixed top-1 z-50 flex flex-col gap-1 w-70 right-1 select-none opacity-80 hover:opacity-100">
       {notifications.map((notification) => (
         <div
           key={notification.id}

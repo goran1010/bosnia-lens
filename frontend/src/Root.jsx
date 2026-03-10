@@ -24,6 +24,8 @@ function Root() {
     setLongWait,
   );
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
     <NotificationContext
       value={{
@@ -34,13 +36,16 @@ function Root() {
     >
       <UserDataContext value={{ userData, setUserData }}>
         <>
-          <Navbar />
+          <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
           <Notifications />
-          <main className="relative flex flex-col justify-center items-center flex-1 gap-5 dark:bg-gray-900 dark:text-white p-4">
+          <main
+            className="flex-1 dark:bg-gray-900 dark:text-white p-2 flex flex-col items-center"
+            onClick={() => isMenuOpen && setIsMenuOpen(false)}
+          >
             {loading ? <Spinner /> : <Outlet />}
             {longWait && (
               <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
-                <div className="bg-gray-500 p-4 rounded shadow">
+                <div className="bg-gray-500 p-2 rounded shadow">
                   <p className="text-white font-bold">
                     This is taking longer than expected (server might be waking
                     up). Please wait...

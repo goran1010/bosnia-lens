@@ -8,7 +8,7 @@ function PostalCodes() {
   const [searchResult, setSearchResult] = useState([]);
 
   return (
-    <>
+    <div className="flex-col items-center gap-8">
       <section className="relative flex flex-col justify-center items-center gap-4 p-4">
         <SearchPostalCode
           setSearchResult={setSearchResult}
@@ -24,7 +24,7 @@ function PostalCodes() {
       <PostalCodesResult searchResult={searchResult} />
 
       <div className="relative"></div>
-    </>
+    </div>
   );
 }
 

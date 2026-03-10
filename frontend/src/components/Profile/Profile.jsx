@@ -20,54 +20,52 @@ function Profile() {
     }
   }, [userData, navigate, addNotification]);
   return (
-    <div className="dark:bg-gray-800 dark:text-white rounded-2xl shadow-xl overflow-hidden min-w-lg">
-      <div className="bg-linear-to-r from-blue-600 to-indigo-600 p-10">
-        <h1 className="text-4xl font-bold text-white mb-2">My Profile</h1>
+    <div className="dark:bg-gray-800 dark:text-white rounded-xl shadow-xl overflow-hidden w-full max-w-md">
+      <div className="bg-linear-to-r from-blue-600 to-indigo-600 p-4">
+        <h1 className="text-2xl font-bold text-white text-center">
+          My Profile
+        </h1>
       </div>
 
-      <div className="px-8 py-8 space-y-6">
-        <div className="border-b border-gray-200 pb-6">
-          <label className="block text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
+      <div className="p-2 flex flex-col gap-2 text-center items-center">
+        <div>
+          <label className="block text-sm font-semibold text-gray-500 uppercase tracking-wide">
             Email Address
           </label>
           <p className="text-lg text-gray-900 font-bold dark:text-white">
             {userData?.email}
           </p>
         </div>
-
-        <div className="border-b border-gray-200 pb-6">
-          <label className="block text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
+        <hr />
+        <div>
+          <label className="block text-sm font-semibold text-gray-500 uppercase tracking-wide">
             Username
           </label>
           <p className="text-lg text-gray-900 font-bold dark:text-white">
             {userData?.username}
           </p>
         </div>
-
-        <div className="border-b border-gray-200 pb-6">
-          <label className="block text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
-            Contributor Status
+        <hr />
+        <div>
+          <label className="block text-sm font-semibold text-gray-500 uppercase tracking-wide">
+            Current Role
           </label>
           <div className="flex items-center justify-center">
             <span
               className={`items-center px-4 py-2 rounded-full text-sm font-bold ${
                 userData?.role === "CONTRIBUTOR"
                   ? "bg-green-200 text-green-800"
-                  : userData?.requestedContributor
-                    ? "bg-yellow-200 text-yellow-800"
+                  : userData?.role === "ADMIN"
+                    ? "bg-red-200 text-red-800"
                     : "bg-gray-200 text-gray-800"
               }`}
             >
-              {userData?.role === "CONTRIBUTOR"
-                ? "Active Contributor"
-                : userData?.requestedContributor
-                  ? "Pending Approval"
-                  : "Not a Contributor"}
+              {userData?.role}
             </span>
           </div>
         </div>
-
-        <div className="pt-4 space-y-4">
+        <hr />
+        <div className="flex flex-col gap-2 w-full max-w-sm">
           {userData?.role !== "CONTRIBUTOR" &&
             !userData?.requestedContributor && (
               <button

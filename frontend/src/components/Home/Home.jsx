@@ -9,8 +9,8 @@ function Home() {
   const { weatherForecast } = useWeatherCheck(setLoading);
 
   return (
-    <>
-      <header className="flex flex-col items-center">
+    <div className="flex flex-col items-center gap-2">
+      <header className="flex flex-col items-center gap-2">
         <h1 className="font-bold">Bosnia Lens</h1>
         <article>
           <p>
@@ -24,47 +24,51 @@ function Home() {
             developer-friendly.
           </p>
         </article>
-        <article>
-          <h2 className="font-bold">Data we're looking to provide includes:</h2>
-          <ul>
-            <li>Cities and municipalities</li>
-            <li>Postal codes</li> <li>Holidays and observances</li>
-            <li>Universities and their programs</li>
-          </ul>
-        </article>
+        <div className="grid grid-rows-1 gap-2 md:grid-cols-2">
+          <article>
+            <h2 className="font-bold text-center">
+              Data we're looking to provide includes:
+            </h2>
+            <ul>
+              <li>Cities and municipalities</li>
+              <li>Postal codes</li> <li>Holidays and observances</li>
+              <li>Universities and their programs</li>
+            </ul>
+          </article>
+          <article className="flex flex-col items-center">
+            <h2 className="font-bold">Tools</h2>
+            <ul>
+              <li>
+                <strong>Built With Express.js</strong> - The web framework for
+                the REST API
+              </li>
+              <li>
+                <strong>React</strong> - Frontend library for building the user
+                interface
+              </li>
+              <li>
+                <strong>Vite</strong> - Build tool and development server
+              </li>
+              <li>
+                <strong>Prisma</strong> - Database ORM and migration tool
+              </li>
+              <li>
+                <strong>PostgreSQL</strong> - Database system
+              </li>
+              <li>
+                <strong>Tailwind CSS</strong> - CSS framework for styling
+              </li>
+            </ul>
+          </article>
+        </div>
       </header>
       {loading ? (
         <Spinner />
       ) : (
         <WeatherCard weatherForecast={weatherForecast} />
       )}
-      <section className="flex flex-col items-center  gap-8">
-        <article className="flex flex-col items-center">
-          <h2 className="font-bold">Tools</h2>
-          <ul>
-            <li>
-              <strong>Built With Express.js</strong> - The web framework for the
-              REST API
-            </li>
-            <li>
-              <strong>React</strong> - Frontend library for building the user
-              interface
-            </li>
-            <li>
-              <strong>Vite</strong> - Build tool and development server
-            </li>
-            <li>
-              <strong>Prisma</strong> - Database ORM and migration tool
-            </li>
-            <li>
-              <strong>PostgreSQL</strong> - Database system
-            </li>
-            <li>
-              <strong>Tailwind CSS</strong> - CSS framework for styling
-            </li>
-          </ul>
-        </article>
-        <div className="flex flex-col md:flex-row gap-8">
+      <section className="flex flex-col items-center gap-2">
+        <div className="grid grid-rows-1 gap-2 md:grid-cols-2">
           <article className="flex flex-col items-center">
             <h2 className="font-bold">Contributing</h2>
             <article>
@@ -104,7 +108,7 @@ function Home() {
           </article>
         </div>
       </section>
-    </>
+    </div>
   );
 }
 

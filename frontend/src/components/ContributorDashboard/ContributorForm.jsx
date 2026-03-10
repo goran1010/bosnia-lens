@@ -9,8 +9,8 @@ function ContributorForm() {
   }
 
   return (
-    <div>
-      <form>
+    <div className="flex flex-col items-center">
+      <form className="p-2 flex items-center">
         <label htmlFor="dataset">Choose dataset: </label>
         <select
           name="dataset"

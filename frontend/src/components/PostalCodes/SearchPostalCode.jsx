@@ -56,7 +56,7 @@ function SearchPostalCode({ setSearchResult, loading, setLoading }) {
     >
       <label
         htmlFor="search-term"
-        className="block text-sm font-medium text-gray-700 mb-1"
+        className="block text-sm font-medium text-gray-700 dark:text-white"
       >
         Search by Postal Code or Municipality
       </label>

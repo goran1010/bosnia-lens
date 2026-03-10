@@ -9,25 +9,24 @@ function PendingRequests({ setCurrentContributors }) {
   const { pendingRequests, setPendingRequests } = useGetPendingRequests();
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-      <h2 className="text-2xl font-semibold mb-4 flex items-center">
-        <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-bold mr-3">
+    <div className="text-gray-800 bg-white rounded-lg shadow-lg p-2 border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      <h2 className="text-md text-center font-semibold flex items-center gap-1 p-1 flex-1">
+        <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-sm font-bold">
           {pendingRequests.length}
         </span>
-        Pending Contributor Requests
+        <span className="flex-1">Pending Requests</span>
       </h2>
       <ul className="space-y-3">
         {pendingRequests.length > 0 ? (
           pendingRequests.map((user) => (
             <li
               key={user.id}
-              className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors duration-200"
+              className="flex items-center flex-wrap justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors duration-200"
             >
-              <div className="flex-1">
+              <div className="flex-1 flex flex-wrap">
                 <span className="font-bold text-gray-800 text-lg">
                   {user.username}
                 </span>
-                <span className="text-gray-500 mx-2">•</span>
                 <span className="text-gray-600">{user.email}</span>
               </div>
               <div className="flex gap-2">

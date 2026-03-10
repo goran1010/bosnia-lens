@@ -9,9 +9,9 @@ function ContributorPostalCodes({
   setLoading,
 }) {
   return (
-    <div>
+    <div className="flex flex-col w-full items-center">
       <h2>View and edit all data:</h2>
-      <section className="relative flex flex-col justify-center items-center gap-4 p-4">
+      <section className="relative flex flex-col justify-center items-center gap-2 p-2 w-full">
         <SearchPostalCode
           setSearchResult={setSearchResult}
           loading={loading}
