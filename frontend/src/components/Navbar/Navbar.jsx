@@ -30,7 +30,7 @@ function Navbar() {
         </select>
       </div>
 
-      <ul className="flex items-center justify-center">
+      <ul className="flex items-center">
         <li>
           <Link className="block py-3 px-2 hover:bg-gray-400" to="/">
             Home
@@ -38,7 +38,7 @@ function Navbar() {
         </li>
         <li>
           <Link
-            className="block py-3 px-2 hover:bg-gray-400"
+            className="block py-3 px-2 hover:bg-gray-400 text-nowrap"
             to="/postal-codes"
           >
             Postal Codes

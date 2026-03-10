@@ -20,9 +20,11 @@ function Profile() {
     }
   }, [userData, navigate, addNotification]);
   return (
-    <div className="dark:bg-gray-800 dark:text-white rounded-xl shadow-xl overflow-hidden">
+    <div className="dark:bg-gray-800 dark:text-white rounded-xl shadow-xl overflow-hidden w-full max-w-md">
       <div className="bg-linear-to-r from-blue-600 to-indigo-600 p-4">
-        <h1 className="text-2xl font-bold text-white">My Profile</h1>
+        <h1 className="text-2xl font-bold text-white text-center">
+          My Profile
+        </h1>
       </div>
 
       <div className="p-2 flex flex-col gap-2 text-center items-center">
