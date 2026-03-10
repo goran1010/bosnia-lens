@@ -14,8 +14,8 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
   }
 
   return (
-    <form className="relative flex flex-col justify-center items-center gap-4 p-4">
-      <div className="flex flex-col gap-4 border border-gray-300 rounded-md p-4 w-full max-w-md">
+    <form className="relative flex flex-col justify-center items-center gap-2 p-2 w-full">
+      <div className="flex flex-col gap-2 border border-gray-300 rounded-md p-2 w-full max-w-lg">
         <h2>Add new data row:</h2>
         <div>
           <label htmlFor="city">City name: </label>

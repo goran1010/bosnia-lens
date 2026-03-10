@@ -9,8 +9,8 @@ function Home() {
   const { weatherForecast } = useWeatherCheck(setLoading);
 
   return (
-    <div className="flex flex-col items-center gap-8">
-      <header className="flex flex-col items-center">
+    <div className="flex flex-col items-center gap-2">
+      <header className="flex flex-col items-center gap-2">
         <h1 className="font-bold">Bosnia Lens</h1>
         <article>
           <p>
@@ -40,7 +40,7 @@ function Home() {
       ) : (
         <WeatherCard weatherForecast={weatherForecast} />
       )}
-      <section className="flex flex-col items-center gap-8">
+      <section className="flex flex-col items-center gap-2">
         <article className="flex flex-col items-center">
           <h2 className="font-bold">Tools</h2>
           <ul>
@@ -66,7 +66,7 @@ function Home() {
             </li>
           </ul>
         </article>
-        <div className="flex flex-col md:flex-row gap-8">
+        <div className="flex flex-col md:flex-row gap-2">
           <article className="flex flex-col items-center">
             <h2 className="font-bold">Contributing</h2>
             <article>
