@@ -24,6 +24,8 @@ function Root() {
     setLongWait,
   );
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
     <NotificationContext
       value={{
@@ -34,9 +36,12 @@ function Root() {
     >
       <UserDataContext value={{ userData, setUserData }}>
         <>
-          <Navbar />
+          <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
           <Notifications />
-          <main className="flex-1 dark:bg-gray-900 dark:text-white p-2 flex flex-col items-center">
+          <main
+            className="flex-1 dark:bg-gray-900 dark:text-white p-2 flex flex-col items-center"
+            onClick={() => isMenuOpen && setIsMenuOpen(false)}
+          >
             {loading ? <Spinner /> : <Outlet />}
             {longWait && (
               <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
