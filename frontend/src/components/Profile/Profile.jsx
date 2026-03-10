@@ -48,23 +48,19 @@ function Profile() {
         <hr />
         <div>
           <label className="block text-sm font-semibold text-gray-500 uppercase tracking-wide">
-            Contributor Status
+            Current Role
           </label>
           <div className="flex items-center justify-center">
             <span
               className={`items-center px-4 py-2 rounded-full text-sm font-bold ${
                 userData?.role === "CONTRIBUTOR"
                   ? "bg-green-200 text-green-800"
-                  : userData?.requestedContributor
-                    ? "bg-yellow-200 text-yellow-800"
+                  : userData?.role === "ADMIN"
+                    ? "bg-red-200 text-red-800"
                     : "bg-gray-200 text-gray-800"
               }`}
             >
-              {userData?.role === "CONTRIBUTOR"
-                ? "Active Contributor"
-                : userData?.requestedContributor
-                  ? "Pending Approval"
-                  : "Not a Contributor"}
+              {userData?.role}
             </span>
           </div>
         </div>
