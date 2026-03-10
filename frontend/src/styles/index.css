@@ -22,20 +22,15 @@
 }
 @import "tailwindcss";
 
+html {
+  font-size: clamp(1em, 17px + 0.24vw, 1.125em);
+}
+
 #root {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
-html {
-  height: 100%;
-  font-size: clamp(1em, 17px + 0.24vw, 1.125em);
-}
-body {
-  text-align: center;
-  height: 100%;
-}
-
 /* Base styles using @layer base to override default styles */
 @layer base {
   main a {
@@ -52,8 +47,7 @@ body {
     @apply bg-blue-600 text-white p-2 rounded-md
            hover:bg-blue-700 hover:cursor-pointer
            disabled:bg-blue-500 disabled:text-gray-300 disabled:cursor-not-allowed
-           relative flex justify-center items-center gap-1
-           transition transform;
+           relative flex justify-center items-center transition transform;
   }
 }
 

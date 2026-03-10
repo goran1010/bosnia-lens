@@ -36,7 +36,7 @@ function Root() {
         <>
           <Navbar />
           <Notifications />
-          <main className="relative flex flex-col justify-center items-center flex-1 gap-5 dark:bg-gray-900 dark:text-white p-4">
+          <main className="flex-1 dark:bg-gray-900 dark:text-white p-2 flex-col">
             {loading ? <Spinner /> : <Outlet />}
             {longWait && (
               <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
