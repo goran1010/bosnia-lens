@@ -21,13 +21,12 @@ function PendingRequests({ setCurrentContributors }) {
           pendingRequests.map((user) => (
             <li
               key={user.id}
-              className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors duration-200"
+              className="flex items-center flex-wrap justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors duration-200"
             >
-              <div className="flex-1">
+              <div className="flex-1 flex flex-wrap">
                 <span className="font-bold text-gray-800 text-lg">
                   {user.username}
                 </span>
-                <span className="text-gray-500 mx-2">•</span>
                 <span className="text-gray-600">{user.email}</span>
               </div>
               <div className="flex gap-2">

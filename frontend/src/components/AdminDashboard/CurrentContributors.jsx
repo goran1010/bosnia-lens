@@ -18,13 +18,12 @@ function CurrentContributors({ currentContributors, setCurrentContributors }) {
           currentContributors.map((user) => (
             <li
               key={user.id}
-              className="flex items-center justify-between p-4  rounded-lg border border-blue-200 hover:bg-blue-100 transition-colors duration-200 dark:border-blue-600 dark:hover:bg-blue-700"
+              className="flex items-center flex-wrap justify-between p-4  rounded-lg border border-blue-200 hover:bg-blue-100 transition-colors duration-200 dark:border-blue-600 dark:hover:bg-blue-700"
             >
-              <div className="flex-1">
+              <div className="flex-1 flex flex-wrap">
                 <span className="font-bold text-gray-800 text-lg dark:text-white">
                   {user.username}
                 </span>
-                <span className="text-gray-500 mx-2">•</span>
                 <span className="text-gray-600 dark:text-gray-300">
                   {user.email}
                 </span>
