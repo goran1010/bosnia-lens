@@ -51,7 +51,7 @@ function SignUpForm({ loading, setLoading }) {
       <div>
         <label
           htmlFor="username"
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300"
         >
           Username
         </label>
@@ -62,12 +62,13 @@ function SignUpForm({ loading, setLoading }) {
           type="text"
           name="username"
           id="username"
+          className="input-standard"
         />
       </div>
       <div>
         <label
           htmlFor="email"
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300"
         >
           Email
         </label>
@@ -78,12 +79,13 @@ function SignUpForm({ loading, setLoading }) {
           type="email"
           name="email"
           id="email"
+          className="input-standard"
         />
       </div>
       <div>
         <label
           htmlFor="password"
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300"
         >
           Password
         </label>
@@ -94,12 +96,13 @@ function SignUpForm({ loading, setLoading }) {
           type="password"
           name="password"
           id="password"
+          className="input-standard"
         />
       </div>
       <div>
         <label
           htmlFor="confirm-password"
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300"
         >
           Confirm Password
         </label>
@@ -110,6 +113,7 @@ function SignUpForm({ loading, setLoading }) {
           type="password"
           name="confirm-password"
           id="confirm-password"
+          className="input-standard"
         />
       </div>
       <div>

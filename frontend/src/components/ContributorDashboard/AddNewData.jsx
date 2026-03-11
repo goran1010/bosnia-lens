@@ -35,6 +35,7 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
               value={input.city}
               onChange={handleInput}
               required
+              className="input-standard"
             />
           </div>
           <div>
@@ -48,6 +49,7 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
               maxLength={5}
               minLength={5}
               required
+              className="input-standard"
             />
           </div>
           <div>
@@ -58,6 +60,7 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
               name="post"
               value={input.post}
               onChange={handleInput}
+              className="input-standard"
             />
           </div>
           <div>

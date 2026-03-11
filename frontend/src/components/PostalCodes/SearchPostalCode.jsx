@@ -70,6 +70,7 @@ function SearchPostalCode({ setSearchResult, loading, setLoading }) {
           type="text"
           name="search-term"
           id="search-term"
+          className="input-standard"
         />
         <button
           type="submit"

@@ -37,12 +37,12 @@ function LogInForm({ loading, setLoading }) {
           navigate,
         )
       }
-      className="flex flex-col gap-5"
+      className="flex flex-col gap-3"
     >
       <div>
         <label
           htmlFor="username"
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300"
         >
           Username
         </label>
@@ -53,12 +53,13 @@ function LogInForm({ loading, setLoading }) {
           type="text"
           name="username"
           id="username"
+          className="input-standard"
         />
       </div>
       <div>
         <label
           htmlFor="password"
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300"
         >
           Password
         </label>
@@ -69,6 +70,7 @@ function LogInForm({ loading, setLoading }) {
           type="password"
           name="password"
           id="password"
+          className="input-standard"
         />
       </div>
       <div>

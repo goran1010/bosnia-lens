@@ -39,7 +39,7 @@ function Root() {
           <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
           <Notifications />
           <main
-            className="flex-1 dark:bg-gray-900 dark:text-white p-2 flex flex-col items-center"
+            className="flex-1 dark:bg-gray-900 dark:text-white p-2 flex flex-col items-center justify-center"
             onClick={() => isMenuOpen && setIsMenuOpen(false)}
           >
             {loading ? <Spinner /> : <Outlet />}
