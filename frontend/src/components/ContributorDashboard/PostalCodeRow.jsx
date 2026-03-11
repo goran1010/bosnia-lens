@@ -13,6 +13,7 @@ const PostalCodeRow = memo(({ result, onChange, onSubmit, onDelete }) => {
         value={result.city || ""}
         onChange={(e) => onChange(result.code, e.target.name, e.target.value)}
         data-code={result.code}
+        className="input-standard"
       />
       <input
         data-code={result.code}
@@ -20,6 +21,7 @@ const PostalCodeRow = memo(({ result, onChange, onSubmit, onDelete }) => {
         type="text"
         value={result.post || ""}
         onChange={(e) => onChange(result.code, e.target.name, e.target.value)}
+        className="input-standard"
       />
       <div>
         <button
