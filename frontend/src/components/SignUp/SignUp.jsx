@@ -7,7 +7,7 @@ function SignUp() {
 
   return (
     <div className="relative min-h-full flex items-center justify-center bg-gray-50 rounded-md dark:bg-gray-800">
-      <div className="w-full max-w-md p-6 flex flex-col gap-3">
+      <div className="w-full max-w-md p-4 flex flex-col gap-3">
         <div>
           <h1 className="text-3xl text-center font-bold text-gray-900 dark:text-gray-100">
             Create your account
