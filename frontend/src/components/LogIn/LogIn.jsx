@@ -8,7 +8,7 @@ function LogIn() {
   return (
     <div className="relative min-h-full flex items-center justify-center bg-gray-50 rounded-md dark:bg-gray-800">
       <div className="w-full max-w-md p-6 flex flex-col gap-3">
-        <h1 className="text-5xl mb-8 text-center font-bold text-gray-900 dark:text-gray-100">
+        <h1 className="text-3xl text-center font-bold text-gray-900 dark:text-gray-100">
           Log in
         </h1>
         <LogInForm setLoading={setLoading} loading={loading} />
