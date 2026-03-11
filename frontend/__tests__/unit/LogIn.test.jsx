@@ -50,7 +50,7 @@ beforeEach(async () => {
 describe("Render LogIn Component", () => {
   test("LogIn component heading", () => {
     const linkElement = screen.getByRole("heading", {
-      name: /Please log in/i,
+      name: /Log in/i,
     });
     expect(linkElement).toBeInTheDocument();
   });
