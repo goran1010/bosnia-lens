@@ -28,7 +28,14 @@ class UsersController {
   }
 
   async becomeContributor(req, res) {
-    const userId = req.user.id;
+    const { id: userId, role } = req.user;
+
+    if (role !== "USER") {
+      return res.status(403).json({
+        error: "Only regular users can request contributor status",
+        details: [{ msg: null }],
+      });
+    }
 
     const updatedUser = await usersModel.update(
       { id: userId },
