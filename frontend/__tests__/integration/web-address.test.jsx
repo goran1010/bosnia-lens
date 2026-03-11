@@ -58,13 +58,13 @@ describe("Loading components when visiting an address", () => {
     expect(linkElements[0]).toBeInTheDocument();
   });
 
-  test("visit home page", () => {
+  test("visit home page", async () => {
     const router = createMemoryRouter(routes, {
       initialEntries: ["/"],
     });
     render(<RouterProvider router={router} />);
 
-    const linkElement = screen.getByText(/Bosnia Lens/i);
+    const linkElement = await screen.findByText(/Bosnia Lens/i);
     expect(linkElement).toBeInTheDocument();
   });
 
