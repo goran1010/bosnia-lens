@@ -28,7 +28,7 @@ class AuthController {
         { expiresIn: "1d" },
       );
 
-      const confirmationLink = `${req.protocol}://${req.get("host")}/users/confirm/${confirmationToken}`;
+      const confirmationLink = `${req.protocol}://${req.get("host")}/auth/confirm/${confirmationToken}`;
 
       const result = await sendConfirmationEmail(
         email,
