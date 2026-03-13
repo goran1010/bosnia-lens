@@ -20,8 +20,8 @@ function Profile() {
     }
   }, [userData, navigate, addNotification]);
   return (
-    <div className="dark:bg-gray-800 dark:text-white rounded-xl shadow-xl overflow-hidden w-full max-w-md">
-      <div className="bg-linear-to-r from-blue-600 to-indigo-600 p-4">
+    <div className="w-full max-w-md mx-auto bg-white dark:bg-gray-800 dark:text-white rounded-xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-600">
+      <div className="bg-linear-to-r from-blue-600 to-indigo-700 p-4">
         <h1 className="text-2xl font-bold text-white text-center">
           My Profile
         </h1>
@@ -71,7 +71,7 @@ function Profile() {
               onClick={() =>
                 handleBecomeContributor(addNotification, setUserData)
               }
-              className="cursor-pointer w-full bg-linear-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:from-blue-600 hover:to-indigo-700 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 hover:cursor-pointer disabled:bg-blue-500 disabled:text-gray-300 disabled:cursor-not-allowed relative flex justify-center items-center transition transform w-full px-6 py-3 font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               Request Contributor Access
             </button>
@@ -79,7 +79,7 @@ function Profile() {
 
           <button
             onClick={() => handleLogout(addNotification, navigate, setUserData)}
-            className="cursor-pointer w-full bg-red-500 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-red-600 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+            className="bg-red-600 text-white p-2 rounded-md hover:bg-red-700 hover:cursor-pointer disabled:bg-red-500 disabled:text-gray-200 disabled:cursor-not-allowed relative flex justify-center items-center transition transform w-full px-6 py-3 font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
           >
             Log Out
           </button>

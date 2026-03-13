@@ -36,14 +36,16 @@ function PostalCodesResultContributor({ searchResult, setSearchResult }) {
   if (searchResult.length === 0) {
     return (
       <section className="flex justify-center items-center p-4">
-        <p className="text-gray-500">No results to display.</p>
+        <p className="text-gray-500 dark:text-gray-300">
+          No results to display.
+        </p>
       </section>
     );
   }
   return (
     <section className="flex flex-col justify-center items-center p-1 w-full">
-      <ul className=" min-w-m max-w-4xl max-h-96 overflow-auto border border-gray-300 rounded-md p-2">
-        <li className="text-center grid gap-1 w-full py-2 border border-gray-300 rounded-md grid-cols-5 font-bold">
+      <ul className="w-full max-w-4xl max-h-150  overflow-auto border border-gray-300 dark:border-gray-600 rounded-md p-2 bg-white dark:bg-gray-700">
+        <li className="hidden sm:grid sm:gap-1 text-center w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md font-bold text-gray-800 dark:text-white bg-gray-50 dark:bg-gray-600 sm:grid-cols-5">
           <div>Code</div>
           <div>City</div>
           <div>Post</div>

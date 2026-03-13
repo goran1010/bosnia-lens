@@ -23,16 +23,21 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
   return (
     <form className="relative flex flex-col justify-center items-center gap-2 p-2 w-full">
       <button
-        className="btn-standard"
+        className="bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 hover:cursor-pointer disabled:bg-blue-500 disabled:text-gray-300 disabled:cursor-not-allowed relative flex justify-center items-center transition transform"
         type="button"
         onClick={() => setIsOpen(!isOpen)}
       >
         {isOpen ? "Close form" : "Add new data"}
       </button>
       {isOpen && (
-        <div className="flex flex-col gap-2 border border-gray-300 rounded-md p-2 w-full max-w-lg">
+        <div className="flex flex-col gap-2 border border-gray-300 dark:border-gray-600 rounded-md p-3 w-full max-w-md mx-auto">
           <div>
-            <label htmlFor="city">City name: </label>
+            <label
+              htmlFor="city"
+              className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300"
+            >
+              City name:
+            </label>
             <input
               ref={cityInput}
               type="text"
@@ -41,11 +46,16 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
               value={input.city}
               onChange={handleInput}
               required
-              className="input-standard"
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500 invalid:border-red-500 focus:invalid:ring-red-500 focus:invalid:border-red-500 dark:invalid:border-red-500 dark:focus:invalid:ring-red-500 dark:focus:invalid:border-red-500"
             />
           </div>
           <div>
-            <label htmlFor="code">Postal Code: </label>
+            <label
+              htmlFor="code"
+              className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300"
+            >
+              Postal Code:
+            </label>
             <input
               ref={codeInput}
               type="text"
@@ -54,21 +64,26 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
               value={input.code}
               onChange={handleInput}
               required
-              className="input-standard"
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500 invalid:border-red-500 focus:invalid:ring-red-500 focus:invalid:border-red-500 dark:invalid:border-red-500 dark:focus:invalid:ring-red-500 dark:focus:invalid:border-red-500"
             />
           </div>
           <div>
-            <label htmlFor="post">Postal Carrier: </label>
+            <label
+              htmlFor="post"
+              className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300"
+            >
+              Postal Carrier:
+            </label>
             <input
               type="text"
               id="post"
               name="post"
               value={input.post}
               onChange={handleInput}
-              className="input-standard"
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500 invalid:border-red-500 focus:invalid:ring-red-500 focus:invalid:border-red-500 dark:invalid:border-red-500 dark:focus:invalid:ring-red-500 dark:focus:invalid:border-red-500"
             />
           </div>
-          <div>
+          <div className="flex justify-center items-center">
             <button
               onClick={(e) =>
                 handleSubmitAddData(
@@ -83,7 +98,7 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
               }
               type="button"
               disabled={loading}
-              className="btn-standard not-disabled:active:scale-95 w-full"
+              className="bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 hover:cursor-pointer disabled:bg-blue-500 disabled:text-gray-300 disabled:cursor-not-allowed relative flex justify-center items-center transition transform not-disabled:active:scale-95"
             >
               <div className="h-full w-full flex justify-center items-center absolute">
                 {loading && <Spinner />}

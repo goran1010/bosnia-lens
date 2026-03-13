@@ -11,7 +11,7 @@ function ContributorPostalCodes({
   return (
     <div className="flex flex-col w-full items-center">
       <h2>View and edit all data:</h2>
-      <section className="relative flex flex-col justify-center items-center gap-2 p-2 w-full">
+      <section className="relative flex flex-col justify-center gap-2 p-2">
         <SearchPostalCode
           setSearchResult={setSearchResult}
           loading={loading}

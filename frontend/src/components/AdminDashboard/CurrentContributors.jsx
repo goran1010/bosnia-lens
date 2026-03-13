@@ -6,9 +6,9 @@ function CurrentContributors({ currentContributors, setCurrentContributors }) {
   const { addNotification } = useContext(NotificationContext);
 
   return (
-    <div className="text-gray-800 bg-white rounded-lg shadow-lg p-2 border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+    <section className="text-gray-800 bg-white rounded-lg shadow p-3 border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
       <h2 className="text-md text-center font-semibold flex items-center gap-1 p-1 flex-1">
-        <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm font-bold">
+        <span className="px-2 py-1 rounded-full text-sm font-bold bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100">
           {currentContributors.length}
         </span>
         <span className="flex-1">Current Contributors</span>
@@ -18,18 +18,18 @@ function CurrentContributors({ currentContributors, setCurrentContributors }) {
           currentContributors.map((user) => (
             <li
               key={user.id}
-              className="flex items-center flex-wrap justify-between p-4  rounded-lg border border-blue-200 hover:bg-blue-100 transition-colors duration-200 dark:border-blue-600 dark:hover:bg-blue-700"
+              className="flex items-center flex-wrap justify-between gap-3 p-3 rounded-lg border border-gray-200 bg-gray-50 transition-colors duration-200 hover:bg-gray-100 dark:border-gray-500 dark:bg-gray-600 dark:hover:bg-gray-500"
             >
-              <div className="flex-1 flex flex-wrap">
-                <span className="font-bold text-gray-800 text-lg dark:text-white">
+              <div className="flex-1 flex flex-col sm:flex-row sm:items-center sm:gap-2 min-w-0">
+                <span className="font-bold text-gray-800 text-lg dark:text-white break-all">
                   {user.username}
                 </span>
-                <span className="text-gray-600 dark:text-gray-300">
+                <span className="text-gray-600 dark:text-gray-200 break-all">
                   {user.email}
                 </span>
               </div>
               <button
-                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-sm hover:shadow-md"
+                className="bg-red-600 text-white p-2 rounded-md hover:bg-red-700 hover:cursor-pointer disabled:bg-red-500 disabled:text-gray-200 disabled:cursor-not-allowed relative flex justify-center items-center transition transform px-3 py-2 text-sm"
                 onClick={() =>
                   handleRemoveContributor(
                     user,
@@ -48,7 +48,7 @@ function CurrentContributors({ currentContributors, setCurrentContributors }) {
           </li>
         )}
       </ul>
-    </div>
+    </section>
   );
 }
 

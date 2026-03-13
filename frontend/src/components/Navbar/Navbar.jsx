@@ -15,7 +15,7 @@ function Navbar({ isMenuOpen, setIsMenuOpen }) {
     <nav className="relative px-2 bg-gray-200 w-full dark:bg-gray-800 dark:text-white font-bold grid grid-cols-3 lg:flex lg:justify-between items-center">
       <div>
         <select
-          className="bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 p-2 rounded cursor-pointer"
+          className="bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 p-2 rounded cursor-pointer border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           defaultValue={theme}
           name="theme-switcher"
           id="theme-switcher"
@@ -48,26 +48,32 @@ function Navbar({ isMenuOpen, setIsMenuOpen }) {
       <div className="hidden lg:flex justify-between items-center">
         <ul className="flex items-center">
           <li>
-            <Link className="block py-3 px-2 hover:bg-gray-400" to="/">
+            <Link
+              className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
+              to="/"
+            >
               Home
             </Link>
           </li>
           <li>
             <Link
-              className="block py-3 px-2 hover:bg-gray-400 text-nowrap"
+              className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700 text-nowrap"
               to="/postal-codes"
             >
               Postal Codes
             </Link>
           </li>
           <li>
-            <Link className="block py-3 px-2 hover:bg-gray-400" to="/holidays">
+            <Link
+              className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
+              to="/holidays"
+            >
               Holidays
             </Link>
           </li>
           <li>
             <Link
-              className="block py-3 px-2 hover:bg-gray-400"
+              className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
               to="/universities"
             >
               Universities
@@ -77,7 +83,7 @@ function Navbar({ isMenuOpen, setIsMenuOpen }) {
           {(userData?.role === "ADMIN" || userData?.role === "CONTRIBUTOR") && (
             <li>
               <Link
-                className="block py-3 px-2 hover:bg-gray-400"
+                className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
                 to="/contributor-dashboard"
               >
                 Contributor
@@ -87,7 +93,7 @@ function Navbar({ isMenuOpen, setIsMenuOpen }) {
           {userData?.role === "ADMIN" && (
             <li>
               <Link
-                className="block py-3 px-2 hover:bg-gray-400"
+                className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
                 to="/admin-dashboard"
               >
                 Admin
@@ -105,7 +111,7 @@ function Navbar({ isMenuOpen, setIsMenuOpen }) {
           <ul className="flex flex-col items-center">
             <li>
               <Link
-                className="block py-3 px-2 hover:bg-gray-400"
+                className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
                 to="/"
                 onClick={closeMenu}
               >
@@ -114,7 +120,7 @@ function Navbar({ isMenuOpen, setIsMenuOpen }) {
             </li>
             <li>
               <Link
-                className="block py-3 px-2 hover:bg-gray-400 text-nowrap"
+                className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700 text-nowrap"
                 to="/postal-codes"
                 onClick={closeMenu}
               >
@@ -123,7 +129,7 @@ function Navbar({ isMenuOpen, setIsMenuOpen }) {
             </li>
             <li>
               <Link
-                className="block py-3 px-2 hover:bg-gray-400"
+                className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
                 to="/holidays"
                 onClick={closeMenu}
               >
@@ -132,7 +138,7 @@ function Navbar({ isMenuOpen, setIsMenuOpen }) {
             </li>
             <li>
               <Link
-                className="block py-3 px-2 hover:bg-gray-400"
+                className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
                 to="/universities"
                 onClick={closeMenu}
               >
@@ -143,7 +149,7 @@ function Navbar({ isMenuOpen, setIsMenuOpen }) {
               userData?.role === "CONTRIBUTOR") && (
               <li>
                 <Link
-                  className="block py-3 px-2 hover:bg-gray-400"
+                  className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
                   to="/contributor-dashboard"
                   onClick={closeMenu}
                 >
@@ -154,7 +160,7 @@ function Navbar({ isMenuOpen, setIsMenuOpen }) {
             {userData?.role === "ADMIN" && (
               <li>
                 <Link
-                  className="block py-3 px-2 hover:bg-gray-400"
+                  className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
                   to="/admin-dashboard"
                   onClick={closeMenu}
                 >

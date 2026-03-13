@@ -52,7 +52,7 @@ function SearchPostalCode({ setSearchResult, loading, setLoading }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col justify-center items-center gap-2"
+      className="flex flex-col justify-center items-center gap-2 w-full"
     >
       <label
         htmlFor="search-term"
@@ -61,7 +61,7 @@ function SearchPostalCode({ setSearchResult, loading, setLoading }) {
         Search by Postal Code or Municipality
       </label>
 
-      <div className="flex gap-2">
+      <div className="flex gap-2 w-full max-w-xl flex-wrap sm:flex-nowrap">
         <input
           ref={searchInput}
           autoFocus
@@ -70,7 +70,7 @@ function SearchPostalCode({ setSearchResult, loading, setLoading }) {
           type="text"
           name="search-term"
           id="search-term"
-          className="input-standard"
+          className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500 invalid:border-red-500 focus:invalid:ring-red-500 focus:invalid:border-red-500 dark:invalid:border-red-500 dark:focus:invalid:ring-red-500 dark:focus:invalid:border-red-500 flex-1"
         />
         <button
           type="submit"
@@ -78,7 +78,7 @@ function SearchPostalCode({ setSearchResult, loading, setLoading }) {
             checkPostalCodesValidity(searchInput);
           }}
           disabled={loading}
-          className="btn-standard not-disabled:active:scale-95"
+          className="bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 hover:cursor-pointer disabled:bg-blue-500 disabled:text-gray-300 disabled:cursor-not-allowed relative flex justify-center items-center transition transform not-disabled:active:scale-95 sm:w-auto w-full"
         >
           <div className="h-full w-full flex justify-center items-center absolute">
             {loading && <Spinner />}

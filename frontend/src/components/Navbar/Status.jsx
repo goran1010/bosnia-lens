@@ -9,7 +9,7 @@ function Status() {
     return (
       <div className="flex items-center justify-center">
         <Link
-          className="py-3 px-2 hover:bg-gray-400 cursor-pointer"
+          className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700 cursor-pointer"
           to="/profile"
         >
           Profile
@@ -20,7 +20,10 @@ function Status() {
 
   return (
     <div className="flex items-center justify-center">
-      <Link className="py-3 px-2 hover:bg-gray-400" to="/login">
+      <Link
+        className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
+        to="/login"
+      >
         Log In
       </Link>
     </div>

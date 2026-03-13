@@ -9,15 +9,15 @@ function WeatherCard({ weatherForecast }) {
     );
   }
   return (
-    <section className="flex items-center flex-wrap justify-center">
+    <section className="flex items-center flex-wrap justify-center gap-3 dark:text-gray-100">
       {weatherForecast.slice(0, 6).map((day) => {
         return (
           <div
             key={day.datetime}
-            className="flex flex-col min-w-21 items-center"
+            className="flex flex-col min-w-20 items-center"
           >
             <div>{getDayInWeek(day.datetime)}</div>
-            <div className="flex flex-col items-center justify-center w-15 h-15">
+            <div className="flex flex-col items-center justify-center w-16 h-16">
               <img
                 src={day.iconURL}
                 alt={`Icon for ${getDayInWeek(day.datetime)}`}

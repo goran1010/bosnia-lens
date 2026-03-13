@@ -43,16 +43,16 @@ function GetAllPostalCodes({ setSearchResult, loading, setLoading }) {
   }
 
   return (
-    <form onSubmit={handleGetAll}>
+    <form onSubmit={handleGetAll} className="w-full">
       <button
         type="submit"
         disabled={loading}
-        className="btn-standard not-disabled:active:scale-95 disabled:bg-yellow-500 bg-yellow-600 hover:bg-yellow-700"
+        className="bg-yellow-600 text-white p-2 rounded-md hover:bg-yellow-700 hover:cursor-pointer disabled:bg-yellow-500 disabled:text-gray-200 disabled:cursor-not-allowed relative flex justify-center items-center transition transform not-disabled:active:scale-95 w-full"
       >
         <div className="h-full w-full flex justify-center items-center absolute">
           {loading && <Spinner />}
         </div>
-        Get All Postal Codes and Municipalities
+        Get All
       </button>
     </form>
   );
