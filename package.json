@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "remove_merged": "git branch --merged | grep -Ev '(^\\*|main|master)' | xargs git branch -d",
+    "prisma_studio": "cd backend && npx prisma studio",
     "db:seed": "cd backend && npx prisma db seed",
     "db:test:seed": "cd backend && NODE_ENV=test npx prisma db seed",
     "db:generate": "cd backend && npx prisma generate",
