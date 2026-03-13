@@ -8,7 +8,7 @@ function PostalCodesResult({ searchResult }) {
   }
   return (
     <section className="flex flex-col justify-center items-center">
-      <ul className=" min-w-m max-w-4xl max-h-96 overflow-y-auto border border-gray-300 rounded-md p-2">
+      <ul className=" min-w-m max-w-4xl max-h-96 overflow-y-auto overflow-x-hidden border border-gray-300 rounded-md p-2">
         <li className="grid gap-1 w-full p-2 border border-gray-300 rounded-md mb-4 grid-cols-3 font-bold">
           <div>Code</div>
           <div>City</div>

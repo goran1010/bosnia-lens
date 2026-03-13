@@ -22,10 +22,6 @@
 }
 @import "tailwindcss";
 
-html {
-  font-size: clamp(1em, 17px + 0.24vw, 1.125em);
-}
-
 #root {
   min-height: 100vh;
   min-width: 320px;
@@ -36,6 +32,9 @@ html {
 @layer base {
   main a {
     @apply hover:underline text-blue-600;
+  }
+  html {
+    font-size: clamp(14px, 1.2vw, 20px);
   }
 }
 
