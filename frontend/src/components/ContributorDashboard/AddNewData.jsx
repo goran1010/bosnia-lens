@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { handleSubmitAddData } from "./utils/handleSubmitAddData";
 import { Spinner } from "../../utils/Spinner";
+import { validateAddData } from "./utils/validateAddData";
 
 function AddNewData({ setSearchResult, loading, setLoading }) {
   const [input, setInput] = useState({ city: "", code: "", post: "" });
@@ -10,6 +11,7 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
   function handleInput(e) {
     const newInput = { ...input };
     newInput[e.target.name] = e.target.value;
+    validateAddData(e);
     setInput(newInput);
   }
 
@@ -46,8 +48,6 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
               name="code"
               value={input.code}
               onChange={handleInput}
-              maxLength={5}
-              minLength={5}
               required
               className="input-standard"
             />
