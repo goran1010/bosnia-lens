@@ -48,16 +48,6 @@ const createPostalCode = [
 
 const editPostalCode = [
   query("code").trim().notEmpty().withMessage("Code is required"),
-  query("code").custom((value) => {
-    if (Number.isInteger(Number(value))) {
-      if (value.length !== 5) {
-        throw new Error("Postal codes must have 5 numbers");
-      }
-    } else {
-      throw new Error("Must be a number");
-    }
-    return true;
-  }),
 
   query("city").trim().notEmpty().withMessage("City is required"),
 
@@ -91,7 +81,10 @@ const editPostalCode = [
 ];
 
 const deletePostalCode = [
-  query("code").trim().notEmpty().withMessage("Search term is required"),
+  query("code")
+    .trim()
+    .notEmpty()
+    .withMessage("Can't delete data. Code is required"),
 
   (req, res, next) => {
     const errors = validationResult(req);
