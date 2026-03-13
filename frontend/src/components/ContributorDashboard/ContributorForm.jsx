@@ -9,9 +9,11 @@ function ContributorForm() {
   }
 
   return (
-    <div className="flex flex-col items-center flex-1">
-      <form className="p-2 flex items-center">
-        <label htmlFor="dataset">Choose dataset: </label>
+    <div className="flex flex-col items-center flex-1 w-full">
+      <form className="p-2 flex items-center gap-1">
+        <label htmlFor="dataset" className="text-nowrap">
+          Choose dataset:{" "}
+        </label>
         <select
           name="dataset"
           id="dataset"
@@ -19,7 +21,7 @@ function ContributorForm() {
           className="bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 p-2 rounded cursor-pointer"
         >
           <option default value="">
-            Select a dataset
+            No dataset
           </option>
           <option value="postal-codes">Postal Codes</option>
           <option value="holidays">Holidays</option>

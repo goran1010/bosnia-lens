@@ -30,7 +30,7 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
         {isOpen ? "Close form" : "Add new data"}
       </button>
       {isOpen && (
-        <div className="flex flex-col gap-2 border border-gray-300 rounded-md p-2 w-full max-w-lg">
+        <div className="flex flex-col gap-2 border border-gray-300 rounded-md p-2 w-full max-w-md">
           <div>
             <label htmlFor="city">City name: </label>
             <input
@@ -68,7 +68,7 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
               className="input-standard"
             />
           </div>
-          <div>
+          <div className="flex justify-center items-center">
             <button
               onClick={(e) =>
                 handleSubmitAddData(
@@ -83,7 +83,7 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
               }
               type="button"
               disabled={loading}
-              className="btn-standard not-disabled:active:scale-95 w-full"
+              className="btn-standard not-disabled:active:scale-95"
             >
               <div className="h-full w-full flex justify-center items-center absolute">
                 {loading && <Spinner />}

@@ -47,12 +47,12 @@ function GetAllPostalCodes({ setSearchResult, loading, setLoading }) {
       <button
         type="submit"
         disabled={loading}
-        className="btn-standard not-disabled:active:scale-95 disabled:bg-yellow-500 bg-yellow-600 hover:bg-yellow-700"
+        className="btn-standard not-disabled:active:scale-95 disabled:bg-yellow-500 bg-yellow-600 hover:bg-yellow-700 w-full"
       >
         <div className="h-full w-full flex justify-center items-center absolute">
           {loading && <Spinner />}
         </div>
-        Get All Postal Codes and Municipalities
+        Get All
       </button>
     </form>
   );

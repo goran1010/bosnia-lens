@@ -9,7 +9,7 @@ function PostalCodes() {
 
   return (
     <div className="flex flex-col items-center gap-8 flex-1">
-      <section className="relative flex flex-col justify-center items-center gap-4 p-4">
+      <section className="relative flex flex-col justify-center items-center gap-4 py-4">
         <SearchPostalCode
           setSearchResult={setSearchResult}
           loading={loading}

@@ -42,7 +42,7 @@ function PostalCodesResultContributor({ searchResult, setSearchResult }) {
   }
   return (
     <section className="flex flex-col justify-center items-center p-1 w-full">
-      <ul className=" min-w-m max-w-4xl max-h-96 overflow-auto border border-gray-300 rounded-md p-2">
+      <ul className="max-w-4xl max-h-96 overflow-auto border border-gray-300 rounded-md p-1">
         <li className="text-center grid gap-1 w-full py-2 border border-gray-300 rounded-md grid-cols-5 font-bold">
           <div>Code</div>
           <div>City</div>
