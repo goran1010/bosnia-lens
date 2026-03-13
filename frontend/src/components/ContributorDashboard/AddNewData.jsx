@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useRef } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { handleSubmitAddData } from "./utils/handleSubmitAddData";
 import { Spinner } from "../../utils/Spinner";
@@ -7,6 +7,9 @@ import { validateAddData } from "./utils/validateAddData";
 function AddNewData({ setSearchResult, loading, setLoading }) {
   const [input, setInput] = useState({ city: "", code: "", post: "" });
   const { addNotification } = useContext(NotificationContext);
+
+  const cityInput = useRef();
+  const codeInput = useRef();
 
   function handleInput(e) {
     const newInput = { ...input };
@@ -31,6 +34,7 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
           <div>
             <label htmlFor="city">City name: </label>
             <input
+              ref={cityInput}
               type="text"
               id="city"
               name="city"
@@ -43,6 +47,7 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
           <div>
             <label htmlFor="code">Postal Code: </label>
             <input
+              ref={codeInput}
               type="text"
               id="code"
               name="code"
@@ -72,6 +77,8 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
                   setSearchResult,
                   addNotification,
                   setLoading,
+                  cityInput,
+                  codeInput,
                 )
               }
               type="button"

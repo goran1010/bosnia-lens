@@ -1,5 +1,6 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 import { getCsrfToken } from "../../utils/getCsrfToken";
+import { validateSubmitAddData } from "./validateSubmitAddData";
 
 async function handleSubmitAddData(
   e,
@@ -7,10 +8,14 @@ async function handleSubmitAddData(
   setSearchResult,
   addNotification,
   setLoading,
+  cityInput,
+  codeInput,
 ) {
   try {
     e.preventDefault();
     const { city, code, post } = input;
+
+    if (!validateSubmitAddData(cityInput, codeInput)) return;
 
     const csrfToken = await getCsrfToken();
 
