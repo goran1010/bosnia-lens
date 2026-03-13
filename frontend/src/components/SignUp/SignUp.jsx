@@ -6,7 +6,7 @@ function SignUp() {
   const [loading, setLoading] = useState(false);
 
   return (
-    <div className="relative min-h-full flex items-center justify-center bg-gray-50 rounded-md dark:bg-gray-800">
+    <div className="relative min-h-full w-full max-w-xl mx-auto flex items-center justify-center bg-gray-50 rounded-md dark:bg-gray-800 p-3">
       <div className="w-full max-w-md p-4 flex flex-col gap-3">
         <div>
           <h1 className="text-3xl text-center font-bold text-gray-900 dark:text-gray-100">

@@ -50,11 +50,11 @@ function Notifications() {
   if (!notifications?.length) return null;
 
   return (
-    <div className="fixed top-1 z-50 flex flex-col gap-1 w-70 right-1 select-none opacity-80 hover:opacity-100">
+    <div className="fixed top-4 right-4 z-50 flex flex-col gap-2 w-[min(92vw,24rem)] select-none opacity-85 hover:opacity-100 transition-opacity">
       {notifications.map((notification) => (
         <div
           key={notification.id}
-          className={`relative px-4 py-3 rounded-lg shadow-lg text-white min-w-[250px] flex flex-col justify-center items-center ${getNotificationStyles(
+          className={`relative px-4 py-3 rounded-lg shadow-lg text-white w-full flex flex-col justify-center items-center ${getNotificationStyles(
             notification.type,
           )}`}
         >

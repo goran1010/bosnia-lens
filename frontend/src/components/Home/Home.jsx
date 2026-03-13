@@ -9,10 +9,10 @@ function Home() {
   const { weatherForecast } = useWeatherCheck(setLoading);
 
   return (
-    <div className="flex flex-col items-center gap-2">
-      <header className="flex flex-col items-center gap-2">
+    <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl flex flex-col items-center gap-4 py-2 dark:text-gray-100">
+      <header className="flex flex-col items-center gap-3 w-full">
         <h1 className="font-bold">Bosnia Lens</h1>
-        <article>
+        <article className="w-full max-w-4xl text-left">
           <p>
             A free, open-source project providing structured public data about
             Bosnia and Herzegovina through a REST API and web interface.
@@ -24,8 +24,8 @@ function Home() {
             developer-friendly.
           </p>
         </article>
-        <div className="grid grid-rows-1 gap-2 md:grid-cols-2">
-          <article>
+        <div className="grid grid-rows-1 gap-3 md:grid-cols-2 w-full max-w-5xl">
+          <article className="text-left">
             <h2 className="font-bold text-center">
               Data we're looking to provide includes:
             </h2>
@@ -35,7 +35,7 @@ function Home() {
               <li>Universities and their programs</li>
             </ul>
           </article>
-          <article className="flex flex-col items-center">
+          <article className="flex flex-col items-center text-left">
             <h2 className="font-bold">Tools</h2>
             <ul>
               <li>
@@ -67,9 +67,9 @@ function Home() {
       ) : (
         <WeatherCard weatherForecast={weatherForecast} />
       )}
-      <section className="flex flex-col items-center gap-2">
-        <div className="grid grid-rows-1 gap-2 md:grid-cols-2">
-          <article className="flex flex-col items-center">
+      <section className="flex flex-col items-center gap-3 w-full">
+        <div className="grid grid-rows-1 gap-3 md:grid-cols-2 w-full max-w-5xl">
+          <article className="flex flex-col items-center text-left">
             <h2 className="font-bold">Contributing</h2>
             <article>
               <p>
@@ -93,7 +93,7 @@ function Home() {
               </p>
             </article>
           </article>
-          <article className="flex flex-col items-center">
+          <article className="flex flex-col items-center text-left">
             <h2 className="font-bold">Acknowledgments</h2>
             <article>
               <p>Inspired by global open data initiatives.</p>
