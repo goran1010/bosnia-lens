@@ -15,6 +15,13 @@ function getNotificationStyles(type) {
   }
 }
 
+function getNotificationRole(type) {
+  if (type === "error" || type === "warning") {
+    return "alert";
+  }
+  return "status";
+}
+
 function Notifications() {
   const { notifications, removeNotification } = useContext(NotificationContext);
   const timerMapRef = useRef(new Map());
@@ -50,28 +57,38 @@ function Notifications() {
   if (!notifications?.length) return null;
 
   return (
-    <div className="fixed top-4 right-4 z-50 flex flex-col gap-2 w-[min(92vw,24rem)] select-none opacity-85 hover:opacity-100 transition-opacity">
-      {notifications.map((notification) => (
-        <div
-          key={notification.id}
-          className={`relative px-4 py-3 rounded-lg shadow-lg text-white w-full flex flex-col justify-center items-center ${getNotificationStyles(
-            notification.type,
-          )}`}
-        >
-          <p>{notification.message}</p>
-          {notification.details && (
-            <p className="text-sm opacity-80">{notification.details}</p>
-          )}
-
-          <button
-            onClick={() => removeNotification(notification.id)}
-            className="absolute top-2 right-2 text-sm opacity-80 hover:opacity-100 cursor-pointer"
+    <aside
+      className="fixed top-4 right-4 z-50 w-[min(92vw,24rem)] select-none opacity-85 hover:opacity-100 transition-opacity"
+      aria-label="Notifications"
+      aria-live="polite"
+      aria-relevant="additions text"
+    >
+      <ul className="flex flex-col gap-2">
+        {notifications.map((notification) => (
+          <li
+            key={notification.id}
+            role={getNotificationRole(notification.type)}
+            className={`relative px-4 py-3 rounded-lg shadow-lg text-white w-full flex flex-col justify-center items-center ${getNotificationStyles(
+              notification.type,
+            )}`}
           >
-            ✕
-          </button>
-        </div>
-      ))}
-    </div>
+            <p>{notification.message}</p>
+            {notification.details && (
+              <p className="text-sm opacity-80">{notification.details}</p>
+            )}
+
+            <button
+              type="button"
+              onClick={() => removeNotification(notification.id)}
+              aria-label="Dismiss notification"
+              className="absolute top-2 right-2 text-sm opacity-80 hover:opacity-100 cursor-pointer"
+            >
+              ✕
+            </button>
+          </li>
+        ))}
+      </ul>
+    </aside>
   );
 }
 

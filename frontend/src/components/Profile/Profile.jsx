@@ -31,43 +31,45 @@ function Profile() {
       </div>
 
       <div className="p-2 flex flex-col gap-2 text-center items-center">
-        <div>
-          <label className="block text-sm font-semibold text-gray-500 uppercase tracking-wide">
-            Email Address
-          </label>
-          <p className="text-lg text-gray-900 font-bold dark:text-white">
-            {userData?.email}
-          </p>
-        </div>
-        <hr />
-        <div>
-          <label className="block text-sm font-semibold text-gray-500 uppercase tracking-wide">
-            Username
-          </label>
-          <p className="text-lg text-gray-900 font-bold dark:text-white">
-            {userData?.username}
-          </p>
-        </div>
-        <hr />
-        <div>
-          <label className="block text-sm font-semibold text-gray-500 uppercase tracking-wide">
-            Current Role
-          </label>
-          <div className="flex items-center justify-center">
-            <span
-              className={`items-center px-4 py-2 rounded-full text-sm font-bold ${
-                userData?.role === "CONTRIBUTOR"
-                  ? "bg-green-200 text-green-800"
-                  : userData?.role === "ADMIN"
-                    ? "bg-red-200 text-red-800"
-                    : "bg-gray-200 text-gray-800"
-              }`}
-            >
-              {userData?.role}
-            </span>
+        <dl className="w-full flex flex-col gap-2">
+          <div>
+            <dt className="block text-sm font-semibold text-gray-500 uppercase tracking-wide">
+              Email Address
+            </dt>
+            <dd className="text-lg text-gray-900 font-bold dark:text-white">
+              {userData?.email}
+            </dd>
           </div>
-        </div>
-        <hr />
+          <hr />
+          <div>
+            <dt className="block text-sm font-semibold text-gray-500 uppercase tracking-wide">
+              Username
+            </dt>
+            <dd className="text-lg text-gray-900 font-bold dark:text-white">
+              {userData?.username}
+            </dd>
+          </div>
+          <hr />
+          <div>
+            <dt className="block text-sm font-semibold text-gray-500 uppercase tracking-wide">
+              Current Role
+            </dt>
+            <dd className="flex items-center justify-center">
+              <span
+                className={`items-center px-4 py-2 rounded-full text-sm font-bold ${
+                  userData?.role === "CONTRIBUTOR"
+                    ? "bg-green-200 text-green-800"
+                    : userData?.role === "ADMIN"
+                      ? "bg-red-200 text-red-800"
+                      : "bg-gray-200 text-gray-800"
+                }`}
+              >
+                {userData?.role}
+              </span>
+            </dd>
+          </div>
+          <hr />
+        </dl>
         <div className="flex flex-col gap-2 w-full max-w-sm">
           {userData?.role === "USER" && !userData?.requestedContributor && (
             <Button
