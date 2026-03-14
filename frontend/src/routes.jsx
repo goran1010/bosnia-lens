@@ -21,6 +21,10 @@ const routes = [
         index: true,
       },
       {
+        element: <Home />,
+        path: "/home",
+      },
+      {
         element: <PostalCodes />,
         path: "postal-codes",
       },

@@ -34,7 +34,7 @@
     @apply hover:underline text-blue-600;
   }
   html {
-    font-size: clamp(14px, 1.2vw, 20px);
+    font-size: clamp(16px, 1.2vw, 20px);
   }
 }
 
