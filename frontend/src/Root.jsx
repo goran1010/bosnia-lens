@@ -9,6 +9,7 @@ import { Notifications } from "./components/Notifications";
 import { NotificationContext } from "./contextData/NotificationContext";
 import { useNotification } from "./customHooks/useNotification";
 import { useTitle } from "./customHooks/useTitle";
+import { LongWaitInfo } from "./utils/longWaitInfo";
 
 function Root() {
   const [loading, setLoading] = useState(true);
@@ -43,16 +44,7 @@ function Root() {
             onClick={() => isMenuOpen && setIsMenuOpen(false)}
           >
             {loading ? <Spinner /> : <Outlet />}
-            {longWait && (
-              <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
-                <div className="bg-gray-500 p-2 rounded shadow">
-                  <p className="text-white font-bold">
-                    This is taking longer than expected (server might be waking
-                    up). Please wait...
-                  </p>
-                </div>
-              </div>
-            )}
+            {longWait && <LongWaitInfo />}
           </main>
           <Footer />
         </>

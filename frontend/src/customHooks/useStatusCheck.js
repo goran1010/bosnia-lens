@@ -6,68 +6,73 @@ function useStatusCheck(setLoading, notificationValue, setLongWait) {
   const [userData, setUserData] = useState(null);
   const userChecked = useRef(false);
 
-  useEffect(() => {
-    setLongWait(false);
-    const abortController = new AbortController();
-    let isMounted = true;
+  try {
+    useEffect(() => {
+      setLongWait(false);
+      let isMounted = true;
 
-    async function checkLogin() {
-      // Show long wait message after 4 seconds
-      const timeoutId = setTimeout(() => {
-        if (userChecked.current === false && isMounted) {
-          setLongWait(true);
-        }
-      }, 4000);
+      async function checkLogin() {
+        // Show long wait message after 4 seconds
+        const timeoutId = setTimeout(() => {
+          if (userChecked.current === false && isMounted) {
+            setLongWait(true);
+          }
+        }, 4000);
 
-      try {
-        const response = await fetch(`${URL}/users/me`, {
-          mode: "cors",
-          method: "GET",
-          credentials: "include",
-          signal: abortController.signal,
-        });
+        try {
+          const response = await fetch(`${URL}/users/me`, {
+            mode: "cors",
+            method: "GET",
+            credentials: "include",
+          });
 
-        const result = await response.json();
-        if (!isMounted) return;
+          const result = await response.json();
+          if (!isMounted) return;
 
-        if (!response.ok) {
+          if (!response.ok) {
+            addNotification({
+              type: "error",
+              message: result.error,
+            });
+            return;
+          }
+          addNotification({
+            type: "success",
+            message: "Login status checked successfully.",
+          });
+          setUserData(result.data);
+        } catch (err) {
+          if (err.name === "AbortError" || !isMounted) return;
           addNotification({
             type: "error",
-            message: result.error,
+            message: "An error occurred while checking login status.",
           });
-          return;
-        }
-        addNotification({
-          type: "success",
-          message: "Login status checked successfully.",
-        });
-        setUserData(result.data);
-      } catch (err) {
-        if (err.name === "AbortError" || !isMounted) return;
-        addNotification({
-          type: "error",
-          message: "An error occurred while checking login status.",
-        });
-        console.error(err);
-      } finally {
-        if (isMounted) {
-          userChecked.current = true;
-          clearTimeout(timeoutId);
-          setLoading(false);
-          setLongWait(false);
+          console.error(err);
+        } finally {
+          if (isMounted) {
+            userChecked.current = true;
+            clearTimeout(timeoutId);
+            setLoading(false);
+            setLongWait(false);
+          }
         }
       }
-    }
 
-    checkLogin();
+      checkLogin();
 
-    return () => {
-      isMounted = false;
-      abortController.abort();
-    };
-  }, [addNotification, setLoading, setLongWait]);
+      return () => {
+        isMounted = false;
+      };
+    }, [addNotification, setLoading, setLongWait]);
 
-  return { userData, setUserData };
+    return { userData, setUserData };
+  } catch (err) {
+    addNotification({
+      type: "error",
+      message: "An error occurred while checking login status.",
+    });
+    console.error(err);
+  }
 }
 
 export { useStatusCheck };

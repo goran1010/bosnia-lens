@@ -1,9 +1,31 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { LogInForm } from "./LogInForm.jsx";
+import { UserDataContext } from "../../contextData/UserDataContext.js";
+import { NotificationContext } from "../../contextData/NotificationContext.js";
 
 function LogIn() {
   const [loading, setLoading] = useState(false);
+
+  const { addNotification } = useContext(NotificationContext);
+
+  const navigate = useNavigate();
+  const { userData } = useContext(UserDataContext);
+  const wasLoggedInOnPageLoad = useRef(Boolean(userData));
+
+  useEffect(() => {
+    if (userData) {
+      if (wasLoggedInOnPageLoad.current) {
+        addNotification({
+          type: "warning",
+          message: "You are already logged in. Redirected to the home page.",
+        });
+      }
+      navigate("/home");
+      return;
+    }
+  }, [userData, navigate, addNotification]);
 
   return (
     <div className="relative min-h-full w-full max-w-xl mx-auto flex items-center justify-center bg-gray-50 rounded-md dark:bg-gray-800 p-3">

@@ -13,12 +13,14 @@ function Profile() {
   useEffect(() => {
     if (!userData) {
       addNotification({
-        type: "error",
-        message: "You must be logged in to view the profile page.",
+        type: "warning",
+        message: "You need to be logged in. Redirected to the login page.",
       });
       navigate("/login");
+      return;
     }
   }, [userData, navigate, addNotification]);
+
   return (
     <div className="w-full max-w-md mx-auto bg-white dark:bg-gray-800 dark:text-white rounded-xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-600">
       <div className="bg-linear-to-r from-blue-600 to-indigo-700 p-4">

@@ -103,7 +103,7 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
               <div className="h-full w-full flex justify-center items-center absolute">
                 {loading && <Spinner />}
               </div>
-              Add row
+              Add data
             </button>
           </div>
         </div>
