@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { Spinner } from "../../utils/Spinner";
-import { Button } from "../Button";
+import { Button } from "../sharedComponents/Button";
 
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 

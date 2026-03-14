@@ -6,9 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { handleSubmitLogIn } from "./utils/handleSubmitLogIn";
 import { Spinner } from "../../utils/Spinner";
-import { Button } from "../Button";
-import { Input } from "../Input";
-import { Label } from "../Label";
+import { Button } from "../sharedComponents/Button";
+import { Input } from "../sharedComponents/Input";
+import { Label } from "../sharedComponents/Label";
 
 function LogInForm({ loading, setLoading }) {
   const navigate = useNavigate();

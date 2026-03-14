@@ -3,9 +3,9 @@ import { NotificationContext } from "../../contextData/NotificationContext";
 import { handleSubmitAddData } from "./utils/handleSubmitAddData";
 import { Spinner } from "../../utils/Spinner";
 import { validateAddData } from "./utils/validateAddData";
-import { Button } from "../Button";
-import { Input } from "../Input";
-import { Label } from "../Label";
+import { Button } from "../sharedComponents/Button";
+import { Input } from "../sharedComponents/Input";
+import { Label } from "../sharedComponents/Label";
 
 function AddNewData({ setSearchResult, loading, setLoading }) {
   const [input, setInput] = useState({ city: "", code: "", post: "" });

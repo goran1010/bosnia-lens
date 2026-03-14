@@ -4,7 +4,7 @@ import { UserDataContext } from "../../contextData/UserDataContext";
 import { useNavigate } from "react-router-dom";
 import { handleBecomeContributor } from "./utils/handleBecomeContributor";
 import { handleLogout } from "./utils/handleLogout";
-import { Button } from "../Button";
+import { Button } from "../sharedComponents/Button";
 
 function Profile() {
   const { addNotification } = useContext(NotificationContext);

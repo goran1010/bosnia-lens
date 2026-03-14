@@ -6,9 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { Spinner } from "../../utils/Spinner";
-import { Button } from "../Button";
-import { Input } from "../Input";
-import { Label } from "../Label";
+import { Button } from "../sharedComponents/Button";
+import { Input } from "../sharedComponents/Input";
+import { Label } from "../sharedComponents/Label";
 
 function SignUpForm({ loading, setLoading }) {
   const navigate = useNavigate();

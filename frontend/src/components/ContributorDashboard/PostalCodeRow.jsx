@@ -1,6 +1,6 @@
 import { memo } from "react";
-import { Button } from "../Button";
-import { Input } from "../Input";
+import { Button } from "../sharedComponents/Button";
+import { Input } from "../sharedComponents/Input";
 
 const PostalCodeRow = memo(({ result, onChange, onSubmit, onDelete }) => {
   return (

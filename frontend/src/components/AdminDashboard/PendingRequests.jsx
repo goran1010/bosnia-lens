@@ -3,14 +3,14 @@ import { handleDecline } from "./utils/handleDecline";
 import { useGetPendingRequests } from "./customHooks/useGetPendingRequests";
 import { useContext } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
-import { Button } from "../Button";
+import { Button } from "../sharedComponents/Button";
 
 function PendingRequests({ setCurrentContributors }) {
   const { addNotification } = useContext(NotificationContext);
   const { pendingRequests, setPendingRequests } = useGetPendingRequests();
 
   return (
-    <section className="text-gray-800 bg-white rounded-lg shadow p-3 border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+    <section className="text-gray-800 bg-white rounded-lg shadow p-3 border border-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
       <h2 className="text-md text-center font-semibold flex items-center gap-1 p-1 flex-1">
         <span className="px-2 py-1 rounded-full text-sm font-bold bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100">
           {pendingRequests.length}
@@ -58,7 +58,7 @@ function PendingRequests({ setCurrentContributors }) {
             </li>
           ))
         ) : (
-          <li className="text-gray-500 italic text-center py-8 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+          <li className="text-gray-500 italic text-center py-8 bg-gray-50 rounded-lg border border-dashed border-gray-400">
             No pending requests
           </li>
         )}
