@@ -64,7 +64,6 @@ function SearchPostalCode({ setSearchResult, loading, setLoading }) {
       <div className="flex gap-2 w-full max-w-xl flex-wrap sm:flex-nowrap">
         <input
           ref={searchInput}
-          autoFocus
           value={searchTerm}
           onChange={handleSearch}
           type="text"
