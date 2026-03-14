@@ -8,6 +8,7 @@ import { handleSubmitLogIn } from "./utils/handleSubmitLogIn";
 import { Spinner } from "../../utils/Spinner";
 import { Button } from "../Button";
 import { Input } from "../Input";
+import { Label } from "../Label";
 
 function LogInForm({ loading, setLoading }) {
   const navigate = useNavigate();
@@ -42,12 +43,7 @@ function LogInForm({ loading, setLoading }) {
       className="flex flex-col gap-3"
     >
       <div>
-        <label
-          htmlFor="username"
-          className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300"
-        >
-          Username
-        </label>
+        <Label htmlFor="username">Username</Label>
         <Input
           value={inputFields.username}
           ref={usernameInput}
@@ -58,12 +54,7 @@ function LogInForm({ loading, setLoading }) {
         />
       </div>
       <div>
-        <label
-          htmlFor="password"
-          className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300"
-        >
-          Password
-        </label>
+        <Label htmlFor="password">Password</Label>
         <Input
           ref={passwordInput}
           value={inputFields.password}

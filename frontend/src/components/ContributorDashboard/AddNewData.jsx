@@ -5,6 +5,7 @@ import { Spinner } from "../../utils/Spinner";
 import { validateAddData } from "./utils/validateAddData";
 import { Button } from "../Button";
 import { Input } from "../Input";
+import { Label } from "../Label";
 
 function AddNewData({ setSearchResult, loading, setLoading }) {
   const [input, setInput] = useState({ city: "", code: "", post: "" });
@@ -30,12 +31,7 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
       {isOpen && (
         <div className="flex flex-col gap-2 border border-gray-300 dark:border-gray-600 rounded-md p-3 w-full max-w-md mx-auto">
           <div>
-            <label
-              htmlFor="city"
-              className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300"
-            >
-              City name:
-            </label>
+            <Label htmlFor="city">City name:</Label>
             <Input
               ref={cityInput}
               type="text"
@@ -47,12 +43,7 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
             />
           </div>
           <div>
-            <label
-              htmlFor="code"
-              className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300"
-            >
-              Postal Code:
-            </label>
+            <Label htmlFor="code">Postal Code:</Label>
             <Input
               ref={codeInput}
               type="text"
@@ -64,12 +55,7 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
             />
           </div>
           <div>
-            <label
-              htmlFor="post"
-              className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300"
-            >
-              Postal Carrier:
-            </label>
+            <Label htmlFor="post">Postal Carrier:</Label>
             <Input
               type="text"
               id="post"

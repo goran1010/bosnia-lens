@@ -8,6 +8,7 @@ import { NotificationContext } from "../../contextData/NotificationContext";
 import { Spinner } from "../../utils/Spinner";
 import { Button } from "../Button";
 import { Input } from "../Input";
+import { Label } from "../Label";
 
 function SignUpForm({ loading, setLoading }) {
   const navigate = useNavigate();
@@ -51,12 +52,7 @@ function SignUpForm({ loading, setLoading }) {
       }
     >
       <div>
-        <label
-          htmlFor="username"
-          className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300"
-        >
-          Username
-        </label>
+        <Label htmlFor="username">Username</Label>
         <Input
           ref={usernameInput}
           value={inputFields.username}
@@ -67,12 +63,7 @@ function SignUpForm({ loading, setLoading }) {
         />
       </div>
       <div>
-        <label
-          htmlFor="email"
-          className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300"
-        >
-          Email
-        </label>
+        <Label htmlFor="email">Email</Label>
         <Input
           ref={emailInput}
           value={inputFields.email}
@@ -83,12 +74,7 @@ function SignUpForm({ loading, setLoading }) {
         />
       </div>
       <div>
-        <label
-          htmlFor="password"
-          className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300"
-        >
-          Password
-        </label>
+        <Label htmlFor="password">Password</Label>
         <Input
           ref={passwordInput}
           value={inputFields.password}
@@ -99,12 +85,7 @@ function SignUpForm({ loading, setLoading }) {
         />
       </div>
       <div>
-        <label
-          htmlFor="confirm-password"
-          className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300"
-        >
-          Confirm Password
-        </label>
+        <Label htmlFor="confirm-password">Confirm Password</Label>
         <Input
           ref={confirmPasswordInput}
           value={inputFields["confirm-password"]}

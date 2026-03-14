@@ -4,6 +4,7 @@ import { NotificationContext } from "../../contextData/NotificationContext";
 import { Spinner } from "../../utils/Spinner";
 import { Button } from "../Button";
 import { Input } from "../Input";
+import { Label } from "../Label";
 
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 
@@ -56,12 +57,7 @@ function SearchPostalCode({ setSearchResult, loading, setLoading }) {
       onSubmit={handleSubmit}
       className="flex flex-col justify-center items-center gap-2 w-full"
     >
-      <label
-        htmlFor="search-term"
-        className="block text-sm font-medium text-gray-700 dark:text-white"
-      >
-        Search by Postal Code or Municipality
-      </label>
+      <Label htmlFor="search-term">Search by Postal Code or Municipality</Label>
 
       <div className="flex gap-2 w-full max-w-xl flex-wrap sm:flex-nowrap">
         <Input
