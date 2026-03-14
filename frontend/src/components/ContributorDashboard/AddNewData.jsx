@@ -4,6 +4,7 @@ import { handleSubmitAddData } from "./utils/handleSubmitAddData";
 import { Spinner } from "../../utils/Spinner";
 import { validateAddData } from "./utils/validateAddData";
 import { Button } from "../Button";
+import { Input } from "../Input";
 
 function AddNewData({ setSearchResult, loading, setLoading }) {
   const [input, setInput] = useState({ city: "", code: "", post: "" });
@@ -35,7 +36,7 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
             >
               City name:
             </label>
-            <input
+            <Input
               ref={cityInput}
               type="text"
               id="city"
@@ -43,7 +44,6 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
               value={input.city}
               onChange={handleInput}
               required
-              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500 invalid:border-red-500 focus:invalid:ring-red-500 focus:invalid:border-red-500 dark:invalid:border-red-500 dark:focus:invalid:ring-red-500 dark:focus:invalid:border-red-500"
             />
           </div>
           <div>
@@ -53,7 +53,7 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
             >
               Postal Code:
             </label>
-            <input
+            <Input
               ref={codeInput}
               type="text"
               id="code"
@@ -61,7 +61,6 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
               value={input.code}
               onChange={handleInput}
               required
-              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500 invalid:border-red-500 focus:invalid:ring-red-500 focus:invalid:border-red-500 dark:invalid:border-red-500 dark:focus:invalid:ring-red-500 dark:focus:invalid:border-red-500"
             />
           </div>
           <div>
@@ -71,13 +70,12 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
             >
               Postal Carrier:
             </label>
-            <input
+            <Input
               type="text"
               id="post"
               name="post"
               value={input.post}
               onChange={handleInput}
-              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500 invalid:border-red-500 focus:invalid:ring-red-500 focus:invalid:border-red-500 dark:invalid:border-red-500 dark:focus:invalid:ring-red-500 dark:focus:invalid:border-red-500"
             />
           </div>
           <div className="flex justify-center items-center">
