@@ -10,8 +10,8 @@ function PostalCodesResult({ searchResult }) {
   }
   return (
     <section className="flex flex-col justify-center items-center w-full">
-      <ul className="w-full max-w-4xl max-h-150 overflow-auto border border-gray-300 dark:border-gray-600 rounded-md p-2 bg-white dark:bg-gray-700">
-        <li className="text-center grid gap-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md font-bold text-gray-800 dark:text-white bg-gray-50 dark:bg-gray-600 grid-cols-3 mb-3">
+      <ul className="w-full max-w-4xl max-h-150 overflow-auto border border-gray-400 dark:border-gray-600 rounded-md p-2 bg-white dark:bg-gray-700">
+        <li className="text-center grid gap-1 w-full p-2 border border-gray-400 dark:border-gray-600 rounded-md font-bold text-gray-800 dark:text-white bg-gray-50 dark:bg-gray-600 grid-cols-3 mb-3">
           <div>Code</div>
           <div>City</div>
           <div>Post</div>
