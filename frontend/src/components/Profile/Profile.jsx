@@ -13,7 +13,7 @@ function Profile() {
   useEffect(() => {
     if (!userData) {
       addNotification({
-        type: "info",
+        type: "warning",
         message: "You need to be logged in. Redirected to the login page.",
       });
       navigate("/login");

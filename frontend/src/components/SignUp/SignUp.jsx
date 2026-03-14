@@ -16,7 +16,7 @@ function SignUp() {
   useEffect(() => {
     if (userData) {
       addNotification({
-        type: "info",
+        type: "warning",
         message:
           "You can't sign up while logged in. Redirected to the home page.",
       });
