@@ -4,6 +4,7 @@ import { UserDataContext } from "../../contextData/UserDataContext";
 import { useNavigate } from "react-router-dom";
 import { handleBecomeContributor } from "./utils/handleBecomeContributor";
 import { handleLogout } from "./utils/handleLogout";
+import { Button } from "../sharedComponents/Button";
 
 function Profile() {
   const { addNotification } = useContext(NotificationContext);
@@ -30,61 +31,63 @@ function Profile() {
       </div>
 
       <div className="p-2 flex flex-col gap-2 text-center items-center">
-        <div>
-          <label className="block text-sm font-semibold text-gray-500 uppercase tracking-wide">
-            Email Address
-          </label>
-          <p className="text-lg text-gray-900 font-bold dark:text-white">
-            {userData?.email}
-          </p>
-        </div>
-        <hr />
-        <div>
-          <label className="block text-sm font-semibold text-gray-500 uppercase tracking-wide">
-            Username
-          </label>
-          <p className="text-lg text-gray-900 font-bold dark:text-white">
-            {userData?.username}
-          </p>
-        </div>
-        <hr />
-        <div>
-          <label className="block text-sm font-semibold text-gray-500 uppercase tracking-wide">
-            Current Role
-          </label>
-          <div className="flex items-center justify-center">
-            <span
-              className={`items-center px-4 py-2 rounded-full text-sm font-bold ${
-                userData?.role === "CONTRIBUTOR"
-                  ? "bg-green-200 text-green-800"
-                  : userData?.role === "ADMIN"
-                    ? "bg-red-200 text-red-800"
-                    : "bg-gray-200 text-gray-800"
-              }`}
-            >
-              {userData?.role}
-            </span>
+        <dl className="w-full flex flex-col gap-2">
+          <div>
+            <dt className="block text-sm font-semibold text-gray-500 uppercase tracking-wide">
+              Email Address
+            </dt>
+            <dd className="text-lg text-gray-900 font-bold dark:text-white">
+              {userData?.email}
+            </dd>
           </div>
-        </div>
-        <hr />
+          <hr />
+          <div>
+            <dt className="block text-sm font-semibold text-gray-500 uppercase tracking-wide">
+              Username
+            </dt>
+            <dd className="text-lg text-gray-900 font-bold dark:text-white">
+              {userData?.username}
+            </dd>
+          </div>
+          <hr />
+          <div>
+            <dt className="block text-sm font-semibold text-gray-500 uppercase tracking-wide">
+              Current Role
+            </dt>
+            <dd className="flex items-center justify-center">
+              <span
+                className={`items-center px-4 py-2 rounded-full text-sm font-bold ${
+                  userData?.role === "CONTRIBUTOR"
+                    ? "bg-green-200 text-green-800"
+                    : userData?.role === "ADMIN"
+                      ? "bg-red-200 text-red-800"
+                      : "bg-gray-200 text-gray-800"
+                }`}
+              >
+                {userData?.role}
+              </span>
+            </dd>
+          </div>
+          <hr />
+        </dl>
         <div className="flex flex-col gap-2 w-full max-w-sm">
           {userData?.role === "USER" && !userData?.requestedContributor && (
-            <button
+            <Button
               onClick={() =>
                 handleBecomeContributor(addNotification, setUserData)
               }
-              className="bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 hover:cursor-pointer disabled:bg-blue-500 disabled:text-gray-300 disabled:cursor-not-allowed relative flex justify-center items-center transition transform w-full px-6 py-3 font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="w-full px-6 py-3 font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               Request Contributor Access
-            </button>
+            </Button>
           )}
 
-          <button
+          <Button
             onClick={() => handleLogout(addNotification, navigate, setUserData)}
-            className="bg-red-600 text-white p-2 rounded-md hover:bg-red-700 hover:cursor-pointer disabled:bg-red-500 disabled:text-gray-200 disabled:cursor-not-allowed relative flex justify-center items-center transition transform w-full px-6 py-3 font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+            className="bg-red-600 px-6 py-3 font-semibold shadow-md hover:bg-red-700 disabled:bg-red-500 disabled:text-gray-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
           >
             Log Out
-          </button>
+          </Button>
         </div>
       </div>
     </div>

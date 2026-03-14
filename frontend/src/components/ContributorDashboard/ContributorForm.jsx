@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { PostalCodeData } from "./PostalCodeData";
+import { Select } from "../sharedComponents/Select";
 
 function ContributorForm() {
   const [datasetSelect, setDatasetSelect] = useState("");
@@ -14,11 +15,11 @@ function ContributorForm() {
         <label htmlFor="dataset" className="text-nowrap">
           Choose dataset:{" "}
         </label>
-        <select
+        <Select
           name="dataset"
           id="dataset"
           onChange={handleDataset}
-          className="bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 p-2 rounded cursor-pointer border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="bg-gray-200 dark:bg-gray-800"
         >
           <option default value="">
             No dataset
@@ -26,7 +27,7 @@ function ContributorForm() {
           <option value="postal-codes">Postal Codes</option>
           <option value="holidays">Holidays</option>
           <option value="universities">Universities</option>
-        </select>
+        </Select>
       </form>
       {datasetSelect === "postal-codes" && <PostalCodeData />}
       {datasetSelect === "holidays" && "Holidays"}

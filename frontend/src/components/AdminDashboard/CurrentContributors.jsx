@@ -1,12 +1,13 @@
 import { handleRemoveContributor } from "./utils/handleRemoveContributor";
 import { useContext } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
+import { Button } from "../sharedComponents/Button";
 
 function CurrentContributors({ currentContributors, setCurrentContributors }) {
   const { addNotification } = useContext(NotificationContext);
 
   return (
-    <section className="text-gray-800 bg-white rounded-lg shadow p-3 border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+    <section className="text-gray-800 bg-white rounded-lg shadow p-3 border border-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
       <h2 className="text-md text-center font-semibold flex items-center gap-1 p-1 flex-1">
         <span className="px-2 py-1 rounded-full text-sm font-bold bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100">
           {currentContributors.length}
@@ -28,8 +29,8 @@ function CurrentContributors({ currentContributors, setCurrentContributors }) {
                   {user.email}
                 </span>
               </div>
-              <button
-                className="bg-red-600 text-white p-2 rounded-md hover:bg-red-700 hover:cursor-pointer disabled:bg-red-500 disabled:text-gray-200 disabled:cursor-not-allowed relative flex justify-center items-center transition transform px-3 py-2 text-sm"
+              <Button
+                className="bg-red-600 px-3 py-2 text-sm hover:bg-red-700 disabled:bg-red-500 disabled:text-gray-200"
                 onClick={() =>
                   handleRemoveContributor(
                     user,
@@ -39,11 +40,11 @@ function CurrentContributors({ currentContributors, setCurrentContributors }) {
                 }
               >
                 Remove
-              </button>
+              </Button>
             </li>
           ))
         ) : (
-          <li className="text-gray-500 italic text-center py-8 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+          <li className="text-gray-500 italic text-center py-8 bg-gray-50 rounded-lg border border-dashed border-gray-400">
             No contributors found
           </li>
         )}

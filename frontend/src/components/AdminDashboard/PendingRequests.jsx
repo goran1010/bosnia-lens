@@ -3,13 +3,14 @@ import { handleDecline } from "./utils/handleDecline";
 import { useGetPendingRequests } from "./customHooks/useGetPendingRequests";
 import { useContext } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
+import { Button } from "../sharedComponents/Button";
 
 function PendingRequests({ setCurrentContributors }) {
   const { addNotification } = useContext(NotificationContext);
   const { pendingRequests, setPendingRequests } = useGetPendingRequests();
 
   return (
-    <section className="text-gray-800 bg-white rounded-lg shadow p-3 border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+    <section className="text-gray-800 bg-white rounded-lg shadow p-3 border border-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
       <h2 className="text-md text-center font-semibold flex items-center gap-1 p-1 flex-1">
         <span className="px-2 py-1 rounded-full text-sm font-bold bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100">
           {pendingRequests.length}
@@ -32,8 +33,8 @@ function PendingRequests({ setCurrentContributors }) {
                 </span>
               </div>
               <div className="flex gap-2">
-                <button
-                  className="bg-green-600 text-white p-2 rounded-md hover:bg-green-700 hover:cursor-pointer disabled:bg-green-500 disabled:text-gray-200 disabled:cursor-not-allowed relative flex justify-center items-center transition transform px-3 py-2 text-sm"
+                <Button
+                  className="bg-green-600 px-3 py-2 text-sm hover:bg-green-700 disabled:bg-green-500 disabled:text-gray-200"
                   onClick={() => {
                     handleConfirm(
                       user,
@@ -44,20 +45,20 @@ function PendingRequests({ setCurrentContributors }) {
                   }}
                 >
                   Confirm
-                </button>
-                <button
-                  className="bg-red-600 text-white p-2 rounded-md hover:bg-red-700 hover:cursor-pointer disabled:bg-red-500 disabled:text-gray-200 disabled:cursor-not-allowed relative flex justify-center items-center transition transform px-3 py-2 text-sm"
+                </Button>
+                <Button
+                  className="bg-red-600 px-3 py-2 text-sm hover:bg-red-700 disabled:bg-red-500 disabled:text-gray-200"
                   onClick={() => {
                     handleDecline(user, setPendingRequests, addNotification);
                   }}
                 >
                   Decline
-                </button>
+                </Button>
               </div>
             </li>
           ))
         ) : (
-          <li className="text-gray-500 italic text-center py-8 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+          <li className="text-gray-500 italic text-center py-8 bg-gray-50 rounded-lg border border-dashed border-gray-400">
             No pending requests
           </li>
         )}

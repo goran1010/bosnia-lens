@@ -12,7 +12,7 @@ function Home() {
     <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl flex flex-col items-center gap-4 py-2 dark:text-gray-100">
       <header className="flex flex-col items-center gap-3 w-full">
         <h1 className="font-bold">Bosnia Lens</h1>
-        <article className="w-full max-w-4xl text-left">
+        <section className="w-full max-w-4xl text-left">
           <p>
             A free, open-source project providing structured public data about
             Bosnia and Herzegovina through a REST API and web interface.
@@ -23,9 +23,9 @@ function Home() {
             - making Bosnian public data open, searchable, and
             developer-friendly.
           </p>
-        </article>
+        </section>
         <div className="grid grid-rows-1 gap-3 md:grid-cols-2 w-full max-w-5xl">
-          <article className="text-left">
+          <section className="text-left">
             <h2 className="font-bold text-center">
               Data we're looking to provide includes:
             </h2>
@@ -34,8 +34,8 @@ function Home() {
               <li>Postal codes</li> <li>Holidays and observances</li>
               <li>Universities and their programs</li>
             </ul>
-          </article>
-          <article className="flex flex-col items-center text-left">
+          </section>
+          <section className="flex flex-col items-center text-left">
             <h2 className="font-bold">Tools</h2>
             <ul>
               <li>
@@ -59,7 +59,7 @@ function Home() {
                 <strong>Tailwind CSS</strong> - CSS framework for styling
               </li>
             </ul>
-          </article>
+          </section>
         </div>
       </header>
       {loading ? (
@@ -69,9 +69,9 @@ function Home() {
       )}
       <section className="flex flex-col items-center gap-3 w-full">
         <div className="grid grid-rows-1 gap-3 md:grid-cols-2 w-full max-w-5xl">
-          <article className="flex flex-col items-center text-left">
+          <section className="flex flex-col items-center text-left">
             <h2 className="font-bold">Contributing</h2>
-            <article>
+            <div>
               <p>
                 Please read{" "}
                 <a href="https://github.com/goran1010/bosnia-lens/blob/main/CONTRIBUTING.md">
@@ -91,11 +91,11 @@ function Home() {
                 </a>{" "}
                 to more information about the project.
               </p>
-            </article>
-          </article>
-          <article className="flex flex-col items-center text-left">
+            </div>
+          </section>
+          <section className="flex flex-col items-center text-left">
             <h2 className="font-bold">Acknowledgments</h2>
-            <article>
+            <div>
               <p>Inspired by global open data initiatives.</p>
               <p>
                 Thanks to the open-source community for tools and libraries.
@@ -104,8 +104,8 @@ function Home() {
                 Special recognition to contributors helping maintain accurate
                 data about Bosnia and Herzegovina.
               </p>
-            </article>
-          </article>
+            </div>
+          </section>
         </div>
       </section>
     </div>

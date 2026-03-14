@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { UserDataContext } from "../../contextData/UserDataContext";
 import { useTheme } from "../../utils/useTheme";
 import { handleTheme } from "../../utils/handleTheme";
+import { Select } from "../sharedComponents/Select";
 
 function Navbar({ isMenuOpen, setIsMenuOpen }) {
   const { theme, setMode } = useTheme();
@@ -12,10 +13,10 @@ function Navbar({ isMenuOpen, setIsMenuOpen }) {
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
-    <nav className="relative px-2 bg-gray-200 w-full dark:bg-gray-800 dark:text-white font-bold grid grid-cols-3 lg:flex lg:justify-between items-center">
+    <nav className="relative px-2 bg-gray-300 w-full dark:bg-gray-800 dark:text-white font-bold grid grid-cols-3 lg:flex lg:justify-between items-center">
       <div>
-        <select
-          className="bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 p-2 rounded cursor-pointer border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        <Select
+          className="bg-gray-300 dark:bg-gray-800"
           defaultValue={theme}
           name="theme-switcher"
           id="theme-switcher"
@@ -30,7 +31,7 @@ function Navbar({ isMenuOpen, setIsMenuOpen }) {
           <option className="font-bold" value="dark">
             dark
           </option>
-        </select>
+        </Select>
       </div>
       <div className="flex lg:hidden justify-center items-center py-2">
         <button
