@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { Button } from "../Button";
 
 const PostalCodeRow = memo(({ result, onChange, onSubmit, onDelete }) => {
   return (
@@ -29,22 +30,19 @@ const PostalCodeRow = memo(({ result, onChange, onSubmit, onDelete }) => {
         aria-label={`Post office for postal code ${result.code}`}
       />
       <div>
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 hover:cursor-pointer active:scale-95 transition"
-        >
+        <Button type="submit" className="w-full py-2">
           Save
-        </button>
+        </Button>
       </div>
       <div>
-        <button
+        <Button
           type="button"
           data-postalcode={result.code}
           onClick={onDelete}
-          className="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700 hover:cursor-pointer active:scale-95 transition"
+          className="w-full bg-red-600 py-2 hover:bg-red-700"
         >
           Delete
-        </button>
+        </Button>
       </div>
     </form>
   );

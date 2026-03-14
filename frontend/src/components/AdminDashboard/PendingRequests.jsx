@@ -3,6 +3,7 @@ import { handleDecline } from "./utils/handleDecline";
 import { useGetPendingRequests } from "./customHooks/useGetPendingRequests";
 import { useContext } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
+import { Button } from "../Button";
 
 function PendingRequests({ setCurrentContributors }) {
   const { addNotification } = useContext(NotificationContext);
@@ -32,8 +33,8 @@ function PendingRequests({ setCurrentContributors }) {
                 </span>
               </div>
               <div className="flex gap-2">
-                <button
-                  className="bg-green-600 text-white p-2 rounded-md hover:bg-green-700 hover:cursor-pointer disabled:bg-green-500 disabled:text-gray-200 disabled:cursor-not-allowed relative flex justify-center items-center transition transform px-3 py-2 text-sm"
+                <Button
+                  className="bg-green-600 px-3 py-2 text-sm hover:bg-green-700 disabled:bg-green-500 disabled:text-gray-200"
                   onClick={() => {
                     handleConfirm(
                       user,
@@ -44,15 +45,15 @@ function PendingRequests({ setCurrentContributors }) {
                   }}
                 >
                   Confirm
-                </button>
-                <button
-                  className="bg-red-600 text-white p-2 rounded-md hover:bg-red-700 hover:cursor-pointer disabled:bg-red-500 disabled:text-gray-200 disabled:cursor-not-allowed relative flex justify-center items-center transition transform px-3 py-2 text-sm"
+                </Button>
+                <Button
+                  className="bg-red-600 px-3 py-2 text-sm hover:bg-red-700 disabled:bg-red-500 disabled:text-gray-200"
                   onClick={() => {
                     handleDecline(user, setPendingRequests, addNotification);
                   }}
                 >
                   Decline
-                </button>
+                </Button>
               </div>
             </li>
           ))

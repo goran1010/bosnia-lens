@@ -2,6 +2,7 @@ import { useState, useRef, useContext } from "react";
 import { checkPostalCodesValidity } from "./utils/checkPostalCodesValidity";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { Spinner } from "../../utils/Spinner";
+import { Button } from "../Button";
 
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 
@@ -71,19 +72,19 @@ function SearchPostalCode({ setSearchResult, loading, setLoading }) {
           id="search-term"
           className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500 invalid:border-red-500 focus:invalid:ring-red-500 focus:invalid:border-red-500 dark:invalid:border-red-500 dark:focus:invalid:ring-red-500 dark:focus:invalid:border-red-500 flex-1"
         />
-        <button
+        <Button
           type="submit"
           onClick={() => {
             checkPostalCodesValidity(searchInput);
           }}
           disabled={loading}
-          className="bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 hover:cursor-pointer disabled:bg-blue-500 disabled:text-gray-300 disabled:cursor-not-allowed relative flex justify-center items-center transition transform not-disabled:active:scale-95 sm:w-auto w-full"
+          className="sm:w-auto "
         >
           <div className="h-full w-full flex justify-center items-center absolute">
             {loading && <Spinner />}
           </div>
           Search
-        </button>
+        </Button>
       </div>
     </form>
   );

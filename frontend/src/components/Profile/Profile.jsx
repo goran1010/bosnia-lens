@@ -4,6 +4,7 @@ import { UserDataContext } from "../../contextData/UserDataContext";
 import { useNavigate } from "react-router-dom";
 import { handleBecomeContributor } from "./utils/handleBecomeContributor";
 import { handleLogout } from "./utils/handleLogout";
+import { Button } from "../Button";
 
 function Profile() {
   const { addNotification } = useContext(NotificationContext);
@@ -69,22 +70,22 @@ function Profile() {
         <hr />
         <div className="flex flex-col gap-2 w-full max-w-sm">
           {userData?.role === "USER" && !userData?.requestedContributor && (
-            <button
+            <Button
               onClick={() =>
                 handleBecomeContributor(addNotification, setUserData)
               }
-              className="bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 hover:cursor-pointer disabled:bg-blue-500 disabled:text-gray-300 disabled:cursor-not-allowed relative flex justify-center items-center transition transform w-full px-6 py-3 font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="w-full px-6 py-3 font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               Request Contributor Access
-            </button>
+            </Button>
           )}
 
-          <button
+          <Button
             onClick={() => handleLogout(addNotification, navigate, setUserData)}
-            className="bg-red-600 text-white p-2 rounded-md hover:bg-red-700 hover:cursor-pointer disabled:bg-red-500 disabled:text-gray-200 disabled:cursor-not-allowed relative flex justify-center items-center transition transform w-full px-6 py-3 font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+            className="bg-red-600 px-6 py-3 font-semibold shadow-md hover:bg-red-700 disabled:bg-red-500 disabled:text-gray-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
           >
             Log Out
-          </button>
+          </Button>
         </div>
       </div>
     </div>

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { Spinner } from "../../utils/Spinner";
+import { Button } from "../Button";
 
 function SignUpForm({ loading, setLoading }) {
   const navigate = useNavigate();
@@ -117,7 +118,7 @@ function SignUpForm({ loading, setLoading }) {
         />
       </div>
       <div>
-        <button
+        <Button
           onClick={() =>
             checkFormValidityClick(
               usernameInput,
@@ -128,13 +129,12 @@ function SignUpForm({ loading, setLoading }) {
           }
           type="submit"
           disabled={loading}
-          className="bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 hover:cursor-pointer disabled:bg-blue-500 disabled:text-gray-300 disabled:cursor-not-allowed relative flex justify-center items-center transition transform not-disabled:active:scale-95 w-full"
         >
           <div className="h-full w-full flex justify-center items-center absolute">
             {loading && <Spinner />}
           </div>
           Create
-        </button>
+        </Button>
       </div>
     </form>
   );

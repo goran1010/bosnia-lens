@@ -1,6 +1,7 @@
 import { handleRemoveContributor } from "./utils/handleRemoveContributor";
 import { useContext } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
+import { Button } from "../Button";
 
 function CurrentContributors({ currentContributors, setCurrentContributors }) {
   const { addNotification } = useContext(NotificationContext);
@@ -28,8 +29,8 @@ function CurrentContributors({ currentContributors, setCurrentContributors }) {
                   {user.email}
                 </span>
               </div>
-              <button
-                className="bg-red-600 text-white p-2 rounded-md hover:bg-red-700 hover:cursor-pointer disabled:bg-red-500 disabled:text-gray-200 disabled:cursor-not-allowed relative flex justify-center items-center transition transform px-3 py-2 text-sm"
+              <Button
+                className="bg-red-600 px-3 py-2 text-sm hover:bg-red-700 disabled:bg-red-500 disabled:text-gray-200"
                 onClick={() =>
                   handleRemoveContributor(
                     user,
@@ -39,7 +40,7 @@ function CurrentContributors({ currentContributors, setCurrentContributors }) {
                 }
               >
                 Remove
-              </button>
+              </Button>
             </li>
           ))
         ) : (

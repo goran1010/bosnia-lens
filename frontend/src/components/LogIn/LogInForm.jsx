@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { handleSubmitLogIn } from "./utils/handleSubmitLogIn";
 import { Spinner } from "../../utils/Spinner";
+import { Button } from "../Button";
 
 function LogInForm({ loading, setLoading }) {
   const navigate = useNavigate();
@@ -74,19 +75,18 @@ function LogInForm({ loading, setLoading }) {
         />
       </div>
       <div>
-        <button
+        <Button
           onClick={() =>
             checkLoginFormClickValidity(usernameInput, passwordInput)
           }
           type="submit"
           disabled={loading}
-          className="bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 hover:cursor-pointer disabled:bg-blue-500 disabled:text-gray-300 disabled:cursor-not-allowed relative flex justify-center items-center transition transform not-disabled:active:scale-95 w-full"
         >
           <div className="h-full w-full flex justify-center items-center absolute">
             {loading && <Spinner />}
           </div>
           Log in
-        </button>
+        </Button>
       </div>
     </form>
   );

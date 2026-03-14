@@ -3,6 +3,7 @@ import { NotificationContext } from "../../contextData/NotificationContext";
 import { handleSubmitAddData } from "./utils/handleSubmitAddData";
 import { Spinner } from "../../utils/Spinner";
 import { validateAddData } from "./utils/validateAddData";
+import { Button } from "../Button";
 
 function AddNewData({ setSearchResult, loading, setLoading }) {
   const [input, setInput] = useState({ city: "", code: "", post: "" });
@@ -21,14 +22,10 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <form className="relative flex flex-col justify-center items-center gap-2 p-2 w-full">
-      <button
-        className="bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 hover:cursor-pointer disabled:bg-blue-500 disabled:text-gray-300 disabled:cursor-not-allowed relative flex justify-center items-center transition transform"
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-      >
+    <form className="relative flex flex-col justify-center items-center gap-2 p-2">
+      <Button type="button" onClick={() => setIsOpen(!isOpen)}>
         {isOpen ? "Close form" : "Add new data"}
-      </button>
+      </Button>
       {isOpen && (
         <div className="flex flex-col gap-2 border border-gray-300 dark:border-gray-600 rounded-md p-3 w-full max-w-md mx-auto">
           <div>
@@ -84,7 +81,7 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
             />
           </div>
           <div className="flex justify-center items-center">
-            <button
+            <Button
               onClick={(e) =>
                 handleSubmitAddData(
                   e,
@@ -98,13 +95,12 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
               }
               type="button"
               disabled={loading}
-              className="bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 hover:cursor-pointer disabled:bg-blue-500 disabled:text-gray-300 disabled:cursor-not-allowed relative flex justify-center items-center transition transform not-disabled:active:scale-95"
             >
-              <div className="h-full w-full flex justify-center items-center absolute">
+              <div className="h-full flex justify-center items-center absolute">
                 {loading && <Spinner />}
               </div>
               Add data
-            </button>
+            </Button>
           </div>
         </div>
       )}

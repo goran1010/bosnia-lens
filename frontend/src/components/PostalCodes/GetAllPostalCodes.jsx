@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { Spinner } from "../../utils/Spinner";
+import { Button } from "../Button";
 
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 
@@ -44,16 +45,16 @@ function GetAllPostalCodes({ setSearchResult, loading, setLoading }) {
 
   return (
     <form onSubmit={handleGetAll} className="w-full">
-      <button
+      <Button
         type="submit"
         disabled={loading}
-        className="bg-yellow-600 text-white p-2 rounded-md hover:bg-yellow-700 hover:cursor-pointer disabled:bg-yellow-500 disabled:text-gray-200 disabled:cursor-not-allowed relative flex justify-center items-center transition transform not-disabled:active:scale-95 w-full"
+        className=" bg-yellow-600 hover:bg-yellow-700 disabled:bg-yellow-500 disabled:text-gray-200"
       >
         <div className="h-full w-full flex justify-center items-center absolute">
           {loading && <Spinner />}
         </div>
         Get All
-      </button>
+      </Button>
     </form>
   );
 }
