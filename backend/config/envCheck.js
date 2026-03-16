@@ -3,7 +3,7 @@ const allRequiredVars = [
   "TEST_DATABASE_URL",
   "ACCESS_TOKEN_SECRET",
   "REFRESH_TOKEN_SECRET",
-  "URL",
+  "FRONTEND_URL",
   "PORT",
   "RESEND_API_KEY",
   "CLIENT_ID",

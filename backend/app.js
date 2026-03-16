@@ -26,7 +26,7 @@ import { usersRouter } from "./routes/usersRouter.js";
 import { isAuthenticated } from "./auth/isAuthenticated.js";
 import { isNotAuthenticated } from "./auth/isNotAuthenticated.js";
 
-const frontendURL = process.env.URL;
+const FRONTEND_URL = process.env.FRONTEND_URL;
 
 // Trust first proxy (required for Koyeb)
 app.set("trust proxy", 1);
@@ -47,7 +47,7 @@ app.use("/api", cors(), rateLimiter.api, apiRouter);
 
 app.use(
   cors({
-    origin: frontendURL,
+    origin: FRONTEND_URL,
     credentials: true,
   }),
 );
