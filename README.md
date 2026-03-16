@@ -1,20 +1,18 @@
 # Bosnia Lens
 
-A free, open-source project providing structured public data about Bosnia and Herzegovina through a REST API and web interface. The primary goal is access to university programs and university data; today it includes postal codes, and it may expand to holidays and other public datasets.
+A free, open-source project providing structured public data about Bosnia and Herzegovina through a REST API and a React web interface. The current implemented dataset is postal codes, with universities and holidays kept in the project as planned expansion areas.
 
 ## Features
 
-- **REST API**: Access open data about Bosnia and Herzegovina
-- **User Authentication**: Session-based auth (Passport) with email confirmation
-- **Web Interface**: React-based frontend for browsing and searching data
-- **Responsive Design**: Built with Tailwind CSS for all devices
+- **Versioned REST API**: Public endpoints under `/api/v1`
+- **Postal Code Search**: Browse all postal codes or search by code and city name
+- **Session Authentication**: Passport-based auth with signup, login, logout, and email confirmation
 
 ## Data Coverage
 
-- Universities and their programs (target focus)
-- Postal codes (currently available)
-- Holidays and observances (planned)
-- Other public datasets (planned)
+- Postal codes (implemented)
+- Universities (frontend route placeholder, planned dataset - target focus of the project)
+- Holidays and observances (frontend route placeholder, planned dataset)
 
 ## Getting Started
 
@@ -24,7 +22,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 Before running this project, you need to have the following installed:
 
-- Node.js (v24.x - could work with older versions but v24 is used for development)
+- Node.js 24.x
 - PostgreSQL database server
 - npm package manager
 
@@ -55,12 +53,28 @@ Set up environment variables:
 
 The repository includes example environment files for both services. Copy them and fill in real values before running the app:
 
-Backend: copy `backend/.env.example` to `backend/.env` and edit values (database URLs, JWT secrets, email API key, etc.).
+Backend: copy `backend/.env.example` to `backend/.env` and edit the values.
 
 ```bash
 cp backend/.env.example backend/.env
 # edit backend/.env
 ```
+
+Backend env layout:
+
+- `NODE_ENV`: app mode, usually `development`
+- `PORT`: backend port, usually `3000`
+- `URL`: frontend origin allowed by CORS, usually `http://localhost:5173`
+- `DATABASE_URL`: development PostgreSQL database
+- `TEST_DATABASE_URL`: separate PostgreSQL database used by tests and test migrations
+- `ACCESS_TOKEN_SECRET`: access token signing secret
+- `REFRESH_TOKEN_SECRET`: refresh token signing secret
+- `COOKIE_SECRET`: session/cookie secret
+- `RESEND_API_KEY`: Resend API key for email confirmation
+- `CLIENT_ID`: OAuth or external client id
+- `CLIENT_SECRET`: OAuth or external client secret
+
+The backend validates these variables on startup, so placeholder values should be replaced before running the app.
 
 Frontend: copy `frontend/.env.example` to `frontend/.env` and update `VITE_BACKEND_URL` if needed.
 
@@ -69,13 +83,24 @@ cp frontend/.env.example frontend/.env
 # edit frontend/.env (optional)
 ```
 
-Initialize the database and run migrations:
+Frontend env layout:
+
+- `VITE_BACKEND_URL`: backend base URL, usually `http://localhost:3000`
+- `VITE_WEATHER_API_KEY`: weather API key used by the home page widget
+
+Initialize the development database and generate the Prisma client:
 
 ```bash
 npm run db:deploy_generate
 ```
 
-Seed the database (optional):
+Initialize the test database as well if you plan to run backend tests locally:
+
+```bash
+npm run db:test:deploy_generate
+```
+
+Seed the databases if needed:
 
 ```bash
 npm run db:seed
@@ -84,66 +109,100 @@ npm run db:seed
 npm run db:test:seed
 ```
 
-End with running the development servers:
+Start the development servers:
 
 ```bash
-# Run both frontend and backend concurrently
+# Run frontend and backend together
 npm run dev:all
 
-# Or run individually:
-npm run dev:backend  # Backend only on http://localhost:3000
-npm run dev:frontend # Frontend only on http://localhost:5173
+# Or run them separately
+npm run dev:backend
+npm run dev:frontend
 ```
 
 You should now be able to access the API at `http://localhost:3000` and the web interface at `http://localhost:5173`.
 
+## Available Scripts
+
+Run these from the repository root.
+
+### Installation
+
+- `npm run install:all`: install root, backend, and frontend dependencies
+
+### Database
+
+- `npm run db:deploy_generate`: apply development migrations and generate Prisma client
+- `npm run db:generate`: generate Prisma client only
+- `npm run db:seed`: seed the development database
+- `npm run db:test:deploy_generate`: create/apply migrations for the test database and generate Prisma client in test mode
+- `npm run db:test:seed`: seed the test database
+- `npm run prisma_studio`: open Prisma Studio from the backend directory
+
+### Development
+
+- `npm run dev:all`: run backend and frontend together
+- `npm run dev:backend`: run the Express backend with file watching
+- `npm run dev:frontend`: run the Vite frontend dev server
+
+### Testing
+
+- `npm run test:all`: run backend and frontend tests together
+- `npm run test:backend`: run backend tests
+- `npm run test:frontend`: run frontend tests
+- `npm run test:coverage:all`: run coverage for both apps
+- `npm run test:coverage:backend`: backend coverage only
+- `npm run test:coverage:frontend`: frontend coverage only
+
+### Maintenance
+
+- `npm run remove_merged`: delete local branches already merged into `main` or `master`
+
+## API Overview
+
+Current public API routes:
+
+- `GET /api`: API status response
+- `GET /api/v1`: versioned API status response
+- `GET /api/v1/postal-codes`: list postal codes
+- `GET /api/v1/postal-codes/search?searchTerm=...`: search postal codes by numeric code or city name
+
 ## Running the tests
 
-### Run All Tests
+Backend tests use Vitest and Supertest. Frontend tests use Vitest, React Testing Library, and JSDOM.
+
+### Run all tests
 
 ```bash
-# Run both backend and frontend tests concurrently
 npm run test:all
 ```
 
-### Backend Tests
-
-Backend tests use Vitest and Supertest to test API endpoints, authentication, and controllers:
+### Run individual test suites
 
 ```bash
 npm run test:backend
-```
-
-### Frontend Tests
-
-Frontend tests use Vitest and React Testing Library for unit and integration tests:
-
-```bash
 npm run test:frontend
 ```
 
-### Run test coverage
-
-Vitest test coverage is by default provided by v8:
+### Run coverage
 
 ```bash
-# Run both backend and frontend coverage tests concurrently
 npm run test:coverage:all
-
-# Run coverage tests individually
 npm run test:coverage:backend
 npm run test:coverage:frontend
 ```
+
+The backend test suite expects `TEST_DATABASE_URL` to point to a separate PostgreSQL database.
 
 ## Deployment
 
 The project is designed to be deployed with:
 
-- **Backend**: Any Node.js hosting service (Koyeb, Railway, Render, Heroku)
+- **Backend**: Any Node.js hosting service capable of running Express and PostgreSQL-backed Prisma migrations
 - **Frontend**: Static hosting (Netlify, Vercel)
 - **Database**: PostgreSQL (Supabase, Koyeb, or self-hosted)
 
-Configure production environment variables and run build commands for each service.
+Backend deployment currently runs migrations on startup through the backend `start` script. Frontend production builds are handled through Vite.
 
 ## Built With
 
@@ -155,6 +214,8 @@ Configure production environment variables and run build commands for each servi
 - [bcryptjs](https://www.npmjs.com/package/bcryptjs)
 - [Express Validator](https://express-validator.github.io/)
 - [Passport](https://www.passportjs.org/) & [Express Session](https://github.com/expressjs/session)
+- [Helmet](https://helmetjs.github.io/)
+- [Pino](https://getpino.io/)
 - [Resend](https://resend.com/)
 - [Vitest](https://vitest.dev/) & [Supertest](https://github.com/ladjs/supertest)
 
@@ -163,8 +224,12 @@ Configure production environment variables and run build commands for each servi
 - [React](https://reactjs.org/)
 - [Vite](https://vitejs.dev/)
 - [React Router](https://reactrouter.com/)
-- [Tailwind CSS](https://tailwindcss.com/)
+- [Tailwind CSS 4](https://tailwindcss.com/)
 - [Vitest](https://vitest.dev/) & [React Testing Library](https://testing-library.com/react)
+
+## Current Status
+
+The repository already contains structure for universities, holidays, contributor flows, and admin flows, but the currently complete public dataset and API surface is centered on postal codes. The README intentionally documents the project as it behaves today rather than as a roadmap.
 
 ## Contributing
 
