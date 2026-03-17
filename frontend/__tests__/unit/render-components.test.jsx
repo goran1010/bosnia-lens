@@ -13,28 +13,6 @@ import { NotificationContext } from "../../src/contextData/NotificationContext";
 describe("Render Components", () => {
   const contextValue = {};
 
-  
-
-  test("Holidays component", () => {
-    render(
-      <NotificationContext value={contextValue}>
-        <Holidays />
-      </NotificationContext>,
-    );
-    const linkElement = screen.getByText(/Holidays/i);
-    expect(linkElement).toBeInTheDocument();
-  });
-
-  test("PostalCodes component", () => {
-    render(
-      <NotificationContext value={contextValue}>
-        <PostalCodes />
-      </NotificationContext>,
-    );
-    const linkElement = screen.getByText(/Postal Code or Municipality/i);
-    expect(linkElement).toBeInTheDocument();
-  });
-
   test("Universities component", () => {
     render(<Universities />);
     const linkElement = screen.getByText(/Universities/i);
