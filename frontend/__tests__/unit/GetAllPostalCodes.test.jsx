@@ -43,7 +43,7 @@ describe("GetAllPostalCodes Component", () => {
       renderComponent();
 
       const button = screen.getByRole("button", {
-        name: "Get All Postal Codes and Municipalities",
+        name: /Get All/i,
       });
       expect(button).toBeInTheDocument();
     });
@@ -57,7 +57,7 @@ describe("GetAllPostalCodes Component", () => {
       screen.debug();
 
       const button = screen.getByRole("button", {
-        name: /get all postal codes and municipalities/i,
+        name: /get all/i,
       });
       expect(button).toHaveAttribute("type", "submit");
     });

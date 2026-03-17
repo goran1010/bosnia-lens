@@ -149,11 +149,12 @@ describe("LogIn Form Submit", () => {
     await user.type(passwordField, "Password123!");
 
     await user.click(logInButton);
+    const errorMessage = await screen.findByText(
+      /Invalid username or password/i,
+    );
 
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(
-      await screen.findByText(/Invalid username or password/i),
-    ).toBeInTheDocument();
+    expect(errorMessage).toBeInTheDocument();
   });
 
   test("Redirects to Home on successful form submit", async () => {
