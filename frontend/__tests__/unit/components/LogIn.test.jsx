@@ -2,13 +2,13 @@ import { describe, test, expect, beforeEach, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
-import { NotificationContext } from "../../src/contextData/NotificationContext";
-import { LogIn } from "../../src/components/LogIn/LogIn";
-import { Home } from "../../src/components/Home/Home";
+import { NotificationContext } from "../../../src/contextData/NotificationContext";
+import { LogIn } from "../../../src/components/LogIn/LogIn";
+import { Home } from "../../../src/components/Home/Home";
 import { useState } from "react";
-import { UserDataContext } from "../../src/contextData/UserDataContext";
-import { useNotification } from "../../src/customHooks/useNotification";
-import { Notifications } from "../../src/components/Notifications";
+import { UserDataContext } from "../../../src/contextData/UserDataContext";
+import { useNotification } from "../../../src/customHooks/useNotification";
+import { Notifications } from "../../../src/components/Notifications";
 
 vi.mock("../../src/components/utils/getCsrfToken", () => ({
   getCsrfToken: vi.fn().mockResolvedValue("mocked-csrf-token"),

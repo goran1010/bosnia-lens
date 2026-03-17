@@ -1,6 +1,6 @@
 import { describe, test, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { Holidays } from "../../src/components/Holidays";
+import { Holidays } from "../../../src/components/Holidays";
 
 describe("Holidays component", () => {
   test("Holidays component", () => {
