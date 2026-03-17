@@ -31,6 +31,15 @@ const FRONTEND_URL = process.env.FRONTEND_URL;
 // Trust first proxy (required for Koyeb)
 app.set("trust proxy", 1);
 
+let wait = true;
+app.use(async (req, res, next) => {
+  if (wait) {
+    await new Promise((resolve) => setTimeout(resolve, 8000));
+    wait = false;
+  }
+  next();
+});
+
 app.use(rateLimiter.global);
 
 app.use((req, res, next) => {
@@ -62,7 +71,7 @@ app.use(csrfRouter);
 
 app.use(
   "/auth",
-  rateLimiter.auth,
+  // rateLimiter.auth,
   csrfSynchronisedProtection,
   isNotAuthenticated,
   authRouter,

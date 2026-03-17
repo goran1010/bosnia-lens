@@ -39,12 +39,10 @@ async function handleSubmitLogIn(
 
     const result = await response.json();
     if (!response.ok) {
-      addNotification({
-        type: "error",
-        message: result.error,
-        details: result.details?.[0]?.msg,
+      throw new Error({
+        message: result?.error,
+        details: result?.details?.[0]?.msg,
       });
-      return;
     }
     addNotification({
       type: "success",
@@ -55,7 +53,8 @@ async function handleSubmitLogIn(
   } catch (err) {
     addNotification({
       type: "error",
-      message: "An error occurred while logging in.",
+      message: err.message || "An error occurred while logging in.",
+      details: err.details,
     });
     console.error(err);
   } finally {

@@ -19,6 +19,12 @@ function useStatusCheck(setLoading, notificationValue, setLongWait) {
           }
         }, 4000);
 
+        const reload = setTimeout(() => {
+          if (userChecked.current === false && isMounted) {
+            window.location.reload();
+          }
+        }, 10000);
+
         try {
           const response = await fetch(`${URL}/users/me`, {
             mode: "cors",
@@ -52,6 +58,7 @@ function useStatusCheck(setLoading, notificationValue, setLongWait) {
           if (isMounted) {
             userChecked.current = true;
             clearTimeout(timeoutId);
+            clearTimeout(reload);
             setLoading(false);
             setLongWait(false);
           }
