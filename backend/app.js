@@ -33,6 +33,7 @@ app.set("trust proxy", 1);
 
 app.use(rateLimiter.global);
 
+// Log every request made to the server
 app.use((req, res, next) => {
   logger.info(`${req.method} ${req.originalUrl} ${req.ip}`);
   next();
@@ -62,7 +63,7 @@ app.use(csrfRouter);
 
 app.use(
   "/auth",
-  // rateLimiter.auth,
+  rateLimiter.auth,
   csrfSynchronisedProtection,
   isNotAuthenticated,
   authRouter,

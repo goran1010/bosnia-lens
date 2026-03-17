@@ -19,6 +19,8 @@ function useStatusCheck(setLoading, notificationValue, setLongWait) {
           }
         }, 4000);
 
+        // Reload the page when the server is taking too long to respond (e.g., waking up from sleep)
+        // Needed to resolve a bug preventing client to contact the server after it wakes up, without refreshing the page
         const reload = setTimeout(() => {
           if (userChecked.current === false && isMounted) {
             window.location.reload();
