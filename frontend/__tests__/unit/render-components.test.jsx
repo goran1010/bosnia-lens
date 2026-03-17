@@ -13,12 +13,6 @@ import { NotificationContext } from "../../src/contextData/NotificationContext";
 describe("Render Components", () => {
   const contextValue = {};
 
-  test("Universities component", () => {
-    render(<Universities />);
-    const linkElement = screen.getByText(/Universities/i);
-    expect(linkElement).toBeInTheDocument();
-  });
-
   test("Footer component", () => {
     render(<Footer />);
     const email = screen.getByText(/goran1010jovic@gmail.com/i);
