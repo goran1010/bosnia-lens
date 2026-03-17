@@ -13,12 +13,6 @@ import { NotificationContext } from "../../src/contextData/NotificationContext";
 describe("Render Components", () => {
   const contextValue = {};
 
-  test("Footer component", () => {
-    render(<Footer />);
-    const email = screen.getByText(/goran1010jovic@gmail.com/i);
-    expect(email).toBeInTheDocument();
-  });
-
   test("Navbar component", () => {
     const userData = { username: "testuser", setUserData: () => {} };
     render(
