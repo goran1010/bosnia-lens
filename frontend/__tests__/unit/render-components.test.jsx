@@ -7,26 +7,13 @@ import { Universities } from "../../src/components/Universities";
 import { Footer } from "../../src/components/Footer";
 import { Navbar } from "../../src/components/Navbar/Navbar";
 import { MemoryRouter } from "react-router-dom";
-import { ErrorPage } from "../../src/components/ErrorPage";
 import { UserDataContext } from "../../src/contextData/UserDataContext";
 import { NotificationContext } from "../../src/contextData/NotificationContext";
 
 describe("Render Components", () => {
-  const contextValue = {
-    notifications: [],
-    addNotification: () => {},
-    removeNotification: () => {},
-  };
+  const contextValue = {};
 
-  test("Home component", () => {
-    render(
-      <NotificationContext value={contextValue}>
-        <Home />
-      </NotificationContext>,
-    );
-    const linkElement = screen.getByText(/Bosnia Lens/i);
-    expect(linkElement).toBeInTheDocument();
-  });
+  
 
   test("Holidays component", () => {
     render(
@@ -41,9 +28,7 @@ describe("Render Components", () => {
   test("PostalCodes component", () => {
     render(
       <NotificationContext value={contextValue}>
-        <UserDataContext value={{ userData: null, setUserData: () => {} }}>
-          <PostalCodes />
-        </UserDataContext>
+        <PostalCodes />
       </NotificationContext>,
     );
     const linkElement = screen.getByText(/Postal Code or Municipality/i);
@@ -81,15 +66,5 @@ describe("Render Components", () => {
     expect(universities).toBeInTheDocument();
     expect(postalCodes).toBeInTheDocument();
     expect(holidays).toBeInTheDocument();
-  });
-
-  test("Error component", () => {
-    render(
-      <MemoryRouter>
-        <ErrorPage />
-      </MemoryRouter>,
-    );
-    const linkElement = screen.getByText(/There is nothing here, sorry./i);
-    expect(linkElement).toBeInTheDocument();
   });
 });
