@@ -19,6 +19,14 @@ function useStatusCheck(setLoading, notificationValue, setLongWait) {
           }
         }, 4000);
 
+        // Reload the page when the server is taking too long to respond (e.g., waking up from sleep)
+        // Needed to resolve a bug preventing client to contact the server after it wakes up, without refreshing the page
+        const reload = setTimeout(() => {
+          if (userChecked.current === false && isMounted) {
+            window.location.reload();
+          }
+        }, 10000);
+
         try {
           const response = await fetch(`${URL}/users/me`, {
             mode: "cors",
@@ -52,6 +60,7 @@ function useStatusCheck(setLoading, notificationValue, setLongWait) {
           if (isMounted) {
             userChecked.current = true;
             clearTimeout(timeoutId);
+            clearTimeout(reload);
             setLoading(false);
             setLongWait(false);
           }

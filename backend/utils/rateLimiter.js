@@ -12,7 +12,7 @@ const global = rateLimit({
 
 const auth = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: process.env.NODE_ENV === "test" ? 1000 : 10,
+  max: process.env.NODE_ENV === "test" ? 1000 : 20,
   message: {
     error: "Too many login attempts. Please wait 15 minutes, then try again.",
   },
