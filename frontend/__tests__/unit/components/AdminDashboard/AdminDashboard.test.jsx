@@ -1,8 +1,8 @@
 import { describe, test, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { AdminDashboard } from "../../../src/components/AdminDashboard/AdminDashboard";
-import { NotificationContext } from "../../../src/contextData/NotificationContext";
-import { UserDataContext } from "../../../src/contextData/UserDataContext";
+import { AdminDashboard } from "../../../../src/components/AdminDashboard/AdminDashboard";
+import { NotificationContext } from "../../../../src/contextData/NotificationContext";
+import { UserDataContext } from "../../../../src/contextData/UserDataContext";
 
 describe("AdminDashboard component", () => {
   test("render component if user doesn't exist", () => {
