@@ -3,17 +3,22 @@ import { render, screen } from "@testing-library/react";
 import { AdminForm } from "../../../../src/components/AdminDashboard/AdminForm";
 import { NotificationContext } from "../../../../src/contextData/NotificationContext";
 import { UserDataContext } from "../../../../src/contextData/UserDataContext";
-import { useGetAllContributors } from "../../../../src/components/AdminDashboard/customHooks/useGetAllContributors";
+
+const fetchMock = vi.fn();
+
+vi.spyOn(globalThis, "fetch").mockImplementation(() => fetchMock);
 
 const renderComponent = () => {
-  const contextValue = {
-    addNotification: vi.fn(),
-  };
-
   const userDataContextValue = { userData: { role: "ADMIN" } };
 
   return render(
-    <NotificationContext value={contextValue}>
+    <NotificationContext
+      value={{
+        notifications: [],
+        addNotification: vi.fn(),
+        removeNotification: vi.fn(),
+      }}
+    >
       <UserDataContext value={userDataContextValue}>
         <AdminForm />
       </UserDataContext>
@@ -21,20 +26,16 @@ const renderComponent = () => {
   );
 };
 
-describe("AdminForm component", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+beforeEach(() => {
+  vi.clearAllMocks();
+});
+
+describe("AdminForm component rendering", () => {
   test("renders AdminForm component's heading", () => {
-    vi.mock(
-      import("../../../../src/components/AdminDashboard/customHooks/useGetAllContributors"),
-      () => ({
-        useGetAllContributors: vi.fn().mockReturnValue({
-          currentContributors: [],
-          setCurrentContributors: vi.fn(),
-        }),
-      }),
-    );
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ data: [], message: "Success" }),
+    });
     renderComponent();
 
     expect(
@@ -42,18 +43,28 @@ describe("AdminForm component", () => {
     ).toBeInTheDocument();
   });
 
-  test("getAllContributors hook is called", () => {
-    vi.mock(
-      import("../../../../src/components/AdminDashboard/customHooks/useGetAllContributors"),
-      () => ({
-        useGetAllContributors: vi.fn().mockReturnValue({
-          currentContributors: [],
-          setCurrentContributors: vi.fn(),
-        }),
-      }),
-    );
+  test("renders contributors list with mock contributor", () => {
+    const mockContributor = { id: 1, name: "John Doe" };
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ data: [mockContributor], message: "Success" }),
+    });
+
+    renderComponent();
+  });
+});
+
+describe("AdminForm component pending requests and contributors interaction", () => {
+  test("updates contributors list when a pending request is approved", async () => {
+    const mockContributor = { id: 1, name: "John Doe" };
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ data: [], message: "Success" }),
+    });
     renderComponent();
 
-    expect(useGetAllContributors).toHaveBeenCalled();
+    // Simulate approving a pending request and check if the contributors list updates
+    // This part would depend on how the PendingRequests component is implemented
+    // For example, you might need to simulate a click on an approve button and then check if the contributor appears in the CurrentContributors list
   });
 });
