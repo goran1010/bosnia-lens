@@ -59,11 +59,11 @@ function useStatusCheck(setLoading, notificationValue, setLongWait) {
         } finally {
           if (isMounted) {
             userChecked.current = true;
-            clearTimeout(timeoutId);
-            clearTimeout(reload);
-            setLoading(false);
-            setLongWait(false);
           }
+          clearTimeout(timeoutId);
+          clearTimeout(reload);
+          setLoading(false);
+          setLongWait(false);
         }
       }
 
