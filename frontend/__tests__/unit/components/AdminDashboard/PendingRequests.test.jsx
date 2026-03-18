@@ -14,9 +14,9 @@ import { useGetPendingRequests } from "../../../../src/components/AdminDashboard
 
 function renderComponent() {
   render(
-    <NotificationContext.Provider value={{ addNotification: vi.fn() }}>
+    <NotificationContext value={{ addNotification: vi.fn() }}>
       <PendingRequests />
-    </NotificationContext.Provider>,
+    </NotificationContext>,
   );
 }
 
