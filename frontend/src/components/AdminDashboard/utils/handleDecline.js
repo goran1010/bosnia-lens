@@ -29,7 +29,7 @@ async function handleDecline(user, setPendingRequests, addNotification) {
 
     if (response.ok) {
       setPendingRequests((prev) =>
-        prev.filter((request) => request._id !== user._id),
+        prev.filter((request) => request.id !== user.id),
       );
       addNotification({
         type: "success",
