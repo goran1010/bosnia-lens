@@ -1,6 +1,11 @@
-import { expect, afterEach } from "vitest";
+import { expect, afterEach, vi } from "vitest";
 import { cleanup } from "@testing-library/react";
 import * as matchers from "@testing-library/jest-dom/matchers";
+
+vi.spyOn(globalThis, "fetch").mockResolvedValue({
+  ok: true,
+  json: async () => ({ data: [], message: "Success" }),
+});
 
 expect.extend(matchers);
 

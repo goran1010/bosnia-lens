@@ -4,7 +4,7 @@ import { Home } from "../../../src/components/Home/Home";
 import { NotificationContext } from "../../../src/contextData/NotificationContext";
 
 describe("Home component", () => {
-  test("render component", () => {
+  test("render component", async () => {
     const contextValue = {};
 
     render(
@@ -12,7 +12,7 @@ describe("Home component", () => {
         <Home />
       </NotificationContext>,
     );
-    const linkElement = screen.getByText(/Bosnia Lens/i);
+    const linkElement = await screen.findByText(/Bosnia Lens/i);
     expect(linkElement).toBeInTheDocument();
   });
 });

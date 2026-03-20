@@ -5,7 +5,7 @@ import { NotificationContext } from "../../../../src/contextData/NotificationCon
 import { UserDataContext } from "../../../../src/contextData/UserDataContext";
 
 describe("AdminDashboard component", () => {
-  test("render component if user doesn't exist", () => {
+  test("render component if user doesn't exist", async () => {
     const contextValue = {};
     const userDataContextValue = {};
 
@@ -17,13 +17,13 @@ describe("AdminDashboard component", () => {
       </NotificationContext>,
     );
 
-    const paragraphElement = screen.getByText(
+    const paragraphElement = await screen.findByText(
       /You need to be logged in and an admin to see the admin dashboard./i,
     );
     expect(paragraphElement).toBeInTheDocument();
   });
 
-  test("render component if user is not admin", () => {
+  test("render component if user is not admin", async () => {
     const contextValue = {};
     const userDataContextValue = { userData: { role: "USER" } };
 
@@ -35,13 +35,13 @@ describe("AdminDashboard component", () => {
       </NotificationContext>,
     );
 
-    const paragraphElement = screen.getByText(
+    const paragraphElement = await screen.findByText(
       /You need to be an admin to see the admin dashboard./i,
     );
     expect(paragraphElement).toBeInTheDocument();
   });
 
-  test("render component if user is admin", () => {
+  test("render component if user is admin", async () => {
     const contextValue = {
       addNotification: vi.fn(() => {}),
     };
@@ -55,7 +55,7 @@ describe("AdminDashboard component", () => {
       </NotificationContext>,
     );
 
-    const headingElement = screen.getByRole("heading", {
+    const headingElement = await screen.findByRole("heading", {
       name: /Admin Dashboard/i,
     });
     expect(headingElement).toBeInTheDocument();
