@@ -14,23 +14,25 @@ vi.mock("../../src/customHooks/useWeatherCheck", () => ({
 }));
 
 describe("Loading components when visiting an address", () => {
-  test("render Error Page when visiting non-existent address", () => {
+  test("render Error Page when visiting non-existent address", async () => {
     const router = createMemoryRouter(routes, {
       initialEntries: ["/non-existent-address"],
     });
     render(<RouterProvider router={router} />);
 
-    const linkElement = screen.getByText(/There is nothing here, sorry./i);
+    const linkElement = await screen.findByText(
+      /There is nothing here, sorry./i,
+    );
     expect(linkElement).toBeInTheDocument();
   });
 
-  test("visit universities page", () => {
+  test("visit universities page", async () => {
     const router = createMemoryRouter(routes, {
       initialEntries: ["/universities"],
     });
     render(<RouterProvider router={router} />);
 
-    const linkElements = screen.getAllByText(/Universities/i);
+    const linkElements = await screen.findAllByText(/Universities/i);
     expect(linkElements[0]).toBeInTheDocument();
   });
 
@@ -48,13 +50,13 @@ describe("Loading components when visiting an address", () => {
     expect(linkElement).toBeInTheDocument();
   });
 
-  test("visit holidays page", () => {
+  test("visit holidays page", async () => {
     const router = createMemoryRouter(routes, {
       initialEntries: ["/holidays"],
     });
     render(<RouterProvider router={router} />);
 
-    const linkElements = screen.getAllByText(/Holidays/i);
+    const linkElements = await screen.findAllByText(/Holidays/i);
     expect(linkElements[0]).toBeInTheDocument();
   });
 
@@ -70,14 +72,14 @@ describe("Loading components when visiting an address", () => {
 
   test.each(["/", "/postal-codes", "/universities", "/holidays"])(
     "render Footer on every page",
-    (route) => {
+    async (route) => {
       const router = createMemoryRouter(routes, {
         initialEntries: [route],
       });
       render(<RouterProvider router={router} />);
 
-      const footerEmail = screen.getByText(/goran1010jovic@gmail.com/i);
-      const footerAuthor = screen.getByText(/Goran Jović/i);
+      const footerEmail = await screen.findByText(/goran1010jovic@gmail.com/i);
+      const footerAuthor = await screen.findByText(/Goran Jović/i);
       expect(footerEmail).toBeInTheDocument();
       expect(footerAuthor).toBeInTheDocument();
     },
@@ -85,20 +87,22 @@ describe("Loading components when visiting an address", () => {
 
   test.each(["/", "/postal-codes", "/universities", "/holidays"])(
     "render Navbar on every page",
-    (route) => {
+    async (route) => {
       const router = createMemoryRouter(routes, {
         initialEntries: [route],
       });
       render(<RouterProvider router={router} />);
 
-      const homeLink = screen.getByRole("link", { name: /Home/i });
-      const universitiesLink = screen.getByRole("link", {
+      const homeLink = await screen.findByRole("link", { name: /Home/i });
+      const universitiesLink = await screen.findByRole("link", {
         name: /Universities/i,
       });
-      const postalCodesLink = screen.getByRole("link", {
+      const postalCodesLink = await screen.findByRole("link", {
         name: /Postal Codes/i,
       });
-      const holidaysLink = screen.getByRole("link", { name: /Holidays/i });
+      const holidaysLink = await screen.findByRole("link", {
+        name: /Holidays/i,
+      });
 
       expect(homeLink).toBeInTheDocument();
       expect(universitiesLink).toBeInTheDocument();
