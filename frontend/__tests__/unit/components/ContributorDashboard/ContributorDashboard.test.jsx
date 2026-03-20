@@ -1,52 +1,53 @@
 import { describe, test, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { AdminDashboard } from "../../../../src/components/AdminDashboard/AdminDashboard";
+import { ContributorDashboard } from "../../../../src/components/ContributorDashboard/ContributorDashboard";
 import { NotificationContext } from "../../../../src/contextData/NotificationContext";
 import { UserDataContext } from "../../../../src/contextData/UserDataContext";
 
-function renderAdminDashboard(contextValue = {}, userDataContextValue = {}) {
+function renderContributorDashboard(
+  contextValue = {},
+  userDataContextValue = {},
+) {
   render(
     <NotificationContext value={contextValue}>
       <UserDataContext value={userDataContextValue}>
-        <AdminDashboard />
+        <ContributorDashboard />
       </UserDataContext>
     </NotificationContext>,
   );
 }
 
-describe("AdminDashboard component", () => {
+describe("ContributorDashboard component", () => {
   test("render component if user doesn't exist", async () => {
-    renderAdminDashboard();
+    renderContributorDashboard();
 
     const paragraphElement = await screen.findByText(
-      /You need to be logged in and an admin to see the admin dashboard./i,
+      /You need to be logged in and a contributor to see the contributor dashboard./i,
     );
     expect(paragraphElement).toBeInTheDocument();
   });
 
-  test("render component if user is not admin", async () => {
+  test("render component if user is not a contributor", async () => {
     const contextValue = {};
     const userDataContextValue = { userData: { role: "USER" } };
 
-    renderAdminDashboard(contextValue, userDataContextValue);
+    renderContributorDashboard(contextValue, userDataContextValue);
 
     const paragraphElement = await screen.findByText(
-      /You need to be an admin to see the admin dashboard./i,
+      /You need to be a contributor to see the contributor dashboard./i,
     );
     expect(paragraphElement).toBeInTheDocument();
   });
 
-  test("render component if user is admin", async () => {
+  test("render component if user is a contributor", async () => {
     const contextValue = {
       addNotification: vi.fn(() => {}),
     };
-    const userDataContextValue = { userData: { role: "ADMIN" } };
+    const userDataContextValue = { userData: { role: "CONTRIBUTOR" } };
 
-    renderAdminDashboard(contextValue, userDataContextValue);
+    renderContributorDashboard(contextValue, userDataContextValue);
 
-    const headingElement = await screen.findByRole("heading", {
-      name: /Admin Dashboard/i,
-    });
+    const headingElement = await screen.findByLabelText(/Choose dataset/i);
     expect(headingElement).toBeInTheDocument();
   });
 });
