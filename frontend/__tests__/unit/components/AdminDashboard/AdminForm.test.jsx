@@ -12,6 +12,50 @@ const createFetchResponse = (data, ok = true) => ({
 
 const fetchMock = vi.fn();
 
+const setupFetchMock = ({
+  contributors = [],
+  pendingRequests = [],
+  csrfToken = "csrf-token",
+  addContributorResponse = {
+    message: "User promoted to contributor successfully.",
+  },
+  declineContributorResponse = {
+    message: "User's request declined successfully.",
+  },
+} = {}) => {
+  fetchMock.mockImplementation((url) => {
+    const requestUrl = String(url);
+
+    if (requestUrl.includes("/users/admin/contributors")) {
+      return Promise.resolve(
+        createFetchResponse({ data: contributors, message: "Success" }),
+      );
+    }
+
+    if (requestUrl.includes("/users/admin/requested-contributors")) {
+      return Promise.resolve(
+        createFetchResponse({ data: pendingRequests, message: "Success" }),
+      );
+    }
+
+    if (requestUrl.includes("/csrf-token")) {
+      return Promise.resolve(
+        createFetchResponse({ data: csrfToken, message: "Success" }),
+      );
+    }
+
+    if (requestUrl.includes("/users/admin/add-contributor/")) {
+      return Promise.resolve(createFetchResponse(addContributorResponse));
+    }
+
+    if (requestUrl.includes("/users/admin/decline-contributor/")) {
+      return Promise.resolve(createFetchResponse(declineContributorResponse));
+    }
+
+    throw new Error(`Unexpected fetch request: ${requestUrl}`);
+  });
+};
+
 vi.spyOn(globalThis, "fetch").mockImplementation(fetchMock);
 
 const renderComponent = () => {
@@ -39,13 +83,7 @@ beforeEach(() => {
 
 describe("AdminForm component rendering", () => {
   test("renders AdminForm component's heading", async () => {
-    fetchMock
-      .mockResolvedValueOnce(
-        createFetchResponse({ data: [], message: "Success" }),
-      )
-      .mockResolvedValueOnce(
-        createFetchResponse({ data: [], message: "Success" }),
-      );
+    setupFetchMock();
 
     renderComponent();
 
@@ -64,13 +102,7 @@ describe("AdminForm component rendering", () => {
       username: "John Doe",
       email: "john.doe@example.com",
     };
-    fetchMock
-      .mockResolvedValueOnce(
-        createFetchResponse({ data: [mockContributor], message: "Success" }),
-      )
-      .mockResolvedValueOnce(
-        createFetchResponse({ data: [], message: "Success" }),
-      );
+    setupFetchMock({ contributors: [mockContributor] });
 
     renderComponent();
 
@@ -86,25 +118,8 @@ describe("AdminForm component pending requests and contributors interaction", ()
       username: "John Doe",
       email: "test_mail@example.com",
     };
-    fetchMock
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ data: [mockContributor], message: "Success" }),
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ data: [], message: "Success" }),
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ data: "csrf-token", message: "Success" }),
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          message: "User promoted to contributor successfully.",
-        }),
-      });
+    setupFetchMock({ pendingRequests: [mockContributor] });
+
     renderComponent();
 
     const user = userEvent.setup();
@@ -149,23 +164,8 @@ describe("AdminForm component pending requests and contributors interaction", ()
       username: "John Doe",
       email: "john.doe@example.com",
     };
-    fetchMock
-      .mockResolvedValueOnce(
-        createFetchResponse({ data: [mockRequest], message: "Success" }),
-      )
-      .mockResolvedValueOnce(
-        createFetchResponse({ data: [], message: "Success" }),
-      )
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ data: "csrf-token", message: "Success" }),
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          message: "User's request declined successfully.",
-        }),
-      });
+    setupFetchMock({ pendingRequests: [mockRequest] });
+
     renderComponent();
 
     const user = userEvent.setup();
