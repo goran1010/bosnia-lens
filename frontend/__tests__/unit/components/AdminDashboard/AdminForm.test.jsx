@@ -22,6 +22,9 @@ const setupFetchMock = ({
   declineContributorResponse = {
     message: "User's request declined successfully.",
   },
+  removeContributorResponse = {
+    message: "User removed from contributors successfully.",
+  },
 } = {}) => {
   fetchMock.mockImplementation((url) => {
     const requestUrl = String(url);
@@ -50,6 +53,10 @@ const setupFetchMock = ({
 
     if (requestUrl.includes("/users/admin/decline-contributor/")) {
       return Promise.resolve(createFetchResponse(declineContributorResponse));
+    }
+
+    if (requestUrl.includes("/users/admin/remove-contributor/")) {
+      return Promise.resolve(createFetchResponse(removeContributorResponse));
     }
 
     throw new Error(`Unexpected fetch request: ${requestUrl}`);
@@ -195,5 +202,35 @@ describe("AdminForm component pending requests and contributors interaction", ()
     expect(pendingCount).toHaveTextContent("0");
 
     expect(screen.getByText(/No pending requests/i)).toBeInTheDocument();
+  });
+
+  test("removes contributor from the list when removed", async () => {
+    const mockContributor = {
+      id: 1,
+      username: "John Doe",
+      email: "john.doe@example.com",
+    };
+    setupFetchMock({ contributors: [mockContributor] });
+
+    renderComponent();
+    const contributorsCount = await screen.findByLabelText(
+      /number of contributors/i,
+    );
+    const user = userEvent.setup();
+
+    expect(contributorsCount).toBeInTheDocument();
+
+    expect(contributorsCount).toHaveTextContent("1");
+
+    expect(await screen.findByText(/Contributors/i)).toBeInTheDocument();
+    const removeButton = await screen.findByRole("button", {
+      name: /Remove/i,
+    });
+
+    await user.click(removeButton);
+
+    expect(contributorsCount).toHaveTextContent("0");
+
+    expect(screen.getByText(/No contributors/i)).toBeInTheDocument();
   });
 });

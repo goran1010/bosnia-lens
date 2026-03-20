@@ -54,8 +54,6 @@ describe("GetAllPostalCodes Component", () => {
       const form = container.querySelector("form");
       expect(form).toBeInTheDocument();
 
-      screen.debug();
-
       const button = screen.getByRole("button", {
         name: /get all/i,
       });
