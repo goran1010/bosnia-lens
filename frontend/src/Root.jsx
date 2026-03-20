@@ -26,31 +26,41 @@ function Root() {
   );
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  return (
-    <NotificationContext
-      value={{
-        notifications: notificationValue.notifications,
-        addNotification: notificationValue.addNotification,
-        removeNotification: notificationValue.removeNotification,
-      }}
-    >
-      <UserDataContext value={{ userData, setUserData }}>
-        <>
-          <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
-          <Notifications />
-          <main
-            className="flex-1 dark:bg-gray-900 dark:text-white flex flex-col items-center justify-center px-[5%] lg:px-[10%] xl:px-[15%] 2xl:px-[20%]"
-            onClick={() => isMenuOpen && setIsMenuOpen(false)}
-          >
-            {loading ? <Spinner /> : <Outlet />}
-            {longWait && <LongWaitInfo />}
-          </main>
-          <Footer />
-        </>
-      </UserDataContext>
-    </NotificationContext>
-  );
+  try {
+    return (
+      <NotificationContext
+        value={{
+          notifications: notificationValue.notifications,
+          addNotification: notificationValue.addNotification,
+          removeNotification: notificationValue.removeNotification,
+        }}
+      >
+        <UserDataContext value={{ userData, setUserData }}>
+          <>
+            <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+            <Notifications />
+            <main
+              className="flex-1 dark:bg-gray-900 dark:text-white flex flex-col items-center justify-center px-[5%] lg:px-[10%] xl:px-[15%] 2xl:px-[20%]"
+              onClick={() => isMenuOpen && setIsMenuOpen(false)}
+            >
+              {loading ? <Spinner /> : <Outlet />}
+              {longWait && <LongWaitInfo />}
+            </main>
+            <Footer />
+          </>
+        </UserDataContext>
+      </NotificationContext>
+    );
+  } catch (error) {
+    console.error("Error in Root component:", error);
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+        <h1 className="text-2xl font-bold text-red-600 dark:text-red-400">
+          An unexpected error occurred. Refresh the page or try again later.
+        </h1>
+      </div>
+    );
+  }
 }
 
 export { Root };

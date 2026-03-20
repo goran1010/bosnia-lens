@@ -34,7 +34,7 @@ async function handleConfirm(
 
     if (response.ok) {
       setPendingRequests((prev) =>
-        prev.filter((request) => request._id !== user._id),
+        prev.filter((request) => request.id !== user.id),
       );
       setCurrentContributors((prev) => [...prev, user]);
       addNotification({

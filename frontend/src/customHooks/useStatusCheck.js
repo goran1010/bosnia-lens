@@ -6,15 +6,30 @@ function useStatusCheck(setLoading, notificationValue, setLongWait) {
   const [userData, setUserData] = useState(null);
   const userChecked = useRef(false);
 
+  const isMounted = useRef(true);
+
+  const timeoutId = setTimeout(() => {
+    if (userChecked.current === false && isMounted.current) {
+      setLongWait(true);
+    }
+  }, 4000);
+
+  // Reload the page when the server is taking too long to respond (e.g., waking up from sleep)
+  // Needed to resolve a bug preventing client to contact the server after it wakes up, without refreshing the page
+  const reload = setTimeout(() => {
+    if (userChecked.current === false && isMounted.current) {
+      window.location.reload();
+    }
+  }, 10000);
+
   try {
     useEffect(() => {
       setLongWait(false);
-      let isMounted = true;
 
       async function checkLogin() {
         // Show long wait message after 4 seconds
         const timeoutId = setTimeout(() => {
-          if (userChecked.current === false && isMounted) {
+          if (userChecked.current === false && isMounted.current) {
             setLongWait(true);
           }
         }, 4000);
@@ -22,7 +37,7 @@ function useStatusCheck(setLoading, notificationValue, setLongWait) {
         // Reload the page when the server is taking too long to respond (e.g., waking up from sleep)
         // Needed to resolve a bug preventing client to contact the server after it wakes up, without refreshing the page
         const reload = setTimeout(() => {
-          if (userChecked.current === false && isMounted) {
+          if (userChecked.current === false && isMounted.current) {
             window.location.reload();
           }
         }, 10000);
@@ -35,7 +50,7 @@ function useStatusCheck(setLoading, notificationValue, setLongWait) {
           });
 
           const result = await response.json();
-          if (!isMounted) return;
+          if (!isMounted.current) return;
 
           if (!response.ok) {
             addNotification({
@@ -50,29 +65,31 @@ function useStatusCheck(setLoading, notificationValue, setLongWait) {
           });
           setUserData(result.data);
         } catch (err) {
-          if (err.name === "AbortError" || !isMounted) return;
+          if (err.name === "AbortError" || !isMounted.current) return;
           addNotification({
             type: "error",
             message: "An error occurred while checking login status.",
           });
           console.error(err);
         } finally {
-          if (isMounted) {
+          if (isMounted.current) {
             userChecked.current = true;
-            clearTimeout(timeoutId);
-            clearTimeout(reload);
-            setLoading(false);
-            setLongWait(false);
           }
+          clearTimeout(timeoutId);
+          clearTimeout(reload);
+          setLoading(false);
+          setLongWait(false);
         }
       }
 
       checkLogin();
 
       return () => {
-        isMounted = false;
+        isMounted.current = false;
+        clearTimeout(timeoutId);
+        clearTimeout(reload);
       };
-    }, [addNotification, setLoading, setLongWait]);
+    }, [addNotification, setLoading, setLongWait, reload, timeoutId]);
 
     return { userData, setUserData };
   } catch (err) {

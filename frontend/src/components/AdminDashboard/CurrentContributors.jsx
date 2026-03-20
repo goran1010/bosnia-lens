@@ -9,7 +9,10 @@ function CurrentContributors({ currentContributors, setCurrentContributors }) {
   return (
     <section className="text-gray-800 bg-white rounded-lg shadow p-3 border border-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
       <h2 className="text-md text-center font-semibold flex items-center gap-1 p-1 flex-1">
-        <span className="px-2 py-1 rounded-full text-sm font-bold bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100">
+        <span
+          aria-label="number of contributors"
+          className="px-2 py-1 rounded-full text-sm font-bold bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100"
+        >
           {currentContributors.length}
         </span>
         <span className="flex-1">Current Contributors</span>

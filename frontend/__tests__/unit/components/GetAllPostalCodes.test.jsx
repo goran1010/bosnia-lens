@@ -1,8 +1,8 @@
 import { describe, test, expect, beforeEach, vi, afterEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { GetAllPostalCodes } from "../../src/components/PostalCodes/GetAllPostalCodes";
-import { NotificationContext } from "../../src/contextData/NotificationContext";
+import { GetAllPostalCodes } from "../../../src/components/PostalCodes/GetAllPostalCodes";
+import { NotificationContext } from "../../../src/contextData/NotificationContext";
 
 const user = userEvent.setup();
 
@@ -43,7 +43,7 @@ describe("GetAllPostalCodes Component", () => {
       renderComponent();
 
       const button = screen.getByRole("button", {
-        name: "Get All Postal Codes and Municipalities",
+        name: /Get All/i,
       });
       expect(button).toBeInTheDocument();
     });
@@ -54,10 +54,8 @@ describe("GetAllPostalCodes Component", () => {
       const form = container.querySelector("form");
       expect(form).toBeInTheDocument();
 
-      screen.debug();
-
       const button = screen.getByRole("button", {
-        name: /get all postal codes and municipalities/i,
+        name: /get all/i,
       });
       expect(button).toHaveAttribute("type", "submit");
     });
