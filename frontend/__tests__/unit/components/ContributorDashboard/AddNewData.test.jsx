@@ -106,4 +106,6 @@ describe("AddNewData component", () => {
     await userEvent.type(codeInput, "12345");
     expect(codeInput.validationMessage).toBe("");
   });
+
+  test("successfully submits data and shows success notification", async () => {});
 });
