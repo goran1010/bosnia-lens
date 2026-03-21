@@ -15,7 +15,9 @@ async function handleSubmitAddData(
     e.preventDefault();
     const { city, code, post } = input;
 
-    if (!validateSubmitAddData(cityInput, codeInput)) return;
+    if (!validateSubmitAddData(cityInput, codeInput)) {
+      return;
+    }
 
     const csrfToken = await getCsrfToken();
 

@@ -106,10 +106,13 @@ describe("LogIn for validation on button click", () => {
 
     await user.type(usernameField, "test");
     await user.click(logInButton);
+
     expect(usernameField).toHaveValue("test");
     expect(usernameField.validationMessage).toMatch(/at least 6 characters/i);
+
     await user.type(usernameField, "user");
     await user.click(logInButton);
+
     expect(usernameField).toHaveValue("testuser");
     expect(usernameField.validationMessage).toBe("");
   });
@@ -119,10 +122,13 @@ describe("LogIn for validation on button click", () => {
 
     await user.type(passwordField, "pass");
     await user.click(logInButton);
+
     expect(passwordField).toHaveValue("pass");
     expect(passwordField.validationMessage).toMatch(/at least 6 characters/i);
+
     await user.type(passwordField, "word");
     await user.click(logInButton);
+
     expect(passwordField).toHaveValue("password");
     expect(passwordField.validationMessage).toBe("");
   });
