@@ -8,11 +8,11 @@ const server = app.listen(PORT, (error) => {
   console.log(`App started at port: ${PORT}`);
 });
 
-// process.on("SIGTERM", () => {
-//   console.warn("SIGTERM received. Shutting down gracefully...");
+process.on("SIGTERM", () => {
+  console.warn("SIGTERM received. Shutting down gracefully...");
 
-//   server.close(() => {
-//     console.warn("Process terminated");
-//     process.exit(0);
-//   });
-// });
+  server.close(() => {
+    console.warn("Process terminated");
+    process.exit(0);
+  });
+});
