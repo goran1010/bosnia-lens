@@ -1,17 +1,23 @@
-import { describe, test, expect, vi } from "vitest";
+import { describe, test, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { AddNewData } from "../../../../src/components/ContributorDashboard/AddNewData";
 import { NotificationContext } from "../../../../src/contextData/NotificationContext";
 import userEvent from "@testing-library/user-event";
 
+const mockAddNotification = vi.fn();
+
+beforeEach(() => {
+  mockAddNotification.mockClear();
+});
+
 const renderComponent = () => {
   return render(
     <NotificationContext
       value={{
-        addNotification: vi.fn(),
+        addNotification: mockAddNotification,
       }}
     >
-      <AddNewData setLoading={vi.fn()} />
+      <AddNewData setLoading={vi.fn()} setSearchResult={vi.fn()} />
     </NotificationContext>,
   );
 };
@@ -107,5 +113,25 @@ describe("AddNewData component", () => {
     expect(codeInput.validationMessage).toBe("");
   });
 
-  test("successfully submits data and shows success notification", async () => {});
+  test("successfully submits data and shows success notification", async () => {
+    renderComponent();
+
+    const toggleButton = screen.getByRole("button", { name: /add new data/i });
+    await userEvent.click(toggleButton);
+
+    const cityInput = screen.getByLabelText(/city name/i);
+    const codeInput = screen.getByLabelText(/postal code/i);
+
+    const addButton = screen.getByRole("button", { name: /add data/i });
+
+    await userEvent.type(cityInput, "Test City");
+    await userEvent.type(codeInput, "12345");
+
+    await userEvent.click(addButton);
+
+    expect(mockAddNotification).toHaveBeenCalledWith({
+      type: "success",
+      message: "Data added successfully",
+    });
+  });
 });
