@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 const URL = import.meta.env.VITE_BACKEND_URL;
 
 function useStatusCheck(setLoading, notificationValue, setLongWait) {
@@ -8,27 +8,8 @@ function useStatusCheck(setLoading, notificationValue, setLongWait) {
 
   const isMounted = useRef(true);
 
-  const timeoutId = useCallback(
-    () =>
-      setTimeout(() => {
-        if (userChecked.current === false && isMounted.current) {
-          setLongWait(true);
-        }
-      }, 4000),
-    [setLongWait],
-  );
-
-  // Reload the page when the server is taking too long to respond (e.g., waking up from sleep)
-  // Needed to resolve a bug preventing client to contact the server after it wakes up, without refreshing the page
-  const reload = useCallback(
-    () =>
-      setTimeout(() => {
-        if (userChecked.current === false && isMounted.current) {
-          window.location.reload();
-        }
-      }, 10000),
-    [],
-  );
+  let timeoutId = useRef(null);
+  let reload = useRef(null);
 
   try {
     useEffect(() => {
@@ -36,6 +17,20 @@ function useStatusCheck(setLoading, notificationValue, setLongWait) {
 
       async function checkLogin() {
         try {
+          timeoutId.current = setTimeout(() => {
+            if (userChecked.current === false && isMounted.current) {
+              setLongWait(true);
+            }
+          }, 4000);
+
+          // Reload the page when the server is taking too long to respond (e.g., waking up from sleep)
+          // Needed to resolve a bug preventing client to contact the server after it wakes up, without refreshing the page
+          // reload.current = setTimeout(() => {
+          //   if (userChecked.current === false && isMounted.current) {
+          //     window.location.reload();
+          //   }
+          // }, 20000);
+
           const response = await fetch(`${URL}/users/me`, {
             mode: "cors",
             method: "GET",
@@ -70,20 +65,21 @@ function useStatusCheck(setLoading, notificationValue, setLongWait) {
             userChecked.current = true;
           }
           isMounted.current = false;
-          clearTimeout(timeoutId);
-          clearTimeout(reload);
+          clearTimeout(timeoutId.current);
+          clearTimeout(reload.current);
           setLoading(false);
           setLongWait(false);
+
+          // If the user is not checked due to no response from server, reload the page to try again
+          if (!userChecked.current) {
+            console.warn("Reload");
+            window.location.reload();
+          }
         }
       }
 
       checkLogin();
-
-      return () => {
-        clearTimeout(timeoutId);
-        clearTimeout(reload);
-      };
-    }, [addNotification, setLoading, setLongWait, reload, timeoutId]);
+    }, [addNotification, setLoading, setLongWait]);
 
     return { userData, setUserData };
   } catch (err) {
