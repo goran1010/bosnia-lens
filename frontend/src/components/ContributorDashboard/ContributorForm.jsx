@@ -30,8 +30,8 @@ function ContributorForm() {
         </Select>
       </form>
       {datasetSelect === "postal-codes" && <PostalCodeData />}
-      {datasetSelect === "holidays" && "Holidays"}
-      {datasetSelect === "universities" && "Universities"}
+      {datasetSelect === "holidays" && "Holidays placeholder"}
+      {datasetSelect === "universities" && "Universities placeholder"}
       {datasetSelect === "" && <div>You need to select a dataset.</div>}
     </div>
   );
