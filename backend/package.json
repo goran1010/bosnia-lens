@@ -10,9 +10,9 @@
     "seed": "node db/seed.js"
   },
   "scripts": {
-    "build": "npx prisma generate",
+    "build": "npx prisma generate && npx prisma migrate deploy",
     "test": "NODE_ENV=test vitest",
-    "start": "npx prisma migrate deploy && node index.js",
+    "start": "node index.js",
     "dev": "node --watch index.js"
   },
   "repository": {
