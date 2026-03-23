@@ -8,6 +8,7 @@ import { useNotification } from "../../../../src/customHooks/useNotification";
 import { Notifications } from "../../../../src/components/Notifications";
 import { useState } from "react";
 import userEvent from "@testing-library/user-event";
+import { Home } from "../../../../src/components/Home/Home";
 
 const user = userEvent.setup();
 
@@ -21,6 +22,7 @@ function Wrapper({ initialUser = null }) {
         <MemoryRouter initialEntries={["/contributor-dashboard"]}>
           <Notifications />
           <Routes>
+            <Route path="/" element={<Home />} />
             <Route
               path="/contributor-dashboard"
               element={<ContributorDashboard />}
@@ -34,7 +36,8 @@ function Wrapper({ initialUser = null }) {
 
 describe("render ContributorDashboard component", () => {
   test("render message if user doesn't exist", async () => {
-    Wrapper();
+    render(<Wrapper />);
+
     const paragraphElement = await screen.findByText(
       /You need to be logged in and a contributor to see the contributor dashboard./i,
     );
@@ -42,8 +45,7 @@ describe("render ContributorDashboard component", () => {
   });
 
   test("render message if user is not a contributor", async () => {
-    const contextValue = {};
-    const userDataContextValue = { userData: { role: "USER" } };
+    render(<Wrapper initialUser={{ role: "USER" }} />);
 
     const paragraphElement = await screen.findByText(
       /You need to be a contributor to see the contributor dashboard./i,
@@ -53,6 +55,10 @@ describe("render ContributorDashboard component", () => {
 });
 
 describe("ContributorForm component rendering", () => {
+  beforeEach(() => {
+    render(<Wrapper initialUser={{ role: "CONTRIBUTOR" }} />);
+  });
+
   test("renders ContributorForm component's select element if user is contributor", async () => {
     const selectElement = screen.getByLabelText(/Choose dataset/i);
     expect(selectElement).toBeInTheDocument();
@@ -102,8 +108,49 @@ describe("ContributorForm component rendering", () => {
 });
 
 describe("AddNewData component", () => {
+  const createFetchResponse = (result, ok = true) => ({
+    ok,
+    json: async () => result,
+  });
+
+  const fetchMock = vi.fn();
+
+  const setupFetchMock = () => {
+    fetchMock.mockImplementation((requestUrl) => {
+      if (requestUrl.includes("/users/contributor")) {
+        return Promise.resolve(
+          createFetchResponse({
+            data: {
+              id: 1,
+              city: "Test City",
+              code: "12345",
+              post: "",
+            },
+
+            message: "Success",
+          }),
+        );
+      }
+
+      return Promise.resolve(
+        createFetchResponse({ data: [], message: "Success" }),
+      );
+    });
+  };
+
+  vi.spyOn(globalThis, "fetch").mockImplementation(fetchMock);
+
+  beforeEach(async () => {
+    render(<Wrapper initialUser={{ role: "CONTRIBUTOR" }} />);
+
+    const selectElement = screen.getByLabelText(/Choose dataset/i);
+    await user.selectOptions(selectElement, "Postal Codes");
+  });
+
   test("renders the component and toggles form visibility", async () => {
-    const toggleButton = screen.getByRole("button", { name: /add new data/i });
+    const toggleButton = screen.getByRole("button", {
+      name: /add new data/i,
+    });
     expect(toggleButton).toBeInTheDocument();
 
     await user.click(toggleButton);
@@ -181,6 +228,8 @@ describe("AddNewData component", () => {
   });
 
   test("successfully submits data and shows success notification", async () => {
+    setupFetchMock();
+
     const toggleButton = screen.getByRole("button", { name: /add new data/i });
     await user.click(toggleButton);
 
@@ -194,9 +243,12 @@ describe("AddNewData component", () => {
 
     await user.click(addButton);
 
-    // expect(mockAddNotification).toHaveBeenCalledWith({
-    //   type: "success",
-    //   message: "Data added successfully",
-    // });
+    const successNotification = await screen.findByText(
+      /Data added successfully/i,
+    );
+    expect(successNotification).toBeInTheDocument();
+
+    const dataRow = await screen.findByText("12345");
+    expect(dataRow).toBeInTheDocument();
   });
 });

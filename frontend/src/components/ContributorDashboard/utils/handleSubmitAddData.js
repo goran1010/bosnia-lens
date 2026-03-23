@@ -39,16 +39,22 @@ async function handleSubmitAddData(
       },
     );
     const result = await response.json();
-
     if (response.ok) {
       addNotification({
         type: "success",
         message: "Data added successfully",
       });
-      return setSearchResult((previous) =>
-        [...previous, result.data].sort((a, b) => a.code - b.code),
+
+      const newItem = result.data;
+
+      setSearchResult((previous) =>
+        [...previous, newItem].sort(
+          (a, b) => Number(a.postalCode) - Number(b.postalCode),
+        ),
       );
+      return;
     }
+
     addNotification({
       type: "error",
       message: result.error,
