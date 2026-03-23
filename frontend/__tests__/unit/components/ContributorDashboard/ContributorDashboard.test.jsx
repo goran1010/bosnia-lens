@@ -247,8 +247,16 @@ describe("AddNewData component", () => {
       /Data added successfully/i,
     );
     expect(successNotification).toBeInTheDocument();
+    expect(screen.getByText(/Get All/i)).toBeInTheDocument();
 
-    const dataRow = await screen.findByText("12345");
-    expect(dataRow).toBeInTheDocument();
+    const dataCodeRow = await screen.findByText("12345");
+
+    const dataInputCity = await screen.findByRole("textbox", {
+      name: /city for postal code 12345/i,
+      value: "Test City",
+    });
+
+    expect(dataCodeRow).toBeInTheDocument();
+    expect(dataInputCity).toBeInTheDocument();
   });
 });
