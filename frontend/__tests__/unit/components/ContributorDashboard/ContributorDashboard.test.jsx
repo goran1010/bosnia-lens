@@ -76,6 +76,23 @@ const setupFetchMock = () => {
       );
     }
 
+    if (requestUrl.includes("/postal-codes")) {
+      return Promise.resolve(
+        createFetchResponse({
+          data: [
+            {
+              id: 1,
+              city: "Test City",
+              code: "12345",
+              post: "",
+            },
+            { id: 2, city: "Test City 2", code: "12346", post: "" },
+          ],
+          message: "Data added successfully",
+        }),
+      );
+    }
+
     return Promise.resolve(
       createFetchResponse({ data: [], message: "Success" }),
     );
@@ -377,5 +394,66 @@ describe("SearchPostalCode component", () => {
     });
     expect(dataCodeRow).toBeInTheDocument();
     expect(dataInputCity).toBeInTheDocument();
+  });
+});
+
+describe("GetAllPostalCodes component", () => {
+  beforeEach(async () => {
+    setupFetchMock();
+    render(<Wrapper initialUser={{ role: "CONTRIBUTOR" }} />);
+
+    const selectElement = screen.getByLabelText(/Choose dataset/i);
+    await user.selectOptions(selectElement, "Postal Codes");
+  });
+
+  test("renders Get All button", async () => {
+    const getAllButton = screen.getByRole("button", { name: /get all/i });
+    expect(getAllButton).toBeInTheDocument();
+  });
+
+  test("shows success notification and results when Get All is successful", async () => {
+    setupFetchMock();
+
+    const getAllButton = screen.getByRole("button", { name: /get all/i });
+    await user.click(getAllButton);
+
+    const successNotification = await screen.findByText(
+      /Postal codes and municipalities retrieved successfully/i,
+    );
+    expect(successNotification).toBeInTheDocument();
+
+    const dataCodeRow = await screen.findByText("12345");
+    const dataInputCity = await screen.findByRole("textbox", {
+      name: /city for postal code 12345/i,
+      value: "Test City",
+    });
+    expect(dataCodeRow).toBeInTheDocument();
+    expect(dataInputCity).toBeInTheDocument();
+  });
+
+  test("shows error notification when Get All fails", async () => {
+    fetchMock.mockImplementation(() =>
+      Promise.resolve(createFetchResponse({ error: "Get All failed" }, false)),
+    );
+
+    const getAllButton = screen.getByRole("button", { name: /get all/i });
+    await user.click(getAllButton);
+
+    const errorNotification = await screen.findByText(/Get All failed/i);
+    expect(errorNotification).toBeInTheDocument();
+  });
+
+  test("shows error notification when Get All throws an error", async () => {
+    fetchMock.mockImplementation(() =>
+      Promise.reject(new Error("Network error")),
+    );
+
+    const getAllButton = screen.getByRole("button", { name: /get all/i });
+    await user.click(getAllButton);
+
+    const errorNotification = await screen.findByText(
+      /An error occurred while fetching postal codes and municipalities/i,
+    );
+    expect(errorNotification).toBeInTheDocument();
   });
 });
