@@ -1,7 +1,7 @@
 function Universities() {
   return (
     <>
-      <h1>Universities Page</h1>
+      <h1>Universities placeholder</h1>
     </>
   );
 }

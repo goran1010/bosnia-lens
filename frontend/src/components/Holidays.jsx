@@ -1,5 +1,5 @@
 function Holidays() {
-  return <>Holidays</>;
+  return <>Holidays placeholder</>;
 }
 
 export { Holidays };

@@ -1,5 +1,5 @@
 import { describe, test, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { AdminForm } from "../../../../src/components/AdminDashboard/AdminForm";
 import { NotificationContext } from "../../../../src/contextData/NotificationContext";
 import { UserDataContext } from "../../../../src/contextData/UserDataContext";
@@ -95,12 +95,10 @@ describe("AdminForm component rendering", () => {
     renderComponent();
 
     expect(
-      screen.getByRole("heading", { name: /Admin Dashboard/i }),
+      await screen.findByRole("heading", { name: /Admin Dashboard/i }),
     ).toBeInTheDocument();
 
-    await waitFor(() => {
-      expect(fetchMock).toHaveBeenCalledTimes(2);
-    });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
   test("renders contributors list with mock contributor", async () => {

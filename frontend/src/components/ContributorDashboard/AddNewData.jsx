@@ -39,7 +39,6 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
               name="city"
               value={input.city}
               onChange={handleInput}
-              required
             />
           </div>
           <div>
@@ -51,7 +50,6 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
               name="code"
               value={input.code}
               onChange={handleInput}
-              required
             />
           </div>
           <div>
