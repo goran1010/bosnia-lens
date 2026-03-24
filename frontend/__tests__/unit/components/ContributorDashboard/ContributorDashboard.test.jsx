@@ -385,8 +385,6 @@ describe("SearchPostalCode component", () => {
     );
     expect(successNotification).toBeInTheDocument();
 
-    screen.debug(undefined, 10000);
-
     const dataCodeRow = await screen.findByText("12345");
     const dataInputCity = await screen.findByRole("textbox", {
       name: /city for postal code 12345/i,
