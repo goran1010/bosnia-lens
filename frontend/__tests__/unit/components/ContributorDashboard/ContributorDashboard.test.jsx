@@ -34,6 +34,54 @@ function Wrapper({ initialUser = null }) {
   );
 }
 
+const createFetchResponse = (result, ok = true) => ({
+  ok,
+  json: async () => result,
+});
+
+const fetchMock = vi.fn();
+
+vi.spyOn(globalThis, "fetch").mockImplementation(fetchMock);
+
+const setupFetchMock = () => {
+  fetchMock.mockImplementation((requestUrl) => {
+    if (requestUrl.includes("/users/contributor")) {
+      return Promise.resolve(
+        createFetchResponse({
+          data: {
+            id: 1,
+            city: "Test City",
+            code: "12345",
+            post: "",
+          },
+
+          message: "Success",
+        }),
+      );
+    }
+
+    if (requestUrl.includes("/postal-codes/search")) {
+      return Promise.resolve(
+        createFetchResponse({
+          data: [
+            {
+              id: 1,
+              city: "Test City",
+              code: "12345",
+              post: "",
+            },
+          ],
+          message: "Postal codes retrieved successfully",
+        }),
+      );
+    }
+
+    return Promise.resolve(
+      createFetchResponse({ data: [], message: "Success" }),
+    );
+  });
+};
+
 describe("render ContributorDashboard component", () => {
   test("render message if user doesn't exist", async () => {
     render(<Wrapper />);
@@ -108,39 +156,8 @@ describe("ContributorForm component rendering", () => {
 });
 
 describe("AddNewData component", () => {
-  const createFetchResponse = (result, ok = true) => ({
-    ok,
-    json: async () => result,
-  });
-
-  const fetchMock = vi.fn();
-
-  const setupFetchMock = () => {
-    fetchMock.mockImplementation((requestUrl) => {
-      if (requestUrl.includes("/users/contributor")) {
-        return Promise.resolve(
-          createFetchResponse({
-            data: {
-              id: 1,
-              city: "Test City",
-              code: "12345",
-              post: "",
-            },
-
-            message: "Success",
-          }),
-        );
-      }
-
-      return Promise.resolve(
-        createFetchResponse({ data: [], message: "Success" }),
-      );
-    });
-  };
-
-  vi.spyOn(globalThis, "fetch").mockImplementation(fetchMock);
-
   beforeEach(async () => {
+    setupFetchMock();
     render(<Wrapper initialUser={{ role: "CONTRIBUTOR" }} />);
 
     const selectElement = screen.getByLabelText(/Choose dataset/i);
@@ -256,6 +273,108 @@ describe("AddNewData component", () => {
       value: "Test City",
     });
 
+    expect(dataCodeRow).toBeInTheDocument();
+    expect(dataInputCity).toBeInTheDocument();
+  });
+});
+
+describe("SearchPostalCode component", () => {
+  beforeEach(async () => {
+    setupFetchMock();
+    render(<Wrapper initialUser={{ role: "CONTRIBUTOR" }} />);
+
+    const selectElement = screen.getByLabelText(/Choose dataset/i);
+    await user.selectOptions(selectElement, "Postal Codes");
+  });
+
+  test("renders search input and button", async () => {
+    const searchInput = screen.getByLabelText(
+      /Search by Postal Code or Municipality/i,
+    );
+    const searchButton = screen.getByRole("button", { name: /search/i });
+
+    expect(searchInput).toBeInTheDocument();
+    expect(searchButton).toBeInTheDocument();
+  });
+
+  test("validates search input and shows error for invalid postal code", async () => {
+    const searchInput = screen.getByLabelText(
+      /Search by Postal Code or Municipality/i,
+    );
+
+    await user.type(searchInput, "1234567");
+    expect(searchInput).toHaveValue("1234567");
+
+    expect(searchInput.validationMessage).toMatch(
+      /Postal code must be a 5-digit number/i,
+    );
+
+    await user.clear(searchInput);
+    await user.type(searchInput, "12345");
+
+    expect(searchInput).toHaveValue("12345");
+    expect(searchInput.validationMessage).toBe("");
+  });
+
+  test("shows error notification when search fails", async () => {
+    fetchMock.mockImplementation(() =>
+      Promise.resolve(createFetchResponse({ error: "Search failed" }, false)),
+    );
+
+    const searchInput = screen.getByLabelText(
+      /Search by Postal Code or Municipality/i,
+    );
+    const searchButton = screen.getByRole("button", { name: /search/i });
+
+    await user.type(searchInput, "12345");
+    await user.click(searchButton);
+
+    const errorNotification = await screen.findByText(/Search failed/i);
+    expect(errorNotification).toBeInTheDocument();
+  });
+
+  test("shows error notification when search throws an error", async () => {
+    fetchMock.mockImplementation(() =>
+      Promise.reject(new Error("Network error")),
+    );
+
+    const searchInput = screen.getByLabelText(
+      /Search by Postal Code or Municipality/i,
+    );
+    const searchButton = screen.getByRole("button", { name: /search/i });
+
+    await user.type(searchInput, "12345");
+    await user.click(searchButton);
+
+    const errorNotification = await screen.findByText(
+      /An error occurred while searching for postal codes/i,
+    );
+    expect(errorNotification).toBeInTheDocument();
+  });
+
+  test("shows search results in the table", async () => {
+    setupFetchMock();
+
+    const searchInput = screen.getByLabelText(
+      /Search by Postal Code or Municipality/i,
+    );
+    const searchButton = screen.getByRole("button", { name: /search/i });
+
+    await user.type(searchInput, "12345");
+    await user.click(searchButton);
+
+    const successNotification = await screen.findByText(
+      /Postal codes retrieved successfully/i,
+    );
+    expect(successNotification).toBeInTheDocument();
+
+    screen.debug(undefined, 10000);
+
+    const dataCodeRow = await screen.findByText("12345");
+    const dataInputCity = await screen.findByRole("textbox", {
+      name: /city for postal code 12345/i,
+      value: "Test City",
+    });
     expect(dataCodeRow).toBeInTheDocument();
     expect(dataInputCity).toBeInTheDocument();
   });
