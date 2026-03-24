@@ -10,9 +10,13 @@ import { useState } from "react";
 import userEvent from "@testing-library/user-event";
 import { Home } from "../../../../src/components/Home/Home";
 
+const { getCsrfTokenMock } = vi.hoisted(() => ({
+  getCsrfTokenMock: vi.fn(),
+}));
+
 vi.mock("../../../../src/components/utils/getCsrfToken", () => {
   return {
-    getCsrfToken: () => Promise.resolve(true),
+    getCsrfToken: getCsrfTokenMock,
   };
 });
 
@@ -48,6 +52,11 @@ const createFetchResponse = (result, ok = true) => ({
 const fetchMock = vi.fn();
 
 vi.spyOn(globalThis, "fetch").mockImplementation(fetchMock);
+
+beforeEach(() => {
+  getCsrfTokenMock.mockReset();
+  getCsrfTokenMock.mockResolvedValue("mocked-csrf-token");
+});
 
 const setupFetchMock = () => {
   fetchMock.mockReset();
@@ -589,5 +598,37 @@ describe("PostalCodesResultContributor component", () => {
 
     const dataCodeRow = screen.queryByText("12345");
     expect(dataCodeRow).not.toBeInTheDocument();
+  });
+
+  test("shows error when csrfToken retrieval fails during edit", async () => {
+    getCsrfTokenMock.mockResolvedValueOnce(false);
+
+    const cityInput = await screen.findByDisplayValue("Test City");
+    await user.clear(cityInput);
+    await user.type(cityInput, "Updated City");
+
+    const editButtons = await screen.findAllByRole("button", { name: /save/i });
+    const editButton = editButtons[0];
+    await user.click(editButton);
+
+    const errorNotification = await screen.findByText(
+      /Failed to retrieve CSRF token/i,
+    );
+    expect(errorNotification).toBeInTheDocument();
+  });
+
+  test("shows error when csrfToken retrieval fails during delete", async () => {
+    getCsrfTokenMock.mockResolvedValueOnce(false);
+
+    const deleteButtons = await screen.findAllByRole("button", {
+      name: /delete/i,
+    });
+    const deleteButton = deleteButtons[0];
+    await user.click(deleteButton);
+
+    const errorNotification = await screen.findByText(
+      /Failed to retrieve CSRF token/i,
+    );
+    expect(errorNotification).toBeInTheDocument();
   });
 });
