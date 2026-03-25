@@ -10,22 +10,27 @@ import { NotificationContext } from "./contextData/NotificationContext";
 import { useNotification } from "./customHooks/useNotification";
 import { useTitle } from "./customHooks/useTitle";
 import { LongWaitInfo } from "./utils/longWaitInfo";
+import { useServerWakeUp } from "./customHooks/useServerWakeUp";
 
 function Root() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [longWait, setLongWait] = useState(false);
-
   const { notificationValue } = useNotification();
 
   useTitle();
 
+  useServerWakeUp({
+    setLongWait,
+    addNotification: notificationValue.addNotification,
+  });
+
   const { userData, setUserData } = useStatusCheck(
     setLoading,
     notificationValue,
-    setLongWait,
+    longWait,
   );
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   try {
     return (
       <NotificationContext
