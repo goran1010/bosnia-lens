@@ -1,19 +1,56 @@
 import { describe, test, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { NotificationContext } from "../../../../src/contextData/NotificationContext";
-import { CurrentContributors } from "../../../../src/components/AdminDashboard/CurrentContributors";
 
-function renderComponent(currentContributors = []) {
-  render(
-    <NotificationContext value={{ addNotification: vi.fn() }}>
-      <CurrentContributors currentContributors={currentContributors} />
-    </NotificationContext>,
+import { AdminDashboard } from "../../../../src/components/AdminDashboard/AdminDashboard";
+import { useNotification } from "../../../../src/customHooks/useNotification";
+import { Notifications } from "../../../../src/components/Notifications";
+import { MemoryRouter, Routes, Route } from "react-router-dom";
+import { useState } from "react";
+import { UserDataContext } from "../../../../src/contextData/UserDataContext";
+
+const createFetchResponse = (data, ok = true) => ({
+  ok,
+  json: async () => data,
+});
+
+const fetchMock = vi.fn();
+
+const setupFetchMock = ({ contributors = [] } = {}) => {
+  fetchMock.mockImplementation((url) => {
+    const requestUrl = String(url);
+
+    if (requestUrl.includes("/users/admin/contributors")) {
+      return Promise.resolve(
+        createFetchResponse({ data: contributors, message: "Success" }),
+      );
+    }
+  });
+};
+
+vi.spyOn(globalThis, "fetch").mockImplementation(fetchMock);
+
+function Wrapper({ initialUser = null }) {
+  const [userData, setUserData] = useState(initialUser);
+  const { notificationValue } = useNotification();
+
+  return (
+    <NotificationContext value={notificationValue}>
+      <UserDataContext value={{ userData, setUserData }}>
+        <MemoryRouter initialEntries={["/admin-dashboard"]}>
+          <Notifications />
+          <Routes>
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          </Routes>
+        </MemoryRouter>
+      </UserDataContext>
+    </NotificationContext>
   );
 }
 
 describe("CurrentContributors Component", () => {
   test("renders without contributors", () => {
-    renderComponent();
+    render(<Wrapper initialUser={{ role: "ADMIN" }} />);
     expect(screen.getByText("Current Contributors")).toBeInTheDocument();
     expect(screen.getByText("No contributors found")).toBeInTheDocument();
 
@@ -21,15 +58,21 @@ describe("CurrentContributors Component", () => {
     expect(countBadge).toHaveTextContent("0");
   });
 
-  test("renders with contributors", () => {
+  test("renders with contributors", async () => {
     const mockContributors = [
-      { id: 1, username: "user1", email: "user1@example.com" },
+      {
+        id: 1,
+        username: "user1",
+        email: "user1@example.com",
+      },
     ];
-    renderComponent(mockContributors);
+    setupFetchMock({ contributors: mockContributors });
 
-    const email = screen.getByText("user1@example.com");
-    const username = screen.getByText("user1");
-    const countBadge = screen.getByLabelText("number of contributors");
+    render(<Wrapper initialUser={{ role: "ADMIN" }} />);
+
+    const email = await screen.findByText("user1@example.com");
+    const username = await screen.findByText("user1");
+    const countBadge = await screen.findByLabelText("number of contributors");
 
     expect(countBadge).toHaveTextContent("1");
     expect(username).toBeInTheDocument();
