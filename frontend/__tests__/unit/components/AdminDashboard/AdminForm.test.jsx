@@ -1,6 +1,5 @@
 import { describe, test, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { AdminForm } from "../../../../src/components/AdminDashboard/AdminForm";
 import { NotificationContext } from "../../../../src/contextData/NotificationContext";
 import { UserDataContext } from "../../../../src/contextData/UserDataContext";
 import userEvent from "@testing-library/user-event";
@@ -65,34 +64,40 @@ const setupFetchMock = ({
 
 vi.spyOn(globalThis, "fetch").mockImplementation(fetchMock);
 
-const renderComponent = () => {
-  const userDataContextValue = { userData: { role: "ADMIN" } };
+import { AdminDashboard } from "../../../../src/components/AdminDashboard/AdminDashboard";
+import { useNotification } from "../../../../src/customHooks/useNotification";
+import { Notifications } from "../../../../src/components/Notifications";
+import { MemoryRouter, Routes, Route } from "react-router-dom";
+import { useState } from "react";
 
-  return render(
-    <NotificationContext
-      value={{
-        notifications: [],
-        addNotification: vi.fn(),
-        removeNotification: vi.fn(),
-      }}
-    >
-      <UserDataContext value={userDataContextValue}>
-        <AdminForm />
+function Wrapper({ initialUser = null }) {
+  const [userData, setUserData] = useState(initialUser);
+  const { notificationValue } = useNotification();
+
+  return (
+    <NotificationContext value={notificationValue}>
+      <UserDataContext value={{ userData, setUserData }}>
+        <MemoryRouter initialEntries={["/admin-dashboard"]}>
+          <Notifications />
+          <Routes>
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          </Routes>
+        </MemoryRouter>
       </UserDataContext>
-    </NotificationContext>,
+    </NotificationContext>
   );
-};
+}
 
 beforeEach(() => {
   vi.clearAllMocks();
   fetchMock.mockReset();
+
+  render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 });
 
 describe("AdminForm component rendering", () => {
   test("renders AdminForm component's heading", async () => {
     setupFetchMock();
-
-    renderComponent();
 
     expect(
       await screen.findByRole("heading", { name: /Admin Dashboard/i }),
@@ -102,14 +107,15 @@ describe("AdminForm component rendering", () => {
   });
 
   test("renders contributors list with mock contributor", async () => {
-    const mockContributor = {
+    const mockAdmin = {
       id: 1,
       username: "John Doe",
       email: "john.doe@example.com",
+      role: "ADMIN",
     };
-    setupFetchMock({ contributors: [mockContributor] });
+    setupFetchMock({ contributors: [mockAdmin] });
 
-    renderComponent();
+    render(<Wrapper initialUser={mockAdmin} />);
 
     expect(await screen.findByText(/John Doe/i)).toBeInTheDocument();
     expect(screen.getByText(/john.doe@example.com/i)).toBeInTheDocument();
@@ -124,8 +130,6 @@ describe("AdminForm component pending requests and contributors interaction", ()
       email: "test_mail@example.com",
     };
     setupFetchMock({ pendingRequests: [mockContributor] });
-
-    renderComponent();
 
     const user = userEvent.setup();
 
@@ -171,8 +175,6 @@ describe("AdminForm component pending requests and contributors interaction", ()
     };
     setupFetchMock({ pendingRequests: [mockRequest] });
 
-    renderComponent();
-
     const user = userEvent.setup();
 
     expect(await screen.findByText(/Pending Requests/i)).toBeInTheDocument();
@@ -210,7 +212,6 @@ describe("AdminForm component pending requests and contributors interaction", ()
     };
     setupFetchMock({ contributors: [mockContributor] });
 
-    renderComponent();
     const contributorsCount = await screen.findByLabelText(
       /number of contributors/i,
     );
