@@ -1,14 +1,16 @@
 import { useEffect } from "react";
 const URL = import.meta.env.VITE_BACKEND_URL;
 
-function useServerWakeUp({ setLongWait, addNotification }) {
+function useServerWakeUp({ setLongWait }) {
+  // To-do:
+  // Limit the number of wake-up attempts to prevent infinite loops
   useEffect(() => {
     const longWaitTimer = setTimeout(() => {
       setLongWait(true);
     }, 4000);
 
     const reloadTimer = setTimeout(() => {
-      window.location.reload();
+      checkServer();
     }, 20000);
 
     async function checkServer() {
@@ -19,20 +21,16 @@ function useServerWakeUp({ setLongWait, addNotification }) {
         });
         await response.json();
         if (!response.ok) {
-          window.location.reload();
+          checkServer();
           return;
         }
 
         setLongWait(false);
         clearTimeout(longWaitTimer);
         clearTimeout(reloadTimer);
-        addNotification({
-          type: "success",
-          message: "Server is awake!",
-        });
       } catch (err) {
         console.error("Error waking up server:", err);
-        window.location.reload();
+        checkServer();
       }
     }
 
@@ -41,7 +39,7 @@ function useServerWakeUp({ setLongWait, addNotification }) {
       clearTimeout(longWaitTimer);
       clearTimeout(reloadTimer);
     };
-  }, [setLongWait, addNotification]);
+  }, [setLongWait]);
 }
 
 export { useServerWakeUp };

@@ -31,10 +31,6 @@ function useStatusCheck(setLoading, notificationValue, longWait) {
         setLoading(false);
         setUserData(result.data);
       } catch (err) {
-        addNotification({
-          type: "error",
-          message: "An error occurred while checking login status.",
-        });
         console.error(err);
       }
     }
