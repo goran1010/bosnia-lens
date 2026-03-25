@@ -31,15 +31,15 @@ const FRONTEND_URL = process.env.FRONTEND_URL;
 // Simulate a long wait for testing purposes (remove in production)
 // let serverAsleep = true;
 
-let serverAsleep = true;
-app.use((req, res, next) => {
-  if (serverAsleep) {
-    setTimeout(() => {
-      serverAsleep = false;
-      next();
-    }, 25000);
-  } else next();
-});
+// let serverAsleep = true;
+// app.use((req, res, next) => {
+//   if (serverAsleep) {
+//     setTimeout(() => {
+//       serverAsleep = false;
+//       res.status(503).json({ error: "Server is waking up, please try again." });
+//     }, 20000);
+//   } else next();
+// });
 // ---------------------------------------------------------------
 
 // Trust first proxy (required for Koyeb)

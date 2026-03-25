@@ -17,9 +17,9 @@ function useServerWakeUp({ setLongWait, addNotification }) {
           method: "GET",
           mode: "cors",
         });
-        const result = await response.json();
+        await response.json();
         if (!response.ok) {
-          console.error("Error waking up server:", result.error);
+          window.location.reload();
           return;
         }
 
@@ -31,7 +31,8 @@ function useServerWakeUp({ setLongWait, addNotification }) {
           message: "Server is awake!",
         });
       } catch (err) {
-        console.error("Error getting server status:", err);
+        console.error("Error waking up server:", err);
+        window.location.reload();
       }
     }
 
