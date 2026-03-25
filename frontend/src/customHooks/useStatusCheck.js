@@ -21,6 +21,7 @@ function useStatusCheck(setLoading, notificationValue, longWait) {
             type: "error",
             message: result.error,
           });
+          setLoading(false);
           return;
         }
 
@@ -32,6 +33,7 @@ function useStatusCheck(setLoading, notificationValue, longWait) {
         setUserData(result.data);
       } catch (err) {
         console.error(err);
+        setLoading(false);
       }
     }
     if (!longWait) {
