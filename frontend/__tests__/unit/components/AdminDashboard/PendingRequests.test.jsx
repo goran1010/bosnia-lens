@@ -1,6 +1,5 @@
 import { describe, test, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { PendingRequests } from "../../../../src/components/AdminDashboard/PendingRequests";
 import { NotificationContext } from "../../../../src/contextData/NotificationContext";
 
 vi.mock(
@@ -12,11 +11,28 @@ vi.mock(
 
 import { useGetPendingRequests } from "../../../../src/components/AdminDashboard/customHooks/useGetPendingRequests";
 
-function renderComponent() {
-  render(
-    <NotificationContext value={{ addNotification: vi.fn() }}>
-      <PendingRequests />
-    </NotificationContext>,
+import { AdminDashboard } from "../../../../src/components/AdminDashboard/AdminDashboard";
+import { useNotification } from "../../../../src/customHooks/useNotification";
+import { Notifications } from "../../../../src/components/Notifications";
+import { MemoryRouter, Routes, Route } from "react-router-dom";
+import { useState } from "react";
+import { UserDataContext } from "../../../../src/contextData/UserDataContext";
+
+function Wrapper({ initialUser = null }) {
+  const [userData, setUserData] = useState(initialUser);
+  const { notificationValue } = useNotification();
+
+  return (
+    <NotificationContext value={notificationValue}>
+      <UserDataContext value={{ userData, setUserData }}>
+        <MemoryRouter initialEntries={["/admin-dashboard"]}>
+          <Notifications />
+          <Routes>
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          </Routes>
+        </MemoryRouter>
+      </UserDataContext>
+    </NotificationContext>
   );
 }
 
@@ -31,7 +47,7 @@ describe("PendingRequests Component", () => {
       setPendingRequests: vi.fn(),
     });
 
-    renderComponent();
+    render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
     const numberOfRequests = screen.getByLabelText(/pending requests count/i);
     const pendingRequestsText = screen.getAllByText(/Pending Requests/i);
@@ -48,7 +64,7 @@ describe("PendingRequests Component", () => {
       setPendingRequests: vi.fn(),
     });
 
-    renderComponent();
+    render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
     expect(screen.getByText(/Pending Requests/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/pending requests count/i)).toHaveTextContent(
