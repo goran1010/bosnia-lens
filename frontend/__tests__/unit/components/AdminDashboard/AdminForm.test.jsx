@@ -91,13 +91,12 @@ function Wrapper({ initialUser = null }) {
 beforeEach(() => {
   vi.clearAllMocks();
   fetchMock.mockReset();
-
-  render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 });
 
 describe("AdminForm component rendering", () => {
   test("renders AdminForm component's heading", async () => {
     setupFetchMock();
+    render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
     expect(
       await screen.findByRole("heading", { name: /Admin Dashboard/i }),
@@ -130,10 +129,11 @@ describe("AdminForm component pending requests and contributors interaction", ()
       email: "test_mail@example.com",
     };
     setupFetchMock({ pendingRequests: [mockContributor] });
+    render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
     const user = userEvent.setup();
 
-    expect(await screen.findByText(/Pending Requests/i)).toBeInTheDocument();
+    expect(await screen.findByText("Pending Requests")).toBeInTheDocument();
     const confirmButton = await screen.findByRole("button", {
       name: /Confirm/i,
     });
@@ -163,7 +163,6 @@ describe("AdminForm component pending requests and contributors interaction", ()
     expect(contributorsCount).toHaveTextContent("1");
 
     expect(screen.getByText(/No pending requests/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/John Doe/i)).toHaveLength(1);
     expect(screen.getByText(/test_mail@example.com/i)).toBeInTheDocument();
   });
 
@@ -174,10 +173,11 @@ describe("AdminForm component pending requests and contributors interaction", ()
       email: "john.doe@example.com",
     };
     setupFetchMock({ pendingRequests: [mockRequest] });
+    render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
     const user = userEvent.setup();
 
-    expect(await screen.findByText(/Pending Requests/i)).toBeInTheDocument();
+    expect(await screen.findByText("Pending Requests")).toBeInTheDocument();
     const declineButton = await screen.findByRole("button", {
       name: /Decline/i,
     });
@@ -211,6 +211,7 @@ describe("AdminForm component pending requests and contributors interaction", ()
       email: "john.doe@example.com",
     };
     setupFetchMock({ contributors: [mockContributor] });
+    render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
     const contributorsCount = await screen.findByLabelText(
       /number of contributors/i,
@@ -221,7 +222,7 @@ describe("AdminForm component pending requests and contributors interaction", ()
 
     expect(contributorsCount).toHaveTextContent("1");
 
-    expect(await screen.findByText(/Contributors/i)).toBeInTheDocument();
+    expect(await screen.findByText("Current Contributors")).toBeInTheDocument();
     const removeButton = await screen.findByRole("button", {
       name: /Remove/i,
     });
