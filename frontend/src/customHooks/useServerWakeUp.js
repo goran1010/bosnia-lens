@@ -2,28 +2,27 @@ import { useEffect } from "react";
 const URL = import.meta.env.VITE_BACKEND_URL;
 
 function useServerWakeUp({ setLongWait, addNotification }) {
-  const longWaitTimer = setTimeout(() => {
-    setLongWait(true);
-  }, 4000);
-
-  const reloadTimer = setTimeout(() => {
-    window.location.reload();
-  }, 20000);
-
   useEffect(() => {
-    async function wakeUpServer() {
+    const longWaitTimer = setTimeout(() => {
+      setLongWait(true);
+    }, 4000);
+
+    const reloadTimer = setTimeout(() => {
+      window.location.reload();
+    }, 20000);
+
+    async function checkServer() {
       try {
-        const response = await fetch(`${URL}/api/status`, {
+        const response = await fetch(`${URL}/api`, {
           method: "GET",
           mode: "cors",
-          credentials: "include",
         });
         const result = await response.json();
-
         if (!response.ok) {
           console.error("Error waking up server:", result.error);
           return;
         }
+
         setLongWait(false);
         clearTimeout(longWaitTimer);
         clearTimeout(reloadTimer);
@@ -36,12 +35,12 @@ function useServerWakeUp({ setLongWait, addNotification }) {
       }
     }
 
-    wakeUpServer();
+    checkServer();
     return () => {
       clearTimeout(longWaitTimer);
       clearTimeout(reloadTimer);
     };
-  }, [setLongWait, addNotification, longWaitTimer, reloadTimer]);
+  }, [setLongWait, addNotification]);
 }
 
 export { useServerWakeUp };

@@ -13,9 +13,9 @@ import { LongWaitInfo } from "./utils/longWaitInfo";
 import { useServerWakeUp } from "./customHooks/useServerWakeUp";
 
 function Root() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [longWait, setLongWait] = useState(false);
-
   const { notificationValue } = useNotification();
 
   useTitle();
@@ -31,14 +31,6 @@ function Root() {
     longWait,
   );
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  console.log(
-    "Root component rendered. Loading:",
-    loading,
-    "Long wait:",
-    longWait,
-  );
   try {
     return (
       <NotificationContext
