@@ -13,6 +13,14 @@ vi.mock("../../src/customHooks/useWeatherCheck", () => ({
   },
 }));
 
+vi.spyOn(globalThis, "fetch").mockResolvedValue({
+  ok: true,
+  json: async () => ({
+    data: [{ id: 1, code: "mocked code" }],
+    message: "mocked message",
+  }),
+});
+
 describe("Loading components when visiting an address", () => {
   test("render Error Page when visiting non-existent address", async () => {
     const router = createMemoryRouter(routes, {

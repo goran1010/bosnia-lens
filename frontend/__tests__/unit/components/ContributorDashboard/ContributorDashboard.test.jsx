@@ -8,7 +8,6 @@ import { useNotification } from "../../../../src/customHooks/useNotification";
 import { Notifications } from "../../../../src/components/Notifications";
 import { useState } from "react";
 import userEvent from "@testing-library/user-event";
-import { Home } from "../../../../src/components/Home/Home";
 
 const { getCsrfTokenMock } = vi.hoisted(() => ({
   getCsrfTokenMock: vi.fn(),
@@ -32,7 +31,6 @@ function Wrapper({ initialUser = null }) {
         <MemoryRouter initialEntries={["/contributor-dashboard"]}>
           <Notifications />
           <Routes>
-            <Route path="/" element={<Home />} />
             <Route
               path="/contributor-dashboard"
               element={<ContributorDashboard />}

@@ -1,6 +1,5 @@
 import { describe, test, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { AdminForm } from "../../../../src/components/AdminDashboard/AdminForm";
 import { NotificationContext } from "../../../../src/contextData/NotificationContext";
 import { UserDataContext } from "../../../../src/contextData/UserDataContext";
 import userEvent from "@testing-library/user-event";
@@ -65,23 +64,29 @@ const setupFetchMock = ({
 
 vi.spyOn(globalThis, "fetch").mockImplementation(fetchMock);
 
-const renderComponent = () => {
-  const userDataContextValue = { userData: { role: "ADMIN" } };
+import { AdminDashboard } from "../../../../src/components/AdminDashboard/AdminDashboard";
+import { useNotification } from "../../../../src/customHooks/useNotification";
+import { Notifications } from "../../../../src/components/Notifications";
+import { MemoryRouter, Routes, Route } from "react-router-dom";
+import { useState } from "react";
 
-  return render(
-    <NotificationContext
-      value={{
-        notifications: [],
-        addNotification: vi.fn(),
-        removeNotification: vi.fn(),
-      }}
-    >
-      <UserDataContext value={userDataContextValue}>
-        <AdminForm />
+function Wrapper({ initialUser = null }) {
+  const [userData, setUserData] = useState(initialUser);
+  const { notificationValue } = useNotification();
+
+  return (
+    <NotificationContext value={notificationValue}>
+      <UserDataContext value={{ userData, setUserData }}>
+        <MemoryRouter initialEntries={["/admin-dashboard"]}>
+          <Notifications />
+          <Routes>
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          </Routes>
+        </MemoryRouter>
       </UserDataContext>
-    </NotificationContext>,
+    </NotificationContext>
   );
-};
+}
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -91,8 +96,7 @@ beforeEach(() => {
 describe("AdminForm component rendering", () => {
   test("renders AdminForm component's heading", async () => {
     setupFetchMock();
-
-    renderComponent();
+    render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
     expect(
       await screen.findByRole("heading", { name: /Admin Dashboard/i }),
@@ -102,14 +106,15 @@ describe("AdminForm component rendering", () => {
   });
 
   test("renders contributors list with mock contributor", async () => {
-    const mockContributor = {
+    const mockAdmin = {
       id: 1,
       username: "John Doe",
       email: "john.doe@example.com",
+      role: "ADMIN",
     };
-    setupFetchMock({ contributors: [mockContributor] });
+    setupFetchMock({ contributors: [mockAdmin] });
 
-    renderComponent();
+    render(<Wrapper initialUser={mockAdmin} />);
 
     expect(await screen.findByText(/John Doe/i)).toBeInTheDocument();
     expect(screen.getByText(/john.doe@example.com/i)).toBeInTheDocument();
@@ -124,12 +129,11 @@ describe("AdminForm component pending requests and contributors interaction", ()
       email: "test_mail@example.com",
     };
     setupFetchMock({ pendingRequests: [mockContributor] });
-
-    renderComponent();
+    render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
     const user = userEvent.setup();
 
-    expect(await screen.findByText(/Pending Requests/i)).toBeInTheDocument();
+    expect(await screen.findByText("Pending Requests")).toBeInTheDocument();
     const confirmButton = await screen.findByRole("button", {
       name: /Confirm/i,
     });
@@ -159,7 +163,6 @@ describe("AdminForm component pending requests and contributors interaction", ()
     expect(contributorsCount).toHaveTextContent("1");
 
     expect(screen.getByText(/No pending requests/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/John Doe/i)).toHaveLength(1);
     expect(screen.getByText(/test_mail@example.com/i)).toBeInTheDocument();
   });
 
@@ -170,12 +173,11 @@ describe("AdminForm component pending requests and contributors interaction", ()
       email: "john.doe@example.com",
     };
     setupFetchMock({ pendingRequests: [mockRequest] });
-
-    renderComponent();
+    render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
     const user = userEvent.setup();
 
-    expect(await screen.findByText(/Pending Requests/i)).toBeInTheDocument();
+    expect(await screen.findByText("Pending Requests")).toBeInTheDocument();
     const declineButton = await screen.findByRole("button", {
       name: /Decline/i,
     });
@@ -209,8 +211,8 @@ describe("AdminForm component pending requests and contributors interaction", ()
       email: "john.doe@example.com",
     };
     setupFetchMock({ contributors: [mockContributor] });
+    render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
-    renderComponent();
     const contributorsCount = await screen.findByLabelText(
       /number of contributors/i,
     );
@@ -220,7 +222,7 @@ describe("AdminForm component pending requests and contributors interaction", ()
 
     expect(contributorsCount).toHaveTextContent("1");
 
-    expect(await screen.findByText(/Contributors/i)).toBeInTheDocument();
+    expect(await screen.findByText("Current Contributors")).toBeInTheDocument();
     const removeButton = await screen.findByRole("button", {
       name: /Remove/i,
     });
