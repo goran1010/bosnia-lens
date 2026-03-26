@@ -167,6 +167,8 @@ describe("SearchPostalCode component", () => {
       Promise.reject(new Error("Network error")),
     );
 
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
     const searchInput = screen.getByLabelText(
       /Search by Postal Code or Municipality/i,
     );
@@ -179,6 +181,9 @@ describe("SearchPostalCode component", () => {
       /An error occurred while searching for postal codes/i,
     );
     expect(errorNotification).toBeInTheDocument();
+
+    expect(consoleSpy).toHaveBeenCalled();
+    consoleSpy.mockRestore();
   });
 
   test("shows search results in the table", async () => {

@@ -128,6 +128,8 @@ describe("Network errors", () => {
     const networkError = new Error("Network error");
     fetchSpy.mockRejectedValueOnce(networkError);
 
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
     const { result } = renderHook(() => useWeatherCheck(mockSetLoading), {
       wrapper,
     });
@@ -138,5 +140,8 @@ describe("Network errors", () => {
 
     expect(result.current.weatherForecast).toHaveLength(0);
     expect(mockSetLoading).toHaveBeenCalledWith(false);
+
+    expect(consoleSpy).toHaveBeenCalled();
+    consoleSpy.mockRestore();
   });
 });

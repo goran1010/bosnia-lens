@@ -149,6 +149,8 @@ describe("PostalCodesResultContributor component", () => {
   test("shows error notification when edit fails", async () => {
     fetchMock.mockRejectedValueOnce(new Error("Edit failed"));
 
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
     const editButtons = await screen.findAllByRole("button", { name: /save/i });
     const editButton = editButtons[0];
     await user.click(editButton);
@@ -157,6 +159,9 @@ describe("PostalCodesResultContributor component", () => {
       /An error occurred while updating the postal code/i,
     );
     expect(errorNotification).toBeInTheDocument();
+
+    expect(consoleSpy).toHaveBeenCalled();
+    consoleSpy.mockRestore();
   });
 
   test("shows success notification and updates data when edit is successful", async () => {
@@ -212,6 +217,8 @@ describe("PostalCodesResultContributor component", () => {
       )
       .mockRejectedValueOnce(new Error("Delete failed"));
 
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
     const deleteButtons = await screen.findAllByRole("button", {
       name: /delete/i,
     });
@@ -222,6 +229,9 @@ describe("PostalCodesResultContributor component", () => {
       /An error occurred while deleting the postal code/i,
     );
     expect(errorNotification).toBeInTheDocument();
+
+    expect(consoleSpy).toHaveBeenCalled();
+    consoleSpy.mockRestore();
   });
 
   test("shows success notification and removes data when delete is successful", async () => {

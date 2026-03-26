@@ -64,6 +64,7 @@ function Wrapper({ initialUser = null }) {
 
 describe("CurrentContributors Component", () => {
   test("renders without contributors", async () => {
+    setupFetchMock();
     render(<Wrapper initialUser={{ role: "ADMIN" }} />);
     expect(await screen.findByText("Current Contributors")).toBeInTheDocument();
     expect(

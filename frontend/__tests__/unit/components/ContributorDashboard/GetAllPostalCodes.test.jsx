@@ -158,6 +158,8 @@ describe("GetAllPostalCodes component", () => {
       Promise.reject(new Error("Network error")),
     );
 
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
     const getAllButton = screen.getByRole("button", { name: /get all/i });
     await user.click(getAllButton);
 
@@ -165,5 +167,7 @@ describe("GetAllPostalCodes component", () => {
       /An error occurred while fetching postal codes and municipalities/i,
     );
     expect(errorNotification).toBeInTheDocument();
+    expect(consoleSpy).toHaveBeenCalled();
+    consoleSpy.mockRestore();
   });
 });
