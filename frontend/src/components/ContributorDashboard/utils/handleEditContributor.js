@@ -4,7 +4,7 @@ import { getCsrfToken } from "../../utils/getCsrfToken";
 async function handleEditContributor(e, setSearchResult, addNotification) {
   try {
     e.preventDefault();
-    const code = e.target.children[0].textContent;
+    const code = e.target.children[0].children[1].textContent;
     const city = e.target[0].value;
     const post = e.target[1].value;
 

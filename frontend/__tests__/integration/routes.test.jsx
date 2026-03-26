@@ -23,6 +23,8 @@ vi.spyOn(globalThis, "fetch").mockResolvedValue({
 
 describe("Loading components when visiting an address", () => {
   test("render Error Page when visiting non-existent address", async () => {
+    const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
     const router = createMemoryRouter(routes, {
       initialEntries: ["/non-existent-address"],
     });
@@ -32,6 +34,9 @@ describe("Loading components when visiting an address", () => {
       /There is nothing here, sorry./i,
     );
     expect(linkElement).toBeInTheDocument();
+    expect(consoleSpy).toHaveBeenCalled();
+
+    consoleSpy.mockRestore();
   });
 
   test("visit universities page", async () => {
