@@ -9,15 +9,25 @@ const createFetchResponse = (data, ok = true) => ({
 
 const fetchMock = vi.fn();
 
-const setupFetchMock = ({ contributors = [] } = {}) => {
+const setupFetchMock = ({ pendingRequests = [], contributors = [] } = {}) => {
   fetchMock.mockImplementation((url) => {
     const requestUrl = String(url);
 
     if (requestUrl.includes("users/admin/requested-contributors")) {
       return Promise.resolve(
+        createFetchResponse({ data: pendingRequests, message: "Success" }),
+      );
+    }
+
+    if (requestUrl.includes("/users/admin/contributors")) {
+      return Promise.resolve(
         createFetchResponse({ data: contributors, message: "Success" }),
       );
     }
+
+    return Promise.resolve(
+      createFetchResponse({ data: [], message: "Success" }),
+    );
   });
 };
 
@@ -49,20 +59,22 @@ function Wrapper({ initialUser = null }) {
 }
 
 beforeEach(() => {
-  vi.clearAllMocks();
+  fetchMock.mockReset();
 });
 
 describe("PendingRequests Component", () => {
-  test("renders PendingRequests component", () => {
+  test("renders PendingRequests component", async () => {
     setupFetchMock();
 
     render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
-    const numberOfRequests = screen.getByLabelText(/pending requests count/i);
-    const pendingRequestsText = screen.getAllByText(/Pending Requests/i);
+    const numberOfRequests = await screen.findByLabelText(
+      /pending requests count/i,
+    );
+    const pendingRequestsText = await screen.findAllByText(/Pending Requests/i);
 
     expect(numberOfRequests).toHaveTextContent("0");
-    expect(pendingRequestsText).toHaveLength(2);
+    expect(pendingRequestsText).toHaveLength(3);
   });
 
   test("renders PendingRequests with 1 request", async () => {
@@ -73,7 +85,7 @@ describe("PendingRequests Component", () => {
         email: "jane.doe@example.com",
       },
     ];
-    setupFetchMock({ contributors: mockPendingRequests });
+    setupFetchMock({ pendingRequests: mockPendingRequests });
 
     render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 

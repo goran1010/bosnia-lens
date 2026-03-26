@@ -1,4 +1,4 @@
-import { describe, test, expect } from "vitest";
+import { describe, test, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { AdminDashboard } from "../../../../src/components/AdminDashboard/AdminDashboard";
 import { NotificationContext } from "../../../../src/contextData/NotificationContext";
@@ -7,6 +7,14 @@ import { useNotification } from "../../../../src/customHooks/useNotification";
 import { Notifications } from "../../../../src/components/Notifications";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
+
+vi.spyOn(globalThis, "fetch").mockResolvedValue({
+  ok: true,
+  json: async () => ({
+    data: [{ id: 1, code: "mocked code" }],
+    message: "mocked message",
+  }),
+});
 
 function Wrapper({ initialUser = null }) {
   const [userData, setUserData] = useState(initialUser);

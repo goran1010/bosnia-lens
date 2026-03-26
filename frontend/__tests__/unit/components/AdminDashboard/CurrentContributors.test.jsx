@@ -1,4 +1,4 @@
-import { describe, test, expect, vi } from "vitest";
+import { describe, test, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { NotificationContext } from "../../../../src/contextData/NotificationContext";
 
@@ -16,19 +16,33 @@ const createFetchResponse = (data, ok = true) => ({
 
 const fetchMock = vi.fn();
 
-const setupFetchMock = ({ contributors = [] } = {}) => {
+const setupFetchMock = ({ contributors = [], pendingRequests = [] } = {}) => {
   fetchMock.mockImplementation((url) => {
     const requestUrl = String(url);
+
+    if (requestUrl.includes("users/admin/requested-contributors")) {
+      return Promise.resolve(
+        createFetchResponse({ data: pendingRequests, message: "Success" }),
+      );
+    }
 
     if (requestUrl.includes("/users/admin/contributors")) {
       return Promise.resolve(
         createFetchResponse({ data: contributors, message: "Success" }),
       );
     }
+
+    return Promise.resolve(
+      createFetchResponse({ data: [], message: "Success" }),
+    );
   });
 };
 
 vi.spyOn(globalThis, "fetch").mockImplementation(fetchMock);
+
+beforeEach(() => {
+  fetchMock.mockReset();
+});
 
 function Wrapper({ initialUser = null }) {
   const [userData, setUserData] = useState(initialUser);
@@ -49,12 +63,14 @@ function Wrapper({ initialUser = null }) {
 }
 
 describe("CurrentContributors Component", () => {
-  test("renders without contributors", () => {
+  test("renders without contributors", async () => {
     render(<Wrapper initialUser={{ role: "ADMIN" }} />);
-    expect(screen.getByText("Current Contributors")).toBeInTheDocument();
-    expect(screen.getByText("No contributors found")).toBeInTheDocument();
+    expect(await screen.findByText("Current Contributors")).toBeInTheDocument();
+    expect(
+      await screen.findByText("No contributors found"),
+    ).toBeInTheDocument();
 
-    const countBadge = screen.getByLabelText("number of contributors");
+    const countBadge = await screen.findByLabelText("number of contributors");
     expect(countBadge).toHaveTextContent("0");
   });
 
