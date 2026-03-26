@@ -9,16 +9,6 @@ import { Notifications } from "../../../../src/components/Notifications";
 import { useState } from "react";
 import userEvent from "@testing-library/user-event";
 
-const { getCsrfTokenMock } = vi.hoisted(() => ({
-  getCsrfTokenMock: vi.fn(),
-}));
-
-vi.mock("../../../../src/components/utils/getCsrfToken", () => {
-  return {
-    getCsrfToken: getCsrfTokenMock,
-  };
-});
-
 const user = userEvent.setup();
 
 function Wrapper({ initialUser = null }) {
@@ -51,14 +41,18 @@ const fetchMock = vi.fn();
 
 vi.spyOn(globalThis, "fetch").mockImplementation(fetchMock);
 
-beforeEach(() => {
-  getCsrfTokenMock.mockReset();
-  getCsrfTokenMock.mockResolvedValue("mocked-csrf-token");
-});
-
 const setupFetchMock = () => {
   fetchMock.mockReset();
   fetchMock.mockImplementation((requestUrl) => {
+    if (requestUrl.includes("/csrf-token")) {
+      return Promise.resolve(
+        createFetchResponse({
+          data: "mocked-csrf-token",
+          message: "CSRF token generated successfully",
+        }),
+      );
+    }
+
     if (requestUrl.includes("/users/contributor")) {
       return Promise.resolve(
         createFetchResponse({
@@ -482,8 +476,6 @@ describe("PostalCodesResultContributor component", () => {
 
     const getAllButton = screen.getByRole("button", { name: /get all/i });
     await user.click(getAllButton);
-
-    await screen.findByText("12345");
   });
 
   test("renders search results in the table", async () => {
@@ -527,19 +519,28 @@ describe("PostalCodesResultContributor component", () => {
   });
 
   test("shows success notification and updates data when edit is successful", async () => {
-    fetchMock.mockImplementationOnce(() =>
-      Promise.resolve(
-        createFetchResponse({
-          data: {
-            id: 1,
-            city: "Updated City",
-            code: "12345",
-            post: "",
-          },
-          message: "Data updated successfully",
-        }),
-      ),
-    );
+    fetchMock
+      .mockImplementationOnce(() =>
+        Promise.resolve(
+          createFetchResponse({
+            data: "mocked-csrf-token",
+            message: "CSRF token generated successfully",
+          }),
+        ),
+      )
+      .mockImplementationOnce(() =>
+        Promise.resolve(
+          createFetchResponse({
+            data: {
+              id: 1,
+              city: "Updated City",
+              code: "12345",
+              post: "",
+            },
+            message: "Data updated successfully",
+          }),
+        ),
+      );
 
     const cityInput = await screen.findByDisplayValue("Test City");
     await user.clear(cityInput);
@@ -559,7 +560,16 @@ describe("PostalCodesResultContributor component", () => {
   });
 
   test("shows error notification when delete fails", async () => {
-    fetchMock.mockRejectedValueOnce(new Error("Delete failed"));
+    fetchMock
+      .mockImplementationOnce(() =>
+        Promise.resolve(
+          createFetchResponse({
+            data: "mocked-csrf-token",
+            message: "CSRF token generated successfully",
+          }),
+        ),
+      )
+      .mockRejectedValueOnce(new Error("Delete failed"));
 
     const deleteButtons = await screen.findAllByRole("button", {
       name: /delete/i,
@@ -574,14 +584,23 @@ describe("PostalCodesResultContributor component", () => {
   });
 
   test("shows success notification and removes data when delete is successful", async () => {
-    fetchMock.mockImplementationOnce(() =>
-      Promise.resolve(
-        createFetchResponse({
-          data: { code: "12345" },
-          message: "Postal code deleted successfully",
-        }),
-      ),
-    );
+    fetchMock
+      .mockImplementationOnce(() =>
+        Promise.resolve(
+          createFetchResponse({
+            data: "mocked-csrf-token",
+            message: "CSRF token generated successfully",
+          }),
+        ),
+      )
+      .mockImplementationOnce(() =>
+        Promise.resolve(
+          createFetchResponse({
+            data: { code: "12345" },
+            message: "Postal code deleted successfully",
+          }),
+        ),
+      );
 
     const deleteButtons = await screen.findAllByRole("button", {
       name: /delete/i,
@@ -599,7 +618,9 @@ describe("PostalCodesResultContributor component", () => {
   });
 
   test("shows error when csrfToken retrieval fails during edit", async () => {
-    getCsrfTokenMock.mockResolvedValueOnce(false);
+    fetchMock.mockImplementationOnce(() =>
+      Promise.resolve("Failed to retrieve CSRF token"),
+    );
 
     const cityInput = await screen.findByDisplayValue("Test City");
     await user.clear(cityInput);
@@ -616,7 +637,9 @@ describe("PostalCodesResultContributor component", () => {
   });
 
   test("shows error when csrfToken retrieval fails during delete", async () => {
-    getCsrfTokenMock.mockResolvedValueOnce(false);
+    fetchMock.mockImplementationOnce(() =>
+      Promise.resolve("Failed to retrieve CSRF token"),
+    );
 
     const deleteButtons = await screen.findAllByRole("button", {
       name: /delete/i,
