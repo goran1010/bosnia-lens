@@ -17,12 +17,13 @@ function Root() {
   const [loading, setLoading] = useState(true);
   const [longWait, setLongWait] = useState(false);
   const { notificationValue } = useNotification();
+  const [serverIsDown, setServerIsDown] = useState(false);
 
   useTitle();
 
   useServerWakeUp({
     setLongWait,
-    addNotification: notificationValue.addNotification,
+    setServerIsDown,
   });
 
   const { userData, setUserData } = useStatusCheck(
@@ -32,6 +33,10 @@ function Root() {
   );
 
   try {
+    if (longWait || serverIsDown) {
+      return <LongWaitInfo serverIsDown={serverIsDown} />;
+    }
+
     return (
       <NotificationContext
         value={{
@@ -49,7 +54,6 @@ function Root() {
               onClick={() => isMenuOpen && setIsMenuOpen(false)}
             >
               {loading ? <Spinner /> : <Outlet />}
-              {longWait && <LongWaitInfo />}
             </main>
             <Footer />
           </>

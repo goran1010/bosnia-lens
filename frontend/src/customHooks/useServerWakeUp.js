@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 const URL = import.meta.env.VITE_BACKEND_URL;
 
-function useServerWakeUp({ setLongWait }) {
-  // To-do:
-  // Limit the number of wake-up attempts to prevent infinite loops
+function useServerWakeUp({ setLongWait, setServerIsDown }) {
   useEffect(() => {
+    // Limit the number of wake-up attempts to prevent infinite loops
+    let numberOfAttempts = 0;
+
     const longWaitTimer = setTimeout(() => {
       setLongWait(true);
     }, 4000);
@@ -14,6 +15,13 @@ function useServerWakeUp({ setLongWait }) {
     }, 20000);
 
     async function checkServer() {
+      if (numberOfAttempts >= 5) {
+        console.error(
+          "Server is taking too long to wake up. Stopping attempts.",
+        );
+        setServerIsDown(true);
+        return;
+      }
       try {
         const response = await fetch(`${URL}/api`, {
           method: "GET",
@@ -21,6 +29,7 @@ function useServerWakeUp({ setLongWait }) {
         });
         await response.json();
         if (!response.ok) {
+          numberOfAttempts++;
           checkServer();
           return;
         }
@@ -30,6 +39,7 @@ function useServerWakeUp({ setLongWait }) {
         clearTimeout(reloadTimer);
       } catch (err) {
         console.error("Error waking up server:", err);
+        numberOfAttempts++;
         checkServer();
       }
     }
@@ -39,7 +49,7 @@ function useServerWakeUp({ setLongWait }) {
       clearTimeout(longWaitTimer);
       clearTimeout(reloadTimer);
     };
-  }, [setLongWait]);
+  }, [setLongWait, setServerIsDown]);
 }
 
 export { useServerWakeUp };
