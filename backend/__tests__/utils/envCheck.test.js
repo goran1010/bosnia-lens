@@ -1,8 +1,8 @@
 import { describe, test, expect, vi } from "vitest";
 
-describe("process.env.URL missing or undefined", () => {
-  test("envCheck should throw an error if process.env.URL is missing", async () => {
-    vi.stubEnv("URL", undefined);
+describe("process.env variable missing or undefined", () => {
+  test("envCheck should throw an error if process.env.FRONTEND_URL is missing", async () => {
+    vi.stubEnv("FRONTEND_URL", undefined);
 
     let error;
     try {
