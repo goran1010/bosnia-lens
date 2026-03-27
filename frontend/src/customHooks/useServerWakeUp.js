@@ -7,13 +7,13 @@ function useServerWakeUp({ setLongWait, setServerIsDown }) {
   useEffect(() => {
     // Limit the number of wake-up attempts to prevent infinite loops
     let numberOfAttempts = 0;
-
     const longWaitTimer = setTimeout(() => {
       setLongWait(true);
     }, 4000);
 
     async function checkServer() {
       if (numberOfAttempts >= ALLOWED_ATTEMPTS) {
+        clearTimeout(longWaitTimer);
         setServerIsDown(true);
         setLongWait(false);
         console.error(

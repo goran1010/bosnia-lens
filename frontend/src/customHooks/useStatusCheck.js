@@ -7,8 +7,9 @@ function useStatusCheck(setLoading, notificationValue, longWait) {
 
   useEffect(() => {
     async function checkLogin() {
+      let response;
       try {
-        const response = await fetch(`${URL}/users/me`, {
+        response = await fetch(`${URL}/users/me`, {
           mode: "cors",
           method: "GET",
           credentials: "include",
@@ -37,7 +38,12 @@ function useStatusCheck(setLoading, notificationValue, longWait) {
       }
     }
     if (!longWait) {
-      checkLogin();
+      // Need to add a slight delay before checking the server status to give it some time to wake up
+      // and avoid unnecessary error notifications
+      // To-Do : Implement a more robust solution for this
+      setTimeout(() => {
+        checkLogin();
+      }, 500);
     }
   }, [addNotification, setLoading, longWait]);
 
