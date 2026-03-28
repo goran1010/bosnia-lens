@@ -7,6 +7,8 @@ import { NotificationContext } from "../../../src/contextData/NotificationContex
 import { useNotification } from "../../../src/customHooks/useNotification";
 import { useState } from "react";
 import { Notifications } from "../../../src/components/Notifications";
+import { Navbar } from "../../../src/components/Navbar/Navbar";
+import userEvent from "@testing-library/user-event";
 
 vi.spyOn(globalThis, "fetch").mockResolvedValue({
   ok: true,
@@ -16,25 +18,24 @@ vi.spyOn(globalThis, "fetch").mockResolvedValue({
   }),
 });
 
-function Wrapper({ initialUser = null }) {
-  const [userData, setUserData] = useState(initialUser);
-  const { notificationValue } = useNotification();
+describe("Render Navbar on root route", () => {
+  function Wrapper({ initialUser = null }) {
+    const [userData, setUserData] = useState(initialUser);
+    const { notificationValue } = useNotification();
 
-  return (
-    <NotificationContext value={notificationValue}>
-      <UserDataContext value={{ userData, setUserData }}>
-        <MemoryRouter initialEntries={["/"]}>
-          <Notifications />
-          <Routes>
-            <Route path="/" element={<Root />} />
-          </Routes>
-        </MemoryRouter>
-      </UserDataContext>
-    </NotificationContext>
-  );
-}
-
-describe("Render Navbar", () => {
+    return (
+      <NotificationContext value={notificationValue}>
+        <UserDataContext value={{ userData, setUserData }}>
+          <MemoryRouter initialEntries={["/"]}>
+            <Notifications />
+            <Routes>
+              <Route path="/" element={<Root />} />
+            </Routes>
+          </MemoryRouter>
+        </UserDataContext>
+      </NotificationContext>
+    );
+  }
   test("user not logged in", async () => {
     render(<Wrapper initialUser={null} />);
     const home = await screen.findByText(/Home/i);
@@ -73,5 +74,42 @@ describe("Render Navbar", () => {
     expect(universities).toBeInTheDocument();
     expect(postalCodes).toBeInTheDocument();
     expect(holidays).toBeInTheDocument();
+  });
+});
+
+describe("render Navbar depending on open menu state", () => {
+  function NavbarWrapper({ isOpen = false }) {
+    const userData = { id: "1", username: "Test User", role: "USER" };
+    const setUserData = vi.fn();
+
+    const [isMenuOpen, setIsMenuOpen] = useState(isOpen);
+    return (
+      <UserDataContext value={{ userData, setUserData }}>
+        <MemoryRouter>
+          <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+        </MemoryRouter>
+      </UserDataContext>
+    );
+  }
+
+  test("mobile menu is closed", async () => {
+    render(<NavbarWrapper />);
+    const menuButton = await screen.findByRole("button", {
+      name: /Menu/i,
+    });
+    expect(menuButton).toBeInTheDocument();
+
+    await userEvent.click(menuButton);
+    screen.debug(undefined, Infinity);
+    const mobileMenu = await screen.findByText(/Close/i);
+    expect(mobileMenu).toBeInTheDocument();
+    expect(screen.queryByText("Menu")).not.toBeInTheDocument();
+  });
+
+  test("mobile menu is open", async () => {
+    render(<NavbarWrapper isOpen={true} />);
+
+    const mobileMenu = await screen.findByText(/Close/i);
+    expect(mobileMenu).toBeInTheDocument();
   });
 });
