@@ -1,10 +1,10 @@
 import { describe, test, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { AdminDashboard } from "../../../../src/components/AdminDashboard/AdminDashboard";
-import { NotificationContext } from "../../../../src/contextData/NotificationContext";
-import { UserDataContext } from "../../../../src/contextData/UserDataContext";
-import { useNotification } from "../../../../src/customHooks/useNotification";
-import { Notifications } from "../../../../src/components/Notifications";
+import { AdminDashboard } from "../../../src/components/AdminDashboard/AdminDashboard";
+import { NotificationContext } from "../../../src/contextData/NotificationContext";
+import { UserDataContext } from "../../../src/contextData/UserDataContext";
+import { useNotification } from "../../../src/customHooks/useNotification";
+import { Notifications } from "../../../src/components/Notifications";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 

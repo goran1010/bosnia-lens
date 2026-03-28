@@ -1,8 +1,8 @@
 import { test, describe, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
-import { routes } from "../../src/routes";
-import { UserDataContext } from "../../src/contextData/UserDataContext";
+import { routes } from "../src/routes";
+import { UserDataContext } from "../src/contextData/UserDataContext";
 
 vi.mock("../../src/customHooks/useWeatherCheck", () => ({
   default: (setWeatherForecast, setLoading) => {

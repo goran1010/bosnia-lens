@@ -1,11 +1,11 @@
 import { describe, test, expect, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { ContributorDashboard } from "../../../../src/components/ContributorDashboard/ContributorDashboard";
-import { NotificationContext } from "../../../../src/contextData/NotificationContext";
-import { UserDataContext } from "../../../../src/contextData/UserDataContext";
-import { useNotification } from "../../../../src/customHooks/useNotification";
-import { Notifications } from "../../../../src/components/Notifications";
+import { ContributorDashboard } from "../../../src/components/ContributorDashboard/ContributorDashboard";
+import { NotificationContext } from "../../../src/contextData/NotificationContext";
+import { UserDataContext } from "../../../src/contextData/UserDataContext";
+import { useNotification } from "../../../src/customHooks/useNotification";
+import { Notifications } from "../../../src/components/Notifications";
 import { useState } from "react";
 import userEvent from "@testing-library/user-event";
 

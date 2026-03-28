@@ -1,6 +1,6 @@
 import { describe, test, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { Universities } from "../../../src/components/Universities";
+import { Universities } from "../../src/components/Universities";
 
 describe("ErrorPage Component", () => {
   test("Universities component", () => {

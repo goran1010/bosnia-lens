@@ -1,6 +1,6 @@
 import { describe, test, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { NotificationContext } from "../../../../src/contextData/NotificationContext";
+import { NotificationContext } from "../../../src/contextData/NotificationContext";
 
 const createFetchResponse = (data, ok = true) => ({
   ok,
@@ -33,12 +33,12 @@ const setupFetchMock = ({ pendingRequests = [], contributors = [] } = {}) => {
 
 vi.spyOn(globalThis, "fetch").mockImplementation(fetchMock);
 
-import { AdminDashboard } from "../../../../src/components/AdminDashboard/AdminDashboard";
-import { useNotification } from "../../../../src/customHooks/useNotification";
-import { Notifications } from "../../../../src/components/Notifications";
+import { AdminDashboard } from "../../../src/components/AdminDashboard/AdminDashboard";
+import { useNotification } from "../../../src/customHooks/useNotification";
+import { Notifications } from "../../../src/components/Notifications";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
-import { UserDataContext } from "../../../../src/contextData/UserDataContext";
+import { UserDataContext } from "../../../src/contextData/UserDataContext";
 
 function Wrapper({ initialUser = null }) {
   const [userData, setUserData] = useState(initialUser);
