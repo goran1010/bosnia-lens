@@ -113,3 +113,40 @@ describe("render Navbar depending on open menu state", () => {
     expect(mobileMenu).toBeInTheDocument();
   });
 });
+
+describe("render Navbar when user is admin or contributor", () => {
+  function NavbarWrapper({ isOpen = false }) {
+    const userData = { id: "1", username: "Test User", role: "ADMIN" };
+    const setUserData = vi.fn();
+
+    const [isMenuOpen, setIsMenuOpen] = useState(isOpen);
+    return (
+      <UserDataContext value={{ userData, setUserData }}>
+        <MemoryRouter>
+          <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+        </MemoryRouter>
+      </UserDataContext>
+    );
+  }
+
+  test("mobile menu is closed", async () => {
+    render(<NavbarWrapper />);
+    const menuButton = await screen.findByRole("button", {
+      name: /Menu/i,
+    });
+    expect(menuButton).toBeInTheDocument();
+
+    await userEvent.click(menuButton);
+
+    const mobileMenu = await screen.findByText(/Close/i);
+    expect(mobileMenu).toBeInTheDocument();
+    expect(screen.queryByText("Menu")).not.toBeInTheDocument();
+  });
+
+  test("mobile menu is open", async () => {
+    render(<NavbarWrapper isOpen={true} />);
+
+    const mobileMenu = await screen.findByText(/Close/i);
+    expect(mobileMenu).toBeInTheDocument();
+  });
+});
