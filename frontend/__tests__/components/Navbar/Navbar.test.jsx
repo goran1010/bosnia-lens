@@ -77,21 +77,21 @@ describe("Render Navbar on root route", () => {
   });
 });
 
+function NavbarWrapper({ isOpen = false }) {
+  const userData = { id: "1", username: "Test User", role: "ADMIN" };
+  const setUserData = vi.fn();
+
+  const [isMenuOpen, setIsMenuOpen] = useState(isOpen);
+  return (
+    <UserDataContext value={{ userData, setUserData }}>
+      <MemoryRouter>
+        <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+      </MemoryRouter>
+    </UserDataContext>
+  );
+}
+
 describe("render Navbar depending on open menu state", () => {
-  function NavbarWrapper({ isOpen = false }) {
-    const userData = { id: "1", username: "Test User", role: "USER" };
-    const setUserData = vi.fn();
-
-    const [isMenuOpen, setIsMenuOpen] = useState(isOpen);
-    return (
-      <UserDataContext value={{ userData, setUserData }}>
-        <MemoryRouter>
-          <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
-        </MemoryRouter>
-      </UserDataContext>
-    );
-  }
-
   test("mobile menu is closed", async () => {
     render(<NavbarWrapper />);
     const menuButton = await screen.findByRole("button", {
@@ -115,20 +115,6 @@ describe("render Navbar depending on open menu state", () => {
 });
 
 describe("render Navbar when user is admin or contributor", () => {
-  function NavbarWrapper({ isOpen = false }) {
-    const userData = { id: "1", username: "Test User", role: "ADMIN" };
-    const setUserData = vi.fn();
-
-    const [isMenuOpen, setIsMenuOpen] = useState(isOpen);
-    return (
-      <UserDataContext value={{ userData, setUserData }}>
-        <MemoryRouter>
-          <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
-        </MemoryRouter>
-      </UserDataContext>
-    );
-  }
-
   test("mobile menu is closed", async () => {
     render(<NavbarWrapper />);
     const menuButton = await screen.findByRole("button", {
