@@ -100,7 +100,7 @@ describe("render Navbar depending on open menu state", () => {
     expect(menuButton).toBeInTheDocument();
 
     await userEvent.click(menuButton);
-    screen.debug(undefined, Infinity);
+
     const mobileMenu = await screen.findByText(/Close/i);
     expect(mobileMenu).toBeInTheDocument();
     expect(screen.queryByText("Menu")).not.toBeInTheDocument();
