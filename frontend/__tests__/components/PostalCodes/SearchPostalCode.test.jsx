@@ -107,8 +107,6 @@ describe("SearchPostalCode component - API interaction", () => {
     );
     expect(notification).toBeInTheDocument();
 
-    screen.debug(undefined, Infinity);
-
     const postalCode = await screen.findByText(/12345/i);
     const municipality = await screen.findByText(/Sarajevo/i);
 

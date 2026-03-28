@@ -10,6 +10,15 @@ import { Notifications } from "../../../src/components/Notifications";
 import { Navbar } from "../../../src/components/Navbar/Navbar";
 import userEvent from "@testing-library/user-event";
 
+function createUser(role = "ADMIN") {
+  return {
+    id: "1",
+    username: "Test User",
+    email: "test@example.com",
+    role,
+  };
+}
+
 vi.spyOn(globalThis, "fetch").mockResolvedValue({
   ok: true,
   json: async () => ({
@@ -77,8 +86,8 @@ describe("Render Navbar on root route", () => {
   });
 });
 
-function NavbarWrapper({ isOpen = false }) {
-  const userData = { id: "1", username: "Test User", role: "ADMIN" };
+function NavbarWrapper({ isOpen = false, role = "ADMIN" }) {
+  const userData = createUser(role);
   const setUserData = vi.fn();
 
   const [isMenuOpen, setIsMenuOpen] = useState(isOpen);
