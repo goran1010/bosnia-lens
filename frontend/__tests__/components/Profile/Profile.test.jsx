@@ -63,4 +63,34 @@ describe("Profile Component", () => {
     expect(usernameElement).toBeInTheDocument();
     expect(roleElement).toBeInTheDocument();
   });
+
+  test("displays contributor role when user role is CONTRIBUTOR", async () => {
+    const user = {
+      email: "contributor@example.com",
+      username: "contributor",
+      role: "CONTRIBUTOR",
+    };
+    render(<Wrapper initialUser={user} />);
+    const emailElement = await screen.findByText(/contributor@example.com/i);
+    const usernameElement = await screen.findByText("contributor");
+    const roleElement = await screen.findByText("CONTRIBUTOR");
+    expect(emailElement).toBeInTheDocument();
+    expect(usernameElement).toBeInTheDocument();
+    expect(roleElement).toBeInTheDocument();
+  });
+
+  test("displays admin role when user role is ADMIN", async () => {
+    const user = {
+      email: "admin@example.com",
+      username: "admin",
+      role: "ADMIN",
+    };
+    render(<Wrapper initialUser={user} />);
+    const emailElement = await screen.findByText(/admin@example.com/i);
+    const usernameElement = await screen.findByText("admin");
+    const roleElement = await screen.findByText("ADMIN");
+    expect(emailElement).toBeInTheDocument();
+    expect(usernameElement).toBeInTheDocument();
+    expect(roleElement).toBeInTheDocument();
+  });
 });
