@@ -168,9 +168,7 @@ describe("Profile Component handle logout", () => {
     expect(logoutButton).toBeInTheDocument();
     await user.click(logoutButton);
 
-    const notificationElement = await screen.findByText(
-      /An error occurred while logging out./i,
-    );
+    const notificationElement = await screen.findByText(/Unexpected error/i);
     expect(notificationElement).toBeInTheDocument();
     expect(consoleErrorSpy).toHaveBeenCalled();
   });

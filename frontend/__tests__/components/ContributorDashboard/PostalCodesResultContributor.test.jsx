@@ -147,7 +147,16 @@ describe("PostalCodesResultContributor component", () => {
   });
 
   test("shows error notification when edit fails", async () => {
-    fetchMock.mockRejectedValueOnce(new Error("Edit failed"));
+    fetchMock
+      .mockImplementationOnce(() =>
+        Promise.resolve(
+          createFetchResponse({
+            data: "mocked-csrf-token",
+            message: "CSRF token generated successfully",
+          }),
+        ),
+      )
+      .mockRejectedValueOnce(new Error("Edit failed"));
 
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
