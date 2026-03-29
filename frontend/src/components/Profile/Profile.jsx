@@ -78,7 +78,7 @@ function Profile() {
               }
               className="w-full px-6 py-3 font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
-              Request Contributor Access
+              Become a Contributor
             </Button>
           )}
 

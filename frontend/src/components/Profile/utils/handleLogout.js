@@ -4,7 +4,6 @@ import { getCsrfToken } from "../../utils/getCsrfToken";
 async function handleLogout(addNotification, navigate, setUserData) {
   try {
     const csrfToken = await getCsrfToken();
-
     if (!csrfToken) {
       addNotification({
         type: "error",
@@ -22,26 +21,26 @@ async function handleLogout(addNotification, navigate, setUserData) {
         "x-csrf-token": csrfToken,
       },
     });
-
     const result = await response.json();
-    if (!response.ok) {
+    if (response.ok) {
       addNotification({
-        type: "error",
-        message: result.error,
-        details: result.details?.[0]?.msg,
+        type: "success",
+        message: result.message,
       });
+      navigate("/");
+      setUserData(null);
       return;
     }
+
     addNotification({
-      type: "success",
-      message: result.message,
+      type: "error",
+      message: result?.error || "Failed to log out.",
+      details: result?.details?.[0]?.msg,
     });
-    navigate("/");
-    setUserData(null);
   } catch (err) {
     addNotification({
       type: "error",
-      message: "An error occurred while logging out.",
+      message: err?.message || "An error occurred while logging out.",
     });
     console.error(err);
   }

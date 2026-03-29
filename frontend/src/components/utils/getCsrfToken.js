@@ -1,15 +1,22 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 
 async function getCsrfToken() {
-  const csrfResponse = await fetch(`${currentUrl}/csrf-token`, {
-    mode: "cors",
-    credentials: "include",
-  });
+  try {
+    const csrfResponse = await fetch(`${currentUrl}/csrf-token`, {
+      mode: "cors",
+      credentials: "include",
+    });
 
-  if (!csrfResponse.ok) return null;
+    if (!csrfResponse.ok) {
+      return null;
+    }
 
-  const { data: csrfToken } = await csrfResponse.json();
-  return csrfToken;
+    const { data: csrfToken } = await csrfResponse.json();
+    return csrfToken;
+  } catch (error) {
+    console.error("Error fetching CSRF token:", error);
+    return Error("Failed to fetch CSRF token");
+  }
 }
 
 export { getCsrfToken };
