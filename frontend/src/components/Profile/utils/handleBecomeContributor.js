@@ -22,9 +22,8 @@ async function handleBecomeContributor(addNotification, setUserData) {
         "x-csrf-token": csrfToken,
       },
     });
-    let result;
+    const result = await response.json();
     if (response.ok) {
-      result = await response.json();
       setUserData(result.data);
       addNotification({
         type: "success",

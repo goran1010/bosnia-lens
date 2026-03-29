@@ -21,9 +21,8 @@ async function handleLogout(addNotification, navigate, setUserData) {
         "x-csrf-token": csrfToken,
       },
     });
-    let result;
+    const result = await response.json();
     if (response.ok) {
-      result = await response.json();
       addNotification({
         type: "success",
         message: result.message,

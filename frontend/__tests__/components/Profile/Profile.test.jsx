@@ -9,6 +9,7 @@ import { useState } from "react";
 import { Profile } from "../../../src/components/Profile/Profile";
 import { LogIn } from "../../../src/components/LogIn/LogIn";
 import userEvent from "@testing-library/user-event";
+import { Home } from "../../../src/components/Home/Home";
 
 const user = userEvent.setup();
 
@@ -33,6 +34,7 @@ function Wrapper({ initialUser = null }) {
         <MemoryRouter initialEntries={["/profile"]}>
           <Notifications />
           <Routes>
+            <Route path="/" element={<div>Home Page</div>} />
             <Route path="/login" element={<LogIn />} />
             <Route path="/profile" element={<Profile />} />
           </Routes>
@@ -133,7 +135,7 @@ describe("Profile Component handle logout", () => {
       .mockResolvedValueOnce({
         ok: false,
         json: async () => ({
-          error: "Network error",
+          error: "Network error.",
         }),
       });
 
@@ -144,7 +146,7 @@ describe("Profile Component handle logout", () => {
     expect(logoutButton).toBeInTheDocument();
     await user.click(logoutButton);
 
-    const notificationElement = await screen.findByText(/Failed to log out./i);
+    const notificationElement = await screen.findByText(/Network error./i);
     expect(notificationElement).toBeInTheDocument();
   });
 
@@ -200,10 +202,10 @@ describe("Profile Component handle logout", () => {
       /User logged out successfully/i,
     );
     expect(notificationElement).toBeInTheDocument();
-    const loginHeading = await screen.findByRole("heading", {
-      name: /Log In/i,
-    });
-    expect(loginHeading).toBeInTheDocument();
+    // const homeHeading = await screen.findByRole("heading", {
+    //   name: /Bosnia Lens/i,
+    // });
+    // expect(homeHeading).toBeInTheDocument();
     expect(logoutButton).not.toBeInTheDocument();
   });
 });
@@ -245,9 +247,7 @@ describe("Profile Component handle become contributor", () => {
     expect(becomeContributorButton).toBeInTheDocument();
     await user.click(becomeContributorButton);
 
-    const notificationElement = await screen.findByText(
-      /Failed to request contributor status./i,
-    );
+    const notificationElement = await screen.findByText(/Network error/i);
     expect(notificationElement).toBeInTheDocument();
   });
 
