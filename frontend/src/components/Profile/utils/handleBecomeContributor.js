@@ -22,20 +22,20 @@ async function handleBecomeContributor(addNotification, setUserData) {
         "x-csrf-token": csrfToken,
       },
     });
-
-    const result = await response.json();
-    if (!response.ok) {
+    let result;
+    if (response.ok) {
+      result = await response.json();
+      setUserData(result.data);
       addNotification({
-        type: "error",
-        message: result.error,
-        details: result.details?.[0]?.msg,
+        type: "success",
+        message: result.message,
       });
       return;
     }
-    setUserData(result.data);
     addNotification({
-      type: "success",
-      message: result.message,
+      type: "error",
+      message: result?.error || "Failed to request contributor status.",
+      details: result?.details?.[0]?.msg,
     });
   } catch (err) {
     addNotification({
