@@ -9,7 +9,6 @@ import { useState } from "react";
 import { Profile } from "../../../src/components/Profile/Profile";
 import { LogIn } from "../../../src/components/LogIn/LogIn";
 import userEvent from "@testing-library/user-event";
-import { Home } from "../../../src/components/Home/Home";
 
 const user = userEvent.setup();
 
