@@ -1,4 +1,4 @@
-import { describe, test, expect } from "vitest";
+import { describe, test, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { NotificationContext } from "../../../src/contextData/NotificationContext";
 import { UserDataContext } from "../../../src/contextData/UserDataContext";
@@ -8,6 +8,15 @@ import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import { Profile } from "../../../src/components/Profile/Profile";
 import { LogIn } from "../../../src/components/LogIn/LogIn";
+import userEvent from "@testing-library/user-event";
+
+const user = userEvent.setup();
+
+const fetchSpy = vi.spyOn(globalThis, "fetch");
+
+beforeEach(() => {
+  fetchSpy.mockReset();
+});
 
 function Wrapper({ initialUser = null }) {
   const [userData, setUserData] = useState(initialUser);
@@ -35,7 +44,6 @@ describe("Profile Component", () => {
       /You need to be logged in. Redirected to the login page./i,
     );
     const usernameElement = screen.queryByText(/Username/i);
-    screen.debug(undefined, Infinity);
     expect(usernameElement).toBeInTheDocument();
     expect(paragraphElement).toBeInTheDocument();
   });
@@ -56,7 +64,6 @@ describe("Profile Component", () => {
     };
     render(<Wrapper initialUser={user} />);
     const emailElement = await screen.findByText(/testuser@example.com/i);
-    screen.debug(undefined, Infinity);
     const usernameElement = await screen.findByText("testuser");
     const roleElement = await screen.findByText("USER");
     expect(emailElement).toBeInTheDocument();
@@ -93,4 +100,47 @@ describe("Profile Component", () => {
     expect(usernameElement).toBeInTheDocument();
     expect(roleElement).toBeInTheDocument();
   });
+});
+
+describe("Profile Component handle logout", () => {
+  test("handles logout failure due to missing CSRF token", async () => {
+    render(<Wrapper initialUser={{ username: "testuser" }} />);
+    const logoutButton = await screen.findByRole("button", {
+      name: /Log out/i,
+    });
+    expect(logoutButton).toBeInTheDocument();
+    await user.click(logoutButton);
+    const notificationElement = await screen.findByText(/invalid csrf token/i);
+    expect(notificationElement).toBeInTheDocument();
+  });
+
+  // test("handles logout correctly", async () => {
+  //   fetchSpy
+  //     .mockResolvedValueOnce({
+  //       ok: true,
+  //       json: async () => ({
+  //         message: "CSRF token generated successfully",
+  //         data: "some-csrf-token",
+  //       }),
+  //     })
+  //     .mockResolvedValueOnce({
+  //       ok: true,
+  //       json: async () => ({
+  //         message: "User logged out successfully",
+  //       }),
+  //     });
+
+  //   render(<Wrapper initialUser={{ username: "testuser" }} />);
+  //   const logoutButton = await screen.findByRole("button", {
+  //     name: /Log out/i,
+  //   });
+  //   expect(logoutButton).toBeInTheDocument();
+  //   await user.click(logoutButton);
+  //   screen.debug(undefined, Infinity);
+  //   const notificationElement = await screen.findByText(
+  //     /User logged out successfully/i,
+  //   );
+  //   expect(notificationElement).toBeInTheDocument();
+  //   expect(logoutButton).not.toBeInTheDocument();
+  // });
 });
