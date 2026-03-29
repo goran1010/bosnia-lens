@@ -1,4 +1,4 @@
-import { describe, test, expect, vi, beforeEach } from "vitest";
+import { describe, test, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { NotificationContext } from "../../../src/contextData/NotificationContext";
 import { UserDataContext } from "../../../src/contextData/UserDataContext";
@@ -12,11 +12,16 @@ import userEvent from "@testing-library/user-event";
 
 const user = userEvent.setup();
 
-const fetchSpy = vi.spyOn(globalThis, "fetch");
-
-beforeEach(() => {
-  fetchSpy.mockReset();
-});
+const fetchSpy = vi.spyOn(globalThis, "fetch").mockImplementation(() =>
+  Promise.resolve({
+    ok: true,
+    json: async () => ({
+      message: "default response",
+      data: null,
+    }),
+  }),
+);
+const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
 function Wrapper({ initialUser = null }) {
   const [userData, setUserData] = useState(initialUser);
@@ -110,37 +115,95 @@ describe("Profile Component handle logout", () => {
     });
     expect(logoutButton).toBeInTheDocument();
     await user.click(logoutButton);
-    const notificationElement = await screen.findByText(/invalid csrf token/i);
+    const notificationElement = await screen.findByText(
+      /Failed to retrieve CSRF token./i,
+    );
     expect(notificationElement).toBeInTheDocument();
   });
 
-  // test("handles logout correctly", async () => {
-  //   fetchSpy
-  //     .mockResolvedValueOnce({
-  //       ok: true,
-  //       json: async () => ({
-  //         message: "CSRF token generated successfully",
-  //         data: "some-csrf-token",
-  //       }),
-  //     })
-  //     .mockResolvedValueOnce({
-  //       ok: true,
-  //       json: async () => ({
-  //         message: "User logged out successfully",
-  //       }),
-  //     });
+  test("handles logout failure due to server error", async () => {
+    fetchSpy
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          message: "CSRF token generated successfully",
+          data: "some-csrf-token",
+        }),
+      })
+      .mockResolvedValueOnce({
+        ok: false,
+        json: async () => ({
+          error: "Network error",
+        }),
+      });
 
-  //   render(<Wrapper initialUser={{ username: "testuser" }} />);
-  //   const logoutButton = await screen.findByRole("button", {
-  //     name: /Log out/i,
-  //   });
-  //   expect(logoutButton).toBeInTheDocument();
-  //   await user.click(logoutButton);
-  //   screen.debug(undefined, Infinity);
-  //   const notificationElement = await screen.findByText(
-  //     /User logged out successfully/i,
-  //   );
-  //   expect(notificationElement).toBeInTheDocument();
-  //   expect(logoutButton).not.toBeInTheDocument();
-  // });
+    render(<Wrapper initialUser={{ username: "testuser" }} />);
+    const logoutButton = await screen.findByRole("button", {
+      name: /Log out/i,
+    });
+    expect(logoutButton).toBeInTheDocument();
+    await user.click(logoutButton);
+
+    const notificationElement = await screen.findByText(/Failed to log out./i);
+    expect(notificationElement).toBeInTheDocument();
+  });
+
+  test("handles logout failure due to unexpected error", async () => {
+    fetchSpy
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          message: "CSRF token generated successfully",
+          data: "some-csrf-token",
+        }),
+      })
+      .mockRejectedValueOnce(new Error("Unexpected error"));
+
+    render(<Wrapper initialUser={{ username: "testuser" }} />);
+    const logoutButton = await screen.findByRole("button", {
+      name: /Log out/i,
+    });
+    expect(logoutButton).toBeInTheDocument();
+    await user.click(logoutButton);
+
+    const notificationElement = await screen.findByText(
+      /An error occurred while logging out./i,
+    );
+    expect(notificationElement).toBeInTheDocument();
+    expect(consoleErrorSpy).toHaveBeenCalled();
+  });
+
+  test("handles logout correctly", async () => {
+    fetchSpy
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          message: "CSRF token generated successfully",
+          data: "some-csrf-token",
+        }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          message: "User logged out successfully",
+        }),
+      });
+
+    render(<Wrapper initialUser={{ username: "testuser" }} />);
+    const logoutButton = await screen.findByRole("button", {
+      name: /Log out/i,
+    });
+    expect(logoutButton).toBeInTheDocument();
+    await user.click(logoutButton);
+
+    const notificationElement = await screen.findByText(
+      /User logged out successfully/i,
+    );
+    expect(notificationElement).toBeInTheDocument();
+    const loginHeading = await screen.findByRole("heading", {
+      name: /Log In/i,
+    });
+    expect(loginHeading).toBeInTheDocument();
+    expect(logoutButton).not.toBeInTheDocument();
+  });
 });
