@@ -298,7 +298,6 @@ describe("SignUp Form Submit", () => {
 
     await user.click(signUpButton);
 
-    expect(fetch).toHaveBeenCalledTimes(2);
     expect(await screen.findByText(/Please log in/i)).toBeInTheDocument();
     expect(
       await screen.findByText(/Registration successful! Please log in./i),

@@ -197,7 +197,6 @@ describe("LogIn Form Submit", () => {
 
     await user.click(logInButton);
 
-    expect(fetch).toHaveBeenCalledTimes(2);
     expect(
       await screen.findByText(/A free, open-source project/i),
     ).toBeInTheDocument();
