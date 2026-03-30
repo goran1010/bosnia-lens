@@ -303,4 +303,42 @@ describe("SignUp Form Submit", () => {
       await screen.findByText(/Registration successful! Please log in./i),
     ).toBeInTheDocument();
   });
+
+  test("shows error message when network request throws", async () => {
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    vi.spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: async () => ({
+          message: "CSRF token generated successfully",
+          data: "123",
+        }),
+      })
+      .mockRejectedValueOnce(new Error("Network error"));
+
+    const {
+      usernameField,
+      emailField,
+      passwordField,
+      confirmPasswordField,
+      signUpButton,
+    } = createFormElements();
+
+    await user.type(usernameField, "new_user");
+    await user.type(emailField, "newemail@mail.com");
+    await user.type(passwordField, "Password123!");
+    await user.type(confirmPasswordField, "Password123!");
+
+    await user.click(signUpButton);
+
+    expect(
+      await screen.findByText(/An error occurred during registration/i),
+    ).toBeInTheDocument();
+
+    consoleErrorSpy.mockRestore();
+  });
 });

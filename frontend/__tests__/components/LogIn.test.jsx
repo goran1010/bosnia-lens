@@ -201,4 +201,34 @@ describe("LogIn Form Submit", () => {
       await screen.findByText(/A free, open-source project/i),
     ).toBeInTheDocument();
   });
+
+  test("shows error message when network request throws", async () => {
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    vi.spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: async () => ({
+          message: "CSRF token generated successfully",
+          data: "123",
+        }),
+      })
+      .mockRejectedValueOnce(new Error("Network error"));
+
+    const { logInButton, usernameField, passwordField } = createFormElements();
+
+    await user.type(usernameField, "existing_user");
+    await user.type(passwordField, "Password123!");
+
+    await user.click(logInButton);
+
+    expect(
+      await screen.findByText(/An error occurred while logging in/i),
+    ).toBeInTheDocument();
+
+    consoleErrorSpy.mockRestore();
+  });
 });

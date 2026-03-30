@@ -98,4 +98,61 @@ describe("PendingRequests Component", () => {
     expect(screen.getByText(/Jane Doe/i)).toBeInTheDocument();
     expect(screen.getByText(/jane.doe@example.com/i)).toBeInTheDocument();
   });
+
+  test("renders multiple pending requests with correct count", async () => {
+    const mockPendingRequests = [
+      { id: 1, username: "user1", email: "user1@example.com" },
+      { id: 2, username: "user2", email: "user2@example.com" },
+      { id: 3, username: "user3", email: "user3@example.com" },
+    ];
+    setupFetchMock({ pendingRequests: mockPendingRequests });
+
+    render(<Wrapper initialUser={{ role: "ADMIN" }} />);
+
+    await screen.findByText("user1");
+
+    expect(screen.getByLabelText(/pending requests count/i)).toHaveTextContent(
+      "3",
+    );
+    expect(screen.getByText("user1")).toBeInTheDocument();
+    expect(screen.getByText("user2")).toBeInTheDocument();
+    expect(screen.getByText("user3")).toBeInTheDocument();
+  });
+
+  test("shows no pending requests when fetch throws a network error", async () => {
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    fetchMock.mockImplementation((url) => {
+      if (String(url).includes("requested-contributors")) {
+        return Promise.reject(new Error("Network error"));
+      }
+      return Promise.resolve(
+        createFetchResponse({ data: [], message: "Success" }),
+      );
+    });
+
+    render(<Wrapper initialUser={{ role: "ADMIN" }} />);
+
+    const countBadge = await screen.findByLabelText(/pending requests count/i);
+    expect(countBadge).toHaveTextContent("0");
+    expect(screen.getByText(/No pending requests/i)).toBeInTheDocument();
+
+    consoleErrorSpy.mockRestore();
+  });
+
+  test("renders pending request with missing email without crashing", async () => {
+    const mockPendingRequests = [{ id: 1, username: "ghostuser" }];
+    setupFetchMock({ pendingRequests: mockPendingRequests });
+
+    render(<Wrapper initialUser={{ role: "ADMIN" }} />);
+
+    await screen.findByText(/ghostuser/i);
+
+    expect(screen.getByLabelText(/pending requests count/i)).toHaveTextContent(
+      "1",
+    );
+    expect(screen.getByText(/ghostuser/i)).toBeInTheDocument();
+  });
 });

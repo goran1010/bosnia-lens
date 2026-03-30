@@ -4,6 +4,11 @@ import { createMemoryRouter } from "react-router-dom";
 import { routes } from "../../../src/routes";
 import { RouterProvider } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
+import { beforeEach } from "vitest";
+
+beforeEach(() => {
+  fetchSpy.mockReset();
+});
 
 const user = userEvent.setup();
 

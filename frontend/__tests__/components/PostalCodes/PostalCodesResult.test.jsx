@@ -25,4 +25,38 @@ describe("PostalCodesResult component", () => {
     expect(code2).toBeInTheDocument();
     expect(city2).toBeInTheDocument();
   });
+
+  test("renders no results message when searchResult is null", () => {
+    render(<PostalCodesResult searchResult={null} />);
+    expect(screen.getByText(/No results to display/i)).toBeInTheDocument();
+  });
+
+  test("renders no results message when searchResult is undefined", () => {
+    render(<PostalCodesResult />);
+    expect(screen.getByText(/No results to display/i)).toBeInTheDocument();
+  });
+
+  test("renders a single result correctly", () => {
+    const mockResults = [
+      { code: "71000", city: "Sarajevo", post: "Main Post" },
+    ];
+    render(<PostalCodesResult searchResult={mockResults} />);
+    expect(screen.getByText("71000")).toBeInTheDocument();
+    expect(screen.getByText("Sarajevo")).toBeInTheDocument();
+    expect(screen.getByText("Main Post")).toBeInTheDocument();
+  });
+
+  test("renders result with null post field without crashing", () => {
+    const mockResults = [{ code: "71000", city: "Sarajevo", post: null }];
+    render(<PostalCodesResult searchResult={mockResults} />);
+    expect(screen.getByText("71000")).toBeInTheDocument();
+    expect(screen.getByText("Sarajevo")).toBeInTheDocument();
+  });
+
+  test("renders result with undefined post field without crashing", () => {
+    const mockResults = [{ code: "71000", city: "Sarajevo" }];
+    render(<PostalCodesResult searchResult={mockResults} />);
+    expect(screen.getByText("71000")).toBeInTheDocument();
+    expect(screen.getByText("Sarajevo")).toBeInTheDocument();
+  });
 });
