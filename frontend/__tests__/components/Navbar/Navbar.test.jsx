@@ -1,4 +1,4 @@
-import { test, describe, expect, vi } from "vitest";
+import { test, describe, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { UserDataContext } from "../../../src/contextData/UserDataContext";
@@ -19,12 +19,18 @@ function createUser(role = "ADMIN") {
   };
 }
 
-vi.spyOn(globalThis, "fetch").mockResolvedValue({
-  ok: true,
-  json: async () => ({
-    data: [{ id: 1, code: "mocked code" }],
-    message: "mocked message",
-  }),
+beforeEach(() => {
+  vi.spyOn(globalThis, "fetch").mockResolvedValue({
+    ok: true,
+    json: async () => ({
+      data: [{ id: 1, code: "mocked code" }],
+      message: "mocked message",
+    }),
+  });
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
 });
 
 describe("Render Navbar on root route", () => {

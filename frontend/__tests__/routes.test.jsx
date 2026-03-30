@@ -1,4 +1,4 @@
-import { test, describe, expect, vi } from "vitest";
+import { test, describe, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { routes } from "../src/routes";
@@ -13,12 +13,18 @@ vi.mock("../../src/customHooks/useWeatherCheck", () => ({
   },
 }));
 
-vi.spyOn(globalThis, "fetch").mockResolvedValue({
-  ok: true,
-  json: async () => ({
-    data: [{ id: 1, code: "mocked code" }],
-    message: "mocked message",
-  }),
+beforeEach(() => {
+  vi.spyOn(globalThis, "fetch").mockResolvedValue({
+    ok: true,
+    json: async () => ({
+      data: [{ id: 1, code: "mocked code" }],
+      message: "mocked message",
+    }),
+  });
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
 });
 
 describe("Loading components when visiting an address", () => {

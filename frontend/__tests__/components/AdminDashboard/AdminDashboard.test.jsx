@@ -1,4 +1,4 @@
-import { describe, test, expect, vi } from "vitest";
+import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { AdminDashboard } from "../../../src/components/AdminDashboard/AdminDashboard";
 import { NotificationContext } from "../../../src/contextData/NotificationContext";
@@ -8,12 +8,18 @@ import { Notifications } from "../../../src/components/Notifications";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 
-vi.spyOn(globalThis, "fetch").mockResolvedValue({
-  ok: true,
-  json: async () => ({
-    data: [{ id: 1, code: "mocked code" }],
-    message: "mocked message",
-  }),
+beforeEach(() => {
+  vi.spyOn(globalThis, "fetch").mockResolvedValue({
+    ok: true,
+    json: async () => ({
+      data: [{ id: 1, code: "mocked code" }],
+      message: "mocked message",
+    }),
+  });
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
 });
 
 function Wrapper({ initialUser = null }) {

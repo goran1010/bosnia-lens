@@ -1,4 +1,4 @@
-import { test, describe, expect, beforeEach, vi } from "vitest";
+import { test, describe, expect, beforeEach, afterEach, vi } from "vitest";
 import { SignUp } from "../../src/components/SignUp/SignUp";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
@@ -37,6 +37,10 @@ beforeEach(async () => {
   }
 
   render(<Wrapper />);
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
 });
 
 function createFormElements() {

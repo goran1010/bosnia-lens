@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeEach, vi } from "vitest";
+import { describe, test, expect, beforeEach, afterEach, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
@@ -45,6 +45,10 @@ beforeEach(async () => {
   }
 
   render(<Wrapper />);
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
 });
 
 describe("Render LogIn Component", () => {

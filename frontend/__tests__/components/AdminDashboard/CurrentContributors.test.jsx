@@ -1,4 +1,4 @@
-import { describe, test, expect, vi, beforeEach } from "vitest";
+import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { NotificationContext } from "../../../src/contextData/NotificationContext";
 
@@ -38,10 +38,13 @@ const setupFetchMock = ({ contributors = [], pendingRequests = [] } = {}) => {
   });
 };
 
-vi.spyOn(globalThis, "fetch").mockImplementation(fetchMock);
-
 beforeEach(() => {
+  vi.spyOn(globalThis, "fetch").mockImplementation(fetchMock);
   fetchMock.mockReset();
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
 });
 
 function Wrapper({ initialUser = null }) {

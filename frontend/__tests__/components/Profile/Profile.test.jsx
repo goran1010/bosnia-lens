@@ -1,4 +1,4 @@
-import { describe, test, expect, vi } from "vitest";
+import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { NotificationContext } from "../../../src/contextData/NotificationContext";
 import { UserDataContext } from "../../../src/contextData/UserDataContext";
@@ -12,16 +12,26 @@ import userEvent from "@testing-library/user-event";
 
 const user = userEvent.setup();
 
-const fetchSpy = vi.spyOn(globalThis, "fetch").mockImplementation(() =>
-  Promise.resolve({
-    ok: true,
-    json: async () => ({
-      message: "default response",
-      data: null,
+let fetchSpy;
+let consoleErrorSpy;
+
+beforeEach(() => {
+  fetchSpy = vi.spyOn(globalThis, "fetch").mockImplementation(() =>
+    Promise.resolve({
+      ok: true,
+      json: async () => ({
+        message: "default response",
+        data: null,
+      }),
     }),
-  }),
-);
-const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+  );
+
+  consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 function Wrapper({ initialUser = null }) {
   const [userData, setUserData] = useState(initialUser);
