@@ -32,6 +32,11 @@ function Root() {
     longWait,
   );
 
+  console.log("Root component rendered with userData:", userData);
+  console.log("Loading state:", loading);
+  console.log("Long wait state:", longWait);
+  console.log("Server is down state:", serverIsDown);
+
   try {
     if (longWait || serverIsDown) {
       return <LongWaitInfo serverIsDown={serverIsDown} />;

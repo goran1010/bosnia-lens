@@ -38,12 +38,11 @@ function useStatusCheck(setLoading, notificationValue, longWait) {
       }
     }
     if (!longWait) {
-      // Need to add a slight delay before checking the server status to give it some time to wake up
-      // and avoid unnecessary error notifications
+      // Need to add a slight delay before checking the server status to avoid race conditions ?!
       // To-Do : Implement a more robust solution for this
       setTimeout(() => {
         checkLogin();
-      }, 500);
+      }, 100);
     }
   }, [addNotification, setLoading, longWait]);
 

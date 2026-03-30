@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 const URL = import.meta.env.VITE_BACKEND_URL;
-const ALLOWED_ATTEMPTS = 30;
-const DELAY_BETWEEN_ATTEMPTS = 2000;
+const ALLOWED_ATTEMPTS = import.meta.env.VITE_ALLOWED_ATTEMPTS_TO_WAKE_UP;
+const DELAY_BETWEEN_ATTEMPTS = import.meta.env
+  .VITE_DELAY_BETWEEN_WAKE_UP_ATTEMPTS;
 
 function useServerWakeUp({ setLongWait, setServerIsDown }) {
   useEffect(() => {
