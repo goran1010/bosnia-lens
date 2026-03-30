@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 const URL = import.meta.env.VITE_BACKEND_URL;
-const ALLOWED_ATTEMPTS = 30;
-const DELAY_BETWEEN_ATTEMPTS = 2000;
+const ALLOWED_ATTEMPTS = 60;
+const DELAY_BETWEEN_ATTEMPTS = 1000;
+const LONG_WAIT_TIME = 2000;
 
 function useServerWakeUp({ setLongWait, setServerIsDown }) {
   useEffect(() => {
@@ -9,7 +10,7 @@ function useServerWakeUp({ setLongWait, setServerIsDown }) {
     let numberOfAttempts = 0;
     const longWaitTimer = setTimeout(() => {
       setLongWait(true);
-    }, 4000);
+    }, LONG_WAIT_TIME);
 
     async function checkServer() {
       if (numberOfAttempts >= ALLOWED_ATTEMPTS) {
@@ -38,7 +39,7 @@ function useServerWakeUp({ setLongWait, setServerIsDown }) {
         setLongWait(false);
         clearTimeout(longWaitTimer);
       } catch (err) {
-        console.error("Error waking up server:", err);
+        console.error(err);
         setTimeout(() => {
           numberOfAttempts++;
           checkServer();
