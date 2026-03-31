@@ -15,7 +15,7 @@ async function getCsrfToken() {
     return csrfToken;
   } catch (error) {
     console.error("Error fetching CSRF token:", error);
-    return Error("Failed to fetch CSRF token");
+    throw Error("Failed to fetch CSRF token");
   }
 }
 
