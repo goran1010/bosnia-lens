@@ -7,6 +7,8 @@ import { RouterProvider } from "react-router-dom";
 
 const user = userEvent.setup();
 
+vi.spyOn(console, "warn").mockImplementation(() => {});
+
 const router = createMemoryRouter(routes, {
   initialEntries: ["/non-existent-route"],
 });

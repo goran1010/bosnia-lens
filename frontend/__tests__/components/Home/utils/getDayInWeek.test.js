@@ -1,5 +1,7 @@
-import { describe, test, expect } from "vitest";
+import { describe, test, expect, vi } from "vitest";
 import { getDayInWeek } from "../../../../src/components/Home/utils/getDayInWeek";
+
+vi.spyOn(console, "error").mockImplementation(() => {});
 
 describe("getDayInWeek", () => {
   test("returns correct day of the week for a valid date", () => {
