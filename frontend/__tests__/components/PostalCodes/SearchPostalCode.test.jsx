@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeEach, vi } from "vitest";
+import { describe, test, expect, beforeEach, afterEach, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { PostalCodes } from "../../../src/components/PostalCodes/PostalCodes";
@@ -11,16 +11,24 @@ import userEvent from "@testing-library/user-event";
 
 const user = userEvent.setup();
 
-vi.spyOn(globalThis, "fetch").mockImplementation(() =>
-  Promise.resolve({
-    ok: true,
-    json: () =>
-      Promise.resolve({
-        data: [{ id: 1, code: "12345", city: "Sarajevo" }],
-        message: "Postal codes retrieved successfully.",
-      }),
-  }),
-);
+let fetchSpy;
+
+beforeEach(() => {
+  fetchSpy = vi.spyOn(globalThis, "fetch").mockImplementation(() =>
+    Promise.resolve({
+      ok: true,
+      json: () =>
+        Promise.resolve({
+          data: [{ id: 1, code: "12345", city: "Sarajevo" }],
+          message: "Postal codes retrieved successfully.",
+        }),
+    }),
+  );
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 function Wrapper({ initialUser = null }) {
   const [userData, setUserData] = useState(initialUser);
@@ -43,7 +51,6 @@ function Wrapper({ initialUser = null }) {
 describe("SearchPostalCode component", () => {
   beforeEach(() => {
     render(<Wrapper initialUser={null} />);
-    vi.clearAllMocks();
   });
 
   test("renders search input and label", () => {
@@ -93,7 +100,6 @@ describe("SearchPostalCode component", () => {
 describe("SearchPostalCode component - API interaction", () => {
   beforeEach(() => {
     render(<Wrapper initialUser={null} />);
-    vi.clearAllMocks();
   });
 
   test("displays success notification on successful search", async () => {
@@ -115,7 +121,7 @@ describe("SearchPostalCode component - API interaction", () => {
   });
 
   test("displays error notification on failed search", async () => {
-    vi.spyOn(globalThis, "fetch").mockImplementationOnce(() =>
+    fetchSpy.mockImplementationOnce(() =>
       Promise.resolve({
         ok: false,
         json: () =>

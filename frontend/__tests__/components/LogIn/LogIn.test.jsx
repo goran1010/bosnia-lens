@@ -1,14 +1,14 @@
-import { describe, test, expect, beforeEach, vi } from "vitest";
+import { describe, test, expect, beforeEach, afterEach, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
-import { NotificationContext } from "../../src/contextData/NotificationContext";
-import { LogIn } from "../../src/components/LogIn/LogIn";
-import { Home } from "../../src/components/Home/Home";
+import { NotificationContext } from "../../../src/contextData/NotificationContext";
+import { LogIn } from "../../../src/components/LogIn/LogIn";
+import { Home } from "../../../src/components/Home/Home";
 import { useState } from "react";
-import { UserDataContext } from "../../src/contextData/UserDataContext";
-import { useNotification } from "../../src/customHooks/useNotification";
-import { Notifications } from "../../src/components/Notifications";
+import { UserDataContext } from "../../../src/contextData/UserDataContext";
+import { useNotification } from "../../../src/customHooks/useNotification";
+import { Notifications } from "../../../src/components/Notifications";
 
 vi.mock("../src/components/utils/getCsrfToken", () => ({
   getCsrfToken: vi.fn().mockResolvedValue("mocked-csrf-token"),
@@ -45,6 +45,10 @@ beforeEach(async () => {
   }
 
   render(<Wrapper />);
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
 });
 
 describe("Render LogIn Component", () => {
@@ -200,5 +204,35 @@ describe("LogIn Form Submit", () => {
     expect(
       await screen.findByText(/A free, open-source project/i),
     ).toBeInTheDocument();
+  });
+
+  test("shows error message when network request throws", async () => {
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    vi.spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: async () => ({
+          message: "CSRF token generated successfully",
+          data: "123",
+        }),
+      })
+      .mockRejectedValueOnce(new Error("Network error"));
+
+    const { logInButton, usernameField, passwordField } = createFormElements();
+
+    await user.type(usernameField, "existing_user");
+    await user.type(passwordField, "Password123!");
+
+    await user.click(logInButton);
+
+    expect(
+      await screen.findByText(/An error occurred while logging in/i),
+    ).toBeInTheDocument();
+
+    consoleErrorSpy.mockRestore();
   });
 });

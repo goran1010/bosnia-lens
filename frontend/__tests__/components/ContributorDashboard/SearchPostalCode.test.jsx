@@ -1,4 +1,4 @@
-import { describe, test, expect, vi, beforeEach } from "vitest";
+import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { ContributorDashboard } from "../../../src/components/ContributorDashboard/ContributorDashboard";
@@ -38,8 +38,6 @@ const createFetchResponse = (result, ok = true) => ({
 });
 
 const fetchMock = vi.fn();
-
-vi.spyOn(globalThis, "fetch").mockImplementation(fetchMock);
 
 const setupFetchMock = () => {
   fetchMock.mockReset();
@@ -106,6 +104,14 @@ const setupFetchMock = () => {
     );
   });
 };
+
+beforeEach(() => {
+  vi.spyOn(globalThis, "fetch").mockImplementation(fetchMock);
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 describe("SearchPostalCode component", () => {
   beforeEach(async () => {

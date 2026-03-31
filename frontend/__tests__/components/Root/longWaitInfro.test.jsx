@@ -9,6 +9,9 @@ describe("LongWaitInfo component", () => {
       /Getting response from the server is taking longer than expected/i,
     );
     expect(message).toBeInTheDocument();
+    expect(
+      screen.queryByText(/Server can't be reached after multiple attempts/i),
+    ).not.toBeInTheDocument();
   });
 
   test("renders server down message when server is down", () => {
@@ -17,5 +20,19 @@ describe("LongWaitInfo component", () => {
       /Server can't be reached after multiple attempts/i,
     );
     expect(message).toBeInTheDocument();
+    expect(
+      screen.queryByText(
+        /Getting response from the server is taking longer than expected/i,
+      ),
+    ).not.toBeInTheDocument();
+  });
+
+  test("falls back to long wait message when serverIsDown prop is omitted", () => {
+    render(<LongWaitInfo />);
+    expect(
+      screen.getByText(
+        /Getting response from the server is taking longer than expected/i,
+      ),
+    ).toBeInTheDocument();
   });
 });

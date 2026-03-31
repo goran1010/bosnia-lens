@@ -1,4 +1,4 @@
-import { describe, test, expect, vi, beforeEach } from "vitest";
+import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { NotificationContext } from "../../../src/contextData/NotificationContext";
 import { UserDataContext } from "../../../src/contextData/UserDataContext";
@@ -62,8 +62,6 @@ const setupFetchMock = ({
   });
 };
 
-vi.spyOn(globalThis, "fetch").mockImplementation(fetchMock);
-
 import { AdminDashboard } from "../../../src/components/AdminDashboard/AdminDashboard";
 import { useNotification } from "../../../src/customHooks/useNotification";
 import { Notifications } from "../../../src/components/Notifications";
@@ -89,8 +87,12 @@ function Wrapper({ initialUser = null }) {
 }
 
 beforeEach(() => {
-  vi.clearAllMocks();
+  vi.spyOn(globalThis, "fetch").mockImplementation(fetchMock);
   fetchMock.mockReset();
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
 });
 
 describe("AdminForm component rendering", () => {

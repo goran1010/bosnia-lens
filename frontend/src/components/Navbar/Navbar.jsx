@@ -3,7 +3,6 @@ import { Status } from "./Status";
 import { useContext } from "react";
 import { UserDataContext } from "../../contextData/UserDataContext";
 import { useTheme } from "../../utils/useTheme";
-import { handleTheme } from "../../utils/handleTheme";
 import { Select } from "../sharedComponents/Select";
 
 function Navbar({ isMenuOpen, setIsMenuOpen }) {
@@ -20,7 +19,7 @@ function Navbar({ isMenuOpen, setIsMenuOpen }) {
           defaultValue={theme}
           name="theme-switcher"
           id="theme-switcher"
-          onChange={(event) => handleTheme(event, setMode)}
+          onChange={(e) => setMode(e.target.value)}
         >
           <option className="font-bold" value="system">
             system

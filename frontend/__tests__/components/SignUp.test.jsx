@@ -1,4 +1,4 @@
-import { test, describe, expect, beforeEach, vi } from "vitest";
+import { test, describe, expect, beforeEach, afterEach, vi } from "vitest";
 import { SignUp } from "../../src/components/SignUp/SignUp";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
@@ -37,6 +37,10 @@ beforeEach(async () => {
   }
 
   render(<Wrapper />);
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
 });
 
 function createFormElements() {
@@ -302,5 +306,43 @@ describe("SignUp Form Submit", () => {
     expect(
       await screen.findByText(/Registration successful! Please log in./i),
     ).toBeInTheDocument();
+  });
+
+  test("shows error message when network request throws", async () => {
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    vi.spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: async () => ({
+          message: "CSRF token generated successfully",
+          data: "123",
+        }),
+      })
+      .mockRejectedValueOnce(new Error("Network error"));
+
+    const {
+      usernameField,
+      emailField,
+      passwordField,
+      confirmPasswordField,
+      signUpButton,
+    } = createFormElements();
+
+    await user.type(usernameField, "new_user");
+    await user.type(emailField, "newemail@mail.com");
+    await user.type(passwordField, "Password123!");
+    await user.type(confirmPasswordField, "Password123!");
+
+    await user.click(signUpButton);
+
+    expect(
+      await screen.findByText(/An error occurred during registration/i),
+    ).toBeInTheDocument();
+
+    consoleErrorSpy.mockRestore();
   });
 });

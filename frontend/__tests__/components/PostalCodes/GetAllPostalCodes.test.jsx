@@ -203,4 +203,37 @@ describe("GetAllPostalCodes Component", () => {
       consoleErrorSpy.mockRestore();
     });
   });
+
+  describe("Race condition prevention", () => {
+    test("button is disabled when loading prop is true", () => {
+      render(
+        <NotificationContext value={{ addNotification: mockAddNotification }}>
+          <GetAllPostalCodes
+            setSearchResult={mockSetSearchResult}
+            setLoading={mockSetLoading}
+            loading={true}
+          />
+        </NotificationContext>,
+      );
+
+      expect(screen.getByRole("button")).toBeDisabled();
+    });
+
+    test("does not submit when button is disabled during loading", async () => {
+      render(
+        <NotificationContext value={{ addNotification: mockAddNotification }}>
+          <GetAllPostalCodes
+            setSearchResult={mockSetSearchResult}
+            setLoading={mockSetLoading}
+            loading={true}
+          />
+        </NotificationContext>,
+      );
+
+      const button = screen.getByRole("button");
+      await user.click(button);
+
+      expect(fetchSpy).not.toHaveBeenCalled();
+    });
+  });
 });

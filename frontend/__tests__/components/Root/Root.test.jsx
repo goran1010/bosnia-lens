@@ -1,15 +1,39 @@
-import { describe, test, expect, vi } from "vitest";
+import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { createMemoryRouter } from "react-router-dom";
 import { routes } from "../../../src/routes";
 import { RouterProvider } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
+let fetchSpy;
+
+beforeEach(() => {
+  fetchSpy = vi.spyOn(globalThis, "fetch");
+  vi.spyOn(console, "error").mockImplementation(() => {});
+  fetchSpy.mockImplementation((url) => {
+    if (String(url).endsWith("/api")) {
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({
+          message: "Server is LIVE",
+          data: null,
+        }),
+      });
+    }
+
+    return Promise.resolve({
+      ok: false,
+      json: async () => ({
+        error: "User not authenticated.",
+      }),
+    });
+  });
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 const user = userEvent.setup();
-
-const fetchSpy = vi.spyOn(globalThis, "fetch");
-
-vi.spyOn(console, "error").mockImplementation(() => {});
 
 function renderRoot() {
   const router = createMemoryRouter(routes, {
@@ -20,18 +44,6 @@ function renderRoot() {
 }
 
 describe("Root component", () => {
-  fetchSpy.mockImplementation((url) => {
-    if (url.endsWith("/api")) {
-      return Promise.resolve({
-        ok: true,
-        json: async () => ({
-          message: "Server is LIVE",
-          data: null,
-        }),
-      });
-    }
-  });
-
   test("renders Home heading if server is live", async () => {
     renderRoot();
     const homeHeading = await screen.findByRole("heading", {
@@ -87,18 +99,6 @@ describe("Root component", () => {
 });
 
 describe("Root component - Menu interaction", () => {
-  fetchSpy.mockImplementation((url) => {
-    if (url.endsWith("/api")) {
-      return Promise.resolve({
-        ok: true,
-        json: async () => ({
-          message: "Server is LIVE",
-          data: null,
-        }),
-      });
-    }
-  });
-
   test("closes menu when main content is clicked", async () => {
     fetchSpy.mockImplementation(() => {
       return Promise.resolve({
