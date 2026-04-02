@@ -25,17 +25,17 @@ function PendingRequests({ setCurrentContributors }) {
           pendingRequests.map((user) => (
             <li
               key={user.id}
-              className="flex items-center flex-wrap justify-between gap-3 p-3 rounded-lg border border-gray-200 bg-gray-50 transition-colors duration-200 hover:bg-gray-100 dark:border-gray-500 dark:bg-gray-600 dark:hover:bg-gray-500"
+              className="flex sm:items-center flex-wrap flex-col justify-between gap-3 p-3 rounded-lg border border-gray-200 bg-gray-50 transition-colors duration-200 hover:bg-gray-100 dark:border-gray-500 dark:bg-gray-600 dark:hover:bg-gray-500"
             >
-              <div className="flex-1 flex flex-col sm:flex-row sm:items-center sm:gap-2 min-w-0">
-                <span className="font-bold text-gray-800 text-lg dark:text-white break-all">
+              <div className="flex-1 flex flex-col sm:flex-row sm:items-center sm:gap-2 min-w-0 lg:flex-col">
+                <span className="font-bold text-gray-800 text-lg dark:text-white break-all text-center">
                   {user.username}
                 </span>
-                <span className="text-gray-600 dark:text-gray-200 break-all">
+                <span className="text-gray-600 dark:text-gray-200 break-all text-center">
                   {user.email}
                 </span>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <Button
                   className="bg-green-600 px-3 py-2 text-sm hover:bg-green-700 disabled:bg-green-500 disabled:text-gray-200"
                   onClick={() => {
