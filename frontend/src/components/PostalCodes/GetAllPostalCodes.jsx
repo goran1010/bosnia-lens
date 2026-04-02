@@ -48,7 +48,7 @@ function GetAllPostalCodes({ setSearchResult, loading, setLoading }) {
       <Button
         type="submit"
         disabled={loading}
-        className=" bg-yellow-600 hover:bg-yellow-700 disabled:bg-yellow-500 disabled:text-gray-200"
+        className="bg-yellow-600 hover:bg-yellow-700 text-white disabled:bg-yellow-500 disabled:text-gray-200"
       >
         <div className="h-full w-full flex justify-center items-center absolute">
           {loading && <Spinner />}

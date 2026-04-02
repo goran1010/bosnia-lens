@@ -71,6 +71,7 @@ function LogInForm({ loading, setLoading }) {
           }
           type="submit"
           disabled={loading}
+          className="text-white"
         >
           <div className="h-full w-full flex justify-center items-center absolute">
             {loading && <Spinner />}

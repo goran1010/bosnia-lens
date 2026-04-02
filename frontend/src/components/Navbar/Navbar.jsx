@@ -17,7 +17,7 @@ function Navbar({
   const { userData } = useContext(UserDataContext);
 
   return (
-    <nav className="relative px-2 bg-gray-300 w-full dark:bg-gray-800 dark:text-white font-bold grid grid-cols-3 lg:flex lg:justify-between items-center gap-2">
+    <nav className="relative px-2 bg-gray-300 w-full dark:bg-gray-800 dark:text-white font-bold grid grid-cols-3 lg:flex lg:justify-between items-center gap-2 transition transform">
       <div className="relative">
         <Button
           className="bg-gray-300 dark:bg-gray-800 border border-gray-500 dark:border-gray-400 text-gray-800 dark:text-white min-w-20"
@@ -29,7 +29,12 @@ function Navbar({
         >
           {isThemeMenuOpen ? "Choose" : "Theme"}
         </Button>
-        {isThemeMenuOpen && <ThemeSwitcher setMode={setMode} />}
+        {isThemeMenuOpen && (
+          <ThemeSwitcher
+            setMode={setMode}
+            setThemeMenuOpen={setThemeMenuOpen}
+          />
+        )}
       </div>
       <div className="flex lg:hidden justify-center items-center py-2">
         <Button

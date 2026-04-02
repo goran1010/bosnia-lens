@@ -37,7 +37,7 @@ function PendingRequests({ setCurrentContributors }) {
               </div>
               <div className="flex flex-col sm:flex-row gap-2">
                 <Button
-                  className="bg-green-600 px-3 py-2 text-sm hover:bg-green-700 disabled:bg-green-500 disabled:text-gray-200"
+                  className="bg-green-600 px-3 py-2 text-sm text-white hover:bg-green-700 disabled:bg-green-500 disabled:text-gray-200"
                   onClick={() => {
                     handleConfirm(
                       user,
@@ -50,7 +50,7 @@ function PendingRequests({ setCurrentContributors }) {
                   Confirm
                 </Button>
                 <Button
-                  className="bg-red-600 px-3 py-2 text-sm hover:bg-red-700 disabled:bg-red-500 disabled:text-gray-200"
+                  className="bg-red-600 px-3 py-2 text-sm text-white hover:bg-red-700 disabled:bg-red-500 disabled:text-gray-200"
                   onClick={() => {
                     handleDecline(user, setPendingRequests, addNotification);
                   }}

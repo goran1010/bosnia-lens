@@ -29,7 +29,7 @@ const PostalCodeRow = memo(({ result, onChange, onSubmit, onDelete }) => {
         aria-label={`Post office for postal code ${result.code}`}
       />
       <div>
-        <Button type="submit" className="w-full py-2">
+        <Button type="submit" className="w-full py-2 text-white">
           Save
         </Button>
       </div>
@@ -38,7 +38,7 @@ const PostalCodeRow = memo(({ result, onChange, onSubmit, onDelete }) => {
           type="button"
           data-postalcode={result.code}
           onClick={onDelete}
-          className="w-full bg-red-600 py-2 hover:bg-red-700"
+          className="w-full bg-red-600 py-2 text-white hover:bg-red-700"
         >
           Delete
         </Button>
