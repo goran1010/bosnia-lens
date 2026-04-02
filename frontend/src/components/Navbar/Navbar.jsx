@@ -4,12 +4,11 @@ import { useContext } from "react";
 import { UserDataContext } from "../../contextData/UserDataContext";
 import { useTheme } from "../../utils/useTheme";
 import { Select } from "../sharedComponents/Select";
+import { MobileMenu } from "./MobileMenu";
 
 function Navbar({ isMenuOpen, setIsMenuOpen }) {
   const { theme, setMode } = useTheme();
   const { userData } = useContext(UserDataContext);
-
-  const closeMenu = () => setIsMenuOpen(false);
 
   return (
     <nav className="relative px-2 bg-gray-300 w-full dark:bg-gray-800 dark:text-white font-bold grid grid-cols-3 lg:flex lg:justify-between items-center">
@@ -104,72 +103,7 @@ function Navbar({ isMenuOpen, setIsMenuOpen }) {
       </div>
 
       {isMenuOpen && (
-        <div
-          id="mobile-menu"
-          className="z-10 lg:hidden pb-2 absolute top-full bg-gray-200 w-full dark:bg-gray-800 dark:text-white left-0"
-        >
-          <ul className="flex flex-col items-center">
-            <li>
-              <Link
-                className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
-                to="/"
-                onClick={closeMenu}
-              >
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700 text-nowrap"
-                to="/postal-codes"
-                onClick={closeMenu}
-              >
-                Postal Codes
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
-                to="/holidays"
-                onClick={closeMenu}
-              >
-                Holidays
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
-                to="/universities"
-                onClick={closeMenu}
-              >
-                Universities
-              </Link>
-            </li>
-            {(userData?.role === "ADMIN" ||
-              userData?.role === "CONTRIBUTOR") && (
-              <li>
-                <Link
-                  className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
-                  to="/contributor-dashboard"
-                  onClick={closeMenu}
-                >
-                  Contributor
-                </Link>
-              </li>
-            )}
-            {userData?.role === "ADMIN" && (
-              <li>
-                <Link
-                  className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
-                  to="/admin-dashboard"
-                  onClick={closeMenu}
-                >
-                  Admin
-                </Link>
-              </li>
-            )}
-          </ul>
-        </div>
+        <MobileMenu setIsMenuOpen={setIsMenuOpen} userData={userData} />
       )}
       <div
         className="flex justify-end items-center"
