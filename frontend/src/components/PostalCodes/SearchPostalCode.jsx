@@ -75,7 +75,7 @@ function SearchPostalCode({ setSearchResult, loading, setLoading }) {
             checkPostalCodesValidity(searchInput);
           }}
           disabled={loading}
-          className="sm:w-auto "
+          className="sm:w-auto text-white"
         >
           <div className="h-full w-full flex justify-center items-center absolute">
             {loading && <Spinner />}

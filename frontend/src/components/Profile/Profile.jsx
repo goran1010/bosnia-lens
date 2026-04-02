@@ -76,7 +76,7 @@ function Profile() {
               onClick={() =>
                 handleBecomeContributor(addNotification, setUserData)
               }
-              className="w-full px-6 py-3 font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="w-full px-6 py-3 text-white font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               Become a Contributor
             </Button>
@@ -84,7 +84,7 @@ function Profile() {
 
           <Button
             onClick={() => handleLogout(addNotification, navigate, setUserData)}
-            className="bg-red-600 px-6 py-3 font-semibold shadow-md hover:bg-red-700 disabled:bg-red-500 disabled:text-gray-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+            className="bg-red-600 px-6 py-3 text-white font-semibold shadow-md hover:bg-red-700 disabled:bg-red-500 disabled:text-gray-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
           >
             Log Out
           </Button>

@@ -14,6 +14,7 @@ import { useServerWakeUp } from "./customHooks/useServerWakeUp";
 
 function Root() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isThemeMenuOpen, setThemeMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [longWait, setLongWait] = useState(false);
   const { notificationValue } = useNotification();
@@ -46,11 +47,19 @@ function Root() {
     >
       <UserDataContext value={{ userData, setUserData }}>
         <>
-          <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+          <Navbar
+            isMenuOpen={isMenuOpen}
+            setIsMenuOpen={setIsMenuOpen}
+            isThemeMenuOpen={isThemeMenuOpen}
+            setThemeMenuOpen={setThemeMenuOpen}
+          />
           <Notifications />
           <main
             className="flex-1 dark:bg-gray-900 dark:text-white flex flex-col items-center justify-center px-[5%] lg:px-[10%] xl:px-[15%] 2xl:px-[20%]"
-            onClick={() => isMenuOpen && setIsMenuOpen(false)}
+            onClick={() => {
+              isMenuOpen && setIsMenuOpen(false);
+              isThemeMenuOpen && setThemeMenuOpen(false);
+            }}
           >
             {loading ? <Spinner /> : <Outlet />}
           </main>

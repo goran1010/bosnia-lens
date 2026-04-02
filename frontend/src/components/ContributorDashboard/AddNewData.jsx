@@ -25,7 +25,11 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
 
   return (
     <form className="relative flex flex-col justify-center items-center gap-2 p-2">
-      <Button type="button" onClick={() => setIsOpen(!isOpen)}>
+      <Button
+        type="button"
+        className="text-white"
+        onClick={() => setIsOpen(!isOpen)}
+      >
         {isOpen ? "Close form" : "Add new data"}
       </Button>
       {isOpen && (
@@ -77,6 +81,7 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
               }
               type="button"
               disabled={loading}
+              className="text-white"
             >
               <div className="h-full flex justify-center items-center absolute">
                 {loading && <Spinner />}
