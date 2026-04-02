@@ -9,7 +9,7 @@ function MobileMenu({ setIsMenuOpen, userData }) {
       <ul className="flex flex-col items-center">
         <li>
           <Link
-            className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
+            className="block p-2 hover:bg-gray-400 dark:hover:bg-gray-700"
             to="/"
             onClick={() => setIsMenuOpen(false)}
           >
@@ -18,7 +18,7 @@ function MobileMenu({ setIsMenuOpen, userData }) {
         </li>
         <li>
           <Link
-            className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700 text-nowrap"
+            className="block p-2 hover:bg-gray-400 dark:hover:bg-gray-700 text-nowrap"
             to="/postal-codes"
             onClick={() => setIsMenuOpen(false)}
           >
@@ -27,7 +27,7 @@ function MobileMenu({ setIsMenuOpen, userData }) {
         </li>
         <li>
           <Link
-            className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
+            className="block p-2 hover:bg-gray-400 dark:hover:bg-gray-700"
             to="/holidays"
             onClick={() => setIsMenuOpen(false)}
           >
@@ -36,7 +36,7 @@ function MobileMenu({ setIsMenuOpen, userData }) {
         </li>
         <li>
           <Link
-            className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
+            className="block p-2 hover:bg-gray-400 dark:hover:bg-gray-700"
             to="/universities"
             onClick={() => setIsMenuOpen(false)}
           >
@@ -46,7 +46,7 @@ function MobileMenu({ setIsMenuOpen, userData }) {
         {(userData?.role === "ADMIN" || userData?.role === "CONTRIBUTOR") && (
           <li>
             <Link
-              className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
+              className="block p-2 hover:bg-gray-400 dark:hover:bg-gray-700"
               to="/contributor-dashboard"
               onClick={() => setIsMenuOpen(false)}
             >
@@ -57,7 +57,7 @@ function MobileMenu({ setIsMenuOpen, userData }) {
         {userData?.role === "ADMIN" && (
           <li>
             <Link
-              className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
+              className="block p-2 hover:bg-gray-400 dark:hover:bg-gray-700"
               to="/admin-dashboard"
               onClick={() => setIsMenuOpen(false)}
             >
