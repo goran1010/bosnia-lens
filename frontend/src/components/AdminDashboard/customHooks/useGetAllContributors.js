@@ -26,7 +26,7 @@ function useGetAllContributors() {
           setCurrentContributors(result.data);
           addNotification({
             type: "success",
-            message: "Fetched current contributors successfully.",
+            message: result.message,
           });
           return;
         }
@@ -38,7 +38,7 @@ function useGetAllContributors() {
       } catch (error) {
         addNotification({
           type: "error",
-          message: "Failed to fetch current contributors.",
+          message: "Error fetching current contributors.",
         });
         console.error("Error fetching current contributors:", error);
       }

@@ -25,7 +25,7 @@ async function handleDecline(user, setPendingRequests, addNotification) {
         credentials: "include",
       },
     );
-    const data = await response.json();
+    const result = await response.json();
 
     if (response.ok) {
       setPendingRequests((prev) =>
@@ -33,19 +33,19 @@ async function handleDecline(user, setPendingRequests, addNotification) {
       );
       addNotification({
         type: "success",
-        message: `User ${user.username}'s request declined.`,
+        message: result.message,
       });
       return;
     }
     addNotification({
       type: "error",
-      message: data.error,
-      details: data.details?.[0]?.msg,
+      message: result.error,
+      details: result.details?.[0]?.msg,
     });
   } catch (error) {
     addNotification({
       type: "error",
-      message: `Failed to decline ${user.username}'s request.`,
+      message: `Error declining ${user.username}'s request.`,
     });
     console.error(`Error declining ${user.username}'s request:`, error);
   }

@@ -30,7 +30,7 @@ async function handleConfirm(
         credentials: "include",
       },
     );
-    const data = await response.json();
+    const result = await response.json();
 
     if (response.ok) {
       setPendingRequests((prev) =>
@@ -39,19 +39,19 @@ async function handleConfirm(
       setCurrentContributors((prev) => [...prev, user]);
       addNotification({
         type: "success",
-        message: `User ${user.username} is now a contributor.`,
+        message: result.message,
       });
       return;
     }
     addNotification({
       type: "error",
-      message: data.error,
-      details: data.details?.[0]?.msg,
+      message: result.error,
+      details: result.details?.[0]?.msg,
     });
   } catch (error) {
     addNotification({
       type: "error",
-      message: `Failed to promote ${user.username} to contributor.`,
+      message: `Error promoting ${user.username} to contributor.`,
     });
     console.error(`Error promoting ${user.username} to contributor:`, error);
   }

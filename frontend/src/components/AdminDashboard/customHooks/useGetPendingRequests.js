@@ -26,7 +26,7 @@ function useGetPendingRequests() {
           setPendingRequests(result.data);
           addNotification({
             type: "success",
-            message: "Fetched pending requests successfully.",
+            message: result.message,
           });
           return;
         }
@@ -37,6 +37,10 @@ function useGetPendingRequests() {
         });
       } catch (error) {
         console.error("Error fetching pending requests:", error);
+        addNotification({
+          type: "error",
+          message: "Error fetching pending contributor requests.",
+        });
       }
     };
     fetchPendingRequests();
