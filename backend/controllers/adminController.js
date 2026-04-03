@@ -6,7 +6,7 @@ class AdminController {
       role: "CONTRIBUTOR",
     });
     res.json({
-      message: "Contributors fetched successfully.",
+      message: "All contributors fetched successfully.",
       data: contributors,
     });
   }
@@ -16,7 +16,7 @@ class AdminController {
       requestedContributor: true,
     });
     res.json({
-      message: "Requested contributors fetched successfully.",
+      message: "Users requested contributor role fetched successfully.",
       data: requestedContributors,
     });
   }

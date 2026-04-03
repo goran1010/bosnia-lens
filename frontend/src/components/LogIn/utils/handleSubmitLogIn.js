@@ -48,7 +48,7 @@ async function handleSubmitLogIn(
     }
     addNotification({
       type: "success",
-      message: "Logged in successfully!",
+      message: result.message,
     });
     setUserData(result.data);
     navigate("/");

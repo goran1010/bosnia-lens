@@ -42,7 +42,7 @@ async function handleSubmitAddData(
     if (response.ok) {
       addNotification({
         type: "success",
-        message: "Data added successfully",
+        message: result.message,
       });
 
       const newItem = result.data;
@@ -61,10 +61,10 @@ async function handleSubmitAddData(
       details: result.details?.[0]?.msg,
     });
   } catch (err) {
-    console.error(err);
+    console.error("Error adding postal code:", err);
     addNotification({
       type: "error",
-      message: "An unexpected error occurred",
+      message: "Error occurred while adding the postal code.",
     });
   } finally {
     setLoading(false);

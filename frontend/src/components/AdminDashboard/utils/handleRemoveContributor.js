@@ -46,12 +46,12 @@ async function handleRemoveContributor(
     );
     addNotification({
       type: "success",
-      message: `User ${user.username} removed from contributors.`,
+      message: result.message,
     });
   } catch (error) {
     addNotification({
       type: "error",
-      message: `Failed to remove ${user.username} from contributors.`,
+      message: `Error removing ${user.username} from contributors.`,
     });
     console.error(`Error removing ${user.username} from contributors:`, error);
   }

@@ -28,7 +28,7 @@ function GetAllPostalCodes({ setSearchResult, loading, setLoading }) {
       }
       addNotification({
         type: "success",
-        message: "Postal codes and municipalities retrieved successfully.",
+        message: result.message,
       });
       setSearchResult(result.data);
     } catch (err) {
@@ -37,7 +37,7 @@ function GetAllPostalCodes({ setSearchResult, loading, setLoading }) {
         message:
           "An error occurred while fetching postal codes and municipalities.",
       });
-      console.error(err);
+      console.error("Error fetching postal codes and municipalities:", err);
     } finally {
       setLoading(false);
     }

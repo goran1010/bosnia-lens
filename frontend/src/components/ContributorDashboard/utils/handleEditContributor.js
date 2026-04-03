@@ -37,21 +37,21 @@ async function handleEditContributor(e, setSearchResult, addNotification) {
       });
       addNotification({
         type: "success",
-        message: `Postal code updated successfully!`,
+        message: result.message,
       });
       return;
     }
     addNotification({
       type: "error",
       message: result.error,
-      details: result.details?.[0].msg,
+      details: result.details?.[0]?.msg,
     });
   } catch (err) {
     addNotification({
       type: "error",
       message: "An error occurred while updating the postal code.",
     });
-    console.error(err);
+    console.error("Error updating postal code:", err);
   }
 }
 

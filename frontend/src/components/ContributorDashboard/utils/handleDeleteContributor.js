@@ -30,12 +30,12 @@ async function handleDeleteContributor(e, setSearchResult, addNotification) {
     const result = await response.json();
 
     if (response.ok) {
-      setSearchResult((previousState) => {
-        return previousState.filter((item) => item.code !== result.data.code);
-      });
+      setSearchResult((previousState) =>
+        previousState.filter((item) => item.code !== result.data.code),
+      );
       addNotification({
         type: "success",
-        message: `Postal code deleted successfully!`,
+        message: result.message,
       });
       return;
     }
@@ -49,7 +49,7 @@ async function handleDeleteContributor(e, setSearchResult, addNotification) {
       type: "error",
       message: "An error occurred while deleting the postal code.",
     });
-    console.error(err);
+    console.error("Error deleting postal code:", err);
   }
 }
 

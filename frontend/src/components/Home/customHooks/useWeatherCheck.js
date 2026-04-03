@@ -19,9 +19,9 @@ function useWeatherCheck(setLoading) {
           return;
         }
 
-        const data = await response.json();
-        if (data.days && Array.isArray(data.days)) {
-          for (let day of data.days) {
+        const result = await response.json();
+        if (result.days && Array.isArray(result.days)) {
+          for (let day of result.days) {
             const URL = `https://raw.githubusercontent.com/visualcrossing/WeatherIcons/58c79610addf3d4d91471abbb95b05e96fb43019/SVG/1st%20Set%20-%20Color/${day.icon}.svg`;
             day.iconURL = URL;
           }
@@ -29,14 +29,14 @@ function useWeatherCheck(setLoading) {
             type: "success",
             message: "Weather data fetched successfully!",
           });
-          setWeatherForecast(data.days);
+          setWeatherForecast(result.days);
         }
       } catch (err) {
         addNotification({
           type: "error",
           message: "An error occurred while fetching weather data.",
         });
-        console.error(err);
+        console.error("Error fetching weather data:", err);
       } finally {
         setLoading(false);
       }

@@ -37,7 +37,7 @@ function useStatusCheck(setLoading, notificationValue, longWait) {
 
         addNotification({
           type: "success",
-          message: "Login status checked successfully.",
+          message: result.message,
         });
         setLoading(false);
         setUserData(result.data);
@@ -45,7 +45,11 @@ function useStatusCheck(setLoading, notificationValue, longWait) {
         if (isCancelled || err?.name === "AbortError") {
           return;
         }
-        console.error(err);
+        addNotification({
+          type: "error",
+          message: "An error occurred while checking login status.",
+        });
+        console.error("Error checking login status:", err);
         setLoading(false);
       }
     }
