@@ -55,7 +55,7 @@ function Root() {
           />
           <Notifications />
           <main
-            className="flex-1 dark:bg-gray-900 dark:text-white flex flex-col items-center justify-center px-[5%] lg:px-[10%] xl:px-[15%] 2xl:px-[20%]"
+            className="app-main flex-1 flex flex-col items-center justify-center px-1 md:px-5 lg:px-10 xl:px-25 2xl:px-50"
             onClick={() => {
               isMenuOpen && setIsMenuOpen(false);
               isThemeMenuOpen && setThemeMenuOpen(false);

@@ -17,7 +17,7 @@ function Navbar({
   const { userData } = useContext(UserDataContext);
 
   return (
-    <nav className="relative px-2 bg-gray-300 w-full dark:bg-gray-800 dark:text-white font-bold grid grid-cols-3 lg:flex lg:justify-between items-center gap-2 transition transform">
+    <nav className="nav-shell relative px-2 w-full font-bold grid grid-cols-3 lg:flex lg:justify-between items-center gap-2 transition transform">
       <div className="relative">
         <ButtonNavbar
           id="theme-switcher"

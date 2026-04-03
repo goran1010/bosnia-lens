@@ -7,8 +7,8 @@ function ContributorDashboard() {
 
   if (!userData) {
     return (
-      <section className="relative min-h-full w-full flex items-center justify-center bg-gray-50 rounded-md p-3 dark:bg-gray-800 dark:text-white">
-        <p className="text-center text-gray-700 dark:text-gray-200">
+      <section className="panel-card relative min-h-full w-full flex items-center justify-center p-3">
+        <p className="label-muted text-center">
           You need to be logged in and a contributor to see the contributor
           dashboard.
         </p>
@@ -20,8 +20,8 @@ function ContributorDashboard() {
     return <ContributorForm />;
   }
   return (
-    <section className="relative min-h-full w-full flex items-center justify-center bg-gray-50 rounded-md p-3 dark:bg-gray-800 dark:text-white">
-      <p className="text-center text-gray-700 dark:text-gray-200">
+    <section className="panel-card relative min-h-full w-full flex items-center justify-center p-3">
+      <p className="label-muted text-center">
         You need to be a contributor to see the contributor dashboard.
       </p>
     </section>

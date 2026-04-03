@@ -23,7 +23,7 @@ function Profile() {
   }, [userData, navigate, addNotification]);
 
   return (
-    <div className="w-full max-w-md mx-auto bg-white dark:bg-gray-800 dark:text-white rounded-xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-600">
+    <div className="panel-card w-full max-w-md mx-auto overflow-hidden">
       <div className="bg-linear-to-r from-blue-600 to-indigo-700 p-4">
         <h1 className="text-2xl font-bold text-white text-center">
           My Profile
@@ -33,42 +33,38 @@ function Profile() {
       <div className="p-2 flex flex-col gap-2 text-center items-center">
         <dl className="w-full flex flex-col gap-2">
           <div>
-            <dt className="block text-sm font-semibold text-gray-500 uppercase tracking-wide">
+            <dt className="label-muted block text-sm font-semibold uppercase tracking-wide">
               Email Address
             </dt>
-            <dd className="text-lg text-gray-900 font-bold dark:text-white">
-              {userData?.email}
-            </dd>
+            <dd className="text-lg font-bold">{userData?.email}</dd>
           </div>
-          <hr />
+          <hr className="divider-muted" />
           <div>
-            <dt className="block text-sm font-semibold text-gray-500 uppercase tracking-wide">
+            <dt className="label-muted block text-sm font-semibold uppercase tracking-wide">
               Username
             </dt>
-            <dd className="text-lg text-gray-900 font-bold dark:text-white">
-              {userData?.username}
-            </dd>
+            <dd className="text-lg font-bold">{userData?.username}</dd>
           </div>
-          <hr />
+          <hr className="divider-muted" />
           <div>
-            <dt className="block text-sm font-semibold text-gray-500 uppercase tracking-wide">
+            <dt className="label-muted block text-sm font-semibold uppercase tracking-wide">
               Current Role
             </dt>
             <dd className="flex items-center justify-center">
               <span
                 className={`items-center px-4 py-2 rounded-full text-sm font-bold ${
                   userData?.role === "CONTRIBUTOR"
-                    ? "bg-green-200 text-green-800"
+                    ? "role-pill-contributor"
                     : userData?.role === "ADMIN"
-                      ? "bg-red-200 text-red-800"
-                      : "bg-gray-200 text-gray-800"
+                      ? "role-pill-admin"
+                      : "role-pill-user"
                 }`}
               >
                 {userData?.role}
               </span>
             </dd>
           </div>
-          <hr />
+          <hr className="divider-muted" />
         </dl>
         <div className="flex flex-col gap-2 w-full max-w-sm">
           {userData?.role === "USER" && !userData?.requestedContributor && (
@@ -84,7 +80,7 @@ function Profile() {
 
           <Button
             onClick={() => handleLogout(addNotification, navigate, setUserData)}
-            className="bg-red-600 px-6 py-3 text-white font-semibold shadow-md hover:bg-red-700 disabled:bg-red-500 disabled:text-gray-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+            className="btn-danger px-6 py-3 font-semibold"
           >
             Log Out
           </Button>

@@ -26,20 +26,18 @@ function SignUp() {
   }, [userData, navigate, addNotification]);
 
   return (
-    <div className="relative min-h-full w-full max-w-xl mx-auto flex items-center justify-center bg-gray-50 rounded-md dark:bg-gray-800 p-3">
+    <div className="panel-card relative min-h-full w-full max-w-xl mx-auto flex items-center justify-center p-3">
       <div className="w-full max-w-md p-4 flex flex-col gap-3">
         <div>
-          <h1 className="text-3xl text-center font-bold text-gray-900 dark:text-gray-100">
+          <h1 className="text-3xl text-center font-bold">
             Create your account
           </h1>
         </div>
         <SignUpForm setLoading={setLoading} loading={loading} />
         <div className="relative flex items-center my-4">
-          <div className="grow border-t border-gray-300 dark:border-gray-700"></div>
-          <span className="mx-4 text-gray-500 text-sm dark:text-gray-400">
-            OR
-          </span>
-          <div className="grow border-t border-gray-300 dark:border-gray-700"></div>
+          <div className="grow border-t divider-muted"></div>
+          <span className="label-muted mx-4 text-sm">OR</span>
+          <div className="grow border-t divider-muted"></div>
         </div>
         <div className="relative">
           <p className="text-center">
