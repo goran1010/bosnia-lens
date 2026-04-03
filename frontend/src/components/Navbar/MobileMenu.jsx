@@ -4,7 +4,7 @@ function MobileMenu({ setIsMenuOpen, userData }) {
   return (
     <div
       id="mobile-menu"
-      className="menu-shell z-10 pb-2 absolute top-full w-full left-0"
+      className="menu-shell z-50 pb-2 absolute top-full w-full left-0"
     >
       <ul className="flex flex-col items-center">
         <Link

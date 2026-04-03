@@ -30,8 +30,8 @@ function Profile() {
         </h1>
       </div>
 
-      <div className="p-2 flex flex-col gap-2 text-center items-center">
-        <dl className="w-full flex flex-col gap-2">
+      <div className="p-4 flex flex-col gap-3 text-center items-center">
+        <dl className="w-full flex flex-col gap-3">
           <div>
             <dt className="label-muted block text-sm font-semibold uppercase tracking-wide">
               Email Address
@@ -72,7 +72,7 @@ function Profile() {
               onClick={() =>
                 handleBecomeContributor(addNotification, setUserData)
               }
-              className="w-full px-6 py-3 text-white font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="w-full px-6 py-3 font-semibold"
             >
               Become a Contributor
             </Button>

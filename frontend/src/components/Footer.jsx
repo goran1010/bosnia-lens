@@ -1,6 +1,6 @@
 function Footer() {
   return (
-    <footer className="nav-shell w-full flex justify-between items-center font-bold p-2">
+    <footer className="nav-shell w-full flex justify-between items-center font-bold px-3 py-2">
       <address className="not-italic w-full flex justify-between items-center">
         <span className="block text-sm font-medium">Goran Jović</span>
         <a

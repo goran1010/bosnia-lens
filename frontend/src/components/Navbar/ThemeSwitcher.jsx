@@ -5,7 +5,7 @@ function ThemeSwitcher({ setMode, setThemeMenuOpen }) {
   const { addNotification } = useContext(NotificationContext);
 
   return (
-    <div className="menu-shell z-10 pb-2 absolute top-full left-0 w-full text-center rounded-b user-select-none cursor-pointer">
+    <div className="menu-shell z-50 pb-2 absolute top-full left-0 w-full text-center rounded-b user-select-none cursor-pointer">
       <ul className="flex flex-col">
         <li
           className="menu-item block py-2 px-4"

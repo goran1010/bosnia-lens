@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 function StandardMenu({ userData }) {
   return (
     <div className="hidden lg:flex justify-between items-center">
-      <ul className="flex items-center">
+      <ul className="flex items-center gap-1">
         <li>
           <Link className="menu-item block py-3 px-2" to="/">
             Home
