@@ -1,5 +1,5 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
-import { getCsrfToken } from "../../utils/getCsrfToken";
+import { getCsrfToken, clearCsrfToken } from "../../utils/getCsrfToken";
 
 async function handleSubmitLogIn(
   e,
@@ -51,6 +51,8 @@ async function handleSubmitLogIn(
       message: result.message,
     });
     setUserData(result.data);
+
+    clearCsrfToken();
     navigate("/");
   } catch (err) {
     addNotification({
