@@ -2,9 +2,18 @@ import { handleRemoveContributor } from "./utils/handleRemoveContributor";
 import { useContext } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { Button } from "../sharedComponents/Button";
+import { Spinner } from "../../utils/Spinner";
 
-function CurrentContributors({ currentContributors, setCurrentContributors }) {
+function CurrentContributors({
+  currentContributors,
+  setCurrentContributors,
+  loading,
+}) {
   const { addNotification } = useContext(NotificationContext);
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   return (
     <section className="panel-card p-3">

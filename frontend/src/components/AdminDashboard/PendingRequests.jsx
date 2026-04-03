@@ -1,13 +1,21 @@
 import { handleConfirm } from "./utils/handleConfirm";
 import { handleDecline } from "./utils/handleDecline";
 import { useGetPendingRequests } from "./customHooks/useGetPendingRequests";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { Button } from "../sharedComponents/Button";
+import { Spinner } from "../../utils/Spinner";
 
 function PendingRequests({ setCurrentContributors }) {
+  const [loading, setLoading] = useState(true);
+
   const { addNotification } = useContext(NotificationContext);
-  const { pendingRequests, setPendingRequests } = useGetPendingRequests();
+  const { pendingRequests, setPendingRequests } =
+    useGetPendingRequests(setLoading);
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   return (
     <section className="panel-card p-3">
