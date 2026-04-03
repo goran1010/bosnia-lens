@@ -49,15 +49,15 @@ async function handleSignUpSubmit(
     }
     addNotification({
       type: "success",
-      message: "Registration successful! Please log in.",
+      message: result.message,
     });
     navigate("/login");
   } catch (err) {
     addNotification({
       type: "error",
-      message: "An error occurred during registration. Please try again.",
+      message: "An error occurred during registration.",
     });
-    console.error(err);
+    console.error("Error during registration:", err);
   } finally {
     setLoading(false);
   }

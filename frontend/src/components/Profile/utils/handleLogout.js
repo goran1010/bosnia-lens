@@ -34,15 +34,15 @@ async function handleLogout(addNotification, navigate, setUserData) {
 
     addNotification({
       type: "error",
-      message: result?.error || "Failed to log out.",
+      message: result?.error,
       details: result?.details?.[0]?.msg,
     });
   } catch (err) {
     addNotification({
       type: "error",
-      message: err?.message || "An error occurred while logging out.",
+      message: "An error occurred while logging out.",
     });
-    console.error(err);
+    console.error("Error logging out:", err);
   }
 }
 
