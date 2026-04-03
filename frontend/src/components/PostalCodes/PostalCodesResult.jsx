@@ -22,8 +22,9 @@ function PostalCodesResult({ searchResult }) {
               className="grid gap-1 w-full p-2 grid-cols-3 rounded border border-transparent hover:border-gray-200 dark:hover:border-gray-500"
               key={result.code}
             >
-              <div>{result.code}</div>
-              <div>{result.city}</div> <div>{result.post}</div>
+              <div className="text-center">{result.code}</div>
+              <div className="text-center">{result.city}</div>
+              <div className="text-center">{result.post}</div>
             </li>
           );
         })}

@@ -3,36 +3,27 @@ import { Link } from "react-router-dom";
 function StandardMenu({ userData }) {
   return (
     <div className="hidden lg:flex justify-between items-center">
-      <ul className="flex items-center">
+      <ul className="flex items-center gap-1">
         <li>
-          <Link
-            className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
-            to="/"
-          >
+          <Link className="menu-item block py-3 px-2" to="/">
             Home
           </Link>
         </li>
         <li>
           <Link
-            className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700 text-nowrap"
+            className="menu-item block py-3 px-2 text-nowrap"
             to="/postal-codes"
           >
             Postal Codes
           </Link>
         </li>
         <li>
-          <Link
-            className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
-            to="/holidays"
-          >
+          <Link className="menu-item block py-3 px-2" to="/holidays">
             Holidays
           </Link>
         </li>
         <li>
-          <Link
-            className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
-            to="/universities"
-          >
+          <Link className="menu-item block py-3 px-2" to="/universities">
             Universities
           </Link>
         </li>
@@ -40,7 +31,7 @@ function StandardMenu({ userData }) {
         {(userData?.role === "ADMIN" || userData?.role === "CONTRIBUTOR") && (
           <li>
             <Link
-              className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
+              className="menu-item block py-3 px-2"
               to="/contributor-dashboard"
             >
               Contributor
@@ -49,10 +40,7 @@ function StandardMenu({ userData }) {
         )}
         {userData?.role === "ADMIN" && (
           <li>
-            <Link
-              className="block py-3 px-2 hover:bg-gray-400 dark:hover:bg-gray-700"
-              to="/admin-dashboard"
-            >
+            <Link className="menu-item block py-3 px-2" to="/admin-dashboard">
               Admin
             </Link>
           </li>

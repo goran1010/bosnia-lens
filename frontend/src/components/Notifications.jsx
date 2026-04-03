@@ -4,14 +4,14 @@ import { NotificationContext } from "../contextData/NotificationContext";
 function getNotificationStyles(type) {
   switch (type) {
     case "success":
-      return "bg-green-500";
+      return "notif-success";
     case "error":
-      return "bg-red-500";
+      return "notif-error";
     case "warning":
-      return "bg-yellow-500 text-black";
+      return "notif-warning";
     case "info":
     default:
-      return "bg-blue-500";
+      return "notif-info";
   }
 }
 
@@ -58,7 +58,7 @@ function Notifications() {
 
   return (
     <aside
-      className="fixed top-4 right-4 z-50 w-[min(92vw,24rem)] select-none opacity-85 hover:opacity-100 transition-opacity"
+      className="fixed top-4 right-4 z-50 w-[min(92vw,24rem)] select-none opacity-90 hover:opacity-100 transition-opacity"
       aria-label="Notifications"
       aria-live="polite"
       aria-relevant="additions text"
@@ -68,7 +68,7 @@ function Notifications() {
           <li
             key={notification.id}
             role={getNotificationRole(notification.type)}
-            className={`relative px-4 py-3 rounded-lg shadow-lg text-white w-full flex flex-col justify-center items-center ${getNotificationStyles(
+            className={`relative px-4 py-3 rounded-lg shadow-lg w-full flex flex-col justify-center items-center ${getNotificationStyles(
               notification.type,
             )}`}
           >

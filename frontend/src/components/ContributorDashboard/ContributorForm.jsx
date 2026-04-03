@@ -19,7 +19,7 @@ function ContributorForm() {
           name="dataset"
           id="dataset"
           onChange={handleDataset}
-          className="bg-gray-200 dark:bg-gray-800"
+          className="min-w-44"
         >
           <option default value="">
             No dataset
