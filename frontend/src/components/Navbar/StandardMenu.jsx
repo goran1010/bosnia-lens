@@ -17,11 +17,7 @@ function StandardMenu({ userData }) {
             Postal Codes
           </Link>
         </li>
-        <li>
-          <Link className="menu-item block py-3 px-2" to="/holidays">
-            Holidays
-          </Link>
-        </li>
+
         <li>
           <Link className="menu-item block py-3 px-2" to="/universities">
             Universities

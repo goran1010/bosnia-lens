@@ -25,14 +25,6 @@ function MobileMenu({ setIsMenuOpen, userData }) {
 
         <Link
           className="menu-item block p-2 w-full text-center text-nowrap"
-          to="/holidays"
-          onClick={() => setIsMenuOpen(false)}
-        >
-          Holidays
-        </Link>
-
-        <Link
-          className="menu-item block p-2 w-full text-center text-nowrap"
           to="/universities"
           onClick={() => setIsMenuOpen(false)}
         >
