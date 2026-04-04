@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 function Home() {
   return (
     <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl flex flex-col items-center gap-4 py-2 dark:text-gray-100">
