@@ -1,8 +1,14 @@
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 import { getCsrfToken, clearCsrfToken } from "../../utils/getCsrfToken";
 
-async function handleLogout(addNotification, navigate, setUserData) {
+async function handleLogout(
+  addNotification,
+  navigate,
+  setUserData,
+  setLoading,
+) {
   try {
+    setLoading(true);
     const csrfToken = await getCsrfToken();
     if (!csrfToken) {
       addNotification({
@@ -45,6 +51,8 @@ async function handleLogout(addNotification, navigate, setUserData) {
       message: "An error occurred while logging out.",
     });
     console.error("Error logging out:", err);
+  } finally {
+    setLoading(false);
   }
 }
 
