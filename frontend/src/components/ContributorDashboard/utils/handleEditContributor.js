@@ -1,9 +1,15 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 import { getCsrfToken } from "../../utils/getCsrfToken";
 
-async function handleEditContributor(e, setSearchResult, addNotification) {
+async function handleEditContributor(
+  e,
+  setSearchResult,
+  addNotification,
+  setLoading,
+) {
   try {
     e.preventDefault();
+    setLoading(true);
     const code = e.target.children[0].children[1].textContent;
     const city = e.target[0].value;
     const post = e.target[1].value;
@@ -52,6 +58,8 @@ async function handleEditContributor(e, setSearchResult, addNotification) {
       message: "An error occurred while updating the postal code.",
     });
     console.error("Error updating postal code:", err);
+  } finally {
+    setLoading(false);
   }
 }
 

@@ -1,10 +1,17 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 import { getCsrfToken } from "../../utils/getCsrfToken";
 
-async function handleDeleteContributor(e, setSearchResult, addNotification) {
+async function handleDeleteContributor(
+  e,
+  setSearchResult,
+  addNotification,
+  setLoading,
+) {
   try {
     e.preventDefault();
-    const code = e.target.dataset.postalcode;
+    setLoading(true);
+    const code = e.target.parentElement.dataset.postalcode;
+    console.log("Attempting to delete postal code:", code);
 
     const csrfToken = await getCsrfToken();
 
@@ -50,6 +57,8 @@ async function handleDeleteContributor(e, setSearchResult, addNotification) {
       message: "An error occurred while deleting the postal code.",
     });
     console.error("Error deleting postal code:", err);
+  } finally {
+    setLoading(false);
   }
 }
 

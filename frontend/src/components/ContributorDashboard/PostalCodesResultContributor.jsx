@@ -7,6 +7,7 @@ import { PostalCodeRow } from "./PostalCodeRow";
 function PostalCodesResultContributor({ searchResult, setSearchResult }) {
   const [inputValuesByCode, setInputValuesByCode] = useState(new Map());
   const { addNotification } = useContext(NotificationContext);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const nextValuesByCode = new Map();
@@ -26,11 +27,11 @@ function PostalCodesResultContributor({ searchResult, setSearchResult }) {
   };
 
   const handleEdit = (e) => {
-    handleEditContributor(e, setSearchResult, addNotification);
+    handleEditContributor(e, setSearchResult, addNotification, setLoading);
   };
 
   const handleDelete = (e) => {
-    handleDeleteContributor(e, setSearchResult, addNotification);
+    handleDeleteContributor(e, setSearchResult, addNotification, setLoading);
   };
 
   if (searchResult.length === 0) {
@@ -61,6 +62,7 @@ function PostalCodesResultContributor({ searchResult, setSearchResult }) {
               onChange={handleInputChange}
               onSubmit={handleEdit}
               onDelete={handleDelete}
+              loading={loading}
             />
           );
         })}
