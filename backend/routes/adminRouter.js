@@ -19,11 +19,13 @@ adminRouter.post(
 
 adminRouter.post(
   "/decline-contributor/:userId",
+  adminPostalCodeValidation.declineContributor,
   adminController.declineContributor,
 );
 
 adminRouter.delete(
   "/remove-contributor/:userId",
+  adminPostalCodeValidation.removeContributor,
   adminController.removeContributor,
 );
 
