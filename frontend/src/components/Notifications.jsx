@@ -58,7 +58,7 @@ function Notifications() {
 
   return (
     <aside
-      className="fixed top-4 right-4 z-50 w-[min(92vw,24rem)] select-none opacity-90 hover:opacity-100 transition-opacity"
+      className="absolute top-2 right-4 z-50 w-[min(92vw,24rem)] select-none opacity-90 hover:opacity-100 transition-opacity"
       aria-label="Notifications"
       aria-live="polite"
       aria-relevant="additions text"
