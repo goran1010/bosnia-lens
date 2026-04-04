@@ -12,14 +12,14 @@ class ContributorController {
   }
 
   async editPostalCode(req, res) {
-    const { city, code, post } = req.query;
+    const { city, code, post } = matchedData(req);
 
     const result = await postalCodesModel.edit(city, code, post);
     res.status(201).json({ message: "Postal code row edited.", data: result });
   }
 
   async deletePostalCode(req, res) {
-    const { code } = req.query;
+    const { code } = matchedData(req);
 
     const result = await postalCodesModel.deleteCode(code);
     res.json({ message: "Postal code row deleted.", data: result });
