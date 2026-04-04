@@ -4,27 +4,12 @@ const IS_PRODUCTION = process.env.NODE_ENV === "production";
 const NUMBER_OF_DAYS = 30;
 
 class UsersController {
-  logout(req, res) {
-    req.logout((err) => {
-      if (err) {
-        console.error(err);
-        return res
-          .status(500)
-          .json({ error: "Couldn't log out", details: [{ msg: null }] });
-      }
+  async me(req, res) {
+    const loggedInUser = req.user;
 
-      req.session.destroy(() => {
-        res.clearCookie("sessionId", {
-          // Must set clearCookie options to match cookie set options, otherwise client will not clear cookie
-          maxAge: NUMBER_OF_DAYS * 24 * 60 * 60 * 1000,
-          sameSite: IS_PRODUCTION ? "none" : "lax",
-          secure: IS_PRODUCTION,
-          httpOnly: true,
-          path: "/",
-        });
-        res.json({ message: "User logged out successfully" });
-      });
-    });
+    delete loggedInUser.password;
+
+    res.json({ message: "User info retrieved", data: loggedInUser });
   }
 
   async becomeContributor(req, res) {
@@ -56,12 +41,27 @@ class UsersController {
     });
   }
 
-  async me(req, res) {
-    const loggedInUser = req.user;
+  logout(req, res) {
+    req.logout((err) => {
+      if (err) {
+        console.error(err);
+        return res
+          .status(500)
+          .json({ error: "Couldn't log out", details: [{ msg: null }] });
+      }
 
-    delete loggedInUser.password;
-
-    res.json({ message: "User info retrieved", data: loggedInUser });
+      req.session.destroy(() => {
+        res.clearCookie("sessionId", {
+          // Must set clearCookie options to match cookie set options, otherwise client will not clear cookie
+          maxAge: NUMBER_OF_DAYS * 24 * 60 * 60 * 1000,
+          sameSite: IS_PRODUCTION ? "none" : "lax",
+          secure: IS_PRODUCTION,
+          httpOnly: true,
+          path: "/",
+        });
+        res.json({ message: "User logged out successfully" });
+      });
+    });
   }
 }
 
