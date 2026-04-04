@@ -4,26 +4,29 @@ import { postalCodesModel } from "../models/postalCodesModel.js";
 const validPosts = ["BH_POSTA", "POSTE_SRP", "HP_MOSTAR"];
 
 const createPostalCode = [
-  query("code").trim().notEmpty().withMessage("Code is required"),
-  query("code").custom((value) => {
-    if (Number.isInteger(Number(value))) {
-      if (value.length !== 5) {
-        throw new Error("Postal codes must have 5 numbers");
+  query("code")
+    .trim()
+    .notEmpty()
+    .withMessage("Code is required")
+    .custom((value) => {
+      if (Number.isInteger(Number(value))) {
+        if (value.length !== 5) {
+          throw new Error("Postal codes must have 5 numbers");
+        }
+      } else {
+        throw new Error("Must be a number");
       }
-    } else {
-      throw new Error("Must be a number");
-    }
-    return true;
-  }),
-  query("code").custom(async (value) => {
-    const codeExists = await postalCodesModel.getPostalCodeByCode(
-      Number(value),
-    );
-    if (codeExists) {
-      throw new Error("Code already exists");
-    }
-    return true;
-  }),
+      return true;
+    })
+    .custom(async (value) => {
+      const codeExists = await postalCodesModel.getPostalCodeByCode(
+        Number(value),
+      );
+      if (codeExists) {
+        throw new Error("Code already exists");
+      }
+      return true;
+    }),
 
   query("city").trim().notEmpty().withMessage("City is required"),
 
