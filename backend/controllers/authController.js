@@ -66,26 +66,6 @@ class AuthController {
     }
   }
 
-  async login(req, res, next) {
-    passport.authenticate("local", (err, user, info) => {
-      if (err) return next(err);
-      if (!user) {
-        return res.status(401).json({
-          error: "Login unsuccessful",
-          details: [{ msg: info.message }],
-        });
-      }
-
-      req.logIn(user, (err) => {
-        if (err) return next(err);
-        return res.json({
-          message: "Logged in successfully",
-          data: user,
-        });
-      });
-    })(req, res, next);
-  }
-
   async confirmEmail(req, res) {
     const { token } = req.params;
 
@@ -125,6 +105,26 @@ class AuthController {
         .status(500)
         .json({ error: "Couldn't confirm email", details: [{ msg: null }] });
     }
+  }
+
+  async login(req, res, next) {
+    passport.authenticate("local", (err, user, info) => {
+      if (err) return next(err);
+      if (!user) {
+        return res.status(401).json({
+          error: "Login unsuccessful",
+          details: [{ msg: info.message }],
+        });
+      }
+
+      req.logIn(user, (err) => {
+        if (err) return next(err);
+        return res.json({
+          message: "Logged in successfully",
+          data: user,
+        });
+      });
+    })(req, res, next);
   }
 }
 
