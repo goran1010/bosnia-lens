@@ -11,7 +11,6 @@ async function handleDeleteContributor(
     e.preventDefault();
     setLoading(true);
     const code = e.target.parentElement.dataset.postalcode;
-    console.log("Attempting to delete postal code:", code);
 
     const csrfToken = await getCsrfToken();
 
