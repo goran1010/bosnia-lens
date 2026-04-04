@@ -1,7 +1,7 @@
 import { prisma } from "../db/prisma.js";
 
 class UsersModel {
-  find(where) {
+  findOne(where) {
     return prisma.user.findUnique({ where: { ...where } });
   }
 

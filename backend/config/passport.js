@@ -6,7 +6,7 @@ import { usersModel } from "../models/usersModel.js";
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
-      const user = await usersModel.find({ username });
+      const user = await usersModel.findOne({ username });
       if (!user) return done(null, false, { message: "Incorrect username" });
 
       const match = await bcrypt.compare(password, user.password);
@@ -35,7 +35,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await usersModel.find({ id });
+    const user = await usersModel.findOne({ id });
     done(null, user);
   } catch (err) {
     done(err);

@@ -1,3 +1,4 @@
+import { matchedData } from "express-validator";
 import { usersModel } from "../models/usersModel.js";
 
 class AdminController {
@@ -22,7 +23,7 @@ class AdminController {
   }
 
   async addContributor(req, res) {
-    const { userId } = req.params;
+    const { userId } = matchedData(req);
     await usersModel.update(
       { id: userId },
       { role: "CONTRIBUTOR", requestedContributor: false },
@@ -33,7 +34,7 @@ class AdminController {
   }
 
   async removeContributor(req, res) {
-    const { userId } = req.params;
+    const { userId } = matchedData(req);
     await usersModel.update(
       { id: userId },
       { role: "USER", requestedContributor: false },
@@ -44,7 +45,7 @@ class AdminController {
   }
 
   async declineContributor(req, res) {
-    const { userId } = req.params;
+    const { userId } = matchedData(req);
     await usersModel.update({ id: userId }, { requestedContributor: false });
     res
       .status(201)

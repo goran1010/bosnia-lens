@@ -2,7 +2,7 @@ import { Router } from "express";
 const contributorRouter = Router();
 
 import { contributorController } from "../controllers/contributorController.js";
-import * as contributorValidation from "../validation/contributorValidation.js";
+import { contributorValidation } from "../validation/contributorValidation.js";
 
 contributorRouter.post(
   "/postal-codes",

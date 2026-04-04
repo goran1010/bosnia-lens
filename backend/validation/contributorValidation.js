@@ -3,99 +3,116 @@ import { postalCodesModel } from "../models/postalCodesModel.js";
 
 const validPosts = ["BH_POSTA", "POSTE_SRP", "HP_MOSTAR"];
 
-const createPostalCode = [
-  query("code").trim().notEmpty().withMessage("Code is required"),
-  query("code").custom((value) => {
-    if (Number.isInteger(Number(value))) {
-      if (value.length !== 5) {
-        throw new Error("Postal codes must have 5 numbers");
+class ContributorValidation {
+  createPostalCode = [
+    query("code")
+      .trim()
+      .notEmpty()
+      .withMessage("Code is required")
+      .custom((value) => {
+        if (Number.isInteger(Number(value))) {
+          if (value.length !== 5) {
+            throw new Error("Postal codes must have 5 numbers");
+          }
+        } else {
+          throw new Error("Must be a number");
+        }
+        return true;
+      })
+      .custom(async (value) => {
+        const codeExists = await postalCodesModel.getPostalCodeByCode(
+          Number(value),
+        );
+        if (codeExists) {
+          throw new Error("Code already exists");
+        }
+        return true;
+      }),
+
+    query("city").trim().notEmpty().withMessage("City is required"),
+
+    query("post").custom((value) => {
+      if (!validPosts.includes(value) && value !== "") {
+        throw new Error("Invalid post");
       }
-    } else {
-      throw new Error("Must be a number");
-    }
-    return true;
-  }),
-  query("code").custom(async (value) => {
-    const codeExists = await postalCodesModel.getPostalCodeByCode(
-      Number(value),
-    );
-    if (codeExists) {
-      throw new Error("Code already exists");
-    }
-    return true;
-  }),
+      return true;
+    }),
 
-  query("city").trim().notEmpty().withMessage("City is required"),
+    (req, res, next) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          error: "Validation failed",
+          details: errors.array(),
+        });
+      }
+      next();
+    },
+  ];
 
-  query("post").custom((value) => {
-    if (!validPosts.includes(value) && value !== "") {
-      throw new Error("Invalid post");
-    }
-    return true;
-  }),
+  editPostalCode = [
+    query("code")
+      .trim()
+      .notEmpty()
+      .withMessage("Code is required")
+      .custom(async (value) => {
+        const codeExists = await postalCodesModel.getPostalCodeByCode(
+          Number(value),
+        );
+        if (!codeExists) {
+          throw new Error("Code doesn't exist");
+        }
+        return true;
+      }),
 
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        error: "Validation failed",
-        details: errors.array(),
-      });
-    }
-    next();
-  },
-];
+    query("city").trim().notEmpty().withMessage("City is required"),
 
-const editPostalCode = [
-  query("code").trim().notEmpty().withMessage("Code is required"),
+    query("post").custom((value) => {
+      if (!validPosts.includes(value) && value !== "") {
+        throw new Error("Invalid post");
+      }
+      return true;
+    }),
 
-  query("city").trim().notEmpty().withMessage("City is required"),
+    (req, res, next) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          error: "Validation failed",
+          details: errors.array(),
+        });
+      }
+      next();
+    },
+  ];
 
-  query("post").custom((value) => {
-    if (!validPosts.includes(value) && value !== "") {
-      throw new Error("Invalid post");
-    }
-    return true;
-  }),
+  deletePostalCode = [
+    query("code")
+      .trim()
+      .notEmpty()
+      .withMessage("Can't delete data. Code is required")
+      .custom(async (value) => {
+        const codeExists = await postalCodesModel.getPostalCodeByCode(
+          Number(value),
+        );
+        if (!codeExists) {
+          throw new Error("Code doesn't exist");
+        }
+        return true;
+      }),
 
-  query("code").custom(async (value) => {
-    const codeExists = await postalCodesModel.getPostalCodeByCode(
-      Number(value),
-    );
-    if (!codeExists) {
-      throw new Error("Code doesn't exist");
-    }
-    return true;
-  }),
+    (req, res, next) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          error: "Validation failed",
+          details: errors.array(),
+        });
+      }
+      next();
+    },
+  ];
+}
 
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        error: "Validation failed",
-        details: errors.array(),
-      });
-    }
-    next();
-  },
-];
-
-const deletePostalCode = [
-  query("code")
-    .trim()
-    .notEmpty()
-    .withMessage("Can't delete data. Code is required"),
-
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        error: "Validation failed",
-        details: errors.array(),
-      });
-    }
-    next();
-  },
-];
-
-export { createPostalCode, editPostalCode, deletePostalCode };
+const contributorValidation = new ContributorValidation();
+export { contributorValidation };
