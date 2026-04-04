@@ -5,10 +5,13 @@ import { useNavigate } from "react-router-dom";
 import { handleBecomeContributor } from "./utils/handleBecomeContributor";
 import { handleLogout } from "./utils/handleLogout";
 import { Button } from "../sharedComponents/Button";
+import { useState } from "react";
+import { Spinner } from "../../utils/Spinner";
 
 function Profile() {
   const { addNotification } = useContext(NotificationContext);
   const { userData, setUserData } = useContext(UserDataContext);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -70,18 +73,34 @@ function Profile() {
           {userData?.role === "USER" && !userData?.requestedContributor && (
             <Button
               onClick={() =>
-                handleBecomeContributor(addNotification, setUserData)
+                handleBecomeContributor(
+                  addNotification,
+                  setUserData,
+                  setLoading,
+                )
               }
               className="w-full px-6 py-3 font-semibold"
+              type="submit"
+              disabled={loading}
             >
-              Become a Contributor
+              <div className="h-full w-full flex justify-center items-center absolute">
+                {loading && <Spinner />}
+              </div>
+              Request Contributor role
             </Button>
           )}
 
           <Button
-            onClick={() => handleLogout(addNotification, navigate, setUserData)}
+            onClick={() =>
+              handleLogout(addNotification, navigate, setUserData, setLoading)
+            }
             className="btn-danger px-6 py-3 font-semibold"
+            type="submit"
+            disabled={loading}
           >
+            <div className="h-full w-full flex justify-center items-center absolute">
+              {loading && <Spinner />}
+            </div>
             Log Out
           </Button>
         </div>

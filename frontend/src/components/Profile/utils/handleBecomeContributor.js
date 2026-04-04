@@ -1,8 +1,13 @@
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 import { getCsrfToken } from "../../utils/getCsrfToken";
 
-async function handleBecomeContributor(addNotification, setUserData) {
+async function handleBecomeContributor(
+  addNotification,
+  setUserData,
+  setLoading,
+) {
   try {
+    setLoading(true);
     const csrfToken = await getCsrfToken();
 
     if (!csrfToken) {
@@ -42,6 +47,8 @@ async function handleBecomeContributor(addNotification, setUserData) {
       message: "An error occurred while requesting contributor status.",
     });
     console.error(err);
+  } finally {
+    setLoading(false);
   }
 }
 

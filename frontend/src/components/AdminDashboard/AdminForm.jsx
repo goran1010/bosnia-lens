@@ -1,10 +1,12 @@
 import { useGetAllContributors } from "./customHooks/useGetAllContributors";
 import { PendingRequests } from "./PendingRequests";
 import { CurrentContributors } from "./CurrentContributors";
+import { useState } from "react";
 
 function AdminForm() {
+  const [loading, setLoading] = useState(true);
   const { currentContributors, setCurrentContributors } =
-    useGetAllContributors();
+    useGetAllContributors(setLoading);
 
   return (
     <div className="relative min-h-full w-full flex items-center justify-center p-3">
@@ -18,6 +20,7 @@ function AdminForm() {
           <CurrentContributors
             currentContributors={currentContributors}
             setCurrentContributors={setCurrentContributors}
+            loading={loading}
           />
         </div>
       </section>

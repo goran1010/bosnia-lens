@@ -1,10 +1,20 @@
 import { handleRemoveContributor } from "./utils/handleRemoveContributor";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { Button } from "../sharedComponents/Button";
+import { Spinner } from "../../utils/Spinner";
 
-function CurrentContributors({ currentContributors, setCurrentContributors }) {
+function CurrentContributors({
+  currentContributors,
+  setCurrentContributors,
+  loading,
+}) {
   const { addNotification } = useContext(NotificationContext);
+  const [buttonLoading, setButtonLoading] = useState(false);
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   return (
     <section className="panel-card p-3">
@@ -40,9 +50,15 @@ function CurrentContributors({ currentContributors, setCurrentContributors }) {
                       user,
                       setCurrentContributors,
                       addNotification,
+                      setButtonLoading,
                     )
                   }
+                  type="submit"
+                  disabled={buttonLoading}
                 >
+                  <div className="h-full w-full flex justify-center items-center absolute">
+                    {buttonLoading && <Spinner />}
+                  </div>
                   Remove
                 </Button>
               </div>

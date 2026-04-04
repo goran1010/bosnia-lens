@@ -1,13 +1,22 @@
 import { handleConfirm } from "./utils/handleConfirm";
 import { handleDecline } from "./utils/handleDecline";
 import { useGetPendingRequests } from "./customHooks/useGetPendingRequests";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { Button } from "../sharedComponents/Button";
+import { Spinner } from "../../utils/Spinner";
 
 function PendingRequests({ setCurrentContributors }) {
+  const [loading, setLoading] = useState(true);
+  const [buttonLoading, setButtonLoading] = useState(false);
+
   const { addNotification } = useContext(NotificationContext);
-  const { pendingRequests, setPendingRequests } = useGetPendingRequests();
+  const { pendingRequests, setPendingRequests } =
+    useGetPendingRequests(setLoading);
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   return (
     <section className="panel-card p-3">
@@ -44,17 +53,33 @@ function PendingRequests({ setCurrentContributors }) {
                       setPendingRequests,
                       setCurrentContributors,
                       addNotification,
+                      setButtonLoading,
                     );
                   }}
+                  type="submit"
+                  disabled={buttonLoading}
                 >
+                  <div className="h-full w-full flex justify-center items-center absolute">
+                    {buttonLoading && <Spinner />}
+                  </div>
                   Confirm
                 </Button>
                 <Button
                   className="btn-danger px-3 py-2 text-sm"
                   onClick={() => {
-                    handleDecline(user, setPendingRequests, addNotification);
+                    handleDecline(
+                      user,
+                      setPendingRequests,
+                      addNotification,
+                      setButtonLoading,
+                    );
                   }}
+                  type="submit"
+                  disabled={buttonLoading}
                 >
+                  <div className="h-full w-full flex justify-center items-center absolute">
+                    {buttonLoading && <Spinner />}
+                  </div>
                   Decline
                 </Button>
               </div>

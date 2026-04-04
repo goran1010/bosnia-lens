@@ -13,6 +13,7 @@ async function handleSubmitAddData(
 ) {
   try {
     e.preventDefault();
+    setLoading(true);
     const { city, code, post } = input;
 
     if (!validateSubmitAddData(cityInput, codeInput)) {

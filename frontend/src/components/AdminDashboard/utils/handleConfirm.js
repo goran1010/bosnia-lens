@@ -6,8 +6,10 @@ async function handleConfirm(
   setPendingRequests,
   setCurrentContributors,
   addNotification,
+  setButtonLoading,
 ) {
   try {
+    setButtonLoading(true);
     const csrfToken = await getCsrfToken();
 
     if (!csrfToken) {
@@ -54,6 +56,8 @@ async function handleConfirm(
       message: `Error promoting ${user.username} to contributor.`,
     });
     console.error(`Error promoting ${user.username} to contributor:`, error);
+  } finally {
+    setButtonLoading(false);
   }
 }
 

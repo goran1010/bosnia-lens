@@ -5,8 +5,10 @@ async function handleRemoveContributor(
   user,
   setCurrentContributors,
   addNotification,
+  setButtonLoading,
 ) {
   try {
+    setButtonLoading(true);
     const csrfToken = await getCsrfToken();
 
     if (!csrfToken) {
@@ -54,6 +56,8 @@ async function handleRemoveContributor(
       message: `Error removing ${user.username} from contributors.`,
     });
     console.error(`Error removing ${user.username} from contributors:`, error);
+  } finally {
+    setButtonLoading(false);
   }
 }
 

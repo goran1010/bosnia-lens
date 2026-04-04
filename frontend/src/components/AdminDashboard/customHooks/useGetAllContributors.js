@@ -3,12 +3,13 @@ import { useContext } from "react";
 import { NotificationContext } from "../../../contextData/NotificationContext";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-function useGetAllContributors() {
+function useGetAllContributors(setLoading) {
   const { addNotification } = useContext(NotificationContext);
   const [currentContributors, setCurrentContributors] = useState([]);
   useEffect(() => {
     async function handleGetAllContributors() {
       try {
+        setLoading(true);
         const response = await fetch(
           `${BACKEND_URL}/users/admin/contributors`,
           {
@@ -41,10 +42,12 @@ function useGetAllContributors() {
           message: "Error fetching current contributors.",
         });
         console.error("Error fetching current contributors:", error);
+      } finally {
+        setLoading(false);
       }
     }
     handleGetAllContributors();
-  }, [addNotification]);
+  }, [addNotification, setLoading]);
 
   return { currentContributors, setCurrentContributors };
 }

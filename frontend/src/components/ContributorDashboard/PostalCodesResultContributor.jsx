@@ -1,7 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
-import { handleEditContributor } from "./utils/handleEditContributor";
-import { handleDeleteContributor } from "./utils/handleDeleteContributor";
 import { PostalCodeRow } from "./PostalCodeRow";
 
 function PostalCodesResultContributor({ searchResult, setSearchResult }) {
@@ -23,14 +21,6 @@ function PostalCodesResultContributor({ searchResult, setSearchResult }) {
       newMap.set(code, { ...current, [name]: value });
       return newMap;
     });
-  };
-
-  const handleEdit = (e) => {
-    handleEditContributor(e, setSearchResult, addNotification);
-  };
-
-  const handleDelete = (e) => {
-    handleDeleteContributor(e, setSearchResult, addNotification);
   };
 
   if (searchResult.length === 0) {
@@ -58,9 +48,9 @@ function PostalCodesResultContributor({ searchResult, setSearchResult }) {
             <PostalCodeRow
               key={result.code}
               result={rowValue}
-              onChange={handleInputChange}
-              onSubmit={handleEdit}
-              onDelete={handleDelete}
+              handleInputChange={handleInputChange}
+              setSearchResult={setSearchResult}
+              addNotification={addNotification}
             />
           );
         })}
