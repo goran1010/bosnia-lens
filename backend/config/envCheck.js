@@ -4,6 +4,7 @@ const allRequiredVars = [
   "ACCESS_TOKEN_SECRET",
   "REFRESH_TOKEN_SECRET",
   "FRONTEND_URL",
+  "BACKEND_URL",
   "PORT",
   "RESEND_API_KEY",
   "CLIENT_ID",

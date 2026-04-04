@@ -4,23 +4,16 @@ import { emailConfirmHTML } from "../utils/emailConfirmHTML.js";
 import { passport } from "../config/passport.js";
 import { sendConfirmationEmail } from "../email/confirmationEmail.js";
 import bcrypt from "bcryptjs";
+import { matchedData } from "express-validator";
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
+const BACKEND_URL = process.env.BACKEND_URL;
 
 class AuthController {
   async signup(req, res) {
     try {
-      const { username, email, password } = req.body;
+      const { username, email, password } = matchedData(req);
       const hashedPassword = await bcrypt.hash(password, 10);
-
-      const userExists = await usersModel.find({ username });
-
-      if (userExists) {
-        return res.status(400).json({
-          error: "Username already taken",
-          details: [{ msg: "Username already taken" }],
-        });
-      }
 
       const confirmationToken = jwt.sign(
         { username, email },
@@ -28,7 +21,7 @@ class AuthController {
         { expiresIn: "1d" },
       );
 
-      const confirmationLink = `${req.protocol}://${req.get("host")}/auth/confirm/${confirmationToken}`;
+      const confirmationLink = `${BACKEND_URL}/auth/confirm/${confirmationToken}`;
 
       const result = await sendConfirmationEmail(
         email,
@@ -61,13 +54,13 @@ class AuthController {
     } catch (err) {
       console.error(err);
       res
-        .status(500)
+        .status(400)
         .json({ error: "Couldn't sign up", details: [{ msg: null }] });
     }
   }
 
   async confirmEmail(req, res) {
-    const { token } = req.params;
+    const { token } = matchedData(req);
 
     if (!token) {
       return res
@@ -78,7 +71,7 @@ class AuthController {
     try {
       const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET);
 
-      const user = await usersModel.find({ username: decoded.username });
+      const user = await usersModel.findOne({ username: decoded.username });
 
       if (!user) {
         return res
@@ -119,9 +112,11 @@ class AuthController {
 
       req.logIn(user, (err) => {
         if (err) return next(err);
+        // eslint-disable-next-line no-unused-vars
+        const { password, ...userWithoutPassword } = user;
         return res.json({
           message: "Logged in successfully",
-          data: user,
+          data: userWithoutPassword,
         });
       });
     })(req, res, next);
