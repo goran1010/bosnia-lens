@@ -1,8 +1,14 @@
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 import { getCsrfToken } from "../../utils/getCsrfToken";
 
-async function handleDecline(user, setPendingRequests, addNotification) {
+async function handleDecline(
+  user,
+  setPendingRequests,
+  addNotification,
+  setButtonLoading,
+) {
   try {
+    setButtonLoading(true);
     const csrfToken = await getCsrfToken();
 
     if (!csrfToken) {
@@ -48,6 +54,8 @@ async function handleDecline(user, setPendingRequests, addNotification) {
       message: `Error declining ${user.username}'s request.`,
     });
     console.error(`Error declining ${user.username}'s request:`, error);
+  } finally {
+    setButtonLoading(false);
   }
 }
 

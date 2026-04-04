@@ -8,6 +8,7 @@ import { Spinner } from "../../utils/Spinner";
 
 function PendingRequests({ setCurrentContributors }) {
   const [loading, setLoading] = useState(true);
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   const { addNotification } = useContext(NotificationContext);
   const { pendingRequests, setPendingRequests } =
@@ -52,17 +53,33 @@ function PendingRequests({ setCurrentContributors }) {
                       setPendingRequests,
                       setCurrentContributors,
                       addNotification,
+                      setButtonLoading,
                     );
                   }}
+                  type="submit"
+                  disabled={buttonLoading}
                 >
+                  <div className="h-full w-full flex justify-center items-center absolute">
+                    {buttonLoading && <Spinner />}
+                  </div>
                   Confirm
                 </Button>
                 <Button
                   className="btn-danger px-3 py-2 text-sm"
                   onClick={() => {
-                    handleDecline(user, setPendingRequests, addNotification);
+                    handleDecline(
+                      user,
+                      setPendingRequests,
+                      addNotification,
+                      setButtonLoading,
+                    );
                   }}
+                  type="submit"
+                  disabled={buttonLoading}
                 >
+                  <div className="h-full w-full flex justify-center items-center absolute">
+                    {buttonLoading && <Spinner />}
+                  </div>
                   Decline
                 </Button>
               </div>
