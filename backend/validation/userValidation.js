@@ -7,7 +7,7 @@ const signupValidationRules = [
     .isLength({ min: 6 })
     .withMessage("Username must be at least 6 characters long")
     .custom(async (username) => {
-      const user = await usersModel.find({ username });
+      const user = await usersModel.findOne({ username });
       if (user) {
         throw new Error("Username already in use");
       }
@@ -19,7 +19,7 @@ const signupValidationRules = [
     .isEmail()
     .withMessage("Invalid email address")
     .custom(async (email) => {
-      const user = await usersModel.find({ email });
+      const user = await usersModel.findOne({ email });
       if (user) {
         throw new Error("Email already in use");
       }
