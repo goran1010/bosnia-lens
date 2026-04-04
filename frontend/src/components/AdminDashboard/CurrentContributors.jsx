@@ -1,5 +1,5 @@
 import { handleRemoveContributor } from "./utils/handleRemoveContributor";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { Button } from "../sharedComponents/Button";
 import { Spinner } from "../../utils/Spinner";
@@ -10,6 +10,7 @@ function CurrentContributors({
   loading,
 }) {
   const { addNotification } = useContext(NotificationContext);
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   if (loading) {
     return <Spinner />;
@@ -49,9 +50,15 @@ function CurrentContributors({
                       user,
                       setCurrentContributors,
                       addNotification,
+                      setButtonLoading,
                     )
                   }
+                  type="submit"
+                  disabled={buttonLoading}
                 >
+                  <div className="h-full w-full flex justify-center items-center absolute">
+                    {buttonLoading && <Spinner />}
+                  </div>
                   Remove
                 </Button>
               </div>
