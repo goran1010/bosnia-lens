@@ -1,5 +1,6 @@
 import { normalizeName } from "../utils/normalizeName.js";
 import { postalCodesModel } from "../models/postalCodesModel.js";
+import { matchedData } from "express-validator";
 
 class V1Controller {
   status(req, res) {
@@ -15,7 +16,7 @@ class V1Controller {
   }
 
   async getPostalCodeByCode(req, res) {
-    let { searchTerm } = req.query;
+    let { searchTerm } = matchedData(req);
 
     const numericSearchTerm = Number(searchTerm);
     if (!Number.isNaN(numericSearchTerm) && numericSearchTerm > 0) {
