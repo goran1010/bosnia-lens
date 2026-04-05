@@ -5,8 +5,14 @@ class AuthValidation {
   signupValidationRules = [
     body("username")
       .trim()
-      .isAlphanumeric()
-      .withMessage("Username must be alphanumeric")
+      .custom((value) => {
+        if (!/^[a-zA-Z0-9_-]+$/.test(value)) {
+          throw new Error(
+            "Username can only contain letters, numbers, dashes or underscores",
+          );
+        }
+        return true;
+      })
       .isLength({ min: 6 })
       .withMessage("Username must be at least 6 characters long")
       .custom(async (username) => {
@@ -31,6 +37,14 @@ class AuthValidation {
 
     body("password")
       .trim()
+      .custom((value) => {
+        if (!/^[a-zA-Z0-9_-]+$/.test(value)) {
+          throw new Error(
+            "Password can only contain letters, numbers, dashes or underscores",
+          );
+        }
+        return true;
+      })
       .isStrongPassword({
         minLength: 6,
         minLowercase: 0,
