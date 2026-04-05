@@ -10,8 +10,9 @@ import { UserDataContext } from "../../../src/contextData/UserDataContext";
 import { useNotification } from "../../../src/customHooks/useNotification";
 import { Notifications } from "../../../src/components/Notifications";
 
-vi.mock("../src/components/utils/getCsrfToken", () => ({
-  getCsrfToken: vi.fn().mockResolvedValue("mocked-csrf-token"),
+vi.mock("../../../src/components/utils/getCsrfToken", () => ({
+  getCsrfToken: async () => "mocked-csrf-token",
+  clearCsrfToken: () => {},
 }));
 
 const user = userEvent.setup();
@@ -140,27 +141,18 @@ describe("LogIn for validation on button click", () => {
 
 describe("LogIn Form Submit", () => {
   test("Shows error message after clicking Create when fetching with wrong username/password", async () => {
-    vi.spyOn(globalThis, "fetch")
-      .mockResolvedValueOnce({
-        ok: true,
-        status: 200,
-        json: async () => ({
-          message: "CSRF token generated successfully",
-          data: "123",
-        }),
-      })
-      .mockResolvedValue({
-        ok: false,
-        status: 400,
-        json: async () => ({
-          error: "Validation failed",
-          details: [
-            {
-              msg: "Invalid username or password",
-            },
-          ],
-        }),
-      });
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: false,
+      status: 400,
+      json: async () => ({
+        error: "Validation failed",
+        details: [
+          {
+            msg: "Invalid username or password",
+          },
+        ],
+      }),
+    });
 
     const { logInButton, usernameField, passwordField } = createFormElements();
 
@@ -172,27 +164,18 @@ describe("LogIn Form Submit", () => {
       /Invalid username or password/i,
     );
 
-    expect(fetch).toHaveBeenCalledTimes(2);
+    expect(fetch).toHaveBeenCalledTimes(1);
     expect(errorMessage).toBeInTheDocument();
   });
 
   test("Redirects to Home on successful form submit", async () => {
-    vi.spyOn(globalThis, "fetch")
-      .mockResolvedValueOnce({
-        ok: true,
-        status: 200,
-        json: async () => ({
-          message: "CSRF token generated successfully",
-          data: "123",
-        }),
-      })
-      .mockResolvedValue({
-        ok: true,
-        status: 200,
-        json: async () => ({
-          username: "new_user",
-        }),
-      });
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({
+        username: "new_user",
+      }),
+    });
 
     const { usernameField, passwordField, logInButton } = createFormElements();
 
@@ -211,16 +194,9 @@ describe("LogIn Form Submit", () => {
       .spyOn(console, "error")
       .mockImplementation(() => {});
 
-    vi.spyOn(globalThis, "fetch")
-      .mockResolvedValueOnce({
-        ok: true,
-        status: 200,
-        json: async () => ({
-          message: "CSRF token generated successfully",
-          data: "123",
-        }),
-      })
-      .mockRejectedValueOnce(new Error("Network error"));
+    vi.spyOn(globalThis, "fetch").mockRejectedValueOnce(
+      new Error("Network error"),
+    );
 
     const { logInButton, usernameField, passwordField } = createFormElements();
 

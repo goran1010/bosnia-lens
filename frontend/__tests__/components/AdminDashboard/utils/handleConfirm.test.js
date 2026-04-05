@@ -28,12 +28,14 @@ describe("handleConfirm", () => {
     const setPendingRequests = vi.fn();
     const setCurrentContributors = vi.fn();
     const addNotification = vi.fn();
+    const setButtonLoading = vi.fn();
 
     await handleConfirm(
       user,
       setPendingRequests,
       setCurrentContributors,
       addNotification,
+      setButtonLoading,
     );
 
     expect(setPendingRequests).toHaveBeenCalled();
@@ -63,6 +65,7 @@ describe("handleConfirm", () => {
       setPendingRequests,
       setCurrentContributors,
       addNotification,
+      vi.fn(),
     );
 
     // Verify contributor is added
@@ -78,16 +81,26 @@ describe("handleConfirm", () => {
     const user = { id: 1, username: "testuser" };
     fetchSpy.mockResolvedValue({
       ok: true,
-      json: async () => ({ success: true }),
+      json: async () => ({
+        success: true,
+        message: "User promoted to contributor successfully",
+      }),
     });
     const addNotification = vi.fn();
+    const setButtonLoading = vi.fn();
 
-    await handleConfirm(user, vi.fn(), vi.fn(), addNotification);
+    await handleConfirm(
+      user,
+      vi.fn(),
+      vi.fn(),
+      addNotification,
+      setButtonLoading,
+    );
 
     expect(addNotification).toHaveBeenCalledWith(
       expect.objectContaining({
         type: "success",
-        message: expect.stringContaining("testuser"),
+        message: "User promoted to contributor successfully",
       }),
     );
   });
@@ -110,6 +123,7 @@ describe("handleConfirm", () => {
       setPendingRequests,
       setCurrentContributors,
       addNotification,
+      vi.fn(),
     );
 
     expect(setPendingRequests).not.toHaveBeenCalled();
@@ -128,6 +142,7 @@ describe("handleConfirm", () => {
       vi.fn(),
       vi.fn(),
       addNotification,
+      vi.fn(),
     );
 
     expect(addNotification).toHaveBeenCalledWith(
@@ -142,7 +157,14 @@ describe("handleConfirm", () => {
       json: async () => ({ success: true }),
     });
 
-    await handleConfirm({ id: 1, username: "test" }, vi.fn(), vi.fn(), vi.fn());
+    const setButtonLoading = vi.fn();
+    await handleConfirm(
+      { id: 1, username: "test" },
+      vi.fn(),
+      vi.fn(),
+      vi.fn(),
+      setButtonLoading,
+    );
 
     expect(fetchSpy).toHaveBeenCalledWith(
       expect.any(String),

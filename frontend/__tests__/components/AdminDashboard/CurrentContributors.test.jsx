@@ -22,13 +22,19 @@ const setupFetchMock = ({ contributors = [], pendingRequests = [] } = {}) => {
 
     if (requestUrl.includes("users/admin/requested-contributors")) {
       return Promise.resolve(
-        createFetchResponse({ data: pendingRequests, message: "Success" }),
+        createFetchResponse({
+          data: pendingRequests,
+          message: "Successfully retrieved pending requests",
+        }),
       );
     }
 
     if (requestUrl.includes("/users/admin/contributors")) {
       return Promise.resolve(
-        createFetchResponse({ data: contributors, message: "Success" }),
+        createFetchResponse({
+          data: contributors,
+          message: "Successfully retrieved current contributors",
+        }),
       );
     }
 
@@ -135,7 +141,7 @@ describe("CurrentContributors Component", () => {
     render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
     expect(
-      await screen.findByText(/Failed to fetch current contributors/i),
+      await screen.findByText(/Error fetching current contributors./i),
     ).toBeInTheDocument();
     expect(
       await screen.findByText("No contributors found"),

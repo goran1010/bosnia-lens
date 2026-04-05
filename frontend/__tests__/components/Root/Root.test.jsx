@@ -70,7 +70,7 @@ describe("Root component", () => {
     renderRoot();
 
     const notificationSuccess = await screen.findByText(
-      /Login status checked successfully./i,
+      /User retrieved successfully./i,
     );
     expect(notificationSuccess).toBeInTheDocument();
     const profileLink = await screen.findByRole("link", { name: /Profile/i });
@@ -78,15 +78,6 @@ describe("Root component", () => {
   });
 
   test("renders Log In link when user is not logged in", async () => {
-    fetchSpy.mockImplementation(() => {
-      return Promise.resolve({
-        ok: false,
-        json: async () => ({
-          error: "User not authenticated.",
-        }),
-      });
-    });
-
     renderRoot();
 
     const notificationError = await screen.findByText(
@@ -100,18 +91,11 @@ describe("Root component", () => {
 
 describe("Root component - Menu interaction", () => {
   test("closes menu when main content is clicked", async () => {
-    fetchSpy.mockImplementation(() => {
-      return Promise.resolve({
-        ok: false,
-        json: async () => ({
-          error: "User not authenticated.",
-        }),
-      });
-    });
-
     renderRoot();
 
-    const menuButton = await screen.findByRole("button", { name: /Menu/i });
+    const menuButton = await screen.findByRole("button", {
+      name: /Toggle navigation menu/i,
+    });
     await user.click(menuButton);
     expect(menuButton).toHaveAttribute("aria-expanded", "true");
 

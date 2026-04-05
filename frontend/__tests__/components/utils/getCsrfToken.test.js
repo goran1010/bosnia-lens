@@ -1,10 +1,10 @@
 import { describe, test, expect, beforeEach, afterEach, vi } from "vitest";
-import { getCsrfToken } from "../../../src/components/utils/getCsrfToken";
 
 let fetchSpy;
 
 beforeEach(() => {
   fetchSpy = vi.spyOn(globalThis, "fetch");
+  vi.resetModules();
 });
 
 afterEach(() => {
@@ -17,7 +17,8 @@ describe("getCsrfToken", () => {
       ok: true,
       json: async () => ({ data: "test-csrf-token" }),
     });
-
+    const { getCsrfToken } =
+      await import("../../../src/components/utils/getCsrfToken");
     const result = await getCsrfToken();
 
     expect(result).toBe("test-csrf-token");
@@ -28,7 +29,8 @@ describe("getCsrfToken", () => {
       ok: true,
       json: async () => ({ data: "token" }),
     });
-
+    const { getCsrfToken } =
+      await import("../../../src/components/utils/getCsrfToken");
     await getCsrfToken();
 
     expect(fetchSpy).toHaveBeenCalledWith(
@@ -39,7 +41,8 @@ describe("getCsrfToken", () => {
 
   test("returns null when response is not ok", async () => {
     fetchSpy.mockResolvedValue({ ok: false });
-
+    const { getCsrfToken } =
+      await import("../../../src/components/utils/getCsrfToken");
     const result = await getCsrfToken();
 
     expect(result).toBeNull();
@@ -48,7 +51,8 @@ describe("getCsrfToken", () => {
   test("throws an Error when fetch throws", async () => {
     fetchSpy.mockRejectedValue(new Error("Network failure"));
     vi.spyOn(console, "error").mockImplementation(() => {});
-
+    const { getCsrfToken } =
+      await import("../../../src/components/utils/getCsrfToken");
     await expect(getCsrfToken()).rejects.toThrow("Failed to fetch CSRF token");
   });
 
@@ -58,7 +62,8 @@ describe("getCsrfToken", () => {
     const consoleErrorSpy = vi
       .spyOn(console, "error")
       .mockImplementation(() => {});
-
+    const { getCsrfToken } =
+      await import("../../../src/components/utils/getCsrfToken");
     await expect(getCsrfToken()).rejects.toThrow("Failed to fetch CSRF token");
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       "Error fetching CSRF token:",

@@ -55,14 +55,6 @@ describe("ContributorForm component rendering", () => {
     expect(messageElement).toBeInTheDocument();
   });
 
-  test("renders Holidays component when Holidays is selected", async () => {
-    const selectElement = screen.getByLabelText(/Choose dataset/i);
-    await user.selectOptions(selectElement, "Holidays");
-
-    const holidaysElement = screen.getByText(/Holidays placeholder/i);
-    expect(holidaysElement).toBeInTheDocument();
-  });
-
   test("renders Universities component when Universities is selected", async () => {
     const selectElement = screen.getByLabelText(/Choose dataset/i);
     await user.selectOptions(selectElement, "Universities");

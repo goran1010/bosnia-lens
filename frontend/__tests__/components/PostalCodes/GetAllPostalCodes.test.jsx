@@ -197,7 +197,10 @@ describe("GetAllPostalCodes Component", () => {
           "An error occurred while fetching postal codes and municipalities.",
       });
 
-      expect(consoleErrorSpy).toHaveBeenCalledWith(networkError);
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        "Error fetching postal codes and municipalities:",
+        networkError,
+      );
       expect(mockSetLoading).toHaveBeenCalledWith(false);
 
       consoleErrorSpy.mockRestore();
