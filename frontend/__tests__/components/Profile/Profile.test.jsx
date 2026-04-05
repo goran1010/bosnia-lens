@@ -160,15 +160,19 @@ describe("Profile Component handle logout", () => {
   });
 
   test("handles logout failure due to unexpected error", async () => {
-    fetchSpy
-      .mockResolvedValueOnce({
+    fetchSpy.mockImplementation((url) => {
+      if (url.endsWith("/users/logout")) {
+        throw new Error("Unexpected error");
+      }
+
+      return Promise.resolve({
         ok: true,
         json: async () => ({
           message: "CSRF token generated successfully",
           data: "some-csrf-token",
         }),
-      })
-      .mockRejectedValueOnce(new Error("Unexpected error"));
+      });
+    });
 
     render(<Wrapper initialUser={{ username: "testuser" }} />);
     const logoutButton = await screen.findByRole("button", {
@@ -177,26 +181,33 @@ describe("Profile Component handle logout", () => {
     expect(logoutButton).toBeInTheDocument();
     await user.click(logoutButton);
 
-    const notificationElement = await screen.findByText(/Unexpected error/i);
+    const notificationElement = await screen.findByText(
+      /An error occurred while logging out./i,
+    );
     expect(notificationElement).toBeInTheDocument();
     expect(consoleErrorSpy).toHaveBeenCalled();
   });
 
   test("handles logout correctly", async () => {
-    fetchSpy
-      .mockResolvedValueOnce({
+    fetchSpy.mockImplementation((url) => {
+      if (url.endsWith("/users/logout")) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            message: "User logged out successfully",
+            data: null,
+          }),
+        });
+      }
+
+      return Promise.resolve({
         ok: true,
         json: async () => ({
           message: "CSRF token generated successfully",
           data: "some-csrf-token",
         }),
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          message: "User logged out successfully",
-        }),
       });
+    });
 
     render(<Wrapper initialUser={{ username: "testuser" }} />);
     const logoutButton = await screen.findByRole("button", {
@@ -221,7 +232,7 @@ describe("Profile Component handle become contributor", () => {
   test("handles become contributor failure due to missing CSRF token", async () => {
     render(<Wrapper initialUser={{ username: "testuser", role: "USER" }} />);
     const becomeContributorButton = await screen.findByRole("button", {
-      name: /Become a Contributor/i,
+      name: /Request Contributor role/i,
     });
     expect(becomeContributorButton).toBeInTheDocument();
     await user.click(becomeContributorButton);
@@ -232,24 +243,28 @@ describe("Profile Component handle become contributor", () => {
   });
 
   test("handles become contributor failure due to server error", async () => {
-    fetchSpy
-      .mockResolvedValueOnce({
+    fetchSpy.mockImplementation((url) => {
+      if (url.endsWith("/users/become-contributor")) {
+        return Promise.resolve({
+          ok: false,
+          json: async () => ({
+            error: "Network error.",
+          }),
+        });
+      }
+
+      return Promise.resolve({
         ok: true,
         json: async () => ({
           message: "CSRF token generated successfully",
           data: "some-csrf-token",
         }),
-      })
-      .mockResolvedValueOnce({
-        ok: false,
-        json: async () => ({
-          error: "Network error",
-        }),
       });
+    });
 
     render(<Wrapper initialUser={{ username: "testuser", role: "USER" }} />);
     const becomeContributorButton = await screen.findByRole("button", {
-      name: /Become a Contributor/i,
+      name: /Request Contributor role/i,
     });
     expect(becomeContributorButton).toBeInTheDocument();
     await user.click(becomeContributorButton);
@@ -259,19 +274,23 @@ describe("Profile Component handle become contributor", () => {
   });
 
   test("handles become contributor failure due to unexpected error", async () => {
-    fetchSpy
-      .mockResolvedValueOnce({
+    fetchSpy.mockImplementation((url) => {
+      if (url.endsWith("/users/become-contributor")) {
+        throw new Error("Unexpected error");
+      }
+
+      return Promise.resolve({
         ok: true,
         json: async () => ({
           message: "CSRF token generated successfully",
           data: "some-csrf-token",
         }),
-      })
-      .mockRejectedValueOnce(new Error("Unexpected error"));
+      });
+    });
 
     render(<Wrapper initialUser={{ username: "testuser", role: "USER" }} />);
     const becomeContributorButton = await screen.findByRole("button", {
-      name: /Become a Contributor/i,
+      name: /Request Contributor role/i,
     });
     expect(becomeContributorButton).toBeInTheDocument();
     await user.click(becomeContributorButton);
@@ -284,25 +303,32 @@ describe("Profile Component handle become contributor", () => {
   });
 
   test("handles become contributor correctly", async () => {
-    fetchSpy
-      .mockResolvedValueOnce({
+    fetchSpy.mockImplementation((url) => {
+      if (url.endsWith("/users/become-contributor")) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            message: "Contributor status requested successfully",
+            data: {
+              email: "testuser@example.com",
+              role: "CONTRIBUTOR",
+            },
+          }),
+        });
+      }
+
+      return Promise.resolve({
         ok: true,
         json: async () => ({
           message: "CSRF token generated successfully",
           data: "some-csrf-token",
         }),
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          message: "Contributor status requested successfully",
-          data: { role: "CONTRIBUTOR" },
-        }),
       });
+    });
 
     render(<Wrapper initialUser={{ username: "testuser", role: "USER" }} />);
     const becomeContributorButton = await screen.findByRole("button", {
-      name: /Become a Contributor/i,
+      name: /Request Contributor role/i,
     });
     expect(becomeContributorButton).toBeInTheDocument();
     await user.click(becomeContributorButton);
