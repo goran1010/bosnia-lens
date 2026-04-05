@@ -10,8 +10,9 @@ import { NotificationContext } from "../../src/contextData/NotificationContext";
 import { useNotification } from "../../src/customHooks/useNotification";
 import { Notifications } from "../../src/components/Notifications";
 
-vi.mock("../src/components/utils/getCsrfToken", () => ({
-  getCsrfToken: vi.fn().mockResolvedValue("mocked-csrf-token"),
+vi.mock("../../src/components/utils/getCsrfToken", () => ({
+  getCsrfToken: async () => "mocked-csrf-token",
+  clearCsrfToken: () => {},
 }));
 
 const user = userEvent.setup();
@@ -225,28 +226,19 @@ describe("SignUp Form Validation on Create button click", () => {
 
 describe("SignUp Form Submit", () => {
   test("Shows error message after clicking Create when fetching with existing username/email", async () => {
-    vi.spyOn(globalThis, "fetch")
-      .mockResolvedValueOnce({
-        ok: true,
-        status: 200,
-        json: async () => ({
-          message: "CSRF token generated successfully",
-          data: "123",
-        }),
-      })
-      .mockResolvedValueOnce({
-        ok: false,
-        status: 400,
-        json: async () => ({
-          error: "Validation failed",
-          details: [
-            {
-              msg: "Username already in use",
-            },
-            { msg: "Email already in use" },
-          ],
-        }),
-      });
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
+      ok: false,
+      status: 400,
+      json: async () => ({
+        error: "Validation failed",
+        details: [
+          {
+            msg: "Username already in use",
+          },
+          { msg: "Email already in use" },
+        ],
+      }),
+    });
     const {
       usernameField,
       emailField,
@@ -262,7 +254,7 @@ describe("SignUp Form Submit", () => {
 
     await user.click(signUpButton);
 
-    expect(fetch).toHaveBeenCalledTimes(2);
+    expect(fetch).toHaveBeenCalledTimes(1);
     expect(await screen.findByText(/Validation failed/i)).toBeInTheDocument();
     expect(
       await screen.findByText(/Username already in use/i),
@@ -270,22 +262,13 @@ describe("SignUp Form Submit", () => {
   });
 
   test("Redirects to LogIn on successful form submit", async () => {
-    vi.spyOn(globalThis, "fetch")
-      .mockResolvedValueOnce({
-        ok: true,
-        status: 200,
-        json: async () => ({
-          message: "CSRF token generated successfully",
-          data: "123",
-        }),
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        status: 200,
-        json: async () => ({
-          message: "Registration successful! Check your email.",
-        }),
-      });
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: async () => ({
+        message: "Registration successful! Check your email.",
+      }),
+    });
 
     const {
       usernameField,
@@ -302,9 +285,11 @@ describe("SignUp Form Submit", () => {
 
     await user.click(signUpButton);
 
-    expect(await screen.findByText(/Please log in/i)).toBeInTheDocument();
+    const logInButton = await screen.findByRole("button", { name: /Log In/i });
+    expect(logInButton).toBeInTheDocument();
+
     expect(
-      await screen.findByText(/Registration successful! Please log in./i),
+      await screen.findByText(/Registration successful! Check your email./i),
     ).toBeInTheDocument();
   });
 
@@ -313,16 +298,9 @@ describe("SignUp Form Submit", () => {
       .spyOn(console, "error")
       .mockImplementation(() => {});
 
-    vi.spyOn(globalThis, "fetch")
-      .mockResolvedValueOnce({
-        ok: true,
-        status: 200,
-        json: async () => ({
-          message: "CSRF token generated successfully",
-          data: "123",
-        }),
-      })
-      .mockRejectedValueOnce(new Error("Network error"));
+    vi.spyOn(globalThis, "fetch").mockRejectedValueOnce(
+      new Error("Network error"),
+    );
 
     const {
       usernameField,
