@@ -1,6 +1,6 @@
 # Bosnia Lens
 
-A free, open-source project providing structured public data about Bosnia and Herzegovina through a REST API and a React web interface. The current implemented dataset is postal codes, with universities as a planned expansion area.
+A free, open-source project providing structured public data about Bosnia and Herzegovina through a REST API and a React web interface. The current implemented dataset is postal codes, with universities as a planned addition and focus of the project.
 
 LIVE Web app at - <https://bosnia-lens.netlify.app/>
 
@@ -210,7 +210,7 @@ The project is designed to be deployed with:
 - **Frontend**: Static hosting (Netlify, Vercel)
 - **Database**: PostgreSQL (Supabase, Koyeb, or self-hosted)
 
-Backend deployment currently runs migrations on startup through the backend `start` script. Frontend production builds are handled through Vite.
+Backend deployment currently runs database migration and Prisma client generation with the `build` script. Frontend production builds are handled through Vite.
 
 ## Built With
 
@@ -237,7 +237,7 @@ Backend deployment currently runs migrations on startup through the backend `sta
 
 ## Current Status
 
-The repository already contains structure for universities, contributor flows, and admin flows, but the currently complete public dataset and API surface is centered on postal codes. The README intentionally documents the project as it behaves today rather than as a roadmap.
+The repository already contains structure for universities, contributor flows, and admin flows, but the currently complete public dataset and API surface is centered on postal codes.
 
 ## Contributing
 
