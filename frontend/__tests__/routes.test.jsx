@@ -4,15 +4,6 @@ import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { routes } from "../src/routes";
 import { UserDataContext } from "../src/contextData/UserDataContext";
 
-vi.mock("../../src/customHooks/useWeatherCheck", () => ({
-  default: (setWeatherForecast, setLoading) => {
-    setWeatherForecast([
-      { datetime: "2025-12-08", temp: 5, iconURL: "icon.svg" },
-    ]);
-    setLoading(false);
-  },
-}));
-
 beforeEach(() => {
   vi.spyOn(globalThis, "fetch").mockResolvedValue({
     ok: true,
@@ -69,16 +60,6 @@ describe("Loading components when visiting an address", () => {
     expect(linkElement).toBeInTheDocument();
   });
 
-  test("visit holidays page", async () => {
-    const router = createMemoryRouter(routes, {
-      initialEntries: ["/holidays"],
-    });
-    render(<RouterProvider router={router} />);
-
-    const linkElements = await screen.findAllByText(/Holidays/i);
-    expect(linkElements[0]).toBeInTheDocument();
-  });
-
   test("visit home page", async () => {
     const router = createMemoryRouter(routes, {
       initialEntries: ["/"],
@@ -89,7 +70,7 @@ describe("Loading components when visiting an address", () => {
     expect(linkElement).toBeInTheDocument();
   });
 
-  test.each(["/", "/postal-codes", "/universities", "/holidays"])(
+  test.each(["/", "/postal-codes", "/universities"])(
     "render Footer on every page",
     async (route) => {
       const router = createMemoryRouter(routes, {
@@ -104,7 +85,7 @@ describe("Loading components when visiting an address", () => {
     },
   );
 
-  test.each(["/", "/postal-codes", "/universities", "/holidays"])(
+  test.each(["/", "/postal-codes", "/universities"])(
     "render Navbar on every page",
     async (route) => {
       const router = createMemoryRouter(routes, {
@@ -119,14 +100,10 @@ describe("Loading components when visiting an address", () => {
       const postalCodesLink = await screen.findByRole("link", {
         name: /Postal Codes/i,
       });
-      const holidaysLink = await screen.findByRole("link", {
-        name: /Holidays/i,
-      });
 
       expect(homeLink).toBeInTheDocument();
       expect(universitiesLink).toBeInTheDocument();
       expect(postalCodesLink).toBeInTheDocument();
-      expect(holidaysLink).toBeInTheDocument();
     },
   );
 });
