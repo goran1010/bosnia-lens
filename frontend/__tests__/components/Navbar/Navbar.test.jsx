@@ -56,7 +56,6 @@ describe("Render Navbar on root route", () => {
     const home = await screen.findByText(/Home/i);
     const universities = screen.getByText(/Universities/i);
     const postalCodes = screen.getByText(/Postal Codes/i);
-    const holidays = screen.getByText(/Holidays/i);
     const profile = screen.queryByRole("link", { name: /profile/i });
 
     expect(profile).not.toBeInTheDocument();
@@ -66,7 +65,6 @@ describe("Render Navbar on root route", () => {
     expect(home).toBeInTheDocument();
     expect(universities).toBeInTheDocument();
     expect(postalCodes).toBeInTheDocument();
-    expect(holidays).toBeInTheDocument();
   });
 
   test("user logged in", async () => {
@@ -78,7 +76,6 @@ describe("Render Navbar on root route", () => {
     const home = await screen.findByText(/Home/i);
     const universities = screen.getByText(/Universities/i);
     const postalCodes = screen.getByText(/Postal Codes/i);
-    const holidays = screen.getByText(/Holidays/i);
     const profile = await screen.findByRole("link", { name: /profile/i });
 
     expect(profile).toBeInTheDocument();
@@ -88,7 +85,6 @@ describe("Render Navbar on root route", () => {
     expect(home).toBeInTheDocument();
     expect(universities).toBeInTheDocument();
     expect(postalCodes).toBeInTheDocument();
-    expect(holidays).toBeInTheDocument();
   });
 });
 
@@ -97,10 +93,16 @@ function NavbarWrapper({ isOpen = false, role = "ADMIN" }) {
   const setUserData = vi.fn();
 
   const [isMenuOpen, setIsMenuOpen] = useState(isOpen);
+  const [isThemeMenuOpen, setThemeMenuOpen] = useState(false);
   return (
     <UserDataContext value={{ userData, setUserData }}>
       <MemoryRouter>
-        <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+        <Navbar
+          isMenuOpen={isMenuOpen}
+          setIsMenuOpen={setIsMenuOpen}
+          isThemeMenuOpen={isThemeMenuOpen}
+          setThemeMenuOpen={setThemeMenuOpen}
+        />
       </MemoryRouter>
     </UserDataContext>
   );
@@ -110,7 +112,7 @@ describe("render Navbar depending on open menu state", () => {
   test("mobile menu is closed", async () => {
     render(<NavbarWrapper />);
     const menuButton = await screen.findByRole("button", {
-      name: /Menu/i,
+      name: /Toggle navigation menu/i,
     });
     expect(menuButton).toBeInTheDocument();
 
@@ -133,7 +135,7 @@ describe("render Navbar when user is admin or contributor", () => {
   test("mobile menu is closed", async () => {
     render(<NavbarWrapper />);
     const menuButton = await screen.findByRole("button", {
-      name: /Menu/i,
+      name: /Toggle navigation menu/i,
     });
     expect(menuButton).toBeInTheDocument();
 
