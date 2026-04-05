@@ -77,7 +77,10 @@ describe("PendingRequests Component", () => {
     const pendingRequestsText = await screen.findAllByText(/Pending Requests/i);
 
     expect(numberOfRequests).toHaveTextContent("0");
-    expect(pendingRequestsText).toHaveLength(3);
+    expect(pendingRequestsText).toHaveLength(2);
+    expect(screen.getByLabelText(/pending requests count/i)).toHaveTextContent(
+      "0",
+    );
   });
 
   test("renders PendingRequests with 1 request", async () => {

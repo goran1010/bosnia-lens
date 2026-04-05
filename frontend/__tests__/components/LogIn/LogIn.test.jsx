@@ -184,7 +184,6 @@ describe("LogIn Form Submit", () => {
 
     await user.click(logInButton);
 
-    screen.debug();
     expect(
       await screen.findByText(/A free, open-source project/i),
     ).toBeInTheDocument();
