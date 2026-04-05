@@ -10,12 +10,21 @@ import { Profile } from "../../../src/components/Profile/Profile";
 import { LogIn } from "../../../src/components/LogIn/LogIn";
 import userEvent from "@testing-library/user-event";
 
+let getCsrfTokenMock = "mocked-csrf-token";
+
+vi.mock("../../../src/components/utils/getCsrfToken", () => ({
+  getCsrfToken: async () => getCsrfTokenMock,
+  clearCsrfToken: () => {},
+}));
+
 const user = userEvent.setup();
 
 let fetchSpy;
 let consoleErrorSpy;
 
 beforeEach(() => {
+  getCsrfTokenMock = "mocked-csrf-token";
+
   fetchSpy = vi.spyOn(globalThis, "fetch").mockImplementation(() =>
     Promise.resolve({
       ok: true,
@@ -120,6 +129,7 @@ describe("Profile Component", () => {
 
 describe("Profile Component handle logout", () => {
   test("handles logout failure due to missing CSRF token", async () => {
+    getCsrfTokenMock = null;
     render(<Wrapper initialUser={{ username: "testuser" }} />);
     const logoutButton = await screen.findByRole("button", {
       name: /Log out/i,
@@ -133,20 +143,12 @@ describe("Profile Component handle logout", () => {
   });
 
   test("handles logout failure due to server error", async () => {
-    fetchSpy
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          message: "CSRF token generated successfully",
-          data: "some-csrf-token",
-        }),
-      })
-      .mockResolvedValueOnce({
-        ok: false,
-        json: async () => ({
-          error: "Network error.",
-        }),
-      });
+    fetchSpy.mockResolvedValueOnce({
+      ok: false,
+      json: async () => ({
+        error: "Network error.",
+      }),
+    });
 
     render(<Wrapper initialUser={{ username: "testuser" }} />);
     const logoutButton = await screen.findByRole("button", {
@@ -164,14 +166,6 @@ describe("Profile Component handle logout", () => {
       if (url.endsWith("/users/logout")) {
         throw new Error("Unexpected error");
       }
-
-      return Promise.resolve({
-        ok: true,
-        json: async () => ({
-          message: "CSRF token generated successfully",
-          data: "some-csrf-token",
-        }),
-      });
     });
 
     render(<Wrapper initialUser={{ username: "testuser" }} />);
@@ -199,14 +193,6 @@ describe("Profile Component handle logout", () => {
           }),
         });
       }
-
-      return Promise.resolve({
-        ok: true,
-        json: async () => ({
-          message: "CSRF token generated successfully",
-          data: "some-csrf-token",
-        }),
-      });
     });
 
     render(<Wrapper initialUser={{ username: "testuser" }} />);
@@ -230,6 +216,7 @@ describe("Profile Component handle logout", () => {
 
 describe("Profile Component handle become contributor", () => {
   test("handles become contributor failure due to missing CSRF token", async () => {
+    getCsrfTokenMock = null;
     render(<Wrapper initialUser={{ username: "testuser", role: "USER" }} />);
     const becomeContributorButton = await screen.findByRole("button", {
       name: /Request Contributor role/i,
@@ -252,14 +239,6 @@ describe("Profile Component handle become contributor", () => {
           }),
         });
       }
-
-      return Promise.resolve({
-        ok: true,
-        json: async () => ({
-          message: "CSRF token generated successfully",
-          data: "some-csrf-token",
-        }),
-      });
     });
 
     render(<Wrapper initialUser={{ username: "testuser", role: "USER" }} />);
@@ -278,14 +257,6 @@ describe("Profile Component handle become contributor", () => {
       if (url.endsWith("/users/become-contributor")) {
         throw new Error("Unexpected error");
       }
-
-      return Promise.resolve({
-        ok: true,
-        json: async () => ({
-          message: "CSRF token generated successfully",
-          data: "some-csrf-token",
-        }),
-      });
     });
 
     render(<Wrapper initialUser={{ username: "testuser", role: "USER" }} />);
@@ -316,14 +287,6 @@ describe("Profile Component handle become contributor", () => {
           }),
         });
       }
-
-      return Promise.resolve({
-        ok: true,
-        json: async () => ({
-          message: "CSRF token generated successfully",
-          data: "some-csrf-token",
-        }),
-      });
     });
 
     render(<Wrapper initialUser={{ username: "testuser", role: "USER" }} />);
