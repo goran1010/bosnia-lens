@@ -2,6 +2,12 @@
 
 A free, open-source project providing structured public data about Bosnia and Herzegovina through a REST API and a React web interface. The current implemented dataset is postal codes, with universities and holidays kept in the project as planned expansion areas.
 
+LIVE Web app at - <https://bosnia-lens.netlify.app/>
+
+REST API at - <https://round-leann-goran-jovic-1010-ccad2ae8.koyeb.app/api>
+
+For more info on how to connect your app to the REST API, visit - <https://bosnia-lens.netlify.app/api-docs>
+
 ## Features
 
 - **Versioned REST API**: Public endpoints under `/api/v1`

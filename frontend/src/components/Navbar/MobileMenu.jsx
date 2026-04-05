@@ -14,7 +14,13 @@ function MobileMenu({ setIsMenuOpen, userData }) {
         >
           Home
         </Link>
-
+        <Link
+          className="menu-item block p-2 w-full text-center text-nowrap"
+          to="/api-docs"
+          onClick={() => setIsMenuOpen(false)}
+        >
+          API Docs
+        </Link>
         <Link
           className="menu-item block p-2 w-full text-center text-nowrap"
           to="/postal-codes"

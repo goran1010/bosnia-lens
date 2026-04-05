@@ -8,6 +8,7 @@ import { SignUp } from "./components/SignUp/SignUp";
 import { ContributorDashboard } from "./components/ContributorDashboard/ContributorDashboard";
 import { AdminDashboard } from "./components/AdminDashboard/AdminDashboard";
 import { Profile } from "./components/Profile/Profile";
+import { Api } from "./components/Api/Api";
 
 const routes = [
   {
@@ -22,6 +23,10 @@ const routes = [
       {
         element: <Home />,
         path: "/home",
+      },
+      {
+        element: <Api />,
+        path: "api-docs",
       },
       {
         element: <PostalCodes />,

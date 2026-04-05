@@ -10,6 +10,11 @@ function StandardMenu({ userData }) {
           </Link>
         </li>
         <li>
+          <Link className="menu-item block py-3 px-2" to="/api-docs">
+            API Docs
+          </Link>
+        </li>
+        <li>
           <Link
             className="menu-item block py-3 px-2 text-nowrap"
             to="/postal-codes"
