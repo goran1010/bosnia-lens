@@ -8,6 +8,7 @@ import { useNotification } from "../../../src/customHooks/useNotification";
 import { Notifications } from "../../../src/components/Notifications";
 import { useState } from "react";
 import userEvent from "@testing-library/user-event";
+import { clearCsrfToken } from "../../../src/components/utils/getCsrfToken";
 
 const user = userEvent.setup();
 
@@ -41,6 +42,7 @@ const fetchMock = vi.fn();
 
 const setupFetchMock = () => {
   fetchMock.mockReset();
+  clearCsrfToken();
   fetchMock.mockImplementation((requestUrl) => {
     if (requestUrl.includes("/csrf-token")) {
       return Promise.resolve(
@@ -61,7 +63,7 @@ const setupFetchMock = () => {
             post: "",
           },
 
-          message: "Success",
+          message: "Postal codes retrieved successfully",
         }),
       );
     }
@@ -77,7 +79,7 @@ const setupFetchMock = () => {
               post: "",
             },
           ],
-          message: "Postal codes retrieved successfully",
+          message: "Postal code found successfully",
         }),
       );
     }
@@ -94,13 +96,16 @@ const setupFetchMock = () => {
             },
             { id: 2, city: "Test City 2", code: "12346", post: "" },
           ],
-          message: "Data added successfully",
+          message: "Postal codes retrieved successfully",
         }),
       );
     }
 
     return Promise.resolve(
-      createFetchResponse({ data: [], message: "Success" }),
+      createFetchResponse({
+        data: [],
+        message: "Postal codes retrieved successfully",
+      }),
     );
   });
 };
@@ -127,7 +132,7 @@ describe("PostalCodesResultContributor component", () => {
 
   test("renders search results in the table", async () => {
     const successNotification = await screen.findByText(
-      /Postal codes and municipalities retrieved successfully/i,
+      /Postal codes retrieved successfully/i,
     );
     expect(successNotification).toBeInTheDocument();
 
@@ -198,7 +203,7 @@ describe("PostalCodesResultContributor component", () => {
               code: "12345",
               post: "",
             },
-            message: "Data updated successfully",
+            message: "Postal code updated successfully",
           }),
         ),
       );

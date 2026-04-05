@@ -61,7 +61,7 @@ const setupFetchMock = () => {
             post: "",
           },
 
-          message: "Success",
+          message: "Data added successfully",
         }),
       );
     }
@@ -100,7 +100,7 @@ const setupFetchMock = () => {
     }
 
     return Promise.resolve(
-      createFetchResponse({ data: [], message: "Success" }),
+      createFetchResponse({ data: [], message: "Data added successfully" }),
     );
   });
 };

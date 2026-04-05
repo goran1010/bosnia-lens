@@ -61,7 +61,7 @@ const setupFetchMock = () => {
             post: "",
           },
 
-          message: "Success",
+          message: "Data added successfully",
         }),
       );
     }
@@ -77,7 +77,7 @@ const setupFetchMock = () => {
               post: "",
             },
           ],
-          message: "Postal codes retrieved successfully",
+          message: "Postal code found successfully",
         }),
       );
     }
@@ -94,7 +94,7 @@ const setupFetchMock = () => {
             },
             { id: 2, city: "Test City 2", code: "12346", post: "" },
           ],
-          message: "Data added successfully",
+          message: "Postal codes retrieved successfully",
         }),
       );
     }
@@ -134,7 +134,7 @@ describe("GetAllPostalCodes component", () => {
     await user.click(getAllButton);
 
     const successNotification = await screen.findByText(
-      /Postal codes and municipalities retrieved successfully/i,
+      /Postal codes retrieved successfully/i,
     );
     expect(successNotification).toBeInTheDocument();
 
@@ -170,7 +170,7 @@ describe("GetAllPostalCodes component", () => {
     await user.click(getAllButton);
 
     const errorNotification = await screen.findByText(
-      /An error occurred while fetching postal codes and municipalities/i,
+      /An error occurred while fetching postal codes/i,
     );
     expect(errorNotification).toBeInTheDocument();
     expect(consoleSpy).toHaveBeenCalled();
