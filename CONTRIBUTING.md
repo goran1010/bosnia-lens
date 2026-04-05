@@ -1,6 +1,6 @@
 # Contributing to Bosnia Lens
 
-Contributions of any kind are welcome — bug fixes, new features, data, documentation, or tests.
+Contributions of any kind are welcome - bug fixes, new features, data, documentation, or tests.
 
 ## Getting Started
 
