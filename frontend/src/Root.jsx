@@ -53,16 +53,18 @@ function Root() {
             isThemeMenuOpen={isThemeMenuOpen}
             setThemeMenuOpen={setThemeMenuOpen}
           />
-          <Notifications />
+
           <main
-            className="app-main flex-1 flex flex-col items-center justify-center px-1 md:px-5 lg:px-10 xl:px-25 2xl:px-50"
+            className="app-main flex-1 flex flex-col items-center justify-center px-1 md:px-5 lg:px-10 xl:px-25 2xl:px-50 relative"
             onClick={() => {
               isMenuOpen && setIsMenuOpen(false);
               isThemeMenuOpen && setThemeMenuOpen(false);
             }}
           >
             {loading ? <Spinner /> : <Outlet />}
+            <Notifications />
           </main>
+
           <Footer />
         </>
       </UserDataContext>

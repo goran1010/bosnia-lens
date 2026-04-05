@@ -1,13 +1,4 @@
-import { useWeatherCheck } from "./customHooks/useWeatherCheck";
-import { useState } from "react";
-import { Spinner } from "../../utils/Spinner";
-import { WeatherCard } from "./WeatherCard";
-
 function Home() {
-  const [loading, setLoading] = useState(true);
-
-  const { weatherForecast } = useWeatherCheck(setLoading);
-
   return (
     <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl flex flex-col items-center gap-4 py-2 dark:text-gray-100">
       <header className="flex flex-col items-center gap-3 w-full">
@@ -62,11 +53,7 @@ function Home() {
           </section>
         </div>
       </header>
-      {loading ? (
-        <Spinner />
-      ) : (
-        <WeatherCard weatherForecast={weatherForecast} />
-      )}
+
       <section className="flex flex-col items-center gap-3 w-full">
         <div className="grid grid-rows-1 gap-3 md:grid-cols-2 w-full max-w-5xl">
           <section className="flex flex-col items-center text-left">

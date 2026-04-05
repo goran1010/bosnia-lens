@@ -3,12 +3,12 @@ import { ErrorPage } from "./components/ErrorPage";
 import { PostalCodes } from "./components/PostalCodes/PostalCodes";
 import { Home } from "./components/Home/Home";
 import { Universities } from "./components/Universities";
-import { Holidays } from "./components/Holidays";
 import { LogIn } from "./components/LogIn/LogIn";
 import { SignUp } from "./components/SignUp/SignUp";
 import { ContributorDashboard } from "./components/ContributorDashboard/ContributorDashboard";
 import { AdminDashboard } from "./components/AdminDashboard/AdminDashboard";
 import { Profile } from "./components/Profile/Profile";
+import { Api } from "./components/Api/Api";
 
 const routes = [
   {
@@ -25,12 +25,12 @@ const routes = [
         path: "/home",
       },
       {
-        element: <PostalCodes />,
-        path: "postal-codes",
+        element: <Api />,
+        path: "api-docs",
       },
       {
-        element: <Holidays />,
-        path: "holidays",
+        element: <PostalCodes />,
+        path: "postal-codes",
       },
       {
         element: <Universities />,
