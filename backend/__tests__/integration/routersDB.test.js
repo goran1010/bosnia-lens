@@ -6,7 +6,6 @@ import { createNewUser } from "../utils/createNewUser.js";
 import { usersModel } from "../../models/usersModel.js";
 import jwt from "jsonwebtoken";
 import { emailConfirmHTML } from "../../utils/emailConfirmHTML.js";
-import e from "express";
 
 vi.mock("../../email/confirmationEmail.js", () => ({
   sendConfirmationEmail: vi.fn(async () => {
