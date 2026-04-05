@@ -1,6 +1,6 @@
 # Bosnia Lens
 
-A free, open-source project providing structured public data about Bosnia and Herzegovina through a REST API and a React web interface. The current implemented dataset is postal codes, with universities and holidays kept in the project as planned expansion areas.
+A free, open-source project providing structured public data about Bosnia and Herzegovina through a REST API and a React web interface. The current implemented dataset is postal codes, with universities as a planned expansion area.
 
 LIVE Web app at - <https://bosnia-lens.netlify.app/>
 
@@ -13,12 +13,13 @@ For more info on how to connect your app to the REST API, visit - <https://bosni
 - **Versioned REST API**: Public endpoints under `/api/v1`
 - **Postal Code Search**: Browse all postal codes or search by code and city name
 - **Session Authentication**: Passport-based auth with signup, login, logout, and email confirmation
+- **Role-based Access**: Contributor and admin roles with protected dashboards for data management
+- **CSRF Protection**: Synchronised CSRF tokens required for all mutating requests to authenticated routes
 
 ## Data Coverage
 
 - Postal codes (implemented)
 - Universities (frontend route placeholder, planned dataset - target focus of the project)
-- Holidays and observances (frontend route placeholder, planned dataset)
 
 ## Getting Started
 
@@ -70,7 +71,8 @@ Backend env layout:
 
 - `NODE_ENV`: app mode, usually `development`
 - `PORT`: backend port, usually `3000`
-- `URL`: frontend origin allowed by CORS, usually `http://localhost:5173`
+- `FRONTEND_URL`: frontend origin allowed by CORS, usually `http://localhost:5173`
+- `BACKEND_URL`: backend's own publicly reachable URL, used for building email confirmation links, usually `http://localhost:3000`
 - `DATABASE_URL`: development PostgreSQL database
 - `TEST_DATABASE_URL`: separate PostgreSQL database used by tests and test migrations
 - `ACCESS_TOKEN_SECRET`: access token signing secret
@@ -166,11 +168,11 @@ Run these from the repository root.
 
 ## API Overview
 
-Current public API routes:
+### Public routes (no authentication required)
 
 - `GET /api`: API status response
 - `GET /api/v1`: versioned API status response
-- `GET /api/v1/postal-codes`: list postal codes
+- `GET /api/v1/postal-codes`: list all postal codes
 - `GET /api/v1/postal-codes/search?searchTerm=...`: search postal codes by numeric code or city name
 
 ## Running the tests
@@ -235,7 +237,7 @@ Backend deployment currently runs migrations on startup through the backend `sta
 
 ## Current Status
 
-The repository already contains structure for universities, holidays, contributor flows, and admin flows, but the currently complete public dataset and API surface is centered on postal codes. The README intentionally documents the project as it behaves today rather than as a roadmap.
+The repository already contains structure for universities, contributor flows, and admin flows, but the currently complete public dataset and API surface is centered on postal codes. The README intentionally documents the project as it behaves today rather than as a roadmap.
 
 ## Contributing
 
