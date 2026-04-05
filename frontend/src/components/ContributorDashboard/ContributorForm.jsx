@@ -25,12 +25,10 @@ function ContributorForm() {
             No dataset
           </option>
           <option value="postal-codes">Postal Codes</option>
-          <option value="holidays">Holidays</option>
           <option value="universities">Universities</option>
         </Select>
       </form>
       {datasetSelect === "postal-codes" && <PostalCodeData />}
-      {datasetSelect === "holidays" && "Holidays placeholder"}
       {datasetSelect === "universities" && "Universities placeholder"}
       {datasetSelect === "" && <div>You need to select a dataset.</div>}
     </div>
