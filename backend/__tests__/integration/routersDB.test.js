@@ -76,9 +76,11 @@ describe("usersRouter", () => {
   });
 
   test("responds with 200 and User test_user logged in successfully for correct login input", async () => {
+    const agent = request.agent(app);
+
     const newUserData = createNewUser();
 
-    const response = await createAndLoginUser(newUserData);
+    const response = await createAndLoginUser(agent, newUserData);
 
     const expectedData = {
       message: `Logged in successfully`,
