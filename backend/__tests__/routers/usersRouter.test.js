@@ -109,7 +109,7 @@ describe("POST /signup", () => {
         {
           type: "field",
           value: newUser.password,
-          msg: "Password must be at least 6 characters long",
+          msg: "Password must be at least 6 characters long and contain at least one number",
           path: "password",
           location: "body",
         },
@@ -164,7 +164,7 @@ describe("POST /signup", () => {
 
   test("responds with json 400, Username already taken, if given username exists", async () => {
     const newUser = createNewUser();
-    vi.spyOn(usersModel, "find").mockResolvedValueOnce({
+    vi.spyOn(usersModel, "findOne").mockResolvedValueOnce({
       username: newUser.username,
     });
 
@@ -254,6 +254,8 @@ describe("GET /confirm/:token", () => {
   });
 
   test("responds with status 400 and message for invalid token", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+
     const response = await request(app).get("/auth/confirm/12345");
 
     expect(response.body).toEqual({
@@ -272,7 +274,7 @@ describe("GET /confirm/:token", () => {
       { expiresIn: "15m" },
     );
 
-    vi.spyOn(usersModel, "find").mockResolvedValueOnce({
+    vi.spyOn(usersModel, "findOne").mockResolvedValueOnce({
       isEmailConfirmed: false,
     });
 
