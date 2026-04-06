@@ -1,29 +1,30 @@
-import request from "supertest";
-import { usersModel } from "../../models/usersModel.js";
-import { app } from "../../app.js";
+import jwt from "jsonwebtoken";
 
-async function createAndLoginUser(newUser) {
+async function createAndLoginUser(agent, newUser) {
   const createUserData = {
     username: newUser.username,
     password: "123123",
     email: newUser.email,
+    role: newUser.role || "USER",
     ["confirm-password"]: "123123",
     isAdmin: newUser.isAdmin || false,
   };
-  await request(app).post("/auth/signup").send(createUserData);
+  await agent.post("/auth/signup").send(createUserData);
 
-  await usersModel.update(
-    { username: createUserData.username },
-    { isEmailConfirmed: true },
+  const accessToken = jwt.sign(
+    { email: createUserData.email, username: createUserData.username },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: "1d" },
   );
 
-  const requestData = {
-    username: newUser.username,
-    password: "123123",
-  };
-  const responseData = await request(app).post("/auth/login").send(requestData);
+  await agent.get(`/auth/confirm/${accessToken}`);
 
-  return responseData;
+  const response = await agent.post("/auth/login").send({
+    username: createUserData.username,
+    password: createUserData.password,
+  });
+
+  return response;
 }
 
 export { createAndLoginUser };

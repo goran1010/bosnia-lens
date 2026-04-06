@@ -13,7 +13,7 @@ class UsersController {
   }
 
   async becomeContributor(req, res) {
-    const { id: userId, role } = req.user;
+    const { id, role } = req.user;
 
     if (role !== "USER") {
       return res.status(403).json({
@@ -23,7 +23,7 @@ class UsersController {
     }
 
     const updatedUser = await usersModel.update(
-      { id: userId },
+      { id },
       { requestedContributor: true },
     );
 
