@@ -12,19 +12,19 @@ adminRouter.get(
 );
 
 adminRouter.post(
-  "/add-contributor/:userId",
+  "/add-contributor",
   adminValidation.checkUserId,
   adminController.addContributor,
 );
 
 adminRouter.post(
-  "/decline-contributor/:userId",
+  "/decline-contributor",
   adminValidation.checkUserId,
   adminController.declineContributor,
 );
 
 adminRouter.delete(
-  "/remove-contributor/:userId",
+  "/remove-contributor",
   adminValidation.checkUserId,
   adminController.removeContributor,
 );

@@ -1,8 +1,8 @@
-import { param, validationResult } from "express-validator";
+import { body, validationResult } from "express-validator";
 
 class AdminValidation {
   checkUserId = [
-    param("userId").trim().notEmpty().withMessage("User ID is required"),
+    body("userId").trim().notEmpty().withMessage("User ID is required"),
 
     (req, res, next) => {
       const errors = validationResult(req);
