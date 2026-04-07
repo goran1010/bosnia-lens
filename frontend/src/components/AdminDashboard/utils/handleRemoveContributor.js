@@ -20,7 +20,7 @@ async function handleRemoveContributor(
     }
 
     const response = await fetch(
-      `${BACKEND_URL}/users/admin/remove-contributor/${user.id}`,
+      `${BACKEND_URL}/users/admin/remove-contributor`,
       {
         method: "DELETE",
         mode: "cors",
@@ -28,6 +28,7 @@ async function handleRemoveContributor(
           "Content-Type": "application/json",
           "x-csrf-token": csrfToken,
         },
+        body: JSON.stringify({ userId: user.id }),
         credentials: "include",
       },
     );
