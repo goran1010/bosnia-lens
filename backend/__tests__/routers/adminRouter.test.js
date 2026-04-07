@@ -340,3 +340,95 @@ describe("Admin Router - POST /users/admin/decline-contributor", () => {
     });
   });
 });
+
+describe("Admin Router - DELETE /users/admin/remove-contributor", () => {
+  test("Responds with You need to be logged in and an admin to access this route if not logged in", async () => {
+    const response = await request(app).delete(
+      "/users/admin/remove-contributor",
+    );
+
+    expect(response.header["content-type"]).toMatch(/json/);
+    expect(response.status).toBe(401);
+    expect(response.body).toEqual({
+      error: "You are not logged in.",
+      details: [{ msg: null }],
+    });
+  });
+
+  test("Responds with You need to be admin to access this route if role USER", async () => {
+    const agent = request.agent(app);
+    await createAndLoginUser(agent);
+
+    const response = await agent.delete("/users/admin/remove-contributor");
+
+    expect(response.header["content-type"]).toMatch(/json/);
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({
+      error: "You need to be admin to access this route.",
+      details: [{ msg: null }],
+    });
+  });
+
+  test("Responds with status 403 and You need to be admin to access this route if role CONTRIBUTOR", async () => {
+    const agent = request.agent(app);
+    await createAndLoginUser(agent, { role: "CONTRIBUTOR" });
+
+    const response = await agent.delete("/users/admin/remove-contributor");
+
+    expect(response.header["content-type"]).toMatch(/json/);
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({
+      error: "You need to be admin to access this route.",
+      details: [{ msg: null }],
+    });
+  });
+
+  test("Responds with status 400 if userId is empty", async () => {
+    const agent = request.agent(app);
+    await createAndLoginUser(agent, { role: "ADMIN" });
+
+    const response = await agent.delete("/users/admin/remove-contributor");
+
+    expect(response.header["content-type"]).toMatch(/json/);
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({
+      error: "Validation failed",
+      details: [
+        {
+          value: "",
+          msg: "User ID is required",
+          path: "userId",
+          type: "field",
+          location: "body",
+        },
+      ],
+    });
+  });
+
+  test("Responds with status 201 and message if user removed from contributors successfully", async () => {
+    const agent = request.agent(app);
+    await createAndLoginUser(agent, { role: "ADMIN" });
+
+    const userContributor = createNewUser({ role: "CONTRIBUTOR" });
+
+    const createdUser = {
+      username: userContributor.username,
+      password: userContributor.password,
+      email: userContributor.email,
+      id: userContributor.id,
+      role: "CONTRIBUTOR",
+      requestedContributor: false,
+    };
+    const userInDb = await usersModel.create(createdUser);
+
+    const response = await agent
+      .delete("/users/admin/remove-contributor")
+      .send({ userId: userInDb.id });
+
+    expect(response.header["content-type"]).toMatch(/json/);
+    expect(response.status).toBe(201);
+    expect(response.body).toEqual({
+      message: "User removed from contributors successfully.",
+    });
+  });
+});
