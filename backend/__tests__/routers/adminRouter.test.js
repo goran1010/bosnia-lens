@@ -25,9 +25,23 @@ describe("Admin Router - GET /users/admin/contributors", () => {
     });
   });
 
-  test("Responds with You need to be admin to access this route if not admin", async () => {
+  test("Responds with You need to be admin to access this route if role USER", async () => {
     const agent = request.agent(app);
     await createAndLoginUser(agent);
+
+    const response = await agent.get("/users/admin/contributors");
+
+    expect(response.header["content-type"]).toMatch(/json/);
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({
+      error: "You need to be admin to access this route.",
+      details: [{ msg: null }],
+    });
+  });
+
+  test("Responds with status 200 and list of contributors if role CONTRIBUTOR", async () => {
+    const agent = request.agent(app);
+    await createAndLoginUser(agent, { role: "CONTRIBUTOR" });
 
     const response = await agent.get("/users/admin/contributors");
 

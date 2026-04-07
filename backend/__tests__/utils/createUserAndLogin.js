@@ -24,6 +24,20 @@ async function createAndLoginUser(agent, newUser) {
     );
   }
 
+  if (userData.isEmailConfirmed === true) {
+    await usersModel.update(
+      { username: userData.username },
+      { isEmailConfirmed: true },
+    );
+  }
+
+  if (userData.requestedContributor === true) {
+    await usersModel.update(
+      { username: userData.username },
+      { requestedContributor: true },
+    );
+  }
+
   const response = await agent.post("/auth/login").send({
     username: userData.username,
     password: userData.password,
