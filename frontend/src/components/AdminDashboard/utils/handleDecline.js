@@ -20,7 +20,7 @@ async function handleDecline(
     }
 
     const response = await fetch(
-      `${BACKEND_URL}/users/admin/decline-contributor/${user.id}`,
+      `${BACKEND_URL}/users/admin/decline-contributor`,
       {
         method: "POST",
         mode: "cors",
@@ -28,6 +28,7 @@ async function handleDecline(
           "Content-Type": "application/json",
           "x-csrf-token": csrfToken,
         },
+        body: JSON.stringify({ userId: user.id }),
         credentials: "include",
       },
     );

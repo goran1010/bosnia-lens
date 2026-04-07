@@ -21,7 +21,7 @@ async function handleConfirm(
     }
 
     const response = await fetch(
-      `${BACKEND_URL}/users/admin/add-contributor/${user.id}`,
+      `${BACKEND_URL}/users/admin/add-contributor/`,
       {
         method: "POST",
         mode: "cors",
@@ -29,6 +29,7 @@ async function handleConfirm(
           "Content-Type": "application/json",
           "x-csrf-token": csrfToken,
         },
+        body: JSON.stringify({ userId: user.id }),
         credentials: "include",
       },
     );

@@ -10,6 +10,8 @@ function createNewUser(user = {}) {
     user.email ||
     `test_user_${timestamp}_${randomSuffix}@non-existent-mail.comms`;
   newUser["confirm-password"] = user["confirm-password"] || "123123";
+  newUser.isEmailConfirmed = user.isEmailConfirmed || false;
+  newUser.requestedContributor = user.requestedContributor || false;
 
   return newUser;
 }
