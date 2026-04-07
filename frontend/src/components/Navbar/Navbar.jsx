@@ -17,7 +17,10 @@ function Navbar({
   const { userData } = useContext(UserDataContext);
 
   return (
-    <nav className="nav-shell relative z-40 px-3 py-2 w-full font-bold grid grid-cols-3 lg:flex lg:justify-between items-center gap-2 lg:gap-3 transition transform">
+    <nav
+      className="nav-shell z-40 px-3 w-full font-bold grid grid-cols-3 lg:flex lg:justify-between items-center gap-2 lg:gap-3 transition transform
+     sticky top-0 left-0 shadow-md"
+    >
       <div className="relative">
         <ButtonNavbar
           id="theme-switcher"
