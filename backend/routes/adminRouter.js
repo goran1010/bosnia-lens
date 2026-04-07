@@ -2,7 +2,7 @@ import { Router } from "express";
 const adminRouter = Router();
 
 import { adminController } from "../controllers/adminController.js";
-import { adminPostalCodeValidation } from "../validation/adminPostalCodeVal.js";
+import { adminValidation } from "../validation/adminValidation.js";
 
 adminRouter.get("/contributors", adminController.getAllContributors);
 
@@ -13,19 +13,19 @@ adminRouter.get(
 
 adminRouter.post(
   "/add-contributor/:userId",
-  adminPostalCodeValidation.addContributor,
+  adminValidation.checkUserId,
   adminController.addContributor,
 );
 
 adminRouter.post(
   "/decline-contributor/:userId",
-  adminPostalCodeValidation.declineContributor,
+  adminValidation.checkUserId,
   adminController.declineContributor,
 );
 
 adminRouter.delete(
   "/remove-contributor/:userId",
-  adminPostalCodeValidation.removeContributor,
+  adminValidation.checkUserId,
   adminController.removeContributor,
 );
 

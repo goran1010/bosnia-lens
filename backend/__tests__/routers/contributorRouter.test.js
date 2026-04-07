@@ -2,7 +2,7 @@ import request from "supertest";
 import { describe, test, expect, vi } from "vitest";
 import jwt from "jsonwebtoken";
 import { createNewUser } from "../utils/createNewUser.js";
-import { createContributorAndKeepLoggedIn } from "../utils/createContributorAndKeepLoggedIn.js";
+import { createAndLoginUser } from "../utils/createUserAndLogin.js";
 import { usersModel } from "../../models/usersModel.js";
 import { postalCodesModel } from "../../models/postalCodesModel.js";
 import { app } from "../../app.js";
@@ -83,13 +83,13 @@ describe("POST /users/contributor/postal-codes", () => {
   test("No code sent responds with status 400 and Code is required", async () => {
     const agent = request.agent(app);
 
-    const newUserData = createNewUser();
+    const newUserData = createNewUser({ role: "CONTRIBUTOR" });
 
     await usersModel.deleteUser({
       username: newUserData.username,
     });
 
-    const response = await createContributorAndKeepLoggedIn(agent, newUserData);
+    const response = await createAndLoginUser(agent, newUserData);
 
     expect(response.status).toBe(200);
     expect(response.body.message).toEqual(`Logged in successfully`);
@@ -105,11 +105,11 @@ describe("POST /users/contributor/postal-codes", () => {
   test("Responds with status 400 and Postal codes must have 5 numbers if code sent is not 5 numbers", async () => {
     const agent = request.agent(app);
 
-    const newUserData = createNewUser({ isContributor: true });
+    const newUserData = createNewUser({ role: "CONTRIBUTOR" });
 
     await usersModel.deleteUser({ email: newUserData.email });
 
-    const response = await createContributorAndKeepLoggedIn(agent, newUserData);
+    const response = await createAndLoginUser(agent, newUserData);
     expect(response.status).toBe(200);
     expect(response.body.message).toEqual(`Logged in successfully`);
 
@@ -126,11 +126,11 @@ describe("POST /users/contributor/postal-codes", () => {
   test("Responds with status 400 and Must be a number if code sent is not a number", async () => {
     const agent = request.agent(app);
 
-    const newUserData = createNewUser({ isContributor: true });
+    const newUserData = createNewUser({ role: "CONTRIBUTOR" });
 
     await usersModel.deleteUser({ email: newUserData.email });
 
-    const response = await createContributorAndKeepLoggedIn(agent, newUserData);
+    const response = await createAndLoginUser(agent, newUserData);
     expect(response.status).toBe(200);
     expect(response.body.message).toEqual(`Logged in successfully`);
 
@@ -147,11 +147,11 @@ describe("POST /users/contributor/postal-codes", () => {
   test("Responds with status 400 and Code already exists if code sent already exists in database", async () => {
     const agent = request.agent(app);
 
-    const newUserData = createNewUser({ isContributor: true });
+    const newUserData = createNewUser({ role: "CONTRIBUTOR" });
 
     await usersModel.deleteUser({ email: newUserData.email });
 
-    const response = await createContributorAndKeepLoggedIn(agent, newUserData);
+    const response = await createAndLoginUser(agent, newUserData);
     expect(response.status).toBe(200);
     expect(response.body.message).toEqual(`Logged in successfully`);
 
@@ -182,11 +182,11 @@ describe("POST /users/contributor/postal-codes", () => {
 
     const agent = request.agent(app);
 
-    const newUserData = createNewUser({ isContributor: true });
+    const newUserData = createNewUser({ role: "CONTRIBUTOR" });
 
     await usersModel.deleteUser({ email: newUserData.email });
 
-    const response = await createContributorAndKeepLoggedIn(agent, newUserData);
+    const response = await createAndLoginUser(agent, newUserData);
 
     expect(response.status).toBe(200);
     expect(response.body.message).toEqual(`Logged in successfully`);
@@ -258,11 +258,11 @@ describe("PUT /users/contributor/postal-codes", () => {
   test("No code sent responds with status 400 and Code is required", async () => {
     const agent = request.agent(app);
 
-    const newUserData = createNewUser({ isContributor: true });
+    const newUserData = createNewUser({ role: "CONTRIBUTOR" });
 
     await usersModel.deleteUser({ email: newUserData.email });
 
-    const response = await createContributorAndKeepLoggedIn(agent, newUserData);
+    const response = await createAndLoginUser(agent, newUserData);
 
     expect(response.status).toBe(200);
     expect(response.body.message).toEqual(`Logged in successfully`);
@@ -289,11 +289,11 @@ describe("PUT /users/contributor/postal-codes", () => {
     });
 
     const agent = request.agent(app);
-    const newUserData = createNewUser({ isContributor: true });
+    const newUserData = createNewUser({ role: "CONTRIBUTOR" });
 
     await usersModel.deleteUser({ email: newUserData.email });
 
-    const response = await createContributorAndKeepLoggedIn(agent, newUserData);
+    const response = await createAndLoginUser(agent, newUserData);
 
     expect(response.status).toBe(200);
     expect(response.body.message).toEqual(`Logged in successfully`);
@@ -368,11 +368,11 @@ describe("DELETE /users/contributor/postal-codes", () => {
   test("No code sent responds with status 400 and Code is required", async () => {
     const agent = request.agent(app);
 
-    const newUserData = createNewUser({ isContributor: true });
+    const newUserData = createNewUser({ role: "CONTRIBUTOR" });
 
     await usersModel.deleteUser({ email: newUserData.email });
 
-    const response = await createContributorAndKeepLoggedIn(agent, newUserData);
+    const response = await createAndLoginUser(agent, newUserData);
 
     expect(response.status).toBe(200);
     expect(response.body.message).toEqual(`Logged in successfully`);
@@ -393,10 +393,10 @@ describe("DELETE /users/contributor/postal-codes", () => {
     });
 
     const agent = request.agent(app);
-    const newUserData = createNewUser({ isContributor: true });
+    const newUserData = createNewUser({ role: "CONTRIBUTOR" });
     await usersModel.deleteUser({ email: newUserData.email });
 
-    const response = await createContributorAndKeepLoggedIn(agent, newUserData);
+    const response = await createAndLoginUser(agent, newUserData);
 
     expect(response.status).toBe(200);
     expect(response.body.message).toEqual(`Logged in successfully`);
