@@ -10,6 +10,10 @@ function prismaPostalCodesSpyOnMock() {
         { code: 78000, city: "Banja Luka", post: "HP_MOSTAR" },
       ];
 
+      if (!where.code) {
+        throw new Error("Code is required");
+      }
+
       return (
         postalCodes.find((postalCode) => postalCode.code === where.code) || null
       );
