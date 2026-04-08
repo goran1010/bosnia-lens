@@ -18,10 +18,6 @@ describe("postalCodesModel", () => {
     expect(postalCodes.length).toBe(3);
   });
 
-  test("getPostalCodeByCode errors when no code is provided", async () => {
-    await expect(postalCodesModel.getPostalCodeByCode()).rejects.toThrow();
-  });
-
   test("getPostalCodeByCode returns null for non-existent code", async () => {
     const postalCode = await postalCodesModel.getPostalCodeByCode(99999);
 

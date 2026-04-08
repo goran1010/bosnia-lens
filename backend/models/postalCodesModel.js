@@ -40,17 +40,17 @@ class PostalCodesModel {
       .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
       .join(" ");
 
-    code = Number(code);
+    let codeNumber = Number(code);
 
     const allowedPosts = ["BH_POSTA", "POSTE_SRP", "HP_MOSTAR"];
 
     if (allowedPosts.includes(post)) {
       return prisma.postalCode.create({
-        data: { city: capitalizedCity, code, post },
+        data: { city: capitalizedCity, code: codeNumber, post },
       });
     }
     return prisma.postalCode.create({
-      data: { city: capitalizedCity, code },
+      data: { city: capitalizedCity, code: codeNumber },
     });
   }
 
@@ -60,26 +60,26 @@ class PostalCodesModel {
       .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
       .join(" ");
 
-    code = Number(code);
+    const codeNumber = Number(code);
 
     const allowedPosts = ["BH_POSTA", "POSTE_SRP", "HP_MOSTAR"];
 
     if (allowedPosts.includes(post)) {
       return prisma.postalCode.update({
-        where: { code },
+        where: { code: codeNumber },
         data: { city: capitalizedCity, post },
       });
     }
     return prisma.postalCode.update({
-      where: { code },
+      where: { code: codeNumber },
       data: { city: capitalizedCity },
     });
   }
 
   deleteCode(code) {
-    code = Number(code);
+    const codeNumber = Number(code);
 
-    return prisma.postalCode.delete({ where: { code } });
+    return prisma.postalCode.delete({ where: { code: codeNumber } });
   }
 }
 
