@@ -6,6 +6,9 @@ class UsersModel {
   }
 
   findMany(where) {
+    if (!where) {
+      return prisma.user.findMany();
+    }
     return prisma.user.findMany({ where: { ...where } });
   }
 

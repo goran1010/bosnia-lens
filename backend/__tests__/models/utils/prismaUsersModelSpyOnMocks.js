@@ -11,7 +11,7 @@ function prismaUsersModelSpyOnMock() {
 
     return users.find((user) => user.id === where.id) || null;
   });
-  vi.spyOn(prisma.user, "findMany").mockImplementation(async ({ where }) => {
+  vi.spyOn(prisma.user, "findMany").mockImplementation(async (where) => {
     const users = [
       { id: 1, name: "John Doe", email: "john.doe@example.com" },
       { id: 2, name: "Jane Smith", email: "jane.smith@example.com" },
@@ -21,14 +21,14 @@ function prismaUsersModelSpyOnMock() {
     if (!where) {
       return users;
     }
-
+    const data = where.where;
     return users.filter(
-      (user) => user.name.toLowerCase() === where.name.toLowerCase(),
+      (user) => user.name.toLowerCase() === data.name.toLowerCase(),
     );
   });
   vi.spyOn(prisma.user, "create").mockImplementation(async ({ data }) => {
     return {
-      id: Date.now(),
+      id: 4,
       name: data.name,
       email: data.email,
     };
@@ -42,7 +42,7 @@ function prismaUsersModelSpyOnMock() {
       };
     },
   );
-  vi.spyOn(prisma.user, "deleteMany").mockImplementation(async ({ where }) => {
+  vi.spyOn(prisma.user, "deleteMany").mockImplementation(async (where) => {
     if (!where) {
       return { count: 3 };
     }
