@@ -9,20 +9,22 @@ function Home() {
             Bosnia and Herzegovina through a REST API and web interface.
           </p>
           <p>
-            Access comprehensive information about cities, municipalities,
-            postal codes, holidays, universities (and their programs), and more
-            - making Bosnian public data open, searchable, and
+            Currently focused on postal codes, with universities as the next
+            planned dataset — making Bosnian public data open, searchable, and
             developer-friendly.
           </p>
         </section>
         <div className="grid grid-rows-1 gap-3 md:grid-cols-2 w-full max-w-5xl">
           <section className="text-left">
-            <h2 className="font-bold text-center">
-              Data we're looking to provide includes:
-            </h2>
+            <h2 className="font-bold text-center">Available data</h2>
             <ul>
-              <li>Cities and municipalities</li>
-              <li>Postal codes</li> <li>Holidays and observances</li>
+              <li>
+                <strong>Postal codes</strong> — browse all or search by code and
+                city name
+              </li>
+            </ul>
+            <h2 className="font-bold text-center mt-3">Planned data</h2>
+            <ul>
               <li>Universities and their programs</li>
             </ul>
           </section>
@@ -30,24 +32,22 @@ function Home() {
             <h2 className="font-bold">Tools</h2>
             <ul>
               <li>
-                <strong>Built With Express.js</strong> - The web framework for
-                the REST API
+                <strong>Express.js</strong> - REST API framework
               </li>
               <li>
-                <strong>React</strong> - Frontend library for building the user
-                interface
+                <strong>React</strong> - Frontend library
               </li>
               <li>
-                <strong>Vite</strong> - Build tool and development server
+                <strong>Vite</strong> - Build tool and dev server
               </li>
               <li>
-                <strong>Prisma</strong> - Database ORM and migration tool
+                <strong>Prisma</strong> - Database ORM and migrations
               </li>
               <li>
                 <strong>PostgreSQL</strong> - Database system
               </li>
               <li>
-                <strong>Tailwind CSS</strong> - CSS framework for styling
+                <strong>Tailwind CSS</strong> - CSS framework
               </li>
             </ul>
           </section>
