@@ -8,7 +8,7 @@ function PostalCodes() {
   const [searchResult, setSearchResult] = useState([]);
 
   return (
-    <div className="flex flex-col gap-8 flex-1">
+    <div className="flex flex-col gap-8 flex-1 items-center justify-center w-full">
       <section className="relative flex flex-col justify-center items-center gap-4 py-4">
         <SearchPostalCode
           setSearchResult={setSearchResult}
