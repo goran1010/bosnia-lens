@@ -34,7 +34,7 @@ function PostalCodesResultContributor({ searchResult, setSearchResult }) {
   }
   return (
     <section className="flex flex-col justify-center items-center p-1 w-full">
-      <ul className="w-full max-w-4xl max-h-150  overflow-auto border border-gray-400 dark:border-gray-600 rounded-md p-2 bg-white dark:bg-gray-700">
+      <ul className="w-full max-w-4xl max-h-128 flex flex-col overflow-auto border border-gray-400 dark:border-gray-600 rounded-md p-2 bg-white dark:bg-gray-700 gap-1">
         <li className="hidden sm:grid sm:gap-1 text-center w-full p-2 border border-gray-400 dark:border-gray-600 rounded-md font-bold text-gray-800 dark:text-white bg-gray-50 dark:bg-gray-600 sm:grid-cols-5">
           <div>Code</div>
           <div>City</div>
