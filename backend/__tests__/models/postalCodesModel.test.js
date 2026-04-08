@@ -1,6 +1,6 @@
 import { postalCodesModel } from "../../models/postalCodesModel.js";
 import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
-import { prismaPostalCodesSpyOnMock } from "./prismaPostalCodesSpyOnMock.js";
+import { prismaPostalCodesSpyOnMock } from "./utils/prismaPostalCodesSpyOnMock.js";
 
 beforeEach(() => {
   prismaPostalCodesSpyOnMock();
