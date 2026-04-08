@@ -4,7 +4,6 @@ import { useLocation } from "react-router-dom";
 const availableRoutes = {
   "/": "Home - Bosnia Lens",
   "/home": "Home - Bosnia Lens",
-  "/holidays": "Holidays - Bosnia Lens",
   "/universities": "Universities - Bosnia Lens",
   "/postal-codes": "Postal Codes - Bosnia Lens",
   "/contributor-dashboard": "Contributor Dashboard - Bosnia Lens",
@@ -12,6 +11,7 @@ const availableRoutes = {
   "/profile": "Profile - Bosnia Lens",
   "/login": "Log In - Bosnia Lens",
   "/signup": "Sign Up - Bosnia Lens",
+  "/api-docs": "API Documentation - Bosnia Lens",
 };
 
 function useTitle() {
