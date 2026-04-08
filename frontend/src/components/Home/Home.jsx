@@ -1,98 +1,79 @@
+import { Link } from "react-router-dom";
+
 function Home() {
   return (
-    <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl flex flex-col items-center gap-4 py-2 dark:text-gray-100">
-      <header className="flex flex-col items-center gap-3 w-full">
-        <h1 className="font-bold">Bosnia Lens</h1>
-        <section className="w-full max-w-4xl text-left">
+    <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl flex flex-col items-center gap-10 py-8 dark:text-gray-100">
+      <header className="flex flex-col items-center gap-6 w-full">
+        <h1 className="text-3xl font-bold">Bosnia Lens</h1>
+        <section className="w-full text-left">
           <p>
             A free, open-source project providing structured public data about
             Bosnia and Herzegovina through a REST API and web interface.
           </p>
-          <p>
-            Access comprehensive information about cities, municipalities,
-            postal codes, holidays, universities (and their programs), and more
-            - making Bosnian public data open, searchable, and
+          <p className="mt-2">
+            Currently focused on postal codes, with universities as the next
+            planned dataset — making Bosnian public data open, searchable, and
             developer-friendly.
           </p>
         </section>
-        <div className="grid grid-rows-1 gap-3 md:grid-cols-2 w-full max-w-5xl">
+
+        <div className="grid gap-6 md:grid-cols-2 w-full">
           <section className="text-left">
-            <h2 className="font-bold text-center">
-              Data we're looking to provide includes:
+            <h2 className="text-xl font-bold text-center mb-2">
+              Available data
             </h2>
             <ul>
-              <li>Cities and municipalities</li>
-              <li>Postal codes</li> <li>Holidays and observances</li>
+              <li>
+                <strong>Postal codes</strong> — browse all or search by code and
+                city name
+              </li>
+            </ul>
+            <h2 className="text-xl font-bold text-center mt-4 mb-2">
+              Planned data
+            </h2>
+            <ul>
               <li>Universities and their programs</li>
             </ul>
           </section>
-          <section className="flex flex-col items-center text-left">
-            <h2 className="font-bold">Tools</h2>
-            <ul>
-              <li>
-                <strong>Built With Express.js</strong> - The web framework for
-                the REST API
-              </li>
-              <li>
-                <strong>React</strong> - Frontend library for building the user
-                interface
-              </li>
-              <li>
-                <strong>Vite</strong> - Build tool and development server
-              </li>
-              <li>
-                <strong>Prisma</strong> - Database ORM and migration tool
-              </li>
-              <li>
-                <strong>PostgreSQL</strong> - Database system
-              </li>
-              <li>
-                <strong>Tailwind CSS</strong> - CSS framework for styling
-              </li>
-            </ul>
+
+          <section className="text-left">
+            <h2 className="text-xl font-bold mb-2">Contributing</h2>
+            <p>
+              Please read{" "}
+              <a href="https://github.com/goran1010/bosnia-lens/blob/main/CONTRIBUTING.md">
+                CONTRIBUTING.md
+              </a>{" "}
+              for details on our code of conduct and the process for submitting
+              pull requests.
+            </p>
+            <p className="mt-2">
+              We welcome contributions of data, code improvements,
+              documentation, and bug reports.
+            </p>
           </section>
         </div>
       </header>
 
-      <section className="flex flex-col items-center gap-3 w-full">
-        <div className="grid grid-rows-1 gap-3 md:grid-cols-2 w-full max-w-5xl">
-          <section className="flex flex-col items-center text-left">
-            <h2 className="font-bold">Contributing</h2>
-            <div>
-              <p>
-                Please read{" "}
-                <a href="https://github.com/goran1010/bosnia-lens/blob/main/CONTRIBUTING.md">
-                  CONTRIBUTING.md
-                </a>{" "}
-                for details on our code of conduct, and the process for
-                submitting pull requests to us.
-              </p>
-              <p>
-                We welcome contributions of data, code improvements,
-                documentation, and bug reports.
-              </p>
-              <p>
-                Read our Github{" "}
-                <a href="https://github.com/goran1010/bosnia-lens/blob/main/README.md">
-                  README.md
-                </a>{" "}
-                to more information about the project.
-              </p>
-            </div>
-          </section>
-          <section className="flex flex-col items-center text-left">
-            <h2 className="font-bold">Acknowledgments</h2>
-            <div>
-              <p>Inspired by global open data initiatives.</p>
-              <p>
-                Thanks to the open-source community for tools and libraries.
-              </p>
-              <p>
-                Special recognition to contributors helping maintain accurate
-                data about Bosnia and Herzegovina.
-              </p>
-            </div>
-          </section>
+      <section className="flex flex-col items-center gap-4 w-full">
+        <h2 className="text-xl font-bold">Get started</h2>
+        <div className="grid gap-4 md:grid-cols-2 w-full">
+          <Link
+            to="/postal-codes"
+            className="border rounded-lg p-5 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-left"
+          >
+            <h3 className="text-lg font-bold mb-1">Postal Codes</h3>
+            <p>Browse all postal codes or search by code and city name.</p>
+          </Link>
+          <Link
+            to="/api-docs"
+            className="border rounded-lg p-5 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-left"
+          >
+            <h3 className="text-lg font-bold mb-1">REST API</h3>
+            <p>
+              Integrate Bosnia Lens data into your own app via our public REST
+              API. View documentation and available endpoints.
+            </p>
+          </Link>
         </div>
       </section>
     </div>

@@ -8,6 +8,22 @@ REST API at - <https://round-leann-goran-jovic-1010-ccad2ae8.koyeb.app/api>
 
 For more info on how to connect your app to the REST API, visit - <https://bosnia-lens.netlify.app/api-docs>
 
+## Table of Contents
+
+- [Features](#features)
+- [Data Coverage](#data-coverage)
+- [Getting Started](#getting-started)
+- [Available Scripts](#available-scripts)
+- [API Overview](#api-overview)
+- [Running the Tests](#running-the-tests)
+- [Deployment](#deployment)
+- [Built With](#built-with)
+- [Current Status](#current-status)
+- [Contributing](#contributing)
+- [Authors](#authors)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
+
 ## Features
 
 - **Versioned REST API**: Public endpoints under `/api/v1`
