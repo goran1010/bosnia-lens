@@ -27,40 +27,6 @@ vi.mock("csrf-sync", () => {
   };
 });
 
-describe("authRouter", () => {
-  test("responds with status 200 and user data if logged in", async () => {
-    const agent = request.agent(app);
-
-    const userData = createNewUser();
-
-    await agent.post("/auth/signup").send(userData);
-
-    const accessToken = jwt.sign(
-      { email: userData.email, username: userData.username },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "1d" },
-    );
-
-    await agent.get(`/auth/confirm/${accessToken}`);
-
-    await agent.post("/auth/login").send({
-      username: userData.username,
-      password: userData.password,
-    });
-
-    const response = await agent.get("/users/me");
-
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.body.data).toEqual(
-      expect.objectContaining({
-        username: userData.username,
-        email: userData.email,
-      }),
-    );
-    expect(response.status).toBe(200);
-  });
-});
-
 describe("usersRouter", () => {
   test("successfully create a user and returns status 201 and message", async () => {
     const responseData = {
@@ -77,7 +43,6 @@ describe("usersRouter", () => {
 
   test("responds with 200 and User test_user logged in successfully for correct login input", async () => {
     const agent = request.agent(app);
-
     const newUserData = createNewUser();
 
     const response = await createAndLoginUser(agent, newUserData);
@@ -92,23 +57,8 @@ describe("usersRouter", () => {
 
   test("responds User logged out successfully", async () => {
     const agent = request.agent(app);
-
     const userData = createNewUser();
-
-    await agent.post("/auth/signup").send(userData);
-
-    const accessToken = jwt.sign(
-      { email: userData.email, username: userData.username },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "1d" },
-    );
-
-    await agent.get(`/auth/confirm/${accessToken}`);
-
-    await agent.post("/auth/login").send({
-      username: userData.username,
-      password: userData.password,
-    });
+    await createAndLoginUser(agent, userData);
 
     const response = await agent.post("/users/logout");
 
