@@ -1,31 +1,11 @@
 import request from "supertest";
-import { describe, test, expect, vi } from "vitest";
+import { describe, test, expect } from "vitest";
 import { app } from "../../app.js";
 import { createAndLoginUser } from "../utils/createUserAndLogin.js";
 import { createNewUser } from "../utils/createNewUser.js";
 import { usersModel } from "../../models/usersModel.js";
 import jwt from "jsonwebtoken";
 import { emailConfirmHTML } from "../../utils/emailConfirmHTML.js";
-
-vi.mock("../../email/confirmationEmail.js", () => ({
-  sendConfirmationEmail: vi.fn(async () => {
-    return { success: true };
-  }),
-}));
-
-vi.mock("csrf-sync", () => {
-  const originalModule = vi.importActual("csrf-sync");
-  return {
-    ...originalModule,
-    csrfSync: () => {
-      return {
-        csrfSynchronisedProtection: (req, res, next) => {
-          next();
-        },
-      };
-    },
-  };
-});
 
 describe("usersRouter", () => {
   test("successfully create a user and returns status 201 and message", async () => {

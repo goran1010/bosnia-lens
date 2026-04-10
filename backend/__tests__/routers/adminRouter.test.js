@@ -1,19 +1,8 @@
 import request from "supertest";
 import { describe, test, expect, vi } from "vitest";
 import { app } from "../../app.js";
-import { createAndLoginUser } from "../utils/createUserAndLogin.js";
 import { usersModel } from "../../models/usersModel.js";
 import { createNewUser } from "../utils/createNewUser.js";
-
-vi.mock("csrf-sync", () => {
-  const originalModule = vi.importActual("csrf-sync");
-  return {
-    ...originalModule,
-    csrfSync: () => ({
-      csrfSynchronisedProtection: (req, res, next) => next(),
-    }),
-  };
-});
 
 describe("Admin Router - GET /users/admin/contributors", () => {
   test("Responds with You need to be logged in and an admin to access this route if not logged in", async () => {
