@@ -49,9 +49,7 @@ async function handleSubmitAddData(
       const newItem = result.data;
 
       setSearchResult((previous) =>
-        [...previous, newItem].sort(
-          (a, b) => Number(a.postalCode) - Number(b.postalCode),
-        ),
+        [...previous, newItem].sort((a, b) => Number(a.code) - Number(b.code)),
       );
       return;
     }
