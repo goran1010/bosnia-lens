@@ -63,10 +63,12 @@
     background: var(--app-bg);
     color: var(--text-primary);
     min-height: 100vh;
+    min-height: 100dvh;
   }
 
   #root {
     min-height: 100vh;
+    min-height: 100dvh;
     min-width: 320px;
     display: flex;
     flex-direction: column;
