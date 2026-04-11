@@ -1,30 +1,4 @@
 import { describe, test, expect, vi, beforeEach } from "vitest";
-
-vi.mock("express-session", () => {
-  return {
-    default: () => (req, res, next) => {
-      req.session = {
-        destroy: (cb) => cb(),
-        touch: () => {},
-        save: () => {},
-      };
-      next();
-    },
-  };
-});
-
-vi.mock("../../config/passport.js", async () => {
-  const actual = await vi.importActual("../../config/passport.js");
-
-  return {
-    passport: {
-      ...actual.passport,
-      authenticate: vi.fn(),
-      session: vi.fn(() => (req, res, next) => next()),
-    },
-  };
-});
-
 import request from "supertest";
 import { app } from "../../app.js";
 
@@ -33,7 +7,7 @@ import { createNewUser } from "../utils/createNewUser.js";
 import { usersModel } from "../../models/usersModel.js";
 import { sendConfirmationEmail } from "../../email/confirmationEmail.js";
 import jwt from "jsonwebtoken";
-import { passport } from "../../config/passport.js";
+import bcrypt from "bcryptjs";
 
 const isAuthenticatedMock = vi.fn();
 
@@ -41,37 +15,14 @@ vi.mock("../../auth/isAuthenticated.js", () => ({
   isAuthenticated: (req, res, next) => isAuthenticatedMock(req, res, next),
 }));
 
-vi.mock("../../email/confirmationEmail.js", () => ({
-  sendConfirmationEmail: vi.fn(() => {
-    return {
-      success: true,
-    };
-  }),
-}));
-
-vi.mock("../../models/usersModel.js");
-
 beforeEach(() => {
-  vi.clearAllMocks();
+  vi.resetAllMocks();
+  vi.restoreAllMocks();
   // Set default behavior
   isAuthenticatedMock.mockImplementation((req, res, next) => {
     if (req.user) return next();
     res.status(403).json({ error: "You need to be logged in." });
   });
-});
-
-vi.mock("csrf-sync", () => {
-  const originalModule = vi.importActual("csrf-sync");
-  return {
-    ...originalModule,
-    csrfSync: () => {
-      return {
-        csrfSynchronisedProtection: (req, res, next) => {
-          next();
-        },
-      };
-    },
-  };
 });
 
 describe("POST /auth/signup", () => {
@@ -217,12 +168,13 @@ describe("GET /auth/confirm/:token", () => {
     const accessToken = jwt.sign(
       { email: newUser.email, username: newUser.username },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "15m" },
+      { expiresIn: "1d" },
     );
 
     vi.spyOn(usersModel, "findOne").mockResolvedValueOnce({
       isEmailConfirmed: false,
     });
+    vi.spyOn(usersModel, "update").mockResolvedValueOnce(true);
 
     const response = await request(app).get(`/auth/confirm/${accessToken}`);
 
@@ -235,10 +187,6 @@ describe("POST /auth/login", () => {
   test("responds with Incorrect username for wrong input", async () => {
     const newUser = createNewUser();
 
-    passport.authenticate.mockImplementation((strategy, callback) => (req) => {
-      req.logIn = (user, cb) => cb(null);
-      callback(null, undefined, { message: "Incorrect username" });
-    });
     const responseData = {
       error: "Login unsuccessful",
       details: [{ msg: "Incorrect username" }],
@@ -251,18 +199,16 @@ describe("POST /auth/login", () => {
   });
 
   test("responds with User test_user logged in successfully for correct input", async () => {
-    const newUser = createNewUser();
+    const newUser = createNewUser({ isEmailConfirmed: true });
 
-    passport.authenticate.mockImplementation((strategy, callback) => (req) => {
-      req.logIn = (user, cb) => cb(null);
-      callback(null, newUser, null);
-    });
+    vi.spyOn(usersModel, "findOne").mockResolvedValueOnce(newUser);
+    vi.spyOn(bcrypt, "compare").mockResolvedValueOnce(true);
+
     const response = await request(app).post("/auth/login").send(newUser);
 
     const responseData = {
       message: `Logged in successfully`,
     };
-
     expect(response.body.message).toEqual(responseData.message);
     expect(response.status).toBe(200);
   });

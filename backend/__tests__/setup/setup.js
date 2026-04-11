@@ -24,6 +24,9 @@ vi.mock("csrf-sync", () => {
         csrfSynchronisedProtection: (req, res, next) => {
           next();
         },
+        generateToken: () => {
+          return "mocked-csrf-token";
+        },
       };
     },
   };

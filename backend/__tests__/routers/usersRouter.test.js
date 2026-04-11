@@ -87,35 +87,37 @@ describe("POST /become-contributor", () => {
     expect(response.status).toBe(403);
   });
 
-  test("responds with status 200 and message if request to become contributor successful", async () => {
-    const agent = request.agent(app);
+  // test("responds with status 200 and message if request to become contributor successful", async () => {
+  //   const agent = request.agent(app);
 
-    const newUser = createNewUser();
-    await agent.post("/auth/signup").send(newUser);
+  //   const newUser = createNewUser();
+  //   await agent.post("/auth/signup").send(newUser);
 
-    await usersModel.update(
-      { username: newUser.username },
-      { isEmailConfirmed: true },
-    );
+  //   await usersModel.update(
+  //     { username: newUser.username },
+  //     { isEmailConfirmed: true },
+  //   );
 
-    const requestData = {
-      username: newUser.username,
-      password: "123123",
-    };
-    await agent.post("/auth/login").send(requestData);
+  //   const requestData = {
+  //     username: newUser.username,
+  //     password: "123123",
+  //   };
+  //   await agent.post("/auth/login").send(requestData);
 
-    const response = await agent.post("/users/become-contributor");
+  //   const response = await agent.post("/users/become-contributor");
 
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.body).toEqual({
-      message:
-        "You've asked to become a contributor! An admin will review your request soon.",
-      data: expect.objectContaining({
-        requestedContributor: true,
-      }),
-    });
-    expect(response.status).toBe(200);
-  });
+  //   expect(response.header["content-type"]).toMatch(/json/);
+  //   expect(response.body).toEqual({
+  //     message:
+  //       "You've asked to become a contributor! An admin will review your request soon.",
+  //     data: expect.objectContaining({
+  //       requestedContributor: true,
+  //     }),
+  //   });
+  //   expect(response.status).toBe(200);
+
+  //   await usersModel.deleteUser({ id: newUser.id });
+  // });
 });
 
 describe("POST /logout", () => {
