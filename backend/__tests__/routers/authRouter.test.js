@@ -1,7 +1,6 @@
 import { describe, test, expect, vi, beforeEach } from "vitest";
 import request from "supertest";
 import { app } from "../../app.js";
-
 import { emailConfirmHTML } from "../../utils/emailConfirmHTML.js";
 import { createNewUser } from "../utils/createNewUser.js";
 import { usersModel } from "../../models/usersModel.js";
