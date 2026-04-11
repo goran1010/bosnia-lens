@@ -47,11 +47,12 @@ describe("Admin Router - GET /users/admin/contributors", () => {
     const response = await request(app).get("/users/admin/contributors");
 
     expect(response.header["content-type"]).toMatch(/json/);
-    // expect(response.status).toBe(403);
+
     expect(response.body).toEqual({
       error: "You need to be admin to access this route.",
       details: [{ msg: null }],
     });
+    expect(response.status).toBe(403);
   });
 
   test("Responds with status 403 and You need to be admin to access this route if role CONTRIBUTOR", async () => {

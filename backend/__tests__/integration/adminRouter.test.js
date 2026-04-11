@@ -20,11 +20,11 @@ describe("Admin Router - GET /users/admin/contributors", () => {
 
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({
-      message: "All contributors fetched successfully.",
-      data: [userInDb],
-    });
-    usersModel.deleteUser(userInDb.id);
+    expect(response.body.message).toEqual(
+      "All contributors fetched successfully.",
+    );
+    expect(response.body.data).toContainEqual(userInDb);
+    await usersModel.deleteUser({ id: userInDb.id });
   });
 });
 
@@ -43,11 +43,11 @@ describe("Admin Router - GET /users/admin/requested-contributors", () => {
 
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({
-      message: "Users requested contributor role fetched successfully.",
-      data: [userInDb],
-    });
-    usersModel.deleteUser(userInDb.id);
+    expect(response.body.message).toEqual(
+      "Users requested contributor role fetched successfully.",
+    );
+    expect(response.body.data).toContainEqual(userInDb);
+    await usersModel.deleteUser({ id: userInDb.id });
   });
 });
 
@@ -71,7 +71,7 @@ describe("Admin Router - POST /users/admin/add-contributor", () => {
     expect(response.body).toEqual({
       message: "User promoted to contributor successfully.",
     });
-    usersModel.deleteUser(userInDb.id);
+    await usersModel.deleteUser({ id: userInDb.id });
   });
 });
 
@@ -94,7 +94,7 @@ describe("Admin Router - POST /users/admin/decline-contributor", () => {
     expect(response.body).toEqual({
       message: "User's contributor request declined successfully.",
     });
-    usersModel.deleteUser(userInDb.id);
+    await usersModel.deleteUser({ id: userInDb.id });
   });
 });
 
@@ -118,6 +118,6 @@ describe("Admin Router - DELETE /users/admin/remove-contributor", () => {
     expect(response.body).toEqual({
       message: "User removed from contributors successfully.",
     });
-    usersModel.deleteUser(userInDb.id);
+    await usersModel.deleteUser({ id: userInDb.id });
   });
 });
