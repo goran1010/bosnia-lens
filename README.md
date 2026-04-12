@@ -184,6 +184,32 @@ Run these from the repository root.
 
 ## API Overview
 
+### Response format
+
+All JSON API responses follow a consistent structure:
+
+- Success responses use `data` and can include an optional `message`.
+- Error responses use a nested `error.message`.
+
+Success example:
+
+```json
+{
+  "data": { "status": "ok" },
+  "message": "API server is running"
+}
+```
+
+Error example:
+
+```json
+{
+  "error": {
+    "message": "Validation failed: Postal codes must have 5 numbers Fix the highlighted fields and try again."
+  }
+}
+```
+
 ### Public routes (no authentication required)
 
 - `GET /api`: API status response

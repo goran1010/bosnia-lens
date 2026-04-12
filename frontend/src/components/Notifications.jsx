@@ -73,9 +73,6 @@ function Notifications() {
             )}`}
           >
             <p>{notification.message}</p>
-            {notification.details && (
-              <p className="text-sm opacity-80">{notification.details}</p>
-            )}
 
             <button
               type="button"

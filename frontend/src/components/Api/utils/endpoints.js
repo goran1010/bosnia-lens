@@ -4,7 +4,10 @@ const endpoints = [
     path: "/api",
     description: "Check API status.",
     params: null,
-    successExample: `{ "message": "API server is running" }`,
+    successExample: `{
+  "data": { "status": "ok" },
+  "message": "API server is running"
+}`,
     errorExample: null,
   },
   {
@@ -12,7 +15,10 @@ const endpoints = [
     path: "/api/v1",
     description: "Check API v1 status.",
     params: null,
-    successExample: `{ "message": "API v1 server is running" }`,
+    successExample: `{
+  "data": { "status": "ok" },
+  "message": "API v1 server is running"
+}`,
     errorExample: null,
   },
   {
@@ -49,10 +55,10 @@ const endpoints = [
   ]
 }`,
     errorExample: `// 404 — no match found
-{ "error": "Postal code not found" }
+{ "error": { "message": "Postal code not found: verify the search term and try again." } }
 
 // 400 — invalid searchTerm
-{ "error": "Validation failed", "details": [{ "msg": "Postal codes must have 5 numbers" }] }`,
+{ "error": { "message": "Validation failed: Postal codes must have 5 numbers Fix the highlighted fields and try again." } }`,
   },
 ];
 
