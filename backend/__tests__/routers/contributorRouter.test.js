@@ -90,7 +90,7 @@ describe("POST /users/contributor/postal-codes", () => {
     const expectedResponse = "Postal codes must have 5 numbers";
     const responseCode = await agent
       .post("/users/contributor/postal-codes")
-      .query({ city: "TestCity", code: "1234", post: "" });
+      .send({ city: "TestCity", code: "1234", post: "" });
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
     expect(responseCode.body.error.message).toContain(expectedResponse);
@@ -109,7 +109,7 @@ describe("POST /users/contributor/postal-codes", () => {
     const expectedResponse = "Must be a number";
     const responseCode = await agent
       .post("/users/contributor/postal-codes")
-      .query({ city: "TestCity", code: "abcde", post: "" });
+      .send({ city: "TestCity", code: "abcde", post: "" });
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
     expect(responseCode.body.error.message).toContain(expectedResponse);
@@ -134,7 +134,7 @@ describe("POST /users/contributor/postal-codes", () => {
     const expectedResponse = "Code already exists";
     const responseCode = await agent
       .post("/users/contributor/postal-codes")
-      .query({ city: "TestCity", code: "12345", post: "" });
+      .send({ city: "TestCity", code: "12345", post: "" });
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
     expect(responseCode.body.error.message).toContain(expectedResponse);
@@ -166,7 +166,7 @@ describe("POST /users/contributor/postal-codes", () => {
 
     const responseCode = await agent
       .post("/users/contributor/postal-codes")
-      .query({ city: "TestCity", code: "12345", post: "" });
+      .send({ city: "TestCity", code: "12345", post: "" });
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
     expect(responseCode.body).toEqual(expectedResponse);
@@ -256,7 +256,7 @@ describe("PUT /users/contributor/postal-codes", () => {
 
     const responseCode = await agent
       .put("/users/contributor/postal-codes")
-      .query({ city: "TestCity", code: "12345", post: "" });
+      .send({ city: "TestCity", code: "12345", post: "" });
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
     expect(responseCode.body).toEqual(expectedResponse);
@@ -348,7 +348,7 @@ describe("DELETE /users/contributor/postal-codes", () => {
 
     const responseCode = await agent
       .delete("/users/contributor/postal-codes")
-      .query({ code: "12345" });
+      .send({ code: "12345" });
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
     expect(responseCode.body).toEqual(expectedResponse);

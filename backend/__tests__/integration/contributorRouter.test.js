@@ -17,7 +17,7 @@ describe("Contributor Router - POST /contributor/postal-codes", () => {
 
     const response = await agent
       .post("/users/contributor/postal-codes")
-      .query(newPostalCode);
+      .send(newPostalCode);
 
     expect(response.header["content-type"]).toMatch(/json/);
 
@@ -55,7 +55,7 @@ describe("Contributor Router - PUT /contributor/postal-codes", () => {
 
     const response = await agent
       .put("/users/contributor/postal-codes")
-      .query(editedPostalCode);
+      .send(editedPostalCode);
 
     expect(response.header["content-type"]).toMatch(/json/);
 
@@ -87,7 +87,7 @@ describe("Contributor Router - DELETE /contributor/postal-codes", () => {
 
     const response = await agent
       .delete("/users/contributor/postal-codes")
-      .query({ code: "12345" });
+      .send({ code: "12345" });
 
     expect(response.header["content-type"]).toMatch(/json/);
 

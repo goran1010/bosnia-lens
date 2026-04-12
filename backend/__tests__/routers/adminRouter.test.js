@@ -81,6 +81,8 @@ describe("Admin Router - GET /users/admin/contributors", () => {
         id: 1,
         username: "contributor1",
         email: "s@non-existent-mail.comms",
+        isEmailConfirmed: false,
+        requestedContributor: false,
         role: "CONTRIBUTOR",
       },
     ]);
@@ -103,6 +105,8 @@ describe("Admin Router - GET /users/admin/contributors", () => {
           id: 1,
           username: "contributor1",
           email: "s@non-existent-mail.comms",
+          isEmailConfirmed: false,
+          requestedContributor: false,
           role: "CONTRIBUTOR",
         },
       ],
@@ -172,6 +176,8 @@ describe("Admin Router - GET /users/admin/requested-contributors", () => {
         id: 1,
         username: "user1",
         email: "user1@non-existent-mail.com",
+        isEmailConfirmed: false,
+        requestedContributor: true,
         role: "CONTRIBUTOR",
       },
     ]);
@@ -196,6 +202,8 @@ describe("Admin Router - GET /users/admin/requested-contributors", () => {
           id: 1,
           username: "user1",
           email: "user1@non-existent-mail.com",
+          isEmailConfirmed: false,
+          requestedContributor: true,
           role: "CONTRIBUTOR",
         },
       ],
@@ -273,6 +281,9 @@ describe("Admin Router - POST /users/admin/add-contributor", () => {
       id: 2,
       username: "user2",
       email: "user2@example.com",
+      isEmailConfirmed: false,
+      requestedContributor: false,
+      role: "CONTRIBUTOR",
     });
 
     mockedUser = {
@@ -287,12 +298,15 @@ describe("Admin Router - POST /users/admin/add-contributor", () => {
       .send({ userId: 2 });
 
     expect(response.header["content-type"]).toMatch(/json/);
-    // expect(response.status).toBe(201);
+    expect(response.status).toBe(201);
     expect(response.body).toEqual({
       data: {
         id: 2,
         username: "user2",
         email: "user2@example.com",
+        isEmailConfirmed: false,
+        requestedContributor: false,
+        role: "CONTRIBUTOR",
       },
       message: "User promoted to contributor successfully.",
     });
@@ -377,6 +391,9 @@ describe("Admin Router - POST /users/admin/decline-contributor", () => {
       id: 2,
       username: "user2",
       email: "user2@example.com",
+      isEmailConfirmed: false,
+      requestedContributor: false,
+      role: "USER",
     });
 
     mockedUser = {
@@ -397,6 +414,9 @@ describe("Admin Router - POST /users/admin/decline-contributor", () => {
         id: 2,
         username: "user2",
         email: "user2@example.com",
+        isEmailConfirmed: false,
+        requestedContributor: false,
+        role: "USER",
       },
       message: "User's contributor request declined successfully.",
     });
@@ -487,6 +507,9 @@ describe("Admin Router - DELETE /users/admin/remove-contributor", () => {
       id: 2,
       username: "user2",
       email: "user2@example.com",
+      isEmailConfirmed: false,
+      requestedContributor: false,
+      role: "USER",
     });
 
     const response = await request(app)
@@ -500,6 +523,9 @@ describe("Admin Router - DELETE /users/admin/remove-contributor", () => {
         id: 2,
         username: "user2",
         email: "user2@example.com",
+        isEmailConfirmed: false,
+        requestedContributor: false,
+        role: "USER",
       },
       message: "User removed from contributors successfully.",
     });

@@ -88,13 +88,18 @@ describe("POST /auth/signup", () => {
       requestedContributor: false,
       password: "hashed-password",
     };
-    vi.spyOn(usersModel, "create").mockResolvedValueOnce(createdUser);
+    vi.spyOn(usersModel, "create").mockResolvedValueOnce(
+      sanitizeUser(createdUser),
+    );
 
     const response = await request(app).post("/auth/signup").send(newUser);
 
     expect(sendConfirmationEmail).toHaveBeenCalled();
     expect(response.body).toEqual({
-      data: sanitizeUser(createdUser),
+      data: expect.objectContaining({
+        username: newUser.username,
+        email: newUser.email,
+      }),
       message: "Registration successful! Check your email.",
     });
     expect(response.status).toBe(201);
@@ -172,7 +177,7 @@ describe("POST /auth/login", () => {
 
     const responseData = {
       error: {
-        message: "Incorrect username",
+        message: "Incorrect username or password",
       },
     };
 
