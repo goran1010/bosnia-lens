@@ -31,12 +31,16 @@ async function handleSubmitAddData(
     }
 
     const response = await fetch(
-      `${currentUrl}/users/contributor/postal-codes?city=${city}&code=${code}&post=${post}`,
+      `${currentUrl}/users/contributor/postal-codes`,
       {
         mode: "cors",
         method: "post",
         credentials: "include",
-        headers: { "x-csrf-token": csrfToken },
+        headers: {
+          "x-csrf-token": csrfToken,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ city, code, post }),
       },
     );
     const result = await response.json();

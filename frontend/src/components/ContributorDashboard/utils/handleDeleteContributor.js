@@ -23,14 +23,16 @@ async function handleDeleteContributor(
     }
 
     const response = await fetch(
-      `${currentUrl}/users/contributor/postal-codes/?code=${code}`,
+      `${currentUrl}/users/contributor/postal-codes`,
       {
         mode: "cors",
         method: "DELETE",
         credentials: "include",
         headers: {
           "x-csrf-token": csrfToken,
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({ code }),
       },
     );
     const result = await response.json();
