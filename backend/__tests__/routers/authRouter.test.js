@@ -29,21 +29,14 @@ describe("POST /auth/signup", () => {
     const newUser = createNewUser({ username: "user" });
 
     const responseData = {
-      error: "Validation failed",
-      details: [
-        {
-          type: "field",
-          value: newUser.username,
-          msg: "Username must be at least 6 characters long",
-          path: "username",
-          location: "body",
-        },
-      ],
+      error: {
+        message: "Username must be at least 6 characters long",
+      },
     };
 
     const response = await request(app).post("/auth/signup").send(newUser);
 
-    expect(response.body).toEqual(responseData);
+    expect(response.body.error.message).toContain(responseData.error.message);
     expect(response.status).toBe(400);
   });
 
@@ -54,21 +47,15 @@ describe("POST /auth/signup", () => {
     });
 
     const responseData = {
-      error: "Validation failed",
-      details: [
-        {
-          type: "field",
-          value: newUser.password,
-          msg: "Password must be at least 6 characters long and contain at least one number",
-          path: "password",
-          location: "body",
-        },
-      ],
+      error: {
+        message:
+          "Password must be at least 6 characters long and contain at least one number",
+      },
     };
 
     const response = await request(app).post("/auth/signup").send(newUser);
 
-    expect(response.body).toEqual(responseData);
+    expect(response.body.error.message).toContain(responseData.error.message);
     expect(response.status).toBe(400);
   });
 
@@ -78,21 +65,14 @@ describe("POST /auth/signup", () => {
     });
 
     const responseData = {
-      error: "Validation failed",
-      details: [
-        {
-          type: "field",
-          value: "123",
-          msg: "Passwords do not match",
-          path: "confirm-password",
-          location: "body",
-        },
-      ],
+      error: {
+        message: "Passwords do not match",
+      },
     };
 
     const response = await request(app).post("/auth/signup").send(newUser);
 
-    expect(response.body).toEqual(responseData);
+    expect(response.body.error.message).toContain(responseData.error.message);
     expect(response.status).toBe(400);
   });
 
@@ -100,6 +80,7 @@ describe("POST /auth/signup", () => {
     vi.spyOn(usersModel, "create").mockResolvedValueOnce(true);
 
     const responseData = {
+      data: true,
       message: "Registration successful! Check your email.",
     };
 
@@ -119,21 +100,14 @@ describe("POST /auth/signup", () => {
     });
 
     const responseData = {
-      error: "Validation failed",
-      details: [
-        {
-          type: "field",
-          value: newUser.username,
-          msg: "Username already in use",
-          path: "username",
-          location: "body",
-        },
-      ],
+      error: {
+        message: "Username already in use",
+      },
     };
 
     const response = await request(app).post("/auth/signup").send(newUser);
 
-    expect(response.body).toEqual(responseData);
+    expect(response.body.error.message).toContain(responseData.error.message);
     expect(response.status).toBe(400);
   });
 });
@@ -143,8 +117,9 @@ describe("GET /auth/confirm/:token", () => {
     const response = await request(app).get("/auth/confirm/");
 
     expect(response.body).toEqual({
-      error: "No resource found",
-      details: [{ msg: null }],
+      error: {
+        message: "Route not found: check the URL and HTTP method.",
+      },
     });
     expect(response.status).toBe(404);
   });
@@ -155,8 +130,10 @@ describe("GET /auth/confirm/:token", () => {
     const response = await request(app).get("/auth/confirm/12345");
 
     expect(response.body).toEqual({
-      error: "Couldn't confirm email",
-      details: [{ msg: null }],
+      error: {
+        message:
+          "Email confirmation failed: token is invalid or expired. Request a new confirmation email.",
+      },
     });
     expect(response.status).toBe(500);
   });
@@ -187,13 +164,14 @@ describe("POST /auth/login", () => {
     const newUser = createNewUser();
 
     const responseData = {
-      error: "Login unsuccessful",
-      details: [{ msg: "Incorrect username" }],
+      error: {
+        message: "Incorrect username",
+      },
     };
 
     const response = await request(app).post("/auth/login").send(newUser);
 
-    expect(response.body).toEqual(responseData);
+    expect(response.body.error.message).toContain(responseData.error.message);
     expect(response.status).toBe(401);
   });
 

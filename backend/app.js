@@ -15,6 +15,7 @@ const { csrfSynchronisedProtection } = csrfSync();
 
 import compression from "compression";
 import pino from "pino";
+import { sendError } from "./utils/response.js";
 
 const logger = pino({
   timestamp: () => `,"time":"${new Date().toISOString()}"`,
@@ -77,18 +78,19 @@ app.use(
 );
 
 app.use((req, res) => {
-  res
-    .status(404)
-    .json({ error: "No resource found", details: [{ msg: null }] });
+  return sendError(res, {
+    status: 404,
+    message: "Route not found: check the URL and HTTP method.",
+  });
 });
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   logger.error(JSON.stringify(err));
 
-  res.status(err.statusCode || 500).json({
-    error: "An unexpected error occurred.",
-    details: [{ msg: err.message }],
+  return sendError(res, {
+    status: err.statusCode || 500,
+    message: err.message || "Server error: please try again later.",
   });
 });
 

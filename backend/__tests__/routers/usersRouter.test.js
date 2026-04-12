@@ -65,8 +65,10 @@ describe("POST /become-contributor", () => {
 
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.body).toEqual({
-      error: "Only regular users can request contributor status",
-      details: [{ msg: null }],
+      error: {
+        message:
+          "Request denied: only regular users can request contributor access.",
+      },
     });
     expect(response.status).toBe(403);
   });
@@ -102,6 +104,9 @@ describe("POST /logout", () => {
     const response = await request(app).post("/users/logout");
 
     expect(response.body).toEqual({
+      data: {
+        success: true,
+      },
       message: "User logged out successfully",
     });
     expect(response.status).toBe(200);

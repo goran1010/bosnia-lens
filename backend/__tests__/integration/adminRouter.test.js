@@ -69,6 +69,9 @@ describe("Admin Router - POST /users/admin/add-contributor", () => {
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(201);
     expect(response.body).toEqual({
+      data: expect.objectContaining({
+        id: userInDb.id,
+      }),
       message: "User promoted to contributor successfully.",
     });
     await usersModel.deleteUser({ id: userInDb.id });
@@ -92,6 +95,9 @@ describe("Admin Router - POST /users/admin/decline-contributor", () => {
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(201);
     expect(response.body).toEqual({
+      data: expect.objectContaining({
+        id: userInDb.id,
+      }),
       message: "User's contributor request declined successfully.",
     });
     await usersModel.deleteUser({ id: userInDb.id });
@@ -116,6 +122,9 @@ describe("Admin Router - DELETE /users/admin/remove-contributor", () => {
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(201);
     expect(response.body).toEqual({
+      data: expect.objectContaining({
+        id: userInDb.id,
+      }),
       message: "User removed from contributors successfully.",
     });
     await usersModel.deleteUser({ id: userInDb.id });

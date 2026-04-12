@@ -5,6 +5,7 @@ import { passport } from "../config/passport.js";
 import { sendConfirmationEmail } from "../email/confirmationEmail.js";
 import bcrypt from "bcryptjs";
 import { matchedData } from "express-validator";
+import { sendError, sendSuccess } from "../utils/response.js";
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const BACKEND_URL = process.env.BACKEND_URL;
@@ -37,25 +38,31 @@ class AuthController {
         });
 
         if (!user) {
-          return res.status(400).json({
-            error: "User could not be created",
-            details: [{ msg: null }],
+          return sendError(res, {
+            status: 400,
+            message: "Signup failed: account could not be created. Try again.",
           });
         }
 
-        return res.status(201).json({
+        return sendSuccess(res, {
+          status: 201,
+          data: user,
           message: "Registration successful! Check your email.",
         });
       }
-      res.status(500).json({
-        error: "Failed to send confirmation email",
-        details: result.error,
+
+      return sendError(res, {
+        status: 500,
+        message:
+          "Signup failed: confirmation email was not sent. Check your email address and try again.",
       });
     } catch (err) {
       console.error(err);
-      res
-        .status(400)
-        .json({ error: "Couldn't sign up", details: [{ msg: null }] });
+
+      return sendError(res, {
+        status: 400,
+        message: "Signup failed: check your input and try again.",
+      });
     }
   }
 
@@ -63,9 +70,10 @@ class AuthController {
     const { token } = matchedData(req);
 
     if (!token) {
-      return res
-        .status(400)
-        .json({ error: "No token provided", details: [{ msg: null }] });
+      return sendError(res, {
+        status: 400,
+        message: "Email confirmation failed: token is missing.",
+      });
     }
 
     try {
@@ -74,15 +82,17 @@ class AuthController {
       const user = await usersModel.findOne({ username: decoded.username });
 
       if (!user) {
-        return res
-          .status(404)
-          .json({ error: "User not found", details: [{ msg: null }] });
+        return sendError(res, {
+          status: 404,
+          message: "Email confirmation failed: account was not found.",
+        });
       }
 
       if (user.isEmailConfirmed) {
-        return res
-          .status(400)
-          .json({ error: "Email already confirmed", details: [{ msg: null }] });
+        return sendError(res, {
+          status: 400,
+          message: "Email already confirmed: log in to continue.",
+        });
       }
 
       await usersModel.update(
@@ -94,9 +104,11 @@ class AuthController {
     } catch (err) {
       console.error(err);
 
-      res
-        .status(500)
-        .json({ error: "Couldn't confirm email", details: [{ msg: null }] });
+      return sendError(res, {
+        status: 500,
+        message:
+          "Email confirmation failed: token is invalid or expired. Request a new confirmation email.",
+      });
     }
   }
 
@@ -104,9 +116,10 @@ class AuthController {
     passport.authenticate("local", (err, user, info) => {
       if (err) return next(err);
       if (!user) {
-        return res.status(401).json({
-          error: "Login unsuccessful",
-          details: [{ msg: info.message }],
+        const loginReason = info?.message || "Invalid username or password";
+        return sendError(res, {
+          status: 401,
+          message: `Login failed: ${loginReason}. Check your credentials and try again.`,
         });
       }
 
@@ -114,7 +127,8 @@ class AuthController {
         if (err) return next(err);
         // eslint-disable-next-line no-unused-vars
         const { password, ...userWithoutPassword } = user;
-        return res.json({
+
+        return sendSuccess(res, {
           message: "Logged in successfully",
           data: userWithoutPassword,
         });

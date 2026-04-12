@@ -1,4 +1,5 @@
 import { query, validationResult } from "express-validator";
+import { sendError } from "../utils/response.js";
 
 class PostalCodeValidation {
   searchValidationRules = [
@@ -21,9 +22,12 @@ class PostalCodeValidation {
     (req, res, next) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({
-          error: "Validation failed",
-          details: errors.array(),
+        return sendError(res, {
+          status: 400,
+          message: `Validation failed: ${errors
+            .array()
+            .map((entry) => entry.msg)
+            .join(" ")} Fix the highlighted fields and try again.`,
         });
       }
       next();

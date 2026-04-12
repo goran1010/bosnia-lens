@@ -49,8 +49,9 @@ describe("Admin Router - GET /users/admin/contributors", () => {
     expect(response.header["content-type"]).toMatch(/json/);
 
     expect(response.body).toEqual({
-      error: "You need to be admin to access this route.",
-      details: [{ msg: null }],
+      error: {
+        message: "Access denied: admin role is required.",
+      },
     });
     expect(response.status).toBe(403);
   });
@@ -68,8 +69,9 @@ describe("Admin Router - GET /users/admin/contributors", () => {
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
-      error: "You need to be admin to access this route.",
-      details: [{ msg: null }],
+      error: {
+        message: "Access denied: admin role is required.",
+      },
     });
   });
 
@@ -137,8 +139,9 @@ describe("Admin Router - GET /users/admin/requested-contributors", () => {
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
-      error: "You need to be admin to access this route.",
-      details: [{ msg: null }],
+      error: {
+        message: "Access denied: admin role is required.",
+      },
     });
   });
 
@@ -157,8 +160,9 @@ describe("Admin Router - GET /users/admin/requested-contributors", () => {
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
-      error: "You need to be admin to access this route.",
-      details: [{ msg: null }],
+      error: {
+        message: "Access denied: admin role is required.",
+      },
     });
   });
 
@@ -224,8 +228,9 @@ describe("Admin Router - POST /users/admin/add-contributor", () => {
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
-      error: "You need to be admin to access this route.",
-      details: [{ msg: null }],
+      error: {
+        message: "Access denied: admin role is required.",
+      },
     });
   });
 
@@ -242,8 +247,9 @@ describe("Admin Router - POST /users/admin/add-contributor", () => {
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
-      error: "You need to be admin to access this route.",
-      details: [{ msg: null }],
+      error: {
+        message: "Access denied: admin role is required.",
+      },
     });
   });
 
@@ -259,18 +265,7 @@ describe("Admin Router - POST /users/admin/add-contributor", () => {
 
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(400);
-    expect(response.body).toEqual({
-      error: "Validation failed",
-      details: [
-        {
-          value: "",
-          msg: "User ID is required",
-          path: "userId",
-          type: "field",
-          location: "body",
-        },
-      ],
-    });
+    expect(response.body.error.message).toContain("User ID is required");
   });
 
   test("Responds with status 201 and message if user promoted to contributor successfully", async () => {
@@ -294,6 +289,11 @@ describe("Admin Router - POST /users/admin/add-contributor", () => {
     expect(response.header["content-type"]).toMatch(/json/);
     // expect(response.status).toBe(201);
     expect(response.body).toEqual({
+      data: {
+        id: 2,
+        username: "user2",
+        email: "user2@example.com",
+      },
       message: "User promoted to contributor successfully.",
     });
   });
@@ -328,8 +328,9 @@ describe("Admin Router - POST /users/admin/decline-contributor", () => {
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
-      error: "You need to be admin to access this route.",
-      details: [{ msg: null }],
+      error: {
+        message: "Access denied: admin role is required.",
+      },
     });
   });
 
@@ -348,8 +349,9 @@ describe("Admin Router - POST /users/admin/decline-contributor", () => {
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
-      error: "You need to be admin to access this route.",
-      details: [{ msg: null }],
+      error: {
+        message: "Access denied: admin role is required.",
+      },
     });
   });
 
@@ -367,18 +369,7 @@ describe("Admin Router - POST /users/admin/decline-contributor", () => {
 
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(400);
-    expect(response.body).toEqual({
-      error: "Validation failed",
-      details: [
-        {
-          value: "",
-          msg: "User ID is required",
-          path: "userId",
-          type: "field",
-          location: "body",
-        },
-      ],
-    });
+    expect(response.body.error.message).toContain("User ID is required");
   });
 
   test("Responds with status 201 and message if user's contributor request declined successfully", async () => {
@@ -402,6 +393,11 @@ describe("Admin Router - POST /users/admin/decline-contributor", () => {
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(201);
     expect(response.body).toEqual({
+      data: {
+        id: 2,
+        username: "user2",
+        email: "user2@example.com",
+      },
       message: "User's contributor request declined successfully.",
     });
   });
@@ -436,8 +432,9 @@ describe("Admin Router - DELETE /users/admin/remove-contributor", () => {
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
-      error: "You need to be admin to access this route.",
-      details: [{ msg: null }],
+      error: {
+        message: "Access denied: admin role is required.",
+      },
     });
   });
 
@@ -456,8 +453,9 @@ describe("Admin Router - DELETE /users/admin/remove-contributor", () => {
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
-      error: "You need to be admin to access this route.",
-      details: [{ msg: null }],
+      error: {
+        message: "Access denied: admin role is required.",
+      },
     });
   });
 
@@ -474,18 +472,7 @@ describe("Admin Router - DELETE /users/admin/remove-contributor", () => {
 
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(400);
-    expect(response.body).toEqual({
-      error: "Validation failed",
-      details: [
-        {
-          value: "",
-          msg: "User ID is required",
-          path: "userId",
-          type: "field",
-          location: "body",
-        },
-      ],
-    });
+    expect(response.body.error.message).toContain("User ID is required");
   });
 
   test("Responds with status 201 and message if user removed from contributors successfully", async () => {
@@ -509,6 +496,11 @@ describe("Admin Router - DELETE /users/admin/remove-contributor", () => {
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(201);
     expect(response.body).toEqual({
+      data: {
+        id: 2,
+        username: "user2",
+        email: "user2@example.com",
+      },
       message: "User removed from contributors successfully.",
     });
   });

@@ -1,12 +1,13 @@
 import { matchedData } from "express-validator";
 import { usersModel } from "../models/usersModel.js";
+import { sendSuccess } from "../utils/response.js";
 
 class AdminController {
   async getAllContributors(req, res) {
     const contributors = await usersModel.findMany({
       role: "CONTRIBUTOR",
     });
-    res.json({
+    return sendSuccess(res, {
       message: "All contributors fetched successfully.",
       data: contributors,
     });
@@ -16,7 +17,7 @@ class AdminController {
     const requestedContributors = await usersModel.findMany({
       requestedContributor: true,
     });
-    res.json({
+    return sendSuccess(res, {
       message: "Users requested contributor role fetched successfully.",
       data: requestedContributors,
     });
@@ -24,32 +25,44 @@ class AdminController {
 
   async addContributor(req, res) {
     const { userId } = matchedData(req);
-    await usersModel.update(
+    const updatedUser = await usersModel.update(
       { id: userId },
       { role: "CONTRIBUTOR", requestedContributor: false },
     );
-    res
-      .status(201)
-      .json({ message: "User promoted to contributor successfully." });
+
+    return sendSuccess(res, {
+      status: 201,
+      message: "User promoted to contributor successfully.",
+      data: updatedUser,
+    });
   }
 
   async removeContributor(req, res) {
     const { userId } = matchedData(req);
-    await usersModel.update(
+    const updatedUser = await usersModel.update(
       { id: userId },
       { role: "USER", requestedContributor: false },
     );
-    res
-      .status(201)
-      .json({ message: "User removed from contributors successfully." });
+
+    return sendSuccess(res, {
+      status: 201,
+      message: "User removed from contributors successfully.",
+      data: updatedUser,
+    });
   }
 
   async declineContributor(req, res) {
     const { userId } = matchedData(req);
-    await usersModel.update({ id: userId }, { requestedContributor: false });
-    res
-      .status(201)
-      .json({ message: "User's contributor request declined successfully." });
+    const updatedUser = await usersModel.update(
+      { id: userId },
+      { requestedContributor: false },
+    );
+
+    return sendSuccess(res, {
+      status: 201,
+      message: "User's contributor request declined successfully.",
+      data: updatedUser,
+    });
   }
 }
 

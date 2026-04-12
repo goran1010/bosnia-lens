@@ -1,15 +1,21 @@
 import { normalizeName } from "../utils/normalizeName.js";
 import { postalCodesModel } from "../models/postalCodesModel.js";
 import { matchedData } from "express-validator";
+import { sendError, sendSuccess } from "../utils/response.js";
 
 class V1Controller {
   status(req, res) {
-    res.json({ message: "API v1 server is running" });
+    return sendSuccess(res, {
+      data: {
+        status: "ok",
+      },
+      message: "API v1 server is running",
+    });
   }
 
   async getPostalCodes(req, res) {
     const postalCodes = await postalCodesModel.getAllPostalCodes();
-    res.json({
+    return sendSuccess(res, {
       message: "Postal codes retrieved successfully",
       data: postalCodes,
     });
@@ -34,15 +40,16 @@ class V1Controller {
     }
 
     if (result.length > 0) {
-      res.json({
+      return sendSuccess(res, {
         message: "Postal codes retrieved successfully",
         data: result,
       });
-    } else {
-      res
-        .status(404)
-        .json({ error: "Postal code not found", details: [{ msg: null }] });
     }
+
+    return sendError(res, {
+      status: 404,
+      message: "Postal code not found: verify the search term and try again.",
+    });
   }
 }
 

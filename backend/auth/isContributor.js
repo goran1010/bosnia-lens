@@ -1,19 +1,21 @@
+import { sendError } from "../utils/response.js";
+
 function isContributor(req, res, next) {
   try {
     if (!req.user) {
-      return res.status(401).json({
-        error:
-          "You need to be logged in and a contributor to access this route.",
-        details: [{ msg: null }],
+      return sendError(res, {
+        status: 401,
+        message:
+          "Access denied: log in with a contributor or admin account.",
       });
     }
 
     if (req.user.role === "CONTRIBUTOR" || req.user.role === "ADMIN")
       return next();
 
-    res.status(403).json({
-      error: "You need to be a contributor to access this route.",
-      details: [{ msg: null }],
+    return sendError(res, {
+      status: 403,
+      message: "Access denied: contributor role is required.",
     });
   } catch (err) {
     next(err);

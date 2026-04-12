@@ -8,6 +8,9 @@ describe("GET /api/", () => {
 
     expect(response.headers["content-type"]).toMatch(/json/);
     expect(response.body).toEqual({
+      data: {
+        status: "ok",
+      },
       message: "API server is running",
     });
     expect(response.status).toBe(200);

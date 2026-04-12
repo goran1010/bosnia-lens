@@ -10,6 +10,7 @@ import { emailConfirmHTML } from "../../utils/emailConfirmHTML.js";
 describe("usersRouter", () => {
   test("successfully create a user and returns status 201 and message", async () => {
     const responseData = {
+      data: expect.any(Object),
       message: "Registration successful! Check your email.",
     };
 
@@ -43,6 +44,9 @@ describe("usersRouter", () => {
     const response = await agent.post("/users/logout");
 
     expect(response.body).toEqual({
+      data: {
+        success: true,
+      },
       message: "User logged out successfully",
     });
     expect(response.status).toBe(200);

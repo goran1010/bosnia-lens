@@ -1,4 +1,5 @@
 import { usersModel } from "../models/usersModel.js";
+import { sendError, sendSuccess } from "../utils/response.js";
 
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 const NUMBER_OF_DAYS = 30;
@@ -9,16 +10,20 @@ class UsersController {
 
     delete loggedInUser.password;
 
-    res.json({ message: "User info retrieved", data: loggedInUser });
+    return sendSuccess(res, {
+      message: "User info retrieved",
+      data: loggedInUser,
+    });
   }
 
   async becomeContributor(req, res) {
     const { id, role } = req.user;
 
     if (role !== "USER") {
-      return res.status(403).json({
-        error: "Only regular users can request contributor status",
-        details: [{ msg: null }],
+      return sendError(res, {
+        status: 403,
+        message:
+          "Request denied: only regular users can request contributor access.",
       });
     }
 
@@ -28,13 +33,14 @@ class UsersController {
     );
 
     if (!updatedUser) {
-      return res.status(400).json({
-        error: "Could not request contributor status",
-        details: [{ msg: null }],
+      return sendError(res, {
+        status: 400,
+        message:
+          "Request failed: contributor request could not be saved. Try again.",
       });
     }
 
-    res.json({
+    return sendSuccess(res, {
       message:
         "You've asked to become a contributor! An admin will review your request soon.",
       data: updatedUser,
@@ -45,9 +51,10 @@ class UsersController {
     req.logout((err) => {
       if (err) {
         console.error(err);
-        return res
-          .status(500)
-          .json({ error: "Couldn't log out", details: [{ msg: null }] });
+        return sendError(res, {
+          status: 500,
+          message: "Logout failed: try again.",
+        });
       }
 
       req.session.destroy(() => {
@@ -59,7 +66,10 @@ class UsersController {
           httpOnly: true,
           path: "/",
         });
-        res.json({ message: "User logged out successfully" });
+        return sendSuccess(res, {
+          message: "User logged out successfully",
+          data: { success: true },
+        });
       });
     });
   }
