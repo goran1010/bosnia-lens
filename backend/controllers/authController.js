@@ -124,11 +124,7 @@ class AuthController {
         });
       }
 
-      req.session.regenerate((regenerateError) => {
-        if (regenerateError) {
-          return next(regenerateError);
-        }
-
+      const continueWithLogin = () => {
         req.logIn(user, (loginError) => {
           if (loginError) {
             return next(loginError);
@@ -139,6 +135,18 @@ class AuthController {
             data: sanitizeUser(user),
           });
         });
+      };
+
+      if (!req.session?.regenerate) {
+        return continueWithLogin();
+      }
+
+      req.session.regenerate((regenerateError) => {
+        if (regenerateError) {
+          return next(regenerateError);
+        }
+
+        return continueWithLogin();
       });
     })(req, res, next);
   }
