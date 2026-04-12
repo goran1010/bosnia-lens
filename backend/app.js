@@ -90,7 +90,7 @@ app.use((err, req, res, next) => {
 
   return sendError(res, {
     status: err.statusCode || 500,
-    message: err.message || "Server error: please try again later.",
+    message: "Server error: please try again later.",
   });
 });
 

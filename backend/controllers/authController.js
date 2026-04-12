@@ -124,12 +124,20 @@ class AuthController {
         });
       }
 
-      req.logIn(user, (err) => {
-        if (err) return next(err);
+      req.session.regenerate((regenerateError) => {
+        if (regenerateError) {
+          return next(regenerateError);
+        }
 
-        return sendSuccess(res, {
-          message: "Logged in successfully",
-          data: sanitizeUser(user),
+        req.logIn(user, (loginError) => {
+          if (loginError) {
+            return next(loginError);
+          }
+
+          return sendSuccess(res, {
+            message: "Logged in successfully",
+            data: sanitizeUser(user),
+          });
         });
       });
     })(req, res, next);

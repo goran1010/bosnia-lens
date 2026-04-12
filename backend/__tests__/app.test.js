@@ -23,7 +23,7 @@ describe("app", () => {
 
     expect(response.body).toEqual({
       error: {
-        message: "Test error",
+        message: "Server error: please try again later.",
       },
     });
     expect(response.status).toBe(500);
