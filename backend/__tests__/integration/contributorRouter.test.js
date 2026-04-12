@@ -97,6 +97,7 @@ describe("Contributor Router - DELETE /contributor/postal-codes", () => {
     });
     expect(response.status).toBe(200);
 
+    await postalCodesModel.deleteCode("12345");
     await usersModel.deleteUser({ id: loginResponse.body.data.id });
   });
 });
