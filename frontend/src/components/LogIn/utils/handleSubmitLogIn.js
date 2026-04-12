@@ -41,8 +41,7 @@ async function handleSubmitLogIn(
     if (!response.ok) {
       addNotification({
         type: "error",
-        message: result?.message,
-        details: result?.details[0]?.msg,
+        message: result?.error?.message || result?.error || "Login failed.",
       });
       return;
     }

@@ -22,8 +22,9 @@ describe("app", () => {
     const response = await request(app).get("/");
 
     expect(response.body).toEqual({
-      error: "An unexpected error occurred.",
-      details: [{ msg: "Test error" }],
+      error: {
+        message: "Server error: please try again later.",
+      },
     });
     expect(response.status).toBe(500);
   });

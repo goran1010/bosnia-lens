@@ -1,8 +1,12 @@
+import { sendError } from "../utils/response.js";
+
 function isNotAuthenticated(req, res, next) {
   if (!req.user) return next();
-  res
-    .status(403)
-    .json({ message: "You shouldn't be logged in.", details: [{ msg: null }] });
+
+  return sendError(res, {
+    status: 403,
+    message: "Already logged in: log out first.",
+  });
 }
 
 export { isNotAuthenticated };

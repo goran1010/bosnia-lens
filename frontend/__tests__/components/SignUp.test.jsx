@@ -230,13 +230,10 @@ describe("SignUp Form Submit", () => {
       ok: false,
       status: 400,
       json: async () => ({
-        error: "Validation failed",
-        details: [
-          {
-            msg: "Username already in use",
-          },
-          { msg: "Email already in use" },
-        ],
+        error: {
+          message:
+            "Validation failed: Username already in use Email already in use Fix the highlighted fields and try again.",
+        },
       }),
     });
     const {
@@ -255,7 +252,6 @@ describe("SignUp Form Submit", () => {
     await user.click(signUpButton);
 
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(await screen.findByText(/Validation failed/i)).toBeInTheDocument();
     expect(
       await screen.findByText(/Username already in use/i),
     ).toBeInTheDocument();

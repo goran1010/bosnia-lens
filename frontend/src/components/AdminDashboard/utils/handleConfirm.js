@@ -20,19 +20,16 @@ async function handleConfirm(
       return;
     }
 
-    const response = await fetch(
-      `${BACKEND_URL}/users/admin/add-contributor/`,
-      {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-          "x-csrf-token": csrfToken,
-        },
-        body: JSON.stringify({ userId: user.id }),
-        credentials: "include",
+    const response = await fetch(`${BACKEND_URL}/users/admin/add-contributor`, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        "x-csrf-token": csrfToken,
       },
-    );
+      body: JSON.stringify({ userId: user.id }),
+      credentials: "include",
+    });
     const result = await response.json();
 
     if (response.ok) {
@@ -48,8 +45,10 @@ async function handleConfirm(
     }
     addNotification({
       type: "error",
-      message: result.error,
-      details: result.details?.[0]?.msg,
+      message:
+        result?.error?.message ||
+        result?.error ||
+        "Failed to approve contributor.",
     });
   } catch (error) {
     addNotification({

@@ -46,15 +46,15 @@ const setupFetchMock = ({
       );
     }
 
-    if (requestUrl.includes("/users/admin/add-contributor/")) {
+    if (requestUrl.includes("/users/admin/add-contributor")) {
       return Promise.resolve(createFetchResponse(addContributorResponse));
     }
 
-    if (requestUrl.includes("/users/admin/decline-contributor/")) {
+    if (requestUrl.includes("/users/admin/decline-contributor")) {
       return Promise.resolve(createFetchResponse(declineContributorResponse));
     }
 
-    if (requestUrl.includes("/users/admin/remove-contributor/")) {
+    if (requestUrl.includes("/users/admin/remove-contributor")) {
       return Promise.resolve(createFetchResponse(removeContributorResponse));
     }
 
@@ -143,9 +143,10 @@ describe("AdminForm component pending requests and contributors interaction", ()
     await user.click(confirmButton);
 
     expect(fetchMock).toHaveBeenCalledWith(
-      expect.stringContaining("/users/admin/add-contributor/1"),
+      expect.stringContaining("/users/admin/add-contributor"),
       expect.objectContaining({
         method: "POST",
+        body: JSON.stringify({ userId: 1 }),
         headers: expect.objectContaining({
           "Content-Type": "application/json",
           "x-csrf-token": "csrf-token",
@@ -187,9 +188,10 @@ describe("AdminForm component pending requests and contributors interaction", ()
     await user.click(declineButton);
 
     expect(fetchMock).toHaveBeenCalledWith(
-      expect.stringContaining("/users/admin/decline-contributor/1"),
+      expect.stringContaining("/users/admin/decline-contributor"),
       expect.objectContaining({
         method: "POST",
+        body: JSON.stringify({ userId: 1 }),
         headers: expect.objectContaining({
           "Content-Type": "application/json",
           "x-csrf-token": "csrf-token",

@@ -49,8 +49,9 @@ describe("POST /users/contributor/postal-codes", () => {
     const agent = request.agent(app);
 
     const expectedResponse = {
-      error: "You need to be a contributor to access this route.",
-      details: [{ msg: null }],
+      error: {
+        message: "Access denied: contributor role is required.",
+      },
     };
 
     const response = await agent.post("/users/contributor/postal-codes");
@@ -69,11 +70,11 @@ describe("POST /users/contributor/postal-codes", () => {
     };
     const agent = request.agent(app);
 
-    const expectedResponse = "Validation failed";
+    const expectedResponse = "Code is required";
     const response = await agent.post("/users/contributor/postal-codes");
 
     expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.body.error).toBe(expectedResponse);
+    expect(response.body.error.message).toContain(expectedResponse);
     expect(response.status).toBe(400);
   });
 
@@ -86,13 +87,13 @@ describe("POST /users/contributor/postal-codes", () => {
     };
     const agent = request.agent(app);
 
-    const expectedResponse = "Validation failed";
+    const expectedResponse = "Postal codes must have 5 numbers";
     const responseCode = await agent
       .post("/users/contributor/postal-codes")
-      .query({ city: "TestCity", code: "1234", post: "" });
+      .send({ city: "TestCity", code: "1234", post: "" });
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
-    expect(responseCode.body.error).toBe(expectedResponse);
+    expect(responseCode.body.error.message).toContain(expectedResponse);
     expect(responseCode.status).toBe(400);
   });
 
@@ -105,13 +106,13 @@ describe("POST /users/contributor/postal-codes", () => {
     };
     const agent = request.agent(app);
 
-    const expectedResponse = "Validation failed";
+    const expectedResponse = "Must be a number";
     const responseCode = await agent
       .post("/users/contributor/postal-codes")
-      .query({ city: "TestCity", code: "abcde", post: "" });
+      .send({ city: "TestCity", code: "abcde", post: "" });
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
-    expect(responseCode.body.error).toBe(expectedResponse);
+    expect(responseCode.body.error.message).toContain(expectedResponse);
     expect(responseCode.status).toBe(400);
   });
 
@@ -130,13 +131,13 @@ describe("POST /users/contributor/postal-codes", () => {
       post: "",
     });
 
-    const expectedResponse = "Validation failed";
+    const expectedResponse = "Code already exists";
     const responseCode = await agent
       .post("/users/contributor/postal-codes")
-      .query({ city: "TestCity", code: "12345", post: "" });
+      .send({ city: "TestCity", code: "12345", post: "" });
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
-    expect(responseCode.body.error).toBe(expectedResponse);
+    expect(responseCode.body.error.message).toContain(expectedResponse);
     expect(responseCode.status).toBe(400);
   });
 
@@ -165,7 +166,7 @@ describe("POST /users/contributor/postal-codes", () => {
 
     const responseCode = await agent
       .post("/users/contributor/postal-codes")
-      .query({ city: "TestCity", code: "12345", post: "" });
+      .send({ city: "TestCity", code: "12345", post: "" });
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
     expect(responseCode.body).toEqual(expectedResponse);
@@ -196,8 +197,9 @@ describe("PUT /users/contributor/postal-codes", () => {
     };
     const agent = request.agent(app);
     const expectedResponse = {
-      error: "You need to be a contributor to access this route.",
-      details: [{ msg: null }],
+      error: {
+        message: "Access denied: contributor role is required.",
+      },
     };
 
     const adminRouteResponse = await agent.put(
@@ -218,11 +220,11 @@ describe("PUT /users/contributor/postal-codes", () => {
     };
     const agent = request.agent(app);
 
-    const expectedResponse = "Validation failed";
+    const expectedResponse = "Code is required";
     const responseCode = await agent.put("/users/contributor/postal-codes");
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
-    expect(responseCode.body.error).toBe(expectedResponse);
+    expect(responseCode.body.error.message).toContain(expectedResponse);
     expect(responseCode.status).toBe(400);
   });
 
@@ -254,7 +256,7 @@ describe("PUT /users/contributor/postal-codes", () => {
 
     const responseCode = await agent
       .put("/users/contributor/postal-codes")
-      .query({ city: "TestCity", code: "12345", post: "" });
+      .send({ city: "TestCity", code: "12345", post: "" });
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
     expect(responseCode.body).toEqual(expectedResponse);
@@ -288,8 +290,9 @@ describe("DELETE /users/contributor/postal-codes", () => {
     const agent = request.agent(app);
 
     const expectedResponse = {
-      error: "You need to be a contributor to access this route.",
-      details: [{ msg: null }],
+      error: {
+        message: "Access denied: contributor role is required.",
+      },
     };
 
     const adminRouteResponse = await agent.delete(
@@ -310,11 +313,11 @@ describe("DELETE /users/contributor/postal-codes", () => {
     };
     const agent = request.agent(app);
 
-    const expectedResponse = "Validation failed";
+    const expectedResponse = "Code is required";
     const responseCode = await agent.delete("/users/contributor/postal-codes");
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
-    expect(responseCode.body.error).toBe(expectedResponse);
+    expect(responseCode.body.error.message).toContain(expectedResponse);
     expect(responseCode.status).toBe(400);
   });
 
@@ -345,7 +348,7 @@ describe("DELETE /users/contributor/postal-codes", () => {
 
     const responseCode = await agent
       .delete("/users/contributor/postal-codes")
-      .query({ code: "12345" });
+      .send({ code: "12345" });
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
     expect(responseCode.body).toEqual(expectedResponse);

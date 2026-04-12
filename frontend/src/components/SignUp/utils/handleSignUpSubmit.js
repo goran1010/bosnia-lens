@@ -42,8 +42,8 @@ async function handleSignUpSubmit(
     if (!response.ok) {
       addNotification({
         type: "error",
-        message: result.error,
-        details: result.details?.[0]?.msg,
+        message:
+          result?.error?.message || result?.error || "Registration failed.",
       });
       return;
     }

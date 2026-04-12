@@ -115,8 +115,7 @@ describe("GetAllPostalCodes Component", () => {
       fetchSpy.mockResolvedValueOnce({
         ok: false,
         json: async () => ({
-          error: "Server Error",
-          details: [{ msg: "Unable to fetch postal codes" }],
+          error: { message: "Server Error" },
         }),
       });
 
@@ -128,7 +127,6 @@ describe("GetAllPostalCodes Component", () => {
       expect(mockAddNotification).toHaveBeenCalledWith({
         type: "error",
         message: "Server Error",
-        details: "Unable to fetch postal codes",
       });
       expect(mockSetLoading).toHaveBeenCalledWith(false);
     });
@@ -138,8 +136,7 @@ describe("GetAllPostalCodes Component", () => {
         ok: false,
         status: 404,
         json: async () => ({
-          error: "Not Found",
-          details: [{ msg: "Postal codes endpoint not found" }],
+          error: { message: "Not Found" },
         }),
       });
 
@@ -152,7 +149,6 @@ describe("GetAllPostalCodes Component", () => {
         expect(mockAddNotification).toHaveBeenCalledWith({
           type: "error",
           message: "Not Found",
-          details: "Postal codes endpoint not found",
         });
       });
     });
@@ -161,8 +157,7 @@ describe("GetAllPostalCodes Component", () => {
       fetchSpy.mockResolvedValueOnce({
         ok: false,
         json: async () => ({
-          error: "Error",
-          details: [{ msg: "Error details" }],
+          error: { message: "Error" },
         }),
       });
 

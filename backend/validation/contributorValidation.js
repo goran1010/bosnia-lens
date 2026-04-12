@@ -1,11 +1,12 @@
-import { query, validationResult } from "express-validator";
+import { body } from "express-validator";
 import { postalCodesModel } from "../models/postalCodesModel.js";
+import { validationError } from "./validationError.js";
 
 const validPosts = ["BH_POSTA", "POSTE_SRP", "HP_MOSTAR"];
 
 class ContributorValidation {
   createPostalCode = [
-    query("code")
+    body("code")
       .trim()
       .notEmpty()
       .withMessage("Code is required")
@@ -29,29 +30,19 @@ class ContributorValidation {
         return true;
       }),
 
-    query("city").trim().notEmpty().withMessage("City is required"),
+    body("city").trim().notEmpty().withMessage("City is required"),
 
-    query("post").custom((value) => {
+    body("post").custom((value) => {
       if (!validPosts.includes(value) && value !== "") {
         throw new Error("Invalid post");
       }
       return true;
     }),
-
-    (req, res, next) => {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({
-          error: "Validation failed",
-          details: errors.array(),
-        });
-      }
-      next();
-    },
+    validationError,
   ];
 
   editPostalCode = [
-    query("code")
+    body("code")
       .trim()
       .notEmpty()
       .withMessage("Code is required")
@@ -65,29 +56,19 @@ class ContributorValidation {
         return true;
       }),
 
-    query("city").trim().notEmpty().withMessage("City is required"),
+    body("city").trim().notEmpty().withMessage("City is required"),
 
-    query("post").custom((value) => {
+    body("post").custom((value) => {
       if (!validPosts.includes(value) && value !== "") {
         throw new Error("Invalid post");
       }
       return true;
     }),
-
-    (req, res, next) => {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({
-          error: "Validation failed",
-          details: errors.array(),
-        });
-      }
-      next();
-    },
+    validationError,
   ];
 
   deletePostalCode = [
-    query("code")
+    body("code")
       .trim()
       .notEmpty()
       .withMessage("Can't delete data. Code is required")
@@ -101,16 +82,7 @@ class ContributorValidation {
         return true;
       }),
 
-    (req, res, next) => {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({
-          error: "Validation failed",
-          details: errors.array(),
-        });
-      }
-      next();
-    },
+    validationError,
   ];
 }
 

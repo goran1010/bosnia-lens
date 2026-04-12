@@ -39,6 +39,9 @@ describe("GET /", () => {
 
     expect(response.headers["content-type"]).toMatch(/json/);
     expect(response.body).toEqual({
+      data: {
+        status: "ok",
+      },
       message: "API v1 server is running",
     });
     expect(response.status).toBe(200);
@@ -94,8 +97,9 @@ describe("GET /api/v1/postal-codes/search", () => {
 
     expect(response.headers["content-type"]).toMatch(/json/);
     expect(response.body).toEqual({
-      error: "Postal code not found",
-      details: [{ msg: null }],
+      error: {
+        message: "Postal code not found: verify the search term and try again.",
+      },
     });
     expect(response.status).toBe(404);
   });
@@ -104,8 +108,7 @@ describe("GET /api/v1/postal-codes/search", () => {
     const response = await request(app).get("/api/v1/postal-codes/search");
 
     expect(response.headers["content-type"]).toMatch(/json/);
-    expect(response.body.error).toEqual("Validation failed");
-    expect(response.body.details[0].msg).toEqual("Search term is required");
+    expect(response.body.error.message).toContain("Search term is required");
     expect(response.status).toBe(400);
   });
 });

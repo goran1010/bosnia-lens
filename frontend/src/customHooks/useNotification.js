@@ -3,17 +3,11 @@ import { useState } from "react";
 function useNotification() {
   const [notifications, setNotifications] = useState([]);
 
-  const addNotification = ({
-    type = "info",
-    message,
-    duration = 3000,
-    details = null,
-  }) => {
+  const addNotification = ({ type = "info", message, duration = 3000 }) => {
     const newNotification = {
       id: crypto.randomUUID(),
       type,
       message,
-      details,
       duration,
       createdAt: Date.now(),
     };

@@ -12,6 +12,7 @@ describe("Auth Router - POST /auth/signup", () => {
     const newUser = createNewUser();
 
     const responseData = {
+      data: expect.any(Object),
       message: "Registration successful! Check your email.",
     };
     const response = await request(app).post("/auth/signup").send(newUser);
