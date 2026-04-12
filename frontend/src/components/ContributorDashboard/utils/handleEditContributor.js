@@ -49,8 +49,10 @@ async function handleEditContributor(
     }
     addNotification({
       type: "error",
-      message: result.error,
-      details: result.details?.[0]?.msg,
+      message:
+        result?.error?.message ||
+        result?.error ||
+        "Failed to update postal code.",
     });
   } catch (err) {
     addNotification({

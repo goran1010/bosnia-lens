@@ -47,8 +47,10 @@ async function handleDeleteContributor(
     }
     addNotification({
       type: "error",
-      message: result.error,
-      details: result.details?.[0]?.msg,
+      message:
+        result?.error?.message ||
+        result?.error ||
+        "Failed to delete postal code.",
     });
   } catch (err) {
     addNotification({

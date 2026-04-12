@@ -145,12 +145,10 @@ describe("LogIn Form Submit", () => {
       ok: false,
       status: 400,
       json: async () => ({
-        error: "Validation failed",
-        details: [
-          {
-            msg: "Invalid username or password",
-          },
-        ],
+        error: {
+          message:
+            "Login failed: Invalid username or password. Check your credentials and try again.",
+        },
       }),
     });
 

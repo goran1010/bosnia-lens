@@ -56,8 +56,8 @@ async function handleSubmitAddData(
 
     addNotification({
       type: "error",
-      message: result.error,
-      details: result.details?.[0]?.msg,
+      message:
+        result?.error?.message || result?.error || "Failed to add postal code.",
     });
   } catch (err) {
     console.error("Error adding postal code:", err);

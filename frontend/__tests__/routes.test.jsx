@@ -66,7 +66,10 @@ describe("Loading components when visiting an address", () => {
     });
     render(<RouterProvider router={router} />);
 
-    const linkElement = await screen.findByText(/Bosnia Lens/i);
+    const linkElement = await screen.findByRole("heading", {
+      name: /Bosnia Lens/i,
+      level: 1,
+    });
     expect(linkElement).toBeInTheDocument();
   });
 

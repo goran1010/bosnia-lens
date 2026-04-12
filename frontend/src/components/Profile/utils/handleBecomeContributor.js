@@ -38,8 +38,10 @@ async function handleBecomeContributor(
     }
     addNotification({
       type: "error",
-      message: result?.error || "Failed to request contributor status.",
-      details: result?.details?.[0]?.msg,
+      message:
+        result?.error?.message ||
+        result?.error ||
+        "Failed to request contributor status.",
     });
   } catch (err) {
     addNotification({

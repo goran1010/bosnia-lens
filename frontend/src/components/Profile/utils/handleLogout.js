@@ -42,8 +42,7 @@ async function handleLogout(
 
     addNotification({
       type: "error",
-      message: result?.error,
-      details: result?.details?.[0]?.msg,
+      message: result?.error?.message || result?.error || "Logout failed.",
     });
   } catch (err) {
     addNotification({

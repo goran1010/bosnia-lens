@@ -29,7 +29,10 @@ function useStatusCheck(setLoading, notificationValue, longWait) {
         if (!response.ok) {
           addNotification({
             type: "error",
-            message: result.error,
+            message:
+              result?.error?.message ||
+              result?.error ||
+              "Failed to check login status.",
           });
           setLoading(false);
           return;
@@ -37,7 +40,7 @@ function useStatusCheck(setLoading, notificationValue, longWait) {
 
         addNotification({
           type: "success",
-          message: result.message,
+          message: result.message || "Login status verified.",
         });
         setLoading(false);
         setUserData(result.data);
