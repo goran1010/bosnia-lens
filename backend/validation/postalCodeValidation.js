@@ -26,8 +26,8 @@ class PostalCodeValidation {
           status: 400,
           message: `Validation failed: ${errors
             .array()
-            .map((entry) => entry.msg)
-            .join(" ")} Fix the highlighted fields and try again.`,
+            .map((entry) => `${entry.path}: ${entry.msg}`)
+            .join(", ")}.`,
         });
       }
       next();
