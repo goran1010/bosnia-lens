@@ -9,9 +9,9 @@ beforeEach(() => {
 
 const dummyData = {
   data: [
-    { code: 71000, city: "Sarajevo" },
-    { code: 71001, city: "Sarajevo" },
-    { code: 78000, city: "Banja Luka" },
+    { code: 71000, city: "Sarajevo", post: "BH_POSTA" },
+    { code: 71001, city: "Sarajevo", post: "BH_POSTA" },
+    { code: 78000, city: "Banja Luka", post: "POSTE_SRP" },
   ],
 };
 

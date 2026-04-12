@@ -1,30 +1,27 @@
 import request from "supertest";
-import { describe, test, expect, vi } from "vitest";
-import jwt from "jsonwebtoken";
-import { createNewUser } from "../utils/createNewUser.js";
-import { createAndLoginUser } from "../utils/createUserAndLogin.js";
-import { usersModel } from "../../models/usersModel.js";
+import { describe, test, expect, vi, beforeEach } from "vitest";
 import { postalCodesModel } from "../../models/postalCodesModel.js";
 import { app } from "../../app.js";
 
-vi.mock("../../email/confirmationEmail.js", () => ({
-  sendConfirmationEmail: vi.fn(async () => {
-    return { success: true };
-  }),
-}));
+let mockedUser = null;
 
-vi.mock("csrf-sync", () => {
-  const originalModule = vi.importActual("csrf-sync");
+vi.mock("../../auth/isAuthenticated.js", () => {
   return {
-    ...originalModule,
-    csrfSync: () => {
-      return {
-        csrfSynchronisedProtection: (req, res, next) => {
-          next();
-        },
-      };
+    isAuthenticated: (req, res, next) => {
+      req.user = mockedUser;
+      if (req.user) return next();
+
+      res.status(401).json({
+        error: "You are not logged in.",
+        details: [{ msg: null }],
+      });
     },
   };
+});
+
+beforeEach(() => {
+  vi.clearAllMocks();
+  mockedUser = null;
 });
 
 describe("POST /users/contributor/postal-codes", () => {
@@ -42,76 +39,52 @@ describe("POST /users/contributor/postal-codes", () => {
   });
 
   test("responds with status 403 and You need to be a contributor to access this route if logged in but not a contributor", async () => {
-    const newUserData = createNewUser();
-
-    await usersModel.deleteUser({ email: newUserData.email });
+    mockedUser = {
+      id: 1,
+      username: "user1",
+      email: "user1@example.com",
+      role: "USER",
+    };
 
     const agent = request.agent(app);
-
-    await agent.post("/auth/signup").send(newUserData);
-
-    const accessToken = jwt.sign(
-      { email: newUserData.email, username: newUserData.username },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "1d" },
-    );
-
-    await agent.get(`/auth/confirm/${accessToken}`);
-
-    const response = await agent.post("/auth/login").send({
-      username: newUserData.username,
-      password: newUserData.password,
-    });
 
     const expectedResponse = {
       error: "You need to be a contributor to access this route.",
       details: [{ msg: null }],
     };
 
-    expect(response.status).toBe(200);
-    expect(response.body.message).toEqual(`Logged in successfully`);
+    const response = await agent.post("/users/contributor/postal-codes");
 
-    const adminRouteResponse = await agent.post(
-      "/users/contributor/postal-codes",
-    );
-
-    expect(adminRouteResponse.header["content-type"]).toMatch(/json/);
-    expect(adminRouteResponse.body).toEqual(expectedResponse);
-    expect(adminRouteResponse.status).toBe(403);
+    expect(response.header["content-type"]).toMatch(/json/);
+    expect(response.body).toEqual(expectedResponse);
+    expect(response.status).toBe(403);
   });
 
   test("No code sent responds with status 400 and Code is required", async () => {
+    mockedUser = {
+      id: 1,
+      username: "user1",
+      email: "user1@example.com",
+      role: "CONTRIBUTOR",
+    };
     const agent = request.agent(app);
 
-    const newUserData = createNewUser({ role: "CONTRIBUTOR" });
-
-    await usersModel.deleteUser({
-      username: newUserData.username,
-    });
-
-    const response = await createAndLoginUser(agent, newUserData);
-
-    expect(response.status).toBe(200);
-    expect(response.body.message).toEqual(`Logged in successfully`);
-
     const expectedResponse = "Validation failed";
-    const responseCode = await agent.post("/users/contributor/postal-codes");
+    const response = await agent.post("/users/contributor/postal-codes");
 
-    expect(responseCode.header["content-type"]).toMatch(/json/);
-    expect(responseCode.body.error).toBe(expectedResponse);
-    expect(responseCode.status).toBe(400);
+    expect(response.header["content-type"]).toMatch(/json/);
+    expect(response.body.error).toBe(expectedResponse);
+    expect(response.status).toBe(400);
   });
 
   test("Responds with status 400 and Postal codes must have 5 numbers if code sent is not 5 numbers", async () => {
+    mockedUser = {
+      id: 1,
+      username: "user1",
+      email: "user1@example.com",
+      role: "CONTRIBUTOR",
+    };
     const agent = request.agent(app);
-
-    const newUserData = createNewUser({ role: "CONTRIBUTOR" });
-
-    await usersModel.deleteUser({ email: newUserData.email });
-
-    const response = await createAndLoginUser(agent, newUserData);
-    expect(response.status).toBe(200);
-    expect(response.body.message).toEqual(`Logged in successfully`);
 
     const expectedResponse = "Validation failed";
     const responseCode = await agent
@@ -124,15 +97,13 @@ describe("POST /users/contributor/postal-codes", () => {
   });
 
   test("Responds with status 400 and Must be a number if code sent is not a number", async () => {
+    mockedUser = {
+      id: 1,
+      username: "user1",
+      email: "user1@example.com",
+      role: "CONTRIBUTOR",
+    };
     const agent = request.agent(app);
-
-    const newUserData = createNewUser({ role: "CONTRIBUTOR" });
-
-    await usersModel.deleteUser({ email: newUserData.email });
-
-    const response = await createAndLoginUser(agent, newUserData);
-    expect(response.status).toBe(200);
-    expect(response.body.message).toEqual(`Logged in successfully`);
 
     const expectedResponse = "Validation failed";
     const responseCode = await agent
@@ -145,15 +116,13 @@ describe("POST /users/contributor/postal-codes", () => {
   });
 
   test("Responds with status 400 and Code already exists if code sent already exists in database", async () => {
+    mockedUser = {
+      id: 1,
+      username: "user1",
+      email: "user1@example.com",
+      role: "CONTRIBUTOR",
+    };
     const agent = request.agent(app);
-
-    const newUserData = createNewUser({ role: "CONTRIBUTOR" });
-
-    await usersModel.deleteUser({ email: newUserData.email });
-
-    const response = await createAndLoginUser(agent, newUserData);
-    expect(response.status).toBe(200);
-    expect(response.body.message).toEqual(`Logged in successfully`);
 
     vi.spyOn(postalCodesModel, "getPostalCodeByCode").mockResolvedValue({
       city: "TestCity",
@@ -171,7 +140,7 @@ describe("POST /users/contributor/postal-codes", () => {
     expect(responseCode.status).toBe(400);
   });
 
-  test("Valid request responds with status 200 and New postal code row created", async () => {
+  test("Valid request responds with status 201 and New postal code row created", async () => {
     vi.spyOn(postalCodesModel, "createNew").mockResolvedValue({
       city: "TestCity",
       code: "12345",
@@ -180,16 +149,14 @@ describe("POST /users/contributor/postal-codes", () => {
 
     vi.spyOn(postalCodesModel, "getPostalCodeByCode").mockResolvedValue(null);
 
+    mockedUser = {
+      id: 1,
+      username: "user1",
+      email: "user1@example.com",
+      role: "CONTRIBUTOR",
+    };
+
     const agent = request.agent(app);
-
-    const newUserData = createNewUser({ role: "CONTRIBUTOR" });
-
-    await usersModel.deleteUser({ email: newUserData.email });
-
-    const response = await createAndLoginUser(agent, newUserData);
-
-    expect(response.status).toBe(200);
-    expect(response.body.message).toEqual(`Logged in successfully`);
 
     const expectedResponse = {
       message: "New postal code row created.",
@@ -202,6 +169,7 @@ describe("POST /users/contributor/postal-codes", () => {
 
     expect(responseCode.header["content-type"]).toMatch(/json/);
     expect(responseCode.body).toEqual(expectedResponse);
+    expect(responseCode.status).toBe(201);
   });
 });
 
@@ -220,31 +188,17 @@ describe("PUT /users/contributor/postal-codes", () => {
   });
 
   test("responds with status 403 and You need to be a contributor to access this route if logged in but not a contributor", async () => {
-    const newUserData = createNewUser();
-
-    await usersModel.deleteUser({ email: newUserData.email });
-
+    mockedUser = {
+      id: 1,
+      username: "user1",
+      email: "user1@example.com",
+      role: "USER",
+    };
     const agent = request.agent(app);
-
-    await agent.post("/auth/signup").send(newUserData);
-    const accessToken = jwt.sign(
-      { email: newUserData.email, username: newUserData.username },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "1d" },
-    );
-    await agent.get(`/auth/confirm/${accessToken}`);
-    const response = await agent.post("/auth/login").send({
-      username: newUserData.username,
-      password: newUserData.password,
-    });
-
     const expectedResponse = {
       error: "You need to be a contributor to access this route.",
       details: [{ msg: null }],
     };
-
-    expect(response.status).toBe(200);
-    expect(response.body.message).toEqual(`Logged in successfully`);
 
     const adminRouteResponse = await agent.put(
       "/users/contributor/postal-codes",
@@ -256,16 +210,13 @@ describe("PUT /users/contributor/postal-codes", () => {
   });
 
   test("No code sent responds with status 400 and Code is required", async () => {
+    mockedUser = {
+      id: 1,
+      username: "user1",
+      email: "user1@example.com",
+      role: "CONTRIBUTOR",
+    };
     const agent = request.agent(app);
-
-    const newUserData = createNewUser({ role: "CONTRIBUTOR" });
-
-    await usersModel.deleteUser({ email: newUserData.email });
-
-    const response = await createAndLoginUser(agent, newUserData);
-
-    expect(response.status).toBe(200);
-    expect(response.body.message).toEqual(`Logged in successfully`);
 
     const expectedResponse = "Validation failed";
     const responseCode = await agent.put("/users/contributor/postal-codes");
@@ -288,15 +239,13 @@ describe("PUT /users/contributor/postal-codes", () => {
       post: "",
     });
 
+    mockedUser = {
+      id: 1,
+      username: "user1",
+      email: "user1@example.com",
+      role: "CONTRIBUTOR",
+    };
     const agent = request.agent(app);
-    const newUserData = createNewUser({ role: "CONTRIBUTOR" });
-
-    await usersModel.deleteUser({ email: newUserData.email });
-
-    const response = await createAndLoginUser(agent, newUserData);
-
-    expect(response.status).toBe(200);
-    expect(response.body.message).toEqual(`Logged in successfully`);
 
     const expectedResponse = {
       message: "Postal code row edited.",
@@ -330,31 +279,18 @@ describe("DELETE /users/contributor/postal-codes", () => {
   });
 
   test("responds with status 403 and You need to be a contributor to access this route if logged in but not a contributor", async () => {
-    const newUserData = createNewUser();
-
-    await usersModel.deleteUser({ email: newUserData.email });
-
+    mockedUser = {
+      id: 1,
+      username: "user1",
+      email: "user1@example.com",
+      role: "USER",
+    };
     const agent = request.agent(app);
-
-    await agent.post("/auth/signup").send(newUserData);
-    const accessToken = jwt.sign(
-      { email: newUserData.email, username: newUserData.username },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "1d" },
-    );
-    await agent.get(`/auth/confirm/${accessToken}`);
-    const response = await agent.post("/auth/login").send({
-      username: newUserData.username,
-      password: newUserData.password,
-    });
 
     const expectedResponse = {
       error: "You need to be a contributor to access this route.",
       details: [{ msg: null }],
     };
-
-    expect(response.status).toBe(200);
-    expect(response.body.message).toEqual(`Logged in successfully`);
 
     const adminRouteResponse = await agent.delete(
       "/users/contributor/postal-codes",
@@ -366,16 +302,13 @@ describe("DELETE /users/contributor/postal-codes", () => {
   });
 
   test("No code sent responds with status 400 and Code is required", async () => {
+    mockedUser = {
+      id: 1,
+      username: "user1",
+      email: "user1@example.com",
+      role: "CONTRIBUTOR",
+    };
     const agent = request.agent(app);
-
-    const newUserData = createNewUser({ role: "CONTRIBUTOR" });
-
-    await usersModel.deleteUser({ email: newUserData.email });
-
-    const response = await createAndLoginUser(agent, newUserData);
-
-    expect(response.status).toBe(200);
-    expect(response.body.message).toEqual(`Logged in successfully`);
 
     const expectedResponse = "Validation failed";
     const responseCode = await agent.delete("/users/contributor/postal-codes");
@@ -391,15 +324,19 @@ describe("DELETE /users/contributor/postal-codes", () => {
       code: "12345",
       post: "",
     });
+    vi.spyOn(postalCodesModel, "getPostalCodeByCode").mockResolvedValue({
+      city: "TestCity",
+      code: "12345",
+      post: "",
+    });
 
     const agent = request.agent(app);
-    const newUserData = createNewUser({ role: "CONTRIBUTOR" });
-    await usersModel.deleteUser({ email: newUserData.email });
-
-    const response = await createAndLoginUser(agent, newUserData);
-
-    expect(response.status).toBe(200);
-    expect(response.body.message).toEqual(`Logged in successfully`);
+    mockedUser = {
+      id: 1,
+      username: "user1",
+      email: "user1@example.com",
+      role: "CONTRIBUTOR",
+    };
 
     const expectedResponse = {
       message: "Postal code row deleted.",

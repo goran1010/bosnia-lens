@@ -2,54 +2,46 @@ import request from "supertest";
 import { describe, test, expect, vi, beforeEach } from "vitest";
 import { usersModel } from "../../models/usersModel.js";
 import { createNewUser } from "../utils/createNewUser.js";
+import { app } from "../../app.js";
 
-vi.mock("csrf-sync", () => {
-  const originalModule = vi.importActual("csrf-sync");
+let mockedUser = null;
+
+vi.mock("../../auth/isAuthenticated.js", () => {
   return {
-    ...originalModule,
-    csrfSync: () => ({
-      csrfSynchronisedProtection: (req, res, next) => next(),
-    }),
+    isAuthenticated: (req, res, next) => {
+      req.user = mockedUser;
+      if (req.user) return next();
+
+      res.status(401).json({
+        error: "You are not logged in.",
+        details: [{ msg: null }],
+      });
+    },
   };
 });
 
-const isAuthenticatedMock = vi.fn();
-
-vi.mock("../../auth/isAuthenticated.js", () => ({
-  isAuthenticated: (req, res, next) => isAuthenticatedMock(req, res, next),
-}));
-
-import { app } from "../../app.js";
-
 beforeEach(() => {
   vi.clearAllMocks();
-  // Set default behavior
-  isAuthenticatedMock.mockImplementation((req, res, next) => {
-    if (req.user) return next();
-    res.status(403).json({ error: "You need to be logged in." });
-  });
+  mockedUser = null;
 });
 
 describe("GET /me", () => {
-  test("responds with status 403 and Need to be logged in if not logged in", async () => {
+  test("responds with status 401 and You are not logged in if not logged in", async () => {
     const notLoggedInResponse = {
-      error: "You need to be logged in.",
+      error: "You are not logged in.",
+      details: [{ msg: null }],
     };
 
     const response = await request(app).get("/users/me");
 
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.body).toEqual(notLoggedInResponse);
-    expect(response.status).toBe(403);
+    expect(response.status).toBe(401);
   });
 
   test("responds with status 200 and user data if logged in", async () => {
-    const user = { email: "test_email@mail.com", username: "test_username" };
-
-    isAuthenticatedMock.mockImplementation((req, res, next) => {
-      req.user = user;
-      next();
-    });
+    const user = createNewUser();
+    mockedUser = user;
 
     const response = await request(app).get("/users/me");
 
@@ -64,16 +56,8 @@ describe("GET /me", () => {
 
 describe("POST /become-contributor", () => {
   test("responds with status 403 and Only regular users can request contributor status if user is not a regular user", async () => {
-    const user = {
-      email: "test_email@mail.com",
-      username: "test_username",
-      role: "ADMIN",
-    };
-
-    isAuthenticatedMock.mockImplementation((req, res, next) => {
-      req.user = user;
-      next();
-    });
+    const user = createNewUser({ role: "CONTRIBUTOR" });
+    mockedUser = user;
 
     const response = await request(app)
       .post("/users/become-contributor")
@@ -88,23 +72,15 @@ describe("POST /become-contributor", () => {
   });
 
   test("responds with status 200 and message if request to become contributor successful", async () => {
-    const agent = request.agent(app);
+    const user = createNewUser();
+    mockedUser = user;
 
-    const newUser = createNewUser();
-    await agent.post("/auth/signup").send(newUser);
+    vi.spyOn(usersModel, "update").mockResolvedValue({
+      ...user,
+      requestedContributor: true,
+    });
 
-    await usersModel.update(
-      { username: newUser.username },
-      { isEmailConfirmed: true },
-    );
-
-    const requestData = {
-      username: newUser.username,
-      password: "123123",
-    };
-    await agent.post("/auth/login").send(requestData);
-
-    const response = await agent.post("/users/become-contributor");
+    const response = await request(app).post("/users/become-contributor");
 
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.body).toEqual({
@@ -120,11 +96,8 @@ describe("POST /become-contributor", () => {
 
 describe("POST /logout", () => {
   test("responds User logged out successfully", async () => {
-    isAuthenticatedMock.mockImplementation((req, res, next) => {
-      req.user = { id: 1 };
-      req.logout = (cb) => cb(null);
-      next();
-    });
+    const user = createNewUser();
+    mockedUser = user;
 
     const response = await request(app).post("/users/logout");
 

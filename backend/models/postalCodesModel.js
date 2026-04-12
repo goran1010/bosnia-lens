@@ -79,7 +79,7 @@ class PostalCodesModel {
   deleteCode(code) {
     const codeNumber = Number(code);
 
-    return prisma.postalCode.delete({ where: { code: codeNumber } });
+    return prisma.postalCode.deleteMany({ where: { code: codeNumber } });
   }
 }
 

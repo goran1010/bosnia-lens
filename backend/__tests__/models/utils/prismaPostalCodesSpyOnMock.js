@@ -56,7 +56,7 @@ function prismaPostalCodesSpyOnMock() {
       };
     },
   );
-  vi.spyOn(prisma.postalCode, "delete").mockImplementation(
+  vi.spyOn(prisma.postalCode, "deleteMany").mockImplementation(
     async ({ where }) => {
       return {
         code: where.code,
