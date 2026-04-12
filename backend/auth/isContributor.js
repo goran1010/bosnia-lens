@@ -5,8 +5,7 @@ function isContributor(req, res, next) {
     if (!req.user) {
       return sendError(res, {
         status: 401,
-        message:
-          "Access denied: log in with a contributor or admin account.",
+        message: "Access denied: log in with a contributor or admin account.",
       });
     }
 
