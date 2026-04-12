@@ -6,6 +6,7 @@ import { sendConfirmationEmail } from "../email/confirmationEmail.js";
 import bcrypt from "bcryptjs";
 import { matchedData } from "express-validator";
 import { sendError, sendSuccess } from "../utils/response.js";
+import { sanitizeUser } from "../utils/sanitizeUser.js";
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const BACKEND_URL = process.env.BACKEND_URL;
@@ -46,7 +47,7 @@ class AuthController {
 
         return sendSuccess(res, {
           status: 201,
-          data: user,
+          data: sanitizeUser(user),
           message: "Registration successful! Check your email.",
         });
       }
@@ -125,12 +126,10 @@ class AuthController {
 
       req.logIn(user, (err) => {
         if (err) return next(err);
-        // eslint-disable-next-line no-unused-vars
-        const { password, ...userWithoutPassword } = user;
 
         return sendSuccess(res, {
           message: "Logged in successfully",
-          data: userWithoutPassword,
+          data: sanitizeUser(user),
         });
       });
     })(req, res, next);

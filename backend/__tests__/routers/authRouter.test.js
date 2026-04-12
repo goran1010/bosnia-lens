@@ -7,6 +7,7 @@ import { usersModel } from "../../models/usersModel.js";
 import { sendConfirmationEmail } from "../../email/confirmationEmail.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import { sanitizeUser } from "../../utils/sanitizeUser.js";
 
 const isAuthenticatedMock = vi.fn();
 
@@ -77,19 +78,25 @@ describe("POST /auth/signup", () => {
   });
 
   test("successfully create a user and returns status 201 and message", async () => {
-    vi.spyOn(usersModel, "create").mockResolvedValueOnce(true);
-
-    const responseData = {
-      data: true,
-      message: "Registration successful! Check your email.",
-    };
-
     const newUser = createNewUser();
+    const createdUser = {
+      id: "mock-user-id",
+      username: newUser.username,
+      email: newUser.email,
+      isEmailConfirmed: false,
+      role: "USER",
+      requestedContributor: false,
+      password: "hashed-password",
+    };
+    vi.spyOn(usersModel, "create").mockResolvedValueOnce(createdUser);
 
     const response = await request(app).post("/auth/signup").send(newUser);
 
     expect(sendConfirmationEmail).toHaveBeenCalled();
-    expect(response.body).toEqual(responseData);
+    expect(response.body).toEqual({
+      data: sanitizeUser(createdUser),
+      message: "Registration successful! Check your email.",
+    });
     expect(response.status).toBe(201);
   });
 

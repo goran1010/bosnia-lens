@@ -3,6 +3,7 @@ import { describe, test, expect, vi, beforeEach } from "vitest";
 import { usersModel } from "../../models/usersModel.js";
 import { createNewUser } from "../utils/createNewUser.js";
 import { app } from "../../app.js";
+import { sanitizeUser } from "../../utils/sanitizeUser.js";
 
 let mockedUser = null;
 
@@ -42,13 +43,14 @@ describe("GET /me", () => {
   test("responds with status 200 and user data if logged in", async () => {
     const user = createNewUser();
     mockedUser = user;
+    const safeUser = sanitizeUser(user);
 
     const response = await request(app).get("/users/me");
 
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.body).toEqual({
       message: "User info retrieved",
-      data: user,
+      data: safeUser,
     });
     expect(response.status).toBe(200);
   });

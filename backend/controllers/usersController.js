@@ -1,14 +1,13 @@
 import { usersModel } from "../models/usersModel.js";
 import { sendError, sendSuccess } from "../utils/response.js";
+import { sanitizeUser } from "../utils/sanitizeUser.js";
 
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 const NUMBER_OF_DAYS = 30;
 
 class UsersController {
   async me(req, res) {
-    const loggedInUser = req.user;
-
-    delete loggedInUser.password;
+    const loggedInUser = sanitizeUser(req.user);
 
     return sendSuccess(res, {
       message: "User info retrieved",
@@ -43,7 +42,7 @@ class UsersController {
     return sendSuccess(res, {
       message:
         "You've asked to become a contributor! An admin will review your request soon.",
-      data: updatedUser,
+      data: sanitizeUser(updatedUser),
     });
   }
 

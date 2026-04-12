@@ -4,6 +4,7 @@ import { app } from "../../app.js";
 import { createAndLoginUser } from "../utils/createUserAndLogin.js";
 import { createNewUser } from "../utils/createNewUser.js";
 import { usersModel } from "../../models/usersModel.js";
+import { sanitizeUser } from "../../utils/sanitizeUser.js";
 
 describe("Admin Router - GET /users/admin/contributors", () => {
   test("Responds with status 200 and all contributors if role ADMIN", async () => {
@@ -17,13 +18,14 @@ describe("Admin Router - GET /users/admin/contributors", () => {
     await createAndLoginUser(agent, { role: "ADMIN" });
 
     const response = await agent.get("/users/admin/contributors");
+    const safeUserInDb = sanitizeUser(userInDb);
 
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(200);
     expect(response.body.message).toEqual(
       "All contributors fetched successfully.",
     );
-    expect(response.body.data).toContainEqual(userInDb);
+    expect(response.body.data).toContainEqual(safeUserInDb);
     await usersModel.deleteUser({ id: userInDb.id });
   });
 });
@@ -40,13 +42,14 @@ describe("Admin Router - GET /users/admin/requested-contributors", () => {
     await createAndLoginUser(agent, { role: "ADMIN" });
 
     const response = await agent.get("/users/admin/requested-contributors");
+    const safeUserInDb = sanitizeUser(userInDb);
 
     expect(response.header["content-type"]).toMatch(/json/);
     expect(response.status).toBe(200);
     expect(response.body.message).toEqual(
       "Users requested contributor role fetched successfully.",
     );
-    expect(response.body.data).toContainEqual(userInDb);
+    expect(response.body.data).toContainEqual(safeUserInDb);
     await usersModel.deleteUser({ id: userInDb.id });
   });
 });

@@ -1,6 +1,7 @@
 import { matchedData } from "express-validator";
 import { usersModel } from "../models/usersModel.js";
 import { sendSuccess } from "../utils/response.js";
+import { sanitizeUser, sanitizeUsers } from "../utils/sanitizeUser.js";
 
 class AdminController {
   async getAllContributors(req, res) {
@@ -9,7 +10,7 @@ class AdminController {
     });
     return sendSuccess(res, {
       message: "All contributors fetched successfully.",
-      data: contributors,
+      data: sanitizeUsers(contributors),
     });
   }
 
@@ -19,7 +20,7 @@ class AdminController {
     });
     return sendSuccess(res, {
       message: "Users requested contributor role fetched successfully.",
-      data: requestedContributors,
+      data: sanitizeUsers(requestedContributors),
     });
   }
 
@@ -33,7 +34,7 @@ class AdminController {
     return sendSuccess(res, {
       status: 201,
       message: "User promoted to contributor successfully.",
-      data: updatedUser,
+      data: sanitizeUser(updatedUser),
     });
   }
 
@@ -47,7 +48,7 @@ class AdminController {
     return sendSuccess(res, {
       status: 201,
       message: "User removed from contributors successfully.",
-      data: updatedUser,
+      data: sanitizeUser(updatedUser),
     });
   }
 
@@ -61,7 +62,7 @@ class AdminController {
     return sendSuccess(res, {
       status: 201,
       message: "User's contributor request declined successfully.",
-      data: updatedUser,
+      data: sanitizeUser(updatedUser),
     });
   }
 }
