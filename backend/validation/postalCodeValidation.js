@@ -1,5 +1,5 @@
-import { query, validationResult } from "express-validator";
-import { sendError } from "../utils/response.js";
+import { query } from "express-validator";
+import { validationError } from "./validationError.js";
 
 class PostalCodeValidation {
   searchValidationRules = [
@@ -19,19 +19,7 @@ class PostalCodeValidation {
         }
         return true;
       }),
-    (req, res, next) => {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return sendError(res, {
-          status: 400,
-          message: `Validation failed: ${errors
-            .array()
-            .map((entry) => `${entry.path}: ${entry.msg}`)
-            .join(", ")}.`,
-        });
-      }
-      next();
-    },
+    validationError,
   ];
 }
 
