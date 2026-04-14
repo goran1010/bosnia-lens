@@ -15,10 +15,6 @@ passport.use(
         return done(null, false, { message: "Incorrect username or password" });
       }
 
-      if (!user.isEmailConfirmed) {
-        return done(null, false, { message: "Email not confirmed" });
-      }
-
       return done(null, user);
     } catch (err) {
       return done(err);

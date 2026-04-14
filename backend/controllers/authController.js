@@ -7,6 +7,7 @@ import bcrypt from "bcryptjs";
 import { matchedData } from "express-validator";
 import { sendError, sendSuccess } from "../utils/response.js";
 import { sanitizeUser } from "../utils/sanitizeUser.js";
+import { pendingUserModel } from "../models/pendingUsersModel.js";
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const BACKEND_URL = process.env.BACKEND_URL;
@@ -25,6 +26,28 @@ class AuthController {
 
       const confirmationLink = `${BACKEND_URL}/auth/confirm/${confirmationToken}`;
 
+      const existingPending = await pendingUserModel.findOne({ email });
+
+      if (existingPending) {
+        await pendingUserModel.update(
+          { email },
+          {
+            username,
+            password: hashedPassword,
+            token: confirmationToken,
+            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+          },
+        );
+      } else {
+        await pendingUserModel.create({
+          username,
+          email,
+          password: hashedPassword,
+          token: confirmationToken,
+          expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        });
+      }
+
       const result = await sendConfirmationEmail(
         email,
         username,
@@ -32,22 +55,9 @@ class AuthController {
       );
 
       if (result.success) {
-        const user = await usersModel.create({
-          username,
-          email,
-          password: hashedPassword,
-        });
-
-        if (!user) {
-          return sendError(res, {
-            status: 400,
-            message: "Signup failed: account could not be created. Try again.",
-          });
-        }
-
         return sendSuccess(res, {
           status: 201,
-          data: sanitizeUser(user),
+          data: { username, email },
           message: "Registration successful! Check your email.",
         });
       }
@@ -68,19 +78,34 @@ class AuthController {
   }
 
   async confirmEmail(req, res) {
-    const { token } = matchedData(req);
-
-    if (!token) {
-      return sendError(res, {
-        status: 400,
-        message: "Email confirmation failed: token is missing.",
-      });
-    }
-
     try {
-      const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET);
+      const { token } = matchedData(req);
 
-      const user = await usersModel.findOne({ username: decoded.username });
+      const pendingUser = await pendingUserModel.findOne({ token });
+
+      if (!pendingUser)
+        return sendError(res, {
+          status: 400,
+          message:
+            "Email confirmation failed: token is invalid or expired. Request a new confirmation email.",
+        });
+
+      if (pendingUser.expiresAt < new Date()) {
+        await pendingUserModel.delete({ id: pendingUser.id });
+
+        return sendError(res, {
+          status: 400,
+          message: "Token expired. Please sign up again.",
+        });
+      }
+
+      const user = await usersModel.create({
+        username: pendingUser.username,
+        email: pendingUser.email,
+        password: pendingUser.password,
+      });
+
+      await pendingUserModel.delete({ id: pendingUser.id });
 
       if (!user) {
         return sendError(res, {
@@ -88,18 +113,6 @@ class AuthController {
           message: "Email confirmation failed: account was not found.",
         });
       }
-
-      if (user.isEmailConfirmed) {
-        return sendError(res, {
-          status: 400,
-          message: "Email already confirmed: log in to continue.",
-        });
-      }
-
-      await usersModel.update(
-        { username: decoded.username },
-        { isEmailConfirmed: true },
-      );
 
       res.send(emailConfirmHTML());
     } catch (err) {
