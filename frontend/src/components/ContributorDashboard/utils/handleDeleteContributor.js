@@ -39,7 +39,7 @@ async function handleDeleteContributor(
 
     if (response.ok) {
       setSearchResult((previousState) =>
-        previousState.filter((item) => item.code !== result.data.code),
+        previousState.filter((item) => item.code !== Number(code)),
       );
       addNotification({
         type: "success",
