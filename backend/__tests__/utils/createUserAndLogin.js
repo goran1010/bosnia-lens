@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import crypto from "crypto";
 import { createNewUser } from "./createNewUser";
 import { usersModel } from "../../models/usersModel.js";
 
@@ -9,13 +9,9 @@ async function createAndLoginUser(agent, newUser) {
 
   await agent.post("/auth/signup").send(userData);
 
-  const accessToken = jwt.sign(
-    { email: userData.email, username: userData.username },
-    process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "1d" },
-  );
+  const token = crypto.randomBytes(32).toString("hex");
 
-  await agent.get(`/auth/confirm/${accessToken}`);
+  await agent.get(`/auth/confirm/${token}`);
 
   if (userData.role !== "USER") {
     await usersModel.update(

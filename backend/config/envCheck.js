@@ -1,7 +1,6 @@
 const allRequiredVars = [
   "DATABASE_URL",
   "TEST_DATABASE_URL",
-  "ACCESS_TOKEN_SECRET",
   "FRONTEND_URL",
   "BACKEND_URL",
   "PORT",
