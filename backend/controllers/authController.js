@@ -75,7 +75,8 @@ class AuthController {
     try {
       const { token } = matchedData(req);
 
-      const pendingUser = await pendingUserModel.findOne({ token });
+      const pendingUsers = await pendingUserModel.findMany({ token });
+      const pendingUser = pendingUsers[0];
 
       if (!pendingUser)
         return sendError(res, {

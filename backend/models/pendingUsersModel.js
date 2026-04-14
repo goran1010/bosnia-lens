@@ -16,9 +16,9 @@ class PendingUserModel {
 
   findMany(where) {
     if (!where) {
-      return prisma.user.findMany();
+      return prisma.pendingUser.findMany();
     }
-    return prisma.user.findMany({ where: { ...where } });
+    return prisma.pendingUser.findMany({ where: { ...where } });
   }
 
   async delete(query) {
