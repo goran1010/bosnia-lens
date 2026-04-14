@@ -1,5 +1,5 @@
 import { usersModel } from "../models/usersModel.js";
-import jwt from "jsonwebtoken";
+import crypto from "crypto";
 import { emailConfirmHTML } from "../utils/emailConfirmHTML.js";
 import { passport } from "../config/passport.js";
 import { sendConfirmationEmail } from "../email/confirmationEmail.js";
@@ -9,7 +9,6 @@ import { sendError, sendSuccess } from "../utils/response.js";
 import { sanitizeUser } from "../utils/sanitizeUser.js";
 import { pendingUserModel } from "../models/pendingUsersModel.js";
 
-const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const BACKEND_URL = process.env.BACKEND_URL;
 
 class AuthController {
@@ -18,12 +17,7 @@ class AuthController {
       const { username, email, password } = matchedData(req);
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      const confirmationToken = jwt.sign(
-        { username, email },
-        ACCESS_TOKEN_SECRET,
-        { expiresIn: "1d" },
-      );
-
+      const confirmationToken = crypto.randomBytes(32).toString("hex");
       const confirmationLink = `${BACKEND_URL}/auth/confirm/${confirmationToken}`;
 
       const existingPending = await pendingUserModel.findOne({ email });
@@ -61,7 +55,7 @@ class AuthController {
           message: "Registration successful! Check your email.",
         });
       }
-
+      await pendingUserModel.delete({ email });
       return sendError(res, {
         status: 500,
         message:
