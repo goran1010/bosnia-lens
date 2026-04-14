@@ -20,9 +20,9 @@ class AuthController {
       const confirmationToken = crypto.randomBytes(32).toString("hex");
       const confirmationLink = `${BACKEND_URL}/auth/confirm/${confirmationToken}`;
 
-      const existingPending = await pendingUserModel.findOne({ email });
+      const existingPending = await pendingUserModel.findMany({ email });
 
-      if (existingPending) {
+      if (existingPending.length > 0) {
         await pendingUserModel.update(
           { email },
           {

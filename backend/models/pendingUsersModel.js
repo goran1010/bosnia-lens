@@ -14,10 +14,11 @@ class PendingUserModel {
     });
   }
 
-  async findOne(query) {
-    return await prisma.pendingUser.findFirst({
-      where: query,
-    });
+  findMany(where) {
+    if (!where) {
+      return prisma.user.findMany();
+    }
+    return prisma.user.findMany({ where: { ...where } });
   }
 
   async delete(query) {
