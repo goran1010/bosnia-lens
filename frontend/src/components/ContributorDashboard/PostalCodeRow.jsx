@@ -55,7 +55,7 @@ const PostalCodeRow = memo(
             <div className="h-full w-full flex justify-center items-center absolute">
               {loading && <Spinner />}
             </div>
-            Save
+            <span className={`${loading ? "invisible" : "visible"}`}>Save</span>
           </Button>
         </div>
         <div>
@@ -69,7 +69,7 @@ const PostalCodeRow = memo(
             <div className="h-full w-full flex justify-center items-center absolute">
               {loading && <Spinner />}
             </div>
-            Delete
+            <span className={`${loading ? "invisible" : "visible"}`}>Delete</span>
           </Button>
         </div>
       </form>

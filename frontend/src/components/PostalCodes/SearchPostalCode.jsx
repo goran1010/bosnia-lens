@@ -79,7 +79,7 @@ function SearchPostalCode({ setSearchResult, loading, setLoading }) {
           <div className="h-full w-full flex justify-center items-center absolute">
             {loading && <Spinner />}
           </div>
-          Search
+          <span className={`${loading ? "invisible" : "visible"}`}>Search</span>
         </Button>
       </div>
     </form>

@@ -112,7 +112,7 @@ function SignUpForm({ loading, setLoading }) {
           <div className="h-full w-full flex justify-center items-center absolute">
             {loading && <Spinner />}
           </div>
-          Create
+          <span className={`${loading ? "invisible" : "visible"}`}>Create</span>
         </Button>
       </div>
     </form>

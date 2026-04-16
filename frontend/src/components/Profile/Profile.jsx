@@ -86,7 +86,7 @@ function Profile() {
               <div className="h-full w-full flex justify-center items-center absolute">
                 {loading && <Spinner />}
               </div>
-              Request Contributor role
+              <span className={`${loading ? "invisible" : "visible"}`}>Request Contributor role</span>
             </Button>
           )}
 
@@ -101,7 +101,7 @@ function Profile() {
             <div className="h-full w-full flex justify-center items-center absolute">
               {loading && <Spinner />}
             </div>
-            Log Out
+            <span className={`${loading ? "invisible" : "visible"}`}>Log Out</span>
           </Button>
         </div>
       </div>

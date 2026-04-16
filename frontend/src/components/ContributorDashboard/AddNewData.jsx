@@ -30,7 +30,7 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
         className="text-white"
         onClick={() => setIsOpen(!isOpen)}
       >
-        {isOpen ? "Close form" : "Add new data"}
+        <span>{isOpen ? "Close form" : "Add new data"}</span>
       </Button>
       {isOpen && (
         <div className="flex flex-col gap-2 border border-gray-300 dark:border-gray-600 rounded-md p-3 w-full max-w-md mx-auto">
@@ -86,7 +86,7 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
               <div className="h-full flex justify-center items-center absolute">
                 {loading && <Spinner />}
               </div>
-              Add data
+              <span className={`${loading ? "invisible" : "visible"}`}>Add data</span>
             </Button>
           </div>
         </div>

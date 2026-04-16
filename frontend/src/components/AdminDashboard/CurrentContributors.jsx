@@ -59,7 +59,7 @@ function CurrentContributors({
                   <div className="h-full w-full flex justify-center items-center absolute">
                     {buttonLoading && <Spinner />}
                   </div>
-                  Remove
+                  <span className={`${buttonLoading ? "invisible" : "visible"}`}>Remove</span>
                 </Button>
               </div>
             </li>

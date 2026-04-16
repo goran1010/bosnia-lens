@@ -76,7 +76,7 @@ function LogInForm({ loading, setLoading }) {
           <div className="h-full w-full flex justify-center items-center absolute">
             {loading && <Spinner />}
           </div>
-          Log in
+          <span className={`${loading ? "invisible" : "visible"}`}>Log in</span>
         </Button>
       </div>
     </form>

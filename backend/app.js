@@ -45,6 +45,12 @@ app.use((req, res, next) => {
 app.use(helmet());
 app.use(compression());
 
+app.use((req, res, next) => {
+  setTimeout(() => {
+    next();
+  }, 1000);
+});
+
 // Public API routes
 app.use("/api", cors(), rateLimiter.api, apiRouter);
 // -----------------
