@@ -6,6 +6,7 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 function useGetAllContributors(setLoading) {
   const { addNotification } = useContext(NotificationContext);
   const [currentContributors, setCurrentContributors] = useState([]);
+
   useEffect(() => {
     async function handleGetAllContributors() {
       try {

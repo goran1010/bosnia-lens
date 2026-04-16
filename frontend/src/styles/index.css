@@ -293,23 +293,23 @@
     cursor: not-allowed;
   }
 
-  .notif-success {
+  .notification-success {
     background: #15803d;
     border: 1px solid rgba(187, 247, 208, 0.45);
   }
 
-  .notif-error {
+  .notification-error {
     background: #b91c1c;
     border: 1px solid rgba(254, 202, 202, 0.4);
   }
 
-  .notif-warning {
+  .notification-warning {
     background: #facc15;
     color: #1f2937;
     border: 1px solid rgba(120, 53, 15, 0.22);
   }
 
-  .notif-info {
+  .notification-info {
     background: #0369a1;
     border: 1px solid rgba(186, 230, 253, 0.4);
   }
