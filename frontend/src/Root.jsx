@@ -17,7 +17,8 @@ function Root() {
   const [isThemeMenuOpen, setThemeMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [longWait, setLongWait] = useState(false);
-  const { notificationValue } = useNotification();
+  const { notifications, addNotification, removeNotification } =
+    useNotification();
   const [serverIsDown, setServerIsDown] = useState(false);
 
   useTitle();
@@ -29,7 +30,7 @@ function Root() {
 
   const { userData, setUserData } = useStatusCheck(
     setLoading,
-    notificationValue,
+    addNotification,
     longWait,
   );
 
@@ -40,9 +41,9 @@ function Root() {
   return (
     <NotificationContext
       value={{
-        notifications: notificationValue.notifications,
-        addNotification: notificationValue.addNotification,
-        removeNotification: notificationValue.removeNotification,
+        notifications,
+        addNotification,
+        removeNotification,
       }}
     >
       <UserDataContext value={{ userData, setUserData }}>

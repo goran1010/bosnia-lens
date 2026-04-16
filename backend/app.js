@@ -1,24 +1,27 @@
 import express from "express";
 const app = express();
-
 import cors from "cors";
+
 import "./config/envCheck.js";
+
 import { sessionMiddleware } from "./config/sessionMiddleware.js";
 import { passport } from "./config/passport.js";
 
 import helmet from "helmet";
 import * as rateLimiter from "./utils/rateLimiter.js";
+
 import { csrfSync } from "csrf-sync";
 import { csrfRouter } from "./routes/csrfRouter.js";
 const { csrfSynchronisedProtection } = csrfSync();
 
 import compression from "compression";
-import pino from "pino";
-import { sendError } from "./utils/response.js";
 
+import pino from "pino";
 const logger = pino({
   timestamp: () => `,"time":"${new Date().toISOString()}"`,
 });
+
+import { sendError } from "./utils/response.js";
 
 import { apiRouter } from "./routes/apiRouter.js";
 import { authRouter } from "./routes/authRouter.js";

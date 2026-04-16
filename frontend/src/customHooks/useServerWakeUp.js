@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-const URL = import.meta.env.VITE_BACKEND_URL;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const ALLOWED_ATTEMPTS = 30;
 const DELAY_BETWEEN_ATTEMPTS = 2000;
 const LONG_WAIT_TIME = 3000;
@@ -7,13 +7,13 @@ const LONG_WAIT_TIME = 3000;
 function useServerWakeUp({ setLongWait, setServerIsDown }) {
   useEffect(() => {
     // Limit the number of wake-up attempts to prevent infinite loops
-    let numberOfAttempts = 0;
+    let currentNumberOfAttempts = 0;
     const longWaitTimer = setTimeout(() => {
       setLongWait(true);
     }, LONG_WAIT_TIME);
 
     async function checkServer() {
-      if (numberOfAttempts >= ALLOWED_ATTEMPTS) {
+      if (currentNumberOfAttempts >= ALLOWED_ATTEMPTS) {
         clearTimeout(longWaitTimer);
         setServerIsDown(true);
         setLongWait(false);
@@ -23,14 +23,14 @@ function useServerWakeUp({ setLongWait, setServerIsDown }) {
         return;
       }
       try {
-        const response = await fetch(`${URL}/api`, {
+        const response = await fetch(`${BACKEND_URL}/api`, {
           method: "GET",
           mode: "cors",
         });
         await response.json();
         if (!response.ok) {
           setTimeout(() => {
-            numberOfAttempts++;
+            currentNumberOfAttempts++;
             checkServer();
           }, DELAY_BETWEEN_ATTEMPTS);
           return;
@@ -41,7 +41,7 @@ function useServerWakeUp({ setLongWait, setServerIsDown }) {
       } catch (err) {
         console.error(err);
         setTimeout(() => {
-          numberOfAttempts++;
+          currentNumberOfAttempts++;
           checkServer();
         }, DELAY_BETWEEN_ATTEMPTS);
       }

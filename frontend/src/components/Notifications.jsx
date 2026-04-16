@@ -4,14 +4,14 @@ import { NotificationContext } from "../contextData/NotificationContext";
 function getNotificationStyles(type) {
   switch (type) {
     case "success":
-      return "notif-success";
+      return "notification-success";
     case "error":
-      return "notif-error";
+      return "notification-error";
     case "warning":
-      return "notif-warning";
+      return "notification-warning";
     case "info":
     default:
-      return "notif-info";
+      return "notification-info";
   }
 }
 
@@ -28,6 +28,7 @@ function Notifications() {
 
   useEffect(() => {
     let newTimerRef = timerMapRef.current;
+
     // Set timers for new notifications only
     notifications?.forEach((notification) => {
       if (notification.duration && !newTimerRef.has(notification.id)) {

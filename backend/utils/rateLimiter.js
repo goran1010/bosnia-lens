@@ -1,7 +1,8 @@
 import rateLimit from "express-rate-limit";
+const MINUTE = 60 * 1000;
 
 const global = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 15 * MINUTE, // 15 minutes
   max: 500,
   message: {
     error: {
@@ -13,8 +14,7 @@ const global = rateLimit({
 });
 
 const auth = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: process.env.NODE_ENV === "test" ? 1000 : 20,
+  windowMs: 15 * MINUTE, // 15 minutes
   message: {
     error: {
       message:
@@ -26,7 +26,7 @@ const auth = rateLimit({
 });
 
 const api = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 15 * MINUTE, // 15 minutes
   max: 100,
   message: {
     error: {
@@ -38,7 +38,7 @@ const api = rateLimit({
 });
 
 const users = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 15 * MINUTE, // 15 minutes
   max: 100,
   message: {
     error: {

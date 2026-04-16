@@ -7,7 +7,7 @@ function ErrorPage() {
         There is nothing here, sorry.
       </p>
       <Link to="/" className="text-blue-500 underline text-2xl">
-        Go Home
+        Go to Home Page
       </Link>
     </main>
   );

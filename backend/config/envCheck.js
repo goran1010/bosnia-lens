@@ -1,6 +1,5 @@
 const allRequiredVars = [
   "DATABASE_URL",
-  "TEST_DATABASE_URL",
   "FRONTEND_URL",
   "BACKEND_URL",
   "PORT",
@@ -16,6 +15,14 @@ function envCheck(requiredVars) {
     throw new Error(
       `Missing required environment variables: ${missingVars.join(", ")}`,
     );
+  }
+
+  if (process.env.NODE_ENV !== "production") {
+    if (!process.env.TEST_DATABASE_URL) {
+      throw new Error(
+        "Missing required environment variable: TEST_DATABASE_URL",
+      );
+    }
   }
 }
 

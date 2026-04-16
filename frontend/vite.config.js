@@ -5,10 +5,11 @@ import process from "node:process";
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
+  // --------------------------------------------------------------------
   // Load env file based on `mode` in the current working directory.
   const env = loadEnv(mode, process.cwd(), "");
 
-  const requiredVars = ["VITE_BACKEND_URL", "VITE_WEATHER_API_KEY"];
+  const requiredVars = ["VITE_BACKEND_URL"];
   const missingVars = requiredVars.filter((varName) => !env[varName]);
 
   if (missingVars.length > 0) {
@@ -16,6 +17,7 @@ export default defineConfig(({ mode }) => {
       `Missing required environment variables: ${missingVars.join(", ")}`,
     );
   }
+  // --------------------------------------------------------------------
 
   return {
     plugins: [
