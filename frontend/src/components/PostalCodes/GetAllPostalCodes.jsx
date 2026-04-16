@@ -47,10 +47,7 @@ function GetAllPostalCodes({ setSearchResult, loading, setLoading }) {
 
   return (
     <form onSubmit={handleGetAll} className="w-full">
-      <Button type="submit" disabled={loading} className="btn-warning">
-        <div className="h-full w-full flex justify-center items-center absolute">
-          {loading && <Spinner />}
-        </div>
+      <Button type="submit" loading={loading} className="btn-warning">
         Get All
       </Button>
     </form>

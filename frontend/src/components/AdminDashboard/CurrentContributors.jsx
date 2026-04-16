@@ -54,11 +54,8 @@ function CurrentContributors({
                     )
                   }
                   type="submit"
-                  disabled={buttonLoading}
+                  loading={buttonLoading}
                 >
-                  <div className="h-full w-full flex justify-center items-center absolute">
-                    {buttonLoading && <Spinner />}
-                  </div>
                   Remove
                 </Button>
               </div>

@@ -57,11 +57,8 @@ function PendingRequests({ setCurrentContributors }) {
                     );
                   }}
                   type="submit"
-                  disabled={buttonLoading}
+                  loading={buttonLoading}
                 >
-                  <div className="h-full w-full flex justify-center items-center absolute">
-                    {buttonLoading && <Spinner />}
-                  </div>
                   Confirm
                 </Button>
                 <Button
@@ -75,11 +72,8 @@ function PendingRequests({ setCurrentContributors }) {
                     );
                   }}
                   type="submit"
-                  disabled={buttonLoading}
+                  loading={buttonLoading}
                 >
-                  <div className="h-full w-full flex justify-center items-center absolute">
-                    {buttonLoading && <Spinner />}
-                  </div>
                   Decline
                 </Button>
               </div>

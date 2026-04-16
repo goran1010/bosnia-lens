@@ -1,7 +1,6 @@
 import { useState, useRef, useContext } from "react";
 import { checkPostalCodesValidity } from "./utils/checkPostalCodesValidity";
 import { NotificationContext } from "../../contextData/NotificationContext";
-import { Spinner } from "../../utils/Spinner";
 import { Button } from "../sharedComponents/Button";
 import { Input } from "../sharedComponents/Input";
 import { Label } from "../sharedComponents/Label";
@@ -73,12 +72,9 @@ function SearchPostalCode({ setSearchResult, loading, setLoading }) {
           onClick={() => {
             checkPostalCodesValidity(searchInput);
           }}
-          disabled={loading}
+          loading={loading}
           className="sm:w-auto text-white"
         >
-          <div className="h-full w-full flex justify-center items-center absolute">
-            {loading && <Spinner />}
-          </div>
           Search
         </Button>
       </div>

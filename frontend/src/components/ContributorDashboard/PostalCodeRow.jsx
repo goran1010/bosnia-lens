@@ -1,7 +1,6 @@
 import { memo } from "react";
 import { Button } from "../sharedComponents/Button";
 import { Input } from "../sharedComponents/Input";
-import { Spinner } from "../../utils/Spinner";
 import { useState } from "react";
 import { handleEditContributor } from "./utils/handleEditContributor";
 import { handleDeleteContributor } from "./utils/handleDeleteContributor";
@@ -50,11 +49,8 @@ const PostalCodeRow = memo(
           <Button
             type="submit"
             className="w-full py-2 text-white"
-            disabled={loading}
+            loading={loading}
           >
-            <div className="h-full w-full flex justify-center items-center absolute">
-              {loading && <Spinner />}
-            </div>
             Save
           </Button>
         </div>
@@ -64,11 +60,8 @@ const PostalCodeRow = memo(
             data-postalcode={result.code}
             onClick={handleDelete}
             className="w-full bg-red-600 py-2 text-white hover:bg-red-700"
-            disabled={loading}
+            loading={loading}
           >
-            <div className="h-full w-full flex justify-center items-center absolute">
-              {loading && <Spinner />}
-            </div>
             Delete
           </Button>
         </div>

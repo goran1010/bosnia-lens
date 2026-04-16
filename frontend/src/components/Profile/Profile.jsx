@@ -6,7 +6,6 @@ import { handleBecomeContributor } from "./utils/handleBecomeContributor";
 import { handleLogout } from "./utils/handleLogout";
 import { Button } from "../sharedComponents/Button";
 import { useState } from "react";
-import { Spinner } from "../../utils/Spinner";
 
 function Profile() {
   const { addNotification } = useContext(NotificationContext);
@@ -81,11 +80,8 @@ function Profile() {
               }
               className="w-full px-6 py-3 font-semibold"
               type="submit"
-              disabled={loading}
+              loading={loading}
             >
-              <div className="h-full w-full flex justify-center items-center absolute">
-                {loading && <Spinner />}
-              </div>
               Request Contributor role
             </Button>
           )}
@@ -96,12 +92,9 @@ function Profile() {
             }
             className="btn-danger px-6 py-3 font-semibold"
             type="submit"
-            disabled={loading}
+            loading={loading}
           >
-            <div className="h-full w-full flex justify-center items-center absolute">
-              {loading && <Spinner />}
-            </div>
-            Log Out
+            Log out
           </Button>
         </div>
       </div>

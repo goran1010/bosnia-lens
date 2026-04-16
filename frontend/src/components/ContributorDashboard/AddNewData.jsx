@@ -1,7 +1,6 @@
 import { useState, useContext, useRef } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { handleSubmitAddData } from "./utils/handleSubmitAddData";
-import { Spinner } from "../../utils/Spinner";
 import { validateAddData } from "./utils/validateAddData";
 import { Button } from "../sharedComponents/Button";
 import { Input } from "../sharedComponents/Input";
@@ -80,12 +79,9 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
                 )
               }
               type="button"
-              disabled={loading}
+              loading={loading}
               className="text-white"
             >
-              <div className="h-full flex justify-center items-center absolute">
-                {loading && <Spinner />}
-              </div>
               Add data
             </Button>
           </div>
