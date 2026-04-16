@@ -1,18 +1,6 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <script>
-      // ---------------------------------------------------------------
-      // Check for saved user theme preference, if any, on initial load.
-      // Copy pasted from https://tailwindcss.com/docs/dark-mode#with-system-theme-support
-      document.documentElement.classList.toggle(
-        "dark",
-        localStorage.theme === "dark" ||
-          (!("theme" in localStorage) &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches),
-      );
-      // ---------------------------------------------------------------
-    </script>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
