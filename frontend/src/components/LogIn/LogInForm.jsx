@@ -5,7 +5,6 @@ import { UserDataContext } from "../../contextData/UserDataContext";
 import { useNavigate } from "react-router-dom";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { handleSubmitLogIn } from "./utils/handleSubmitLogIn";
-import { Spinner } from "../../utils/Spinner";
 import { Button } from "../sharedComponents/Button";
 import { Input } from "../sharedComponents/Input";
 import { Label } from "../sharedComponents/Label";
@@ -70,13 +69,10 @@ function LogInForm({ loading, setLoading }) {
             checkLoginFormClickValidity(usernameInput, passwordInput)
           }
           type="submit"
-          disabled={loading}
+          loading={loading}
           className="text-white"
         >
-          <div className="h-full w-full flex justify-center items-center absolute">
-            {loading && <Spinner />}
-          </div>
-          <span className={`${loading ? "invisible" : "visible"}`}>Log in</span>
+          Log in
         </Button>
       </div>
     </form>

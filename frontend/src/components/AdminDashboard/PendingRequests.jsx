@@ -57,12 +57,9 @@ function PendingRequests({ setCurrentContributors }) {
                     );
                   }}
                   type="submit"
-                  disabled={buttonLoading}
+                  loading={buttonLoading}
                 >
-                  <div className="h-full w-full flex justify-center items-center absolute">
-                    {buttonLoading && <Spinner />}
-                  </div>
-                  <span className={`${buttonLoading ? "invisible" : "visible"}`}>Confirm</span>
+                  Confirm
                 </Button>
                 <Button
                   className="btn-danger px-3 py-2 text-sm"
@@ -75,12 +72,9 @@ function PendingRequests({ setCurrentContributors }) {
                     );
                   }}
                   type="submit"
-                  disabled={buttonLoading}
+                  loading={buttonLoading}
                 >
-                  <div className="h-full w-full flex justify-center items-center absolute">
-                    {buttonLoading && <Spinner />}
-                  </div>
-                  <span className={`${buttonLoading ? "invisible" : "visible"}`}>Decline</span>
+                  Decline
                 </Button>
               </div>
             </li>

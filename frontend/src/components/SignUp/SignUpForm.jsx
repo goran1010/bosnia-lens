@@ -5,7 +5,6 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
-import { Spinner } from "../../utils/Spinner";
 import { Button } from "../sharedComponents/Button";
 import { Input } from "../sharedComponents/Input";
 import { Label } from "../sharedComponents/Label";
@@ -106,13 +105,10 @@ function SignUpForm({ loading, setLoading }) {
             )
           }
           type="submit"
-          disabled={loading}
+          loading={loading}
           className="text-white"
         >
-          <div className="h-full w-full flex justify-center items-center absolute">
-            {loading && <Spinner />}
-          </div>
-          <span className={`${loading ? "invisible" : "visible"}`}>Create</span>
+          Create
         </Button>
       </div>
     </form>

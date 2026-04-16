@@ -1,7 +1,6 @@
 import { useState, useContext, useRef } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { handleSubmitAddData } from "./utils/handleSubmitAddData";
-import { Spinner } from "../../utils/Spinner";
 import { validateAddData } from "./utils/validateAddData";
 import { Button } from "../sharedComponents/Button";
 import { Input } from "../sharedComponents/Input";
@@ -30,7 +29,7 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
         className="text-white"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span>{isOpen ? "Close form" : "Add new data"}</span>
+        {isOpen ? "Close form" : "Add new data"}
       </Button>
       {isOpen && (
         <div className="flex flex-col gap-2 border border-gray-300 dark:border-gray-600 rounded-md p-3 w-full max-w-md mx-auto">
@@ -80,13 +79,10 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
                 )
               }
               type="button"
-              disabled={loading}
+              loading={loading}
               className="text-white"
             >
-              <div className="h-full flex justify-center items-center absolute">
-                {loading && <Spinner />}
-              </div>
-              <span className={`${loading ? "invisible" : "visible"}`}>Add data</span>
+              Add data
             </Button>
           </div>
         </div>
