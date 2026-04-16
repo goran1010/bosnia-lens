@@ -40,10 +40,10 @@ import { UserDataContext } from "../../../src/contextData/UserDataContext";
 
 function Wrapper({ initialUser = null }) {
   const [userData, setUserData] = useState(initialUser);
-  const { notificationValue } = useNotification();
+  const { notifications, addNotification, removeNotification } = useNotification();
 
   return (
-    <NotificationContext value={notificationValue}>
+    <NotificationContext value={{ notifications, addNotification, removeNotification }}>
       <UserDataContext value={{ userData, setUserData }}>
         <MemoryRouter initialEntries={["/admin-dashboard"]}>
           <Notifications />
