@@ -1,14 +1,5 @@
-import { describe, test, expect, vi } from "vitest";
+import { describe, test, expect } from "vitest";
 import request from "supertest";
-
-vi.mock("../utils/rateLimiter.js", () => ({
-  global: () => {
-    throw new Error("Test error");
-  },
-  api: (req, res, next) => next(),
-  auth: (req, res, next) => next(),
-  users: (req, res, next) => next(),
-}));
 
 describe("app", () => {
   test("app should be defined", async () => {
