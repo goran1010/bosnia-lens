@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 const URL = import.meta.env.VITE_BACKEND_URL;
 
-function useStatusCheck(setLoading, notificationValue, longWait) {
-  const { addNotification } = notificationValue;
+function useStatusCheck(setLoading, addNotification, longWait) {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {

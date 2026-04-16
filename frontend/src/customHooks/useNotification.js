@@ -1,4 +1,5 @@
 import { useState } from "react";
+const MAX_NOTIFICATIONS = 5;
 
 function useNotification() {
   const [notifications, setNotifications] = useState([]);
@@ -13,7 +14,7 @@ function useNotification() {
     };
 
     setNotifications((prev) => {
-      if (prev.length >= 5) {
+      if (prev.length >= MAX_NOTIFICATIONS) {
         return [...prev.slice(1), newNotification];
       }
       return [...prev, newNotification];
@@ -24,13 +25,7 @@ function useNotification() {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
   };
 
-  const notificationValue = {
-    notifications,
-    addNotification,
-    removeNotification,
-  };
-
-  return { notificationValue };
+  return { notifications, addNotification, removeNotification };
 }
 
 export { useNotification };
