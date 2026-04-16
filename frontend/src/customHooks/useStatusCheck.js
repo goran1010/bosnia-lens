@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-const URL = import.meta.env.VITE_BACKEND_URL;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 function useStatusCheck(setLoading, addNotification, longWait) {
   const [userData, setUserData] = useState(null);
@@ -12,7 +12,7 @@ function useStatusCheck(setLoading, addNotification, longWait) {
     async function checkLogin() {
       let response;
       try {
-        response = await fetch(`${URL}/users/me`, {
+        response = await fetch(`${BACKEND_URL}/users/me`, {
           mode: "cors",
           method: "GET",
           credentials: "include",
