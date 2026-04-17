@@ -4,9 +4,6 @@ import { app } from "../../app.js";
 import { createNewUser } from "../utils/createNewUser.js";
 import { emailConfirmHTML } from "../../utils/emailConfirmHTML.js";
 
-const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
-import jwt from "jsonwebtoken";
-
 describe("Auth Router - POST /auth/signup", () => {
   test("responds with status 201 and Registration successful! Check your email message if user created successfully", async () => {
     const newUser = createNewUser();

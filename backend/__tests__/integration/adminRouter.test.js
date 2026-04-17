@@ -1,10 +1,17 @@
 import request from "supertest";
-import { describe, test, expect } from "vitest";
+import { describe, test, expect, vi } from "vitest";
 import { app } from "../../app.js";
 import { createAndLoginUser } from "../utils/createUserAndLogin.js";
 import { createNewUser } from "../utils/createNewUser.js";
 import { usersModel } from "../../models/usersModel.js";
 import { sanitizeUser } from "../../utils/sanitizeUser.js";
+
+vi.mock("../../utils/rateLimiter.js", () => ({
+  global: vi.fn((req, res, next) => next()),
+  api: vi.fn((req, res, next) => next()),
+  auth: vi.fn((req, res, next) => next()),
+  users: vi.fn((req, res, next) => next()),
+}));
 
 describe("Admin Router - GET /users/admin/contributors", () => {
   test("Responds with status 200 and all contributors if role ADMIN", async () => {

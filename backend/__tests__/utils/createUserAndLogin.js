@@ -1,6 +1,6 @@
-import crypto from "crypto";
 import { createNewUser } from "./createNewUser";
 import { usersModel } from "../../models/usersModel.js";
+import { pendingUserModel } from "../../models/pendingUsersModel.js";
 
 async function createAndLoginUser(agent, newUser) {
   const userData = createNewUser(newUser);
@@ -9,7 +9,10 @@ async function createAndLoginUser(agent, newUser) {
 
   await agent.post("/auth/signup").send(userData);
 
-  const token = crypto.randomBytes(32).toString("hex");
+  const users = await pendingUserModel.findMany({
+    email: userData.email,
+  });
+  const token = users[0].token;
 
   await agent.get(`/auth/confirm/${token}`);
 
