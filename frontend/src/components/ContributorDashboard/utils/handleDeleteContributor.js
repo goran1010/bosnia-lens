@@ -10,7 +10,7 @@ async function handleDeleteContributor(
   try {
     e.preventDefault();
     setLoading(true);
-    const code = e.target.parentElement.dataset.postalcode;
+    const code = e.currentTarget.dataset.postalcode;
 
     const csrfToken = await getCsrfToken();
 
@@ -39,7 +39,7 @@ async function handleDeleteContributor(
 
     if (response.ok) {
       setSearchResult((previousState) =>
-        previousState.filter((item) => item.code !== Number(code)),
+        previousState.filter((item) => Number(item.code) !== Number(code)),
       );
       addNotification({
         type: "success",

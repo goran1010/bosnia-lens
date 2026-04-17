@@ -28,10 +28,10 @@ function createFormElements() {
 beforeEach(async () => {
   function Wrapper() {
     const [userData, setUserData] = useState(null);
-    const { notificationValue } = useNotification();
+    const { notifications, addNotification, removeNotification } = useNotification();
 
     return (
-      <NotificationContext value={notificationValue}>
+      <NotificationContext value={{ notifications, addNotification, removeNotification }}>
         <UserDataContext value={{ userData, setUserData }}>
           <MemoryRouter initialEntries={["/login"]}>
             <Notifications />

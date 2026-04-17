@@ -76,7 +76,7 @@ class AuthController {
       const { token } = matchedData(req);
 
       const pendingUsers = await pendingUserModel.findMany({ token });
-      const pendingUser = pendingUsers[0];
+      const pendingUser = pendingUsers?.[0];
 
       if (!pendingUser)
         return sendError(res, {
@@ -105,7 +105,7 @@ class AuthController {
       if (!user) {
         return sendError(res, {
           status: 404,
-          message: "Email confirmation failed: account was not found.",
+          message: "Email confirmation failed: account couldn't be created.",
         });
       }
 

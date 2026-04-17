@@ -14,10 +14,13 @@ const user = userEvent.setup();
 
 function Wrapper({ initialUser = null }) {
   const [userData, setUserData] = useState(initialUser);
-  const { notificationValue } = useNotification();
+  const { notifications, addNotification, removeNotification } =
+    useNotification();
 
   return (
-    <NotificationContext value={notificationValue}>
+    <NotificationContext
+      value={{ notifications, addNotification, removeNotification }}
+    >
       <UserDataContext value={{ userData, setUserData }}>
         <MemoryRouter initialEntries={["/contributor-dashboard"]}>
           <Notifications />
@@ -59,7 +62,7 @@ const setupFetchMock = () => {
           data: {
             id: 1,
             city: "Test City",
-            code: "12345",
+            code: 12345,
             post: "",
           },
 
@@ -75,7 +78,7 @@ const setupFetchMock = () => {
             {
               id: 1,
               city: "Test City",
-              code: "12345",
+              code: 12345,
               post: "",
             },
           ],
@@ -91,10 +94,10 @@ const setupFetchMock = () => {
             {
               id: 1,
               city: "Test City",
-              code: "12345",
+              code: 12345,
               post: "",
             },
-            { id: 2, city: "Test City 2", code: "12346", post: "" },
+            { id: 2, city: "Test City 2", code: 12346, post: "" },
           ],
           message: "Postal codes retrieved successfully",
         }),
@@ -200,7 +203,7 @@ describe("PostalCodesResultContributor component", () => {
             data: {
               id: 1,
               city: "Updated City",
-              code: "12345",
+              code: 12345,
               post: "",
             },
             message: "Postal code updated successfully",
@@ -267,7 +270,7 @@ describe("PostalCodesResultContributor component", () => {
       .mockImplementationOnce(() =>
         Promise.resolve(
           createFetchResponse({
-            data: { code: "12345" },
+            data: { code: 12345 },
             message: "Postal code deleted successfully",
           }),
         ),
@@ -277,6 +280,7 @@ describe("PostalCodesResultContributor component", () => {
       name: /delete/i,
     });
     const deleteButton = deleteButtons[0];
+
     await user.click(deleteButton);
 
     const successNotification = await screen.findByText(

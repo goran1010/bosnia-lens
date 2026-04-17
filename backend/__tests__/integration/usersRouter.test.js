@@ -3,9 +3,6 @@ import { describe, test, expect } from "vitest";
 import { app } from "../../app.js";
 import { createAndLoginUser } from "../utils/createUserAndLogin.js";
 import { createNewUser } from "../utils/createNewUser.js";
-import { usersModel } from "../../models/usersModel.js";
-import jwt from "jsonwebtoken";
-import { emailConfirmHTML } from "../../utils/emailConfirmHTML.js";
 
 describe("usersRouter", () => {
   test("successfully create a user and returns status 201 and message", async () => {
@@ -49,26 +46,6 @@ describe("usersRouter", () => {
       },
       message: "User logged out successfully",
     });
-    expect(response.status).toBe(200);
-  });
-
-  test("responds with status 200 and HTML for valid token", async () => {
-    const { username, password, email } = createNewUser();
-    const userInDB = await usersModel.create({
-      username,
-      password,
-      email,
-    });
-
-    const accessToken = jwt.sign(
-      { email: userInDB.email, username: userInDB.username },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "30d" },
-    );
-
-    const response = await request(app).get(`/auth/confirm/${accessToken}`);
-
-    expect(response.text).toContain(emailConfirmHTML());
     expect(response.status).toBe(200);
   });
 });

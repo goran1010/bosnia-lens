@@ -5,9 +5,10 @@ import { emailConfirmHTML } from "../../utils/emailConfirmHTML.js";
 import { createNewUser } from "../utils/createNewUser.js";
 import { usersModel } from "../../models/usersModel.js";
 import { sendConfirmationEmail } from "../../email/confirmationEmail.js";
-import jwt from "jsonwebtoken";
+import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import { sanitizeUser } from "../../utils/sanitizeUser.js";
+import { pendingUserModel } from "../../models/pendingUsersModel.js";
 
 const isAuthenticatedMock = vi.fn();
 
@@ -147,24 +148,34 @@ describe("GET /auth/confirm/:token", () => {
           "Email confirmation failed: token is invalid or expired. Request a new confirmation email.",
       },
     });
-    expect(response.status).toBe(500);
+    expect(response.status).toBe(400);
   });
 
   test("responds with status 200 and HTML for valid token", async () => {
-    const newUser = createNewUser();
+    vi.spyOn(pendingUserModel, "findMany").mockResolvedValueOnce([
+      {
+        id: "mock-pending-user-id",
+        username: "test_user",
+        email: "test_user@example.com",
+        expiresAt: new Date(Date.now() + 60 * 60 * 1000), // expires in 1 hour
+      },
+    ]);
 
-    const accessToken = jwt.sign(
-      { email: newUser.email, username: newUser.username },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "1d" },
-    );
+    vi.spyOn(pendingUserModel, "delete").mockResolvedValueOnce(true);
+    vi.spyOn(usersModel, "create").mockResolvedValueOnce({
+      id: "mock-user-id",
+      username: "test_user",
+      email: "test_user@example.com",
+    });
+
+    const token = crypto.randomBytes(32).toString("hex");
 
     vi.spyOn(usersModel, "findOne").mockResolvedValueOnce({
       isEmailConfirmed: false,
     });
     vi.spyOn(usersModel, "update").mockResolvedValueOnce(true);
 
-    const response = await request(app).get(`/auth/confirm/${accessToken}`);
+    const response = await request(app).get(`/auth/confirm/${token}`);
 
     expect(response.status).toBe(200);
     expect(response.text).toContain(emailConfirmHTML());

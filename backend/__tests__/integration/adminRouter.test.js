@@ -1,5 +1,5 @@
 import request from "supertest";
-import { describe, test, expect } from "vitest";
+import { describe, test, expect, vi } from "vitest";
 import { app } from "../../app.js";
 import { createAndLoginUser } from "../utils/createUserAndLogin.js";
 import { createNewUser } from "../utils/createNewUser.js";
