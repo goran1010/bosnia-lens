@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /admin-dashboard
+Disallow: /contributor-dashboard
+Disallow: /profile
+Disallow: /login
+Disallow: /signup
