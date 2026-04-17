@@ -1,9 +1,14 @@
 import rateLimit from "express-rate-limit";
 const MINUTE = 60 * 1000;
 
+let testEnvironmentIncrease = 1;
+if (process.env.NODE_ENV === "test") {
+  testEnvironmentIncrease = 100;
+}
+
 const global = rateLimit({
   windowMs: 15 * MINUTE,
-  max: 500,
+  max: 500 * testEnvironmentIncrease,
   message: {
     error: {
       message: "Too many requests. Please wait 15 minutes, then try again.",
@@ -15,6 +20,7 @@ const global = rateLimit({
 
 const auth = rateLimit({
   windowMs: 15 * MINUTE,
+  max: 15 * testEnvironmentIncrease,
   message: {
     error: {
       message:
@@ -27,7 +33,7 @@ const auth = rateLimit({
 
 const api = rateLimit({
   windowMs: 15 * MINUTE,
-  max: 100,
+  max: 100 * testEnvironmentIncrease,
   message: {
     error: {
       message: "Too many API requests. Please wait 15 minutes, then try again.",
@@ -39,7 +45,7 @@ const api = rateLimit({
 
 const users = rateLimit({
   windowMs: 15 * MINUTE,
-  max: 100,
+  max: 100 * testEnvironmentIncrease,
   message: {
     error: {
       message: "Too many requests. Please wait 15 minutes, then try again.",
