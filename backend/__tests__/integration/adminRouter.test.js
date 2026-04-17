@@ -6,13 +6,6 @@ import { createNewUser } from "../utils/createNewUser.js";
 import { usersModel } from "../../models/usersModel.js";
 import { sanitizeUser } from "../../utils/sanitizeUser.js";
 
-vi.mock("../../utils/rateLimiter.js", () => ({
-  global: vi.fn((req, res, next) => next()),
-  api: vi.fn((req, res, next) => next()),
-  auth: vi.fn((req, res, next) => next()),
-  users: vi.fn((req, res, next) => next()),
-}));
-
 describe("Admin Router - GET /users/admin/contributors", () => {
   test("Responds with status 200 and all contributors if role ADMIN", async () => {
     // eslint-disable-next-line no-unused-vars

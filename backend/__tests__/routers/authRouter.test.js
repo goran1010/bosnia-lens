@@ -10,13 +10,6 @@ import bcrypt from "bcryptjs";
 import { sanitizeUser } from "../../utils/sanitizeUser.js";
 import { pendingUserModel } from "../../models/pendingUsersModel.js";
 
-vi.mock("../../utils/rateLimiter.js", () => ({
-  global: vi.fn((req, res, next) => next()),
-  api: vi.fn((req, res, next) => next()),
-  auth: vi.fn((req, res, next) => next()),
-  users: vi.fn((req, res, next) => next()),
-}));
-
 const isAuthenticatedMock = vi.fn();
 
 vi.mock("../../auth/isAuthenticated.js", () => ({
