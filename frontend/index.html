@@ -46,6 +46,48 @@
       name="twitter:image"
       content="https://bosnia-lens.netlify.app/og-image.png"
     />
+
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://bosnia-lens.netlify.app/#website",
+            "url": "https://bosnia-lens.netlify.app/",
+            "name": "Bosnia Lens",
+            "description": "Free, open-source public data about Bosnia and Herzegovina. Browse postal codes and universities' programs via REST API or interactive interface.",
+            "inLanguage": "en"
+          },
+          {
+            "@type": "Dataset",
+            "@id": "https://bosnia-lens.netlify.app/#postal-codes",
+            "name": "Bosnia and Herzegovina Postal Codes",
+            "description": "A complete dataset of postal codes and universities' programs for Bosnia and Herzegovina, including city names and postal operator assignments.",
+            "url": "https://bosnia-lens.netlify.app/postal-codes",
+            "license": "https://www.gnu.org/licenses/agpl-3.0.html",
+            "isAccessibleForFree": true,
+            "creator": {
+              "@type": "Person",
+              "name": "Goran Jovic",
+              "url": "https://github.com/goran1010"
+            },
+            "distribution": [
+              {
+                "@type": "DataDownload",
+                "encodingFormat": "application/json",
+                "contentUrl": "https://round-leann-goran-jovic-1010-ccad2ae8.koyeb.app/api/v1/postal-codes"
+              }
+            ],
+            "spatialCoverage": {
+              "@type": "Place",
+              "name": "Bosnia and Herzegovina"
+            }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
