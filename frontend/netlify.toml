@@ -1,4 +1,10 @@
 [[redirects]]
+  from = "/backend/*"
+  to = "https://round-leann-goran-jovic-1010-ccad2ae8.koyeb.app/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/*"
   to = "/"
   status = 200
