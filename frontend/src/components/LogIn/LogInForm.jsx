@@ -50,6 +50,7 @@ function LogInForm({ loading, setLoading }) {
           type="text"
           name="username"
           id="username"
+          autoComplete="username"
         />
       </div>
       <div>
@@ -61,6 +62,7 @@ function LogInForm({ loading, setLoading }) {
           type="password"
           name="password"
           id="password"
+          autoComplete="current-password"
         />
       </div>
       <div>
