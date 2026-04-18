@@ -59,6 +59,7 @@ function SignUpForm({ loading, setLoading }) {
           type="text"
           name="username"
           id="username"
+          autoComplete="username"
         />
       </div>
       <div>
@@ -70,6 +71,7 @@ function SignUpForm({ loading, setLoading }) {
           type="email"
           name="email"
           id="email"
+          autoComplete="email"
         />
       </div>
       <div>
@@ -81,6 +83,7 @@ function SignUpForm({ loading, setLoading }) {
           type="password"
           name="password"
           id="password"
+          autoComplete="new-password"
         />
       </div>
       <div>
@@ -92,6 +95,7 @@ function SignUpForm({ loading, setLoading }) {
           type="password"
           name="confirm-password"
           id="confirm-password"
+          autoComplete="new-password"
         />
       </div>
       <div>

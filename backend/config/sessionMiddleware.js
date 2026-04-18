@@ -11,7 +11,7 @@ const sessionMiddleware = expressSession({
   proxy: IS_PRODUCTION,
   cookie: {
     maxAge: NUMBER_OF_DAYS * 24 * 60 * 60 * 1000,
-    sameSite: IS_PRODUCTION ? "none" : "lax",
+    sameSite: "lax",
     secure: IS_PRODUCTION,
     httpOnly: true,
     path: "/",

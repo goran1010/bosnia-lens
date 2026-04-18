@@ -12,7 +12,7 @@ function Home() {
           </p>
           <p className="mt-2">
             Currently focused on postal codes, with universities as the next
-            planned dataset — making Bosnian public data open, searchable, and
+            planned dataset - making Bosnian public data open, searchable, and
             developer-friendly.
           </p>
         </section>

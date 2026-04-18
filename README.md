@@ -2,11 +2,13 @@
 
 A free, open-source project providing structured public data about Bosnia and Herzegovina through a REST API and a React web interface. The current implemented dataset is postal codes, with universities as a planned addition and focus of the project.
 
-LIVE Web app at - <https://bosnia-lens.netlify.app/>
+LIVE Web app - <https://bosnia-lens.netlify.app/>
 
-REST API at - <https://round-leann-goran-jovic-1010-ccad2ae8.koyeb.app/api>
+REST API - <https://round-leann-goran-jovic-1010-ccad2ae8.koyeb.app/api>
 
-For more info on how to connect your app to the REST API, visit - <https://bosnia-lens.netlify.app/api-docs>
+For more info on how to connect your app to the REST API, visit <https://bosnia-lens.netlify.app/api-docs>
+
+![Bosnia Lens](./frontend/public/og-image.png)
 
 ## Table of Contents
 
@@ -31,6 +33,7 @@ For more info on how to connect your app to the REST API, visit - <https://bosni
 - **Session Authentication**: Passport-based auth with signup, login, logout, and email confirmation
 - **Role-based Access**: Contributor and admin roles with protected dashboards for data management
 - **CSRF Protection**: Synchronised CSRF tokens required for all mutating requests to authenticated routes
+- **First-party cookies**: Frontend proxies authenticated requests through Netlify (`/backend/*`) so session cookies are always same-site
 
 ## Data Coverage
 
@@ -85,20 +88,16 @@ cp backend/.env.example backend/.env
 
 Backend env layout:
 
-- `NODE_ENV`: app mode, usually `development`
-- `PORT`: backend port, usually `3000`
+- `DATABASE_URL`: development PostgreSQL connection string
+- `TEST_DATABASE_URL`: separate PostgreSQL database used by tests and test migrations
+- `RESEND_API_KEY`: Resend API key for email confirmation
 - `FRONTEND_URL`: frontend origin allowed by CORS, usually `http://localhost:5173`
 - `BACKEND_URL`: backend's own publicly reachable URL, used for building email confirmation links, usually `http://localhost:3000`
-- `DATABASE_URL`: development PostgreSQL database
-- `TEST_DATABASE_URL`: separate PostgreSQL database used by tests and test migrations
-- `ACCESS_TOKEN_SECRET`: access token signing secret
-- `REFRESH_TOKEN_SECRET`: refresh token signing secret
-- `COOKIE_SECRET`: session/cookie secret
-- `RESEND_API_KEY`: Resend API key for email confirmation
-- `CLIENT_ID`: OAuth or external client id
-- `CLIENT_SECRET`: OAuth or external client secret
+- `PORT`: backend port, usually `3000`
+- `COOKIE_SECRET`: session/cookie signing secret
+- `NODE_ENV`: app mode, usually `development`
 
-The backend validates these variables on startup, so placeholder values should be replaced before running the app.
+The backend validates these variables on startup, so placeholder values must be replaced before running the app.
 
 Frontend: copy `frontend/.env.example` to `frontend/.env` and update `VITE_BACKEND_URL` if needed.
 
@@ -109,8 +108,7 @@ cp frontend/.env.example frontend/.env
 
 Frontend env layout:
 
-- `VITE_BACKEND_URL`: backend base URL, usually `http://localhost:3000`
-- `VITE_WEATHER_API_KEY`: weather API key used by the home page widget
+- `VITE_BACKEND_URL`: backend base URL, usually `http://localhost:3000` for local development. In production on Netlify, set this to `/backend` - the proxy rule in `netlify.toml` forwards those requests to the actual backend, keeping session cookies first-party.
 
 Initialize the development database and generate the Prisma client:
 
@@ -195,8 +193,16 @@ Success example:
 
 ```json
 {
-  "data": { "status": "ok" },
-  "message": "API server is running"
+  "data": {
+    "postalCodes": [
+      {
+        "code": "71000",
+        "city": "Sarajevo",
+        "post": "BH_POSTA"
+      }
+    ]
+  },
+  "message": "Postal codes retrieved successfully."
 }
 ```
 
@@ -248,11 +254,11 @@ The backend test suite expects `TEST_DATABASE_URL` to point to a separate Postgr
 
 The project is designed to be deployed with:
 
-- **Backend**: Any Node.js hosting service capable of running Express and PostgreSQL-backed Prisma migrations
-- **Frontend**: Static hosting (Netlify, Vercel)
+- **Backend**: Any Node.js hosting service capable of running Express and PostgreSQL-backed Prisma migrations. The backend `build` script runs `prisma generate` and `prisma migrate deploy` automatically.
+- **Frontend**: Netlify (recommended). The `netlify.toml` proxy rule forwards `/backend/*` requests to the actual backend so session cookies remain first-party. Set `VITE_BACKEND_URL=/backend` in Netlify's environment variables.
 - **Database**: PostgreSQL (Supabase, Koyeb, or self-hosted)
 
-Backend deployment currently runs database migration and Prisma client generation with the `build` script. Frontend production builds are handled through Vite.
+The public REST API (`/api/v1/...`) is served directly from the backend with open CORS and requires no authentication, so third-party apps can call the Koyeb URL directly without going through the Netlify proxy.
 
 ## Built With
 
@@ -293,7 +299,7 @@ See also the list of [contributors](https://github.com/goran1010/bosnia-lens/con
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details. All data used will be public domain or properly attributed to its original source.
+This project is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0) - see the [LICENSE.md](LICENSE.md) file for details. All data used will be public domain or properly attributed to its original source.
 
 ## Acknowledgments
 

@@ -40,14 +40,12 @@ function Profile() {
             </dt>
             <dd className="text-lg font-bold">{userData?.email}</dd>
           </div>
-          <hr className="divider-muted" />
           <div>
             <dt className="label-muted block text-sm font-semibold uppercase tracking-wide">
               Username
             </dt>
             <dd className="text-lg font-bold">{userData?.username}</dd>
           </div>
-          <hr className="divider-muted" />
           <div>
             <dt className="label-muted block text-sm font-semibold uppercase tracking-wide">
               Current Role
@@ -66,7 +64,6 @@ function Profile() {
               </span>
             </dd>
           </div>
-          <hr className="divider-muted" />
         </dl>
         <div className="flex flex-col gap-2 w-full max-w-sm">
           {userData?.role === "USER" && !userData?.requestedContributor && (
