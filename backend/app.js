@@ -63,7 +63,7 @@ app.use(passport.session());
 
 app.use(csrfRouter);
 
-app.use("/auth", authRouter);
+app.use("/auth", rateLimiter.auth, authRouter);
 app.use(
   "/users",
   rateLimiter.users,

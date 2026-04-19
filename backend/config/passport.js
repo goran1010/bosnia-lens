@@ -42,6 +42,12 @@ passport.use(
         if (user) return done(null, user);
 
         const primaryEmail = profile.emails?.[0]?.value;
+        if (!primaryEmail) {
+          return done(null, false, {
+            message: "GitHub account has no public email",
+          });
+        }
+
         if (primaryEmail) {
           user = await usersModel.findOne({ email: primaryEmail });
           if (user) {
