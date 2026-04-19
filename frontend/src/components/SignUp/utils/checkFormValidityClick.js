@@ -1,16 +1,8 @@
 function checkFormValidityClick(
-  usernameInput,
   passwordInput,
   confirmPasswordInput,
   emailInput,
 ) {
-  if (usernameInput.current.value.trim().length < 6) {
-    usernameInput.current.setCustomValidity(
-      "Username must have at least 6 characters",
-    );
-    usernameInput.current.reportValidity();
-  } else usernameInput.current.setCustomValidity("");
-
   const emailValue = emailInput.current.value.trim();
 
   if (emailValue.length < 3) {

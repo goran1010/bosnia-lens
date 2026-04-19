@@ -13,13 +13,11 @@ function SignUpForm({ loading, setLoading }) {
   const navigate = useNavigate();
   const { addNotification } = useContext(NotificationContext);
 
-  const usernameInput = useRef();
   const passwordInput = useRef();
   const confirmPasswordInput = useRef();
   const emailInput = useRef();
 
   const [inputFields, setInputFields] = useState({
-    username: "",
     email: "",
     password: "",
     ["confirm-password"]: "",
@@ -28,7 +26,6 @@ function SignUpForm({ loading, setLoading }) {
   function handleInputFields(e) {
     checkFormValidity(
       e.target.name,
-      usernameInput,
       passwordInput,
       confirmPasswordInput,
       emailInput,
@@ -50,18 +47,6 @@ function SignUpForm({ loading, setLoading }) {
         )
       }
     >
-      <div>
-        <Label htmlFor="username">Username</Label>
-        <Input
-          ref={usernameInput}
-          value={inputFields.username}
-          onChange={handleInputFields}
-          type="text"
-          name="username"
-          id="username"
-          autoComplete="username"
-        />
-      </div>
       <div>
         <Label htmlFor="email">Email</Label>
         <Input
@@ -102,7 +87,6 @@ function SignUpForm({ loading, setLoading }) {
         <Button
           onClick={() =>
             checkFormValidityClick(
-              usernameInput,
               passwordInput,
               confirmPasswordInput,
               emailInput,

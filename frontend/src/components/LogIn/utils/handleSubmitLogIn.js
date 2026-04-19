@@ -32,7 +32,7 @@ async function handleSubmitLogIn(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: inputFields.username,
+        email: inputFields.email,
         password: inputFields.password,
       }),
     });

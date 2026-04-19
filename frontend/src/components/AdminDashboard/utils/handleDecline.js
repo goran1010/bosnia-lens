@@ -52,9 +52,9 @@ async function handleDecline(
   } catch (error) {
     addNotification({
       type: "error",
-      message: `Error declining ${user.username}'s request.`,
+      message: `Error declining ${user.email}'s request.`,
     });
-    console.error(`Error declining ${user.username}'s request:`, error);
+    console.error(`Error declining ${user.email}'s request:`, error);
   } finally {
     setButtonLoading(false);
   }

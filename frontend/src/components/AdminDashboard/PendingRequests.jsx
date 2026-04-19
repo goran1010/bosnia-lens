@@ -38,7 +38,7 @@ function PendingRequests({ setCurrentContributors }) {
             >
               <div className="flex-1 flex flex-col sm:flex-row sm:items-center sm:gap-2 min-w-0 lg:flex-col">
                 <span className="font-bold text-lg break-all text-center">
-                  {user.username}
+                  {user.email}
                 </span>
                 <span className="label-muted break-all text-center">
                   {user.email}

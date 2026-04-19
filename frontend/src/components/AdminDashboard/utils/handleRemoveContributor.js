@@ -56,9 +56,9 @@ async function handleRemoveContributor(
   } catch (error) {
     addNotification({
       type: "error",
-      message: `Error removing ${user.username} from contributors.`,
+      message: `Error removing ${user.email} from contributors.`,
     });
-    console.error(`Error removing ${user.username} from contributors:`, error);
+    console.error(`Error removing ${user.email} from contributors:`, error);
   } finally {
     setButtonLoading(false);
   }

@@ -53,9 +53,9 @@ async function handleConfirm(
   } catch (error) {
     addNotification({
       type: "error",
-      message: `Error promoting ${user.username} to contributor.`,
+      message: `Error promoting ${user.email} to contributor.`,
     });
-    console.error(`Error promoting ${user.username} to contributor:`, error);
+    console.error(`Error promoting ${user.email} to contributor:`, error);
   } finally {
     setButtonLoading(false);
   }

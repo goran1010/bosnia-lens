@@ -1,10 +1,9 @@
-function checkLoginFormClickValidity(usernameInput, passwordInput) {
-  if (usernameInput.current.value.trim().length < 6) {
-    usernameInput.current.setCustomValidity(
-      "Username must have at least 6 characters",
-    );
-    usernameInput.current.reportValidity();
-  } else usernameInput.current.setCustomValidity("");
+function checkLoginFormClickValidity(emailInput, passwordInput) {
+  const emailValue = emailInput.current.value.trim();
+  if (!emailValue.includes("@") || emailValue.length < 3) {
+    emailInput.current.setCustomValidity("Please enter a valid email address");
+    emailInput.current.reportValidity();
+  } else emailInput.current.setCustomValidity("");
 
   if (passwordInput.current.value.trim().length < 6) {
     passwordInput.current.setCustomValidity(
