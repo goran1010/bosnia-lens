@@ -27,7 +27,6 @@ import { apiRouter } from "./routes/apiRouter.js";
 import { authRouter } from "./routes/authRouter.js";
 import { usersRouter } from "./routes/usersRouter.js";
 import { isAuthenticated } from "./auth/isAuthenticated.js";
-import { isNotAuthenticated } from "./auth/isNotAuthenticated.js";
 
 const FRONTEND_URL = process.env.FRONTEND_URL;
 
@@ -64,13 +63,7 @@ app.use(passport.session());
 
 app.use(csrfRouter);
 
-app.use(
-  "/auth",
-  rateLimiter.auth,
-  csrfSynchronisedProtection,
-  isNotAuthenticated,
-  authRouter,
-);
+app.use("/auth", rateLimiter.auth, csrfSynchronisedProtection, authRouter);
 app.use(
   "/users",
   rateLimiter.users,
