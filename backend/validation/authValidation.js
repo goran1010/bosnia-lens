@@ -4,26 +4,6 @@ import { validationError } from "./validationError.js";
 
 class AuthValidation {
   signupValidationRules = [
-    body("username")
-      .trim()
-      .custom((value) => {
-        if (!/^[a-zA-Z0-9_-]+$/.test(value)) {
-          throw new Error(
-            "Username can only contain letters, numbers, dashes or underscores",
-          );
-        }
-        return true;
-      })
-      .isLength({ min: 6 })
-      .withMessage("Username must be at least 6 characters long")
-      .custom(async (username) => {
-        const user = await usersModel.findOne({ username });
-        if (user) {
-          throw new Error("Username already in use");
-        }
-        return true;
-      }),
-
     body("email")
       .normalizeEmail()
       .isEmail()
@@ -75,7 +55,10 @@ class AuthValidation {
   ];
 
   loginValidationRules = [
-    body("username").trim().notEmpty().withMessage("Username is required"),
+    body("email")
+      .normalizeEmail()
+      .isEmail()
+      .withMessage("Invalid email address"),
     body("password").trim().notEmpty().withMessage("Password is required"),
     validationError,
   ];

@@ -4,7 +4,7 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
 const resend = new Resend(RESEND_API_KEY);
 
-async function sendConfirmationEmail(userEmail, userName, confirmationLink) {
+async function sendConfirmationEmail(userEmail, confirmationLink) {
   try {
     const email = await resend.emails.send({
       from: "Bosnia Lens <onboarding@resend.dev>",
@@ -12,7 +12,7 @@ async function sendConfirmationEmail(userEmail, userName, confirmationLink) {
       subject: "Confirm Your Email Address",
       html: `
         <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #333;">Welcome, ${userName}!</h2>
+          <h2 style="color: #333;">Welcome!</h2>
           <p>Thank you for registering. Please confirm your email address by clicking the button below:</p>
           <div style="text-align: center; margin: 30px 0;">
             <a href="${confirmationLink}" 

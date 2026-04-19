@@ -21,4 +21,7 @@ authRouter.post(
   authController.login,
 );
 
+authRouter.get("/github", authController.githubLogin);
+authRouter.get("/github/callback", authController.githubCallback);
+
 export { authRouter };
