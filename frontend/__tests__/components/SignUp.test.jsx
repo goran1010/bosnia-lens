@@ -20,10 +20,13 @@ const user = userEvent.setup();
 beforeEach(async () => {
   function Wrapper() {
     const [userData, setUserData] = useState(null);
-    const { notifications, addNotification, removeNotification } = useNotification();
+    const { notifications, addNotification, removeNotification } =
+      useNotification();
 
     return (
-      <NotificationContext value={{ notifications, addNotification, removeNotification }}>
+      <NotificationContext
+        value={{ notifications, addNotification, removeNotification }}
+      >
         <UserDataContext value={{ userData, setUserData }}>
           <MemoryRouter initialEntries={["/signup"]}>
             <Notifications />
@@ -46,7 +49,6 @@ afterEach(() => {
 
 function createFormElements() {
   return {
-    usernameField: screen.getByLabelText(/Username/i),
     emailField: screen.getByLabelText(/Email/i),
     passwordField: screen.getByLabelText("Password"),
     confirmPasswordField: screen.getByLabelText(/Confirm Password/i),
@@ -73,15 +75,13 @@ describe("Render SignUp Component", () => {
 
 describe("User typing in input fields in SignUp Component", () => {
   test("displays user input", async () => {
-    const { passwordField, confirmPasswordField, emailField, usernameField } =
+    const { passwordField, confirmPasswordField, emailField } =
       createFormElements();
 
-    await user.type(usernameField, "testuser");
     await user.type(emailField, "testuser@example.com");
     await user.type(passwordField, "Password123!");
     await user.type(confirmPasswordField, "Password123!");
 
-    expect(usernameField).toHaveValue("testuser");
     expect(emailField).toHaveValue("testuser@example.com");
     expect(passwordField).toHaveValue("Password123!");
     expect(confirmPasswordField).toHaveValue("Password123!");
@@ -89,19 +89,6 @@ describe("User typing in input fields in SignUp Component", () => {
 });
 
 describe("SignUp Form Validation on input", () => {
-  test("shows validation messages for username input", async () => {
-    const { usernameField } = createFormElements();
-
-    await user.type(usernameField, "test");
-    expect(usernameField).toHaveValue("test");
-    // JSDOM doesn't render browser validation UI so check the input's validationMessage
-    expect(usernameField.validationMessage).toMatch(/at least 6 characters/i);
-
-    await user.type(usernameField, "user");
-    expect(usernameField).toHaveValue("testuser");
-    expect(usernameField.validationMessage).toBe("");
-  });
-
   test("shows validation messages for email input", async () => {
     const { emailField } = createFormElements();
 
@@ -153,18 +140,6 @@ describe("SignUp Form Validation on input", () => {
 });
 
 describe("SignUp Form Validation on Create button click", () => {
-  test("shows validation messages for invalid input when clicking Create button", async () => {
-    const { usernameField, signUpButton } = createFormElements();
-
-    await user.type(usernameField, "test");
-    expect(usernameField).toHaveValue("test");
-    await user.click(signUpButton);
-    expect(usernameField.validationMessage).toMatch(/at least 6 characters/i);
-    await user.type(usernameField, "user");
-    expect(usernameField).toHaveValue("testuser");
-    expect(usernameField.validationMessage).toBe("");
-  });
-
   test("shows validation messages for invalid input on Create button click", async () => {
     const { signUpButton, emailField } = createFormElements();
 
@@ -225,26 +200,20 @@ describe("SignUp Form Validation on Create button click", () => {
 });
 
 describe("SignUp Form Submit", () => {
-  test("Shows error message after clicking Create when fetching with existing username/email", async () => {
+  test("Shows error message after clicking Create when fetching with existing email", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
       ok: false,
       status: 400,
       json: async () => ({
         error: {
           message:
-            "Validation failed: Username already in use Email already in use Fix the highlighted fields and try again.",
+            "Validation failed: Email already in use Fix the highlighted fields and try again.",
         },
       }),
     });
-    const {
-      usernameField,
-      emailField,
-      passwordField,
-      confirmPasswordField,
-      signUpButton,
-    } = createFormElements();
+    const { emailField, passwordField, confirmPasswordField, signUpButton } =
+      createFormElements();
 
-    await user.type(usernameField, "new_user");
     await user.type(emailField, "newemail@mail.com");
     await user.type(passwordField, "Password123!");
     await user.type(confirmPasswordField, "Password123!");
@@ -253,7 +222,7 @@ describe("SignUp Form Submit", () => {
 
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(
-      await screen.findByText(/Username already in use/i),
+      await screen.findByText(/Email already in use/i),
     ).toBeInTheDocument();
   });
 
@@ -266,15 +235,9 @@ describe("SignUp Form Submit", () => {
       }),
     });
 
-    const {
-      usernameField,
-      emailField,
-      passwordField,
-      confirmPasswordField,
-      signUpButton,
-    } = createFormElements();
+    const { emailField, passwordField, confirmPasswordField, signUpButton } =
+      createFormElements();
 
-    await user.type(usernameField, "new_user");
     await user.type(emailField, "newemail@mail.com");
     await user.type(passwordField, "Password123!");
     await user.type(confirmPasswordField, "Password123!");
@@ -298,15 +261,9 @@ describe("SignUp Form Submit", () => {
       new Error("Network error"),
     );
 
-    const {
-      usernameField,
-      emailField,
-      passwordField,
-      confirmPasswordField,
-      signUpButton,
-    } = createFormElements();
+    const { emailField, passwordField, confirmPasswordField, signUpButton } =
+      createFormElements();
 
-    await user.type(usernameField, "new_user");
     await user.type(emailField, "newemail@mail.com");
     await user.type(passwordField, "Password123!");
     await user.type(confirmPasswordField, "Password123!");

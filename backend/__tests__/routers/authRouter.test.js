@@ -27,21 +27,6 @@ beforeEach(() => {
 });
 
 describe("POST /auth/signup", () => {
-  test("responds with status 400 and message for incorrect username input", async () => {
-    const newUser = createNewUser({ username: "user" });
-
-    const responseData = {
-      error: {
-        message: "Username must be at least 6 characters long",
-      },
-    };
-
-    const response = await request(app).post("/auth/signup").send(newUser);
-
-    expect(response.body.error.message).toContain(responseData.error.message);
-    expect(response.status).toBe(400);
-  });
-
   test("responds with status 400 and message for incorrect password input", async () => {
     const newUser = createNewUser({
       password: "123",
@@ -82,7 +67,6 @@ describe("POST /auth/signup", () => {
     const newUser = createNewUser();
     const createdUser = {
       id: "mock-user-id",
-      username: newUser.username,
       email: newUser.email,
       isEmailConfirmed: false,
       role: "USER",
@@ -98,7 +82,6 @@ describe("POST /auth/signup", () => {
     expect(sendConfirmationEmail).toHaveBeenCalled();
     expect(response.body).toEqual({
       data: expect.objectContaining({
-        username: newUser.username,
         email: newUser.email,
       }),
       message: "Registration successful! Check your email.",
@@ -106,15 +89,15 @@ describe("POST /auth/signup", () => {
     expect(response.status).toBe(201);
   });
 
-  test("responds with json 400, Username already taken, if given username exists", async () => {
+  test("responds with json 400, Email already in use, if given email exists", async () => {
     const newUser = createNewUser();
     vi.spyOn(usersModel, "findOne").mockResolvedValueOnce({
-      username: newUser.username,
+      email: newUser.email,
     });
 
     const responseData = {
       error: {
-        message: "Username already in use",
+        message: "Email already in use",
       },
     };
 
@@ -155,7 +138,6 @@ describe("GET /auth/confirm/:token", () => {
     vi.spyOn(pendingUserModel, "findMany").mockResolvedValueOnce([
       {
         id: "mock-pending-user-id",
-        username: "test_user",
         email: "test_user@example.com",
         expiresAt: new Date(Date.now() + 60 * 60 * 1000), // expires in 1 hour
       },
@@ -164,7 +146,6 @@ describe("GET /auth/confirm/:token", () => {
     vi.spyOn(pendingUserModel, "delete").mockResolvedValueOnce(true);
     vi.spyOn(usersModel, "create").mockResolvedValueOnce({
       id: "mock-user-id",
-      username: "test_user",
       email: "test_user@example.com",
     });
 
@@ -183,12 +164,12 @@ describe("GET /auth/confirm/:token", () => {
 });
 
 describe("POST /auth/login", () => {
-  test("responds with Incorrect username for wrong input", async () => {
+  test("responds with Incorrect email for wrong input", async () => {
     const newUser = createNewUser();
 
     const responseData = {
       error: {
-        message: "Incorrect username or password",
+        message: "Incorrect email or password",
       },
     };
 

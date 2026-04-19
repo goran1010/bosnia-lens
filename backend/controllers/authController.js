@@ -10,11 +10,12 @@ import { sanitizeUser } from "../utils/sanitizeUser.js";
 import { pendingUserModel } from "../models/pendingUsersModel.js";
 
 const BACKEND_URL = process.env.BACKEND_URL;
+const FRONTEND_URL = process.env.FRONTEND_URL;
 
 class AuthController {
   async signup(req, res) {
     try {
-      const { username, email, password } = matchedData(req);
+      const { email, password } = matchedData(req);
       const hashedPassword = await bcrypt.hash(password, 10);
 
       const confirmationToken = crypto.randomBytes(32).toString("hex");
@@ -26,7 +27,6 @@ class AuthController {
         await pendingUserModel.update(
           { email },
           {
-            username,
             password: hashedPassword,
             token: confirmationToken,
             expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
@@ -34,7 +34,6 @@ class AuthController {
         );
       } else {
         await pendingUserModel.create({
-          username,
           email,
           password: hashedPassword,
           token: confirmationToken,
@@ -42,16 +41,12 @@ class AuthController {
         });
       }
 
-      const result = await sendConfirmationEmail(
-        email,
-        username,
-        confirmationLink,
-      );
+      const result = await sendConfirmationEmail(email, confirmationLink);
 
       if (result.success) {
         return sendSuccess(res, {
           status: 201,
-          data: { username, email },
+          data: { email },
           message: "Registration successful! Check your email.",
         });
       }
@@ -95,7 +90,6 @@ class AuthController {
       }
 
       const user = await usersModel.create({
-        username: pendingUser.username,
         email: pendingUser.email,
         password: pendingUser.password,
       });
@@ -125,7 +119,7 @@ class AuthController {
     passport.authenticate("local", (err, user, info) => {
       if (err) return next(err);
       if (!user) {
-        const loginReason = info?.message || "Invalid username or password";
+        const loginReason = info?.message || "Invalid email or password";
         return sendError(res, {
           status: 401,
           message: `Login failed: ${loginReason}. Check your credentials and try again.`,
@@ -154,6 +148,38 @@ class AuthController {
           return next(regenerateError);
         }
 
+        return continueWithLogin();
+      });
+    })(req, res, next);
+  }
+
+  githubLogin(req, res, next) {
+    passport.authenticate("github", { scope: ["user:email"] })(req, res, next);
+  }
+
+  githubCallback(req, res, next) {
+    passport.authenticate("github", (err, user) => {
+      if (err) return next(err);
+      if (!user) {
+        return res.redirect(`${FRONTEND_URL}/login?error=github`);
+      }
+
+      const continueWithLogin = () => {
+        req.logIn(user, (loginError) => {
+          if (loginError) return next(loginError);
+          req.session.save((saveError) => {
+            if (saveError) return next(saveError);
+            return res.redirect(FRONTEND_URL);
+          });
+        });
+      };
+
+      if (!req.session?.regenerate) {
+        return continueWithLogin();
+      }
+
+      req.session.regenerate((regenerateError) => {
+        if (regenerateError) return next(regenerateError);
         return continueWithLogin();
       });
     })(req, res, next);

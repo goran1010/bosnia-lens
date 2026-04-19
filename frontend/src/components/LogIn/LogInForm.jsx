@@ -15,15 +15,15 @@ function LogInForm({ loading, setLoading }) {
   const { addNotification } = useContext(NotificationContext);
 
   const [inputFields, setInputFields] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
-  const usernameInput = useRef();
+  const emailInput = useRef();
   const passwordInput = useRef();
 
   function handleInputFields(e) {
-    checkLoginFormValidity(e.target.name, usernameInput, passwordInput);
+    checkLoginFormValidity(e.target.name, emailInput, passwordInput);
     setInputFields({ ...inputFields, [e.target.name]: e.target.value });
   }
 
@@ -42,15 +42,15 @@ function LogInForm({ loading, setLoading }) {
       className="flex flex-col gap-3"
     >
       <div>
-        <Label htmlFor="username">Username</Label>
+        <Label htmlFor="email">Email</Label>
         <Input
-          value={inputFields.username}
-          ref={usernameInput}
+          value={inputFields.email}
+          ref={emailInput}
           onChange={handleInputFields}
-          type="text"
-          name="username"
-          id="username"
-          autoComplete="username"
+          type="email"
+          name="email"
+          id="email"
+          autoComplete="email"
         />
       </div>
       <div>
@@ -67,9 +67,7 @@ function LogInForm({ loading, setLoading }) {
       </div>
       <div>
         <Button
-          onClick={() =>
-            checkLoginFormClickValidity(usernameInput, passwordInput)
-          }
+          onClick={() => checkLoginFormClickValidity(emailInput, passwordInput)}
           type="submit"
           loading={loading}
           className="text-white"

@@ -42,12 +42,6 @@ function Profile() {
           </div>
           <div>
             <dt className="label-muted block text-sm font-semibold uppercase tracking-wide">
-              Username
-            </dt>
-            <dd className="text-lg font-bold">{userData?.username}</dd>
-          </div>
-          <div>
-            <dt className="label-muted block text-sm font-semibold uppercase tracking-wide">
               Current Role
             </dt>
             <dd className="flex items-center justify-center">

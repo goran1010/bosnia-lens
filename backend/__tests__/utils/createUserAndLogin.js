@@ -17,21 +17,18 @@ async function createAndLoginUser(agent, newUser) {
   await agent.get(`/auth/confirm/${token}`);
 
   if (userData.role !== "USER") {
-    await usersModel.update(
-      { username: userData.username },
-      { role: userData.role },
-    );
+    await usersModel.update({ email: userData.email }, { role: userData.role });
   }
 
   if (userData.requestedContributor === true) {
     await usersModel.update(
-      { username: userData.username },
+      { email: userData.email },
       { requestedContributor: true },
     );
   }
 
   const response = await agent.post("/auth/login").send({
-    username: userData.username,
+    email: userData.email,
     password: userData.password,
   });
 

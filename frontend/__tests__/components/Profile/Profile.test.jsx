@@ -44,10 +44,13 @@ afterEach(() => {
 
 function Wrapper({ initialUser = null }) {
   const [userData, setUserData] = useState(initialUser);
-  const { notifications, addNotification, removeNotification } = useNotification();
+  const { notifications, addNotification, removeNotification } =
+    useNotification();
 
   return (
-    <NotificationContext value={{ notifications, addNotification, removeNotification }}>
+    <NotificationContext
+      value={{ notifications, addNotification, removeNotification }}
+    >
       <UserDataContext value={{ userData, setUserData }}>
         <MemoryRouter initialEntries={["/profile"]}>
           <Notifications />
@@ -68,8 +71,6 @@ describe("Profile Component", () => {
     const paragraphElement = await screen.findByText(
       /You need to be logged in. Redirected to the login page./i,
     );
-    const usernameElement = screen.queryByText(/Username/i);
-    expect(usernameElement).toBeInTheDocument();
     expect(paragraphElement).toBeInTheDocument();
   });
 
@@ -84,45 +85,36 @@ describe("Profile Component", () => {
   test("displays user information correctly", async () => {
     const user = {
       email: "testuser@example.com",
-      username: "testuser",
       role: "USER",
     };
     render(<Wrapper initialUser={user} />);
     const emailElement = await screen.findByText(/testuser@example.com/i);
-    const usernameElement = await screen.findByText("testuser");
     const roleElement = await screen.findByText("USER");
     expect(emailElement).toBeInTheDocument();
-    expect(usernameElement).toBeInTheDocument();
     expect(roleElement).toBeInTheDocument();
   });
 
   test("displays contributor role when user role is CONTRIBUTOR", async () => {
     const user = {
       email: "contributor@example.com",
-      username: "contributor",
       role: "CONTRIBUTOR",
     };
     render(<Wrapper initialUser={user} />);
     const emailElement = await screen.findByText(/contributor@example.com/i);
-    const usernameElement = await screen.findByText("contributor");
     const roleElement = await screen.findByText("CONTRIBUTOR");
     expect(emailElement).toBeInTheDocument();
-    expect(usernameElement).toBeInTheDocument();
     expect(roleElement).toBeInTheDocument();
   });
 
   test("displays admin role when user role is ADMIN", async () => {
     const user = {
       email: "admin@example.com",
-      username: "admin",
       role: "ADMIN",
     };
     render(<Wrapper initialUser={user} />);
     const emailElement = await screen.findByText(/admin@example.com/i);
-    const usernameElement = await screen.findByText("admin");
     const roleElement = await screen.findByText("ADMIN");
     expect(emailElement).toBeInTheDocument();
-    expect(usernameElement).toBeInTheDocument();
     expect(roleElement).toBeInTheDocument();
   });
 });

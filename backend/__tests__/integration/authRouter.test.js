@@ -52,7 +52,7 @@ describe("Auth Router - POST /auth/login", () => {
     await agent.get(`/auth/confirm/${token}`);
 
     const response = await agent.post("/auth/login").send({
-      username: newUser.username,
+      email: newUser.email,
       password: newUser.password,
     });
 
