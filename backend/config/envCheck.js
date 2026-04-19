@@ -6,6 +6,8 @@ const allRequiredVars = [
   "RESEND_API_KEY",
   "COOKIE_SECRET",
   "NODE_ENV",
+  "GITHUB_CLIENT_ID",
+  "GITHUB_CLIENT_SECRET",
 ];
 
 function envCheck(requiredVars) {
