@@ -8,6 +8,7 @@ const allRequiredVars = [
   "NODE_ENV",
   "GITHUB_CLIENT_ID",
   "GITHUB_CLIENT_SECRET",
+  "GITHUB_CALLBACK_URL",
 ];
 
 function envCheck(requiredVars) {
