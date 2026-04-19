@@ -48,13 +48,13 @@
     "resend": "^6.5.2"
   },
   "devDependencies": {
-    "@eslint/js": "^9.30.1",
+    "@eslint/js": "^10.0.1",
     "@vitest/coverage-v8": "^4.1.2",
     "dotenv": "^17.4.1",
-    "eslint": "^9.30.1",
+    "eslint": "^10.2.0",
     "eslint-config-prettier": "^10.1.5",
-    "globals": "^16.3.0",
-    "prettier": "3.6.2",
+    "globals": "^17.5.0",
+    "prettier": "^3.8.3",
     "prisma": "^7.3.0",
     "supertest": "^7.1.4",
     "vitest": "^4.1.2"
