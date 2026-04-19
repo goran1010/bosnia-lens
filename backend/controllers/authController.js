@@ -167,7 +167,10 @@ class AuthController {
       const continueWithLogin = () => {
         req.logIn(user, (loginError) => {
           if (loginError) return next(loginError);
-          return res.redirect(FRONTEND_URL);
+          req.session.save((saveError) => {
+            if (saveError) return next(saveError);
+            return res.redirect(FRONTEND_URL);
+          });
         });
       };
 
