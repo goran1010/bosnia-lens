@@ -2,7 +2,7 @@ import { Router } from "express";
 const authRouter = Router();
 import { authValidation } from "../validation/authValidation.js";
 import { authController } from "../controllers/authController.js";
-import { isNotAuthenticated } from "./auth/isNotAuthenticated.js";
+import { isNotAuthenticated } from "../auth/isNotAuthenticated.js";
 
 authRouter.post(
   "/signup",
