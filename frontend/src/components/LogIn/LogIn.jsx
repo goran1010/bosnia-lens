@@ -47,7 +47,7 @@ function LogIn() {
 
         <DividerOr />
 
-        <GitHubLoginLink />
+        <GitHubLoginLink setLoading={setLoading} loading={loading} />
 
         <DividerOr />
 
