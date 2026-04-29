@@ -6,11 +6,11 @@ const GitHubIcon =
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 function GitHubLoginLink({ loading, setLoading }) {
-  function handleLoading() {
+  function handleLoading(e) {
+    if (loading) return e.preventDefault();
     setLoading(true);
   }
-  const baseClassName =
-    "btn-primary w-full relative inline-flex items-center justify-center rounded-md p-2 text-sm cursor-pointer disabled:cursor-not-allowed";
+  const baseClassName = `btn-primary w-full relative inline-flex items-center justify-center rounded-md p-2 text-sm ${loading ? "cursor-not-allowed" : "cursor-pointer"}`;
   return (
     <a
       href={`${BACKEND_URL}/auth/github`}
