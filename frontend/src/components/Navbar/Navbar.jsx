@@ -46,6 +46,7 @@ function Navbar({ closeMenu }) {
       </div>
       <div className="flex lg:hidden justify-center items-center py-2">
         <ButtonNavbar
+          id="mobile-menu-toggle"
           type="button"
           aria-label="Toggle navigation menu"
           aria-controls="mobile-menu"
