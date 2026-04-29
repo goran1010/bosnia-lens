@@ -5,6 +5,7 @@ import { LogInForm } from "./LogInForm.jsx";
 import { UserDataContext } from "../../contextData/UserDataContext.js";
 import { NotificationContext } from "../../contextData/NotificationContext.js";
 import { GitHubLoginLink } from "../sharedComponents/GitHubLoginLink.jsx";
+import { DividerOr } from "../sharedComponents/dividerOr.jsx";
 
 function LogIn() {
   const [loading, setLoading] = useState(false);
@@ -44,19 +45,11 @@ function LogIn() {
         <h1 className="text-3xl text-center font-bold">Log in</h1>
         <LogInForm setLoading={setLoading} loading={loading} />
 
-        <div className="relative flex items-center">
-          <div className="grow border-t divider-muted"></div>
-          <span className="label-muted mx-4 text-sm">OR</span>
-          <div className="grow border-t divider-muted"></div>
-        </div>
+        <DividerOr />
 
         <GitHubLoginLink />
 
-        <div className="relative flex items-center">
-          <div className="grow border-t divider-muted"></div>
-          <span className="label-muted mx-4 text-sm">OR</span>
-          <div className="grow border-t divider-muted"></div>
-        </div>
+        <DividerOr />
 
         <div className="relative">
           <p className="text-center">
