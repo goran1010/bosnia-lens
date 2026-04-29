@@ -7,17 +7,20 @@ import { MobileMenu } from "./MobileMenu";
 import { StandardMenu } from "./StandardMenu";
 import { ButtonNavbar } from "./ButtonNavbar";
 
-function Navbar({
-  isMenuOpen,
-  setIsMenuOpen,
-  isThemeMenuOpen,
-  setThemeMenuOpen,
-}) {
+function Navbar({ closeMenu }) {
+  const {
+    navRef,
+    isMenuOpen,
+    setIsMenuOpen,
+    isThemeMenuOpen,
+    setThemeMenuOpen,
+  } = closeMenu;
   const { setMode } = useTheme();
   const { userData } = useContext(UserDataContext);
 
   return (
     <nav
+      ref={navRef}
       className="nav-shell z-40 px-3 w-full font-bold grid grid-cols-3 lg:flex lg:justify-between items-center gap-2 lg:gap-3 transition transform
      sticky top-0 left-0 shadow-md"
     >
@@ -62,13 +65,7 @@ function Navbar({
 
       <StandardMenu userData={userData} />
 
-      <div
-        className="flex justify-center items-center"
-        onClick={() => {
-          isMenuOpen && setIsMenuOpen(false);
-          isThemeMenuOpen && setThemeMenuOpen(false);
-        }}
-      >
+      <div className="flex justify-center items-center">
         <Status />
       </div>
     </nav>
