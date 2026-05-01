@@ -152,16 +152,16 @@ describe("CurrentContributors Component", () => {
   });
 
   test("renders contributor with missing email without crashing", async () => {
-    const mockContributors = [{ id: 1, username: "noemail_user" }];
+    const mockContributors = [{ id: 1, email: "noemail_user@example.com" }];
     setupFetchMock({ contributors: mockContributors });
 
     render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
-    await screen.findByText("noemail_user");
+    const email = await screen.findByText("noemail_user@example.com");
 
     expect(screen.getByLabelText("number of contributors")).toHaveTextContent(
       "1",
     );
-    expect(screen.getByText("noemail_user")).toBeInTheDocument();
+    expect(email).toBeInTheDocument();
   });
 });
