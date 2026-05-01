@@ -70,10 +70,13 @@ import { useState } from "react";
 
 function Wrapper({ initialUser = null }) {
   const [userData, setUserData] = useState(initialUser);
-  const { notifications, addNotification, removeNotification } = useNotification();
+  const { notifications, addNotification, removeNotification } =
+    useNotification();
 
   return (
-    <NotificationContext value={{ notifications, addNotification, removeNotification }}>
+    <NotificationContext
+      value={{ notifications, addNotification, removeNotification }}
+    >
       <UserDataContext value={{ userData, setUserData }}>
         <MemoryRouter initialEntries={["/admin-dashboard"]}>
           <Notifications />
@@ -110,16 +113,15 @@ describe("AdminForm component rendering", () => {
   test("renders contributors list with mock contributor", async () => {
     const mockAdmin = {
       id: 1,
-      username: "John Doe",
       email: "john.doe@example.com",
       role: "ADMIN",
     };
     setupFetchMock({ contributors: [mockAdmin] });
 
     render(<Wrapper initialUser={mockAdmin} />);
+    const email = await screen.findByText(/john.doe@example.com/i);
 
-    expect(await screen.findByText(/John Doe/i)).toBeInTheDocument();
-    expect(screen.getByText(/john.doe@example.com/i)).toBeInTheDocument();
+    expect(email).toBeInTheDocument();
   });
 });
 

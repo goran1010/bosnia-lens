@@ -40,9 +40,6 @@ function PendingRequests({ setCurrentContributors }) {
                 <span className="font-bold text-lg break-all text-center">
                   {user.email}
                 </span>
-                <span className="label-muted break-all text-center">
-                  {user.email}
-                </span>
               </div>
               <div className="flex flex-col sm:flex-row gap-2">
                 <Button
