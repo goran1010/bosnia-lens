@@ -161,3 +161,26 @@ describe("render Navbar when user is admin or contributor", () => {
     expect(mobileMenu).toBeInTheDocument();
   });
 });
+
+describe("render Menu based on viewport size", () => {
+  test("Menu has the appropriate css", async () => {
+    render(<NavbarWrapper />);
+
+    const homeLink = await screen.findByRole("link", { name: /Home/i });
+    const universitiesLink = screen.getByRole("link", {
+      name: /Universities/i,
+    });
+    const postalCodesLink = screen.getByRole("link", { name: /Postal Codes/i });
+
+    expect(homeLink).toBeInTheDocument();
+    expect(universitiesLink).toBeInTheDocument();
+    expect(postalCodesLink).toBeInTheDocument();
+
+    const menuButton = screen.getByRole("button", {
+      name: /Toggle navigation menu/i,
+    });
+
+    expect(menuButton.parentElement).toHaveClass("flex");
+    expect(menuButton.parentElement).toHaveClass("lg:hidden");
+  });
+});
