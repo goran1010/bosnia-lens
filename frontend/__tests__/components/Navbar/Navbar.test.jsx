@@ -9,6 +9,7 @@ import { useState } from "react";
 import { Notifications } from "../../../src/components/Notifications";
 import { Navbar } from "../../../src/components/Navbar/Navbar";
 import userEvent from "@testing-library/user-event";
+import { useCloseMenu } from "../../../src/customHooks/useCloseMenu";
 
 function createUser(role = "ADMIN") {
   return {
@@ -36,10 +37,13 @@ afterEach(() => {
 describe("Render Navbar on root route", () => {
   function Wrapper({ initialUser = null }) {
     const [userData, setUserData] = useState(initialUser);
-    const { notifications, addNotification, removeNotification } = useNotification();
+    const { notifications, addNotification, removeNotification } =
+      useNotification();
 
     return (
-      <NotificationContext value={{ notifications, addNotification, removeNotification }}>
+      <NotificationContext
+        value={{ notifications, addNotification, removeNotification }}
+      >
         <UserDataContext value={{ userData, setUserData }}>
           <MemoryRouter initialEntries={["/"]}>
             <Notifications />
@@ -88,21 +92,15 @@ describe("Render Navbar on root route", () => {
   });
 });
 
-function NavbarWrapper({ isOpen = false, role = "ADMIN" }) {
+function NavbarWrapper({ role = "ADMIN" }) {
   const userData = createUser(role);
   const setUserData = vi.fn();
 
-  const [isMenuOpen, setIsMenuOpen] = useState(isOpen);
-  const [isThemeMenuOpen, setThemeMenuOpen] = useState(false);
+  const closeMenu = useCloseMenu();
   return (
     <UserDataContext value={{ userData, setUserData }}>
       <MemoryRouter>
-        <Navbar
-          isMenuOpen={isMenuOpen}
-          setIsMenuOpen={setIsMenuOpen}
-          isThemeMenuOpen={isThemeMenuOpen}
-          setThemeMenuOpen={setThemeMenuOpen}
-        />
+        <Navbar closeMenu={closeMenu} />
       </MemoryRouter>
     </UserDataContext>
   );
@@ -124,7 +122,12 @@ describe("render Navbar depending on open menu state", () => {
   });
 
   test("mobile menu is open", async () => {
-    render(<NavbarWrapper isOpen={true} />);
+    render(<NavbarWrapper />);
+
+    const menuButton = await screen.findByRole("button", {
+      name: /Toggle navigation menu/i,
+    });
+    await userEvent.click(menuButton);
 
     const mobileMenu = await screen.findByText(/Close/i);
     expect(mobileMenu).toBeInTheDocument();
@@ -147,7 +150,12 @@ describe("render Navbar when user is admin or contributor", () => {
   });
 
   test("mobile menu is open", async () => {
-    render(<NavbarWrapper isOpen={true} />);
+    render(<NavbarWrapper />);
+
+    const menuButton = await screen.findByRole("button", {
+      name: /Toggle navigation menu/i,
+    });
+    await userEvent.click(menuButton);
 
     const mobileMenu = await screen.findByText(/Close/i);
     expect(mobileMenu).toBeInTheDocument();

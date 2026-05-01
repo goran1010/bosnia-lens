@@ -21,7 +21,7 @@ function Navbar({ closeMenu }) {
   return (
     <nav
       ref={navRef}
-      className="nav-shell z-40 px-3 w-full font-bold grid grid-cols-3 lg:flex lg:justify-between items-center gap-2 lg:gap-3 transition transform
+      className="nav-shell z-40 px-3 py-1 w-full font-bold grid grid-cols-3 lg:flex lg:justify-between items-center gap-2 lg:gap-3 transition transform
      sticky top-0 left-0 shadow-md"
     >
       <div className="relative">
