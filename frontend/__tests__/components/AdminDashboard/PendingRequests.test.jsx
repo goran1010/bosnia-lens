@@ -40,10 +40,13 @@ import { UserDataContext } from "../../../src/contextData/UserDataContext";
 
 function Wrapper({ initialUser = null }) {
   const [userData, setUserData] = useState(initialUser);
-  const { notifications, addNotification, removeNotification } = useNotification();
+  const { notifications, addNotification, removeNotification } =
+    useNotification();
 
   return (
-    <NotificationContext value={{ notifications, addNotification, removeNotification }}>
+    <NotificationContext
+      value={{ notifications, addNotification, removeNotification }}
+    >
       <UserDataContext value={{ userData, setUserData }}>
         <MemoryRouter initialEntries={["/admin-dashboard"]}>
           <Notifications />
@@ -87,7 +90,6 @@ describe("PendingRequests Component", () => {
     const mockPendingRequests = [
       {
         id: 1,
-        username: "Jane Doe",
         email: "jane.doe@example.com",
       },
     ];
@@ -95,34 +97,33 @@ describe("PendingRequests Component", () => {
 
     render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
-    await screen.findByText(/Jane Doe/i);
+    await screen.findByText(/jane.doe@example.com/i);
 
     expect(screen.getByText("Pending Requests")).toBeInTheDocument();
     expect(screen.getByLabelText(/pending requests count/i)).toHaveTextContent(
       "1",
     );
-    expect(screen.getByText(/Jane Doe/i)).toBeInTheDocument();
     expect(screen.getByText(/jane.doe@example.com/i)).toBeInTheDocument();
   });
 
   test("renders multiple pending requests with correct count", async () => {
     const mockPendingRequests = [
-      { id: 1, username: "user1", email: "user1@example.com" },
-      { id: 2, username: "user2", email: "user2@example.com" },
-      { id: 3, username: "user3", email: "user3@example.com" },
+      { id: 1, email: "user1@example.com" },
+      { id: 2, email: "user2@example.com" },
+      { id: 3, email: "user3@example.com" },
     ];
     setupFetchMock({ pendingRequests: mockPendingRequests });
 
     render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
-    await screen.findByText("user1");
+    await screen.findByText("user1@example.com");
 
     expect(screen.getByLabelText(/pending requests count/i)).toHaveTextContent(
       "3",
     );
-    expect(screen.getByText("user1")).toBeInTheDocument();
-    expect(screen.getByText("user2")).toBeInTheDocument();
-    expect(screen.getByText("user3")).toBeInTheDocument();
+    expect(screen.getByText("user1@example.com")).toBeInTheDocument();
+    expect(screen.getByText("user2@example.com")).toBeInTheDocument();
+    expect(screen.getByText("user3@example.com")).toBeInTheDocument();
   });
 
   test("shows no pending requests when fetch throws a network error", async () => {
@@ -149,16 +150,16 @@ describe("PendingRequests Component", () => {
   });
 
   test("renders pending request with missing email without crashing", async () => {
-    const mockPendingRequests = [{ id: 1, username: "ghostuser" }];
+    const mockPendingRequests = [{ id: 1, email: "ghostuser@example.com" }];
     setupFetchMock({ pendingRequests: mockPendingRequests });
 
     render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
-    await screen.findByText(/ghostuser/i);
+    const email = await screen.findByText(/ghostuser@example.com/i);
 
     expect(screen.getByLabelText(/pending requests count/i)).toHaveTextContent(
       "1",
     );
-    expect(screen.getByText(/ghostuser/i)).toBeInTheDocument();
+    expect(email).toBeInTheDocument();
   });
 });

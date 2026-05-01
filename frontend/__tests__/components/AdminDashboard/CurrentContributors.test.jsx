@@ -55,10 +55,13 @@ afterEach(() => {
 
 function Wrapper({ initialUser = null }) {
   const [userData, setUserData] = useState(initialUser);
-  const { notifications, addNotification, removeNotification } = useNotification();
+  const { notifications, addNotification, removeNotification } =
+    useNotification();
 
   return (
-    <NotificationContext value={{ notifications, addNotification, removeNotification }}>
+    <NotificationContext
+      value={{ notifications, addNotification, removeNotification }}
+    >
       <UserDataContext value={{ userData, setUserData }}>
         <MemoryRouter initialEntries={["/admin-dashboard"]}>
           <Notifications />
@@ -88,7 +91,6 @@ describe("CurrentContributors Component", () => {
     const mockContributors = [
       {
         id: 1,
-        username: "user1",
         email: "user1@example.com",
       },
     ];
@@ -97,31 +99,30 @@ describe("CurrentContributors Component", () => {
     render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
     const email = await screen.findByText("user1@example.com");
-    const username = await screen.findByText("user1");
+
     const countBadge = await screen.findByLabelText("number of contributors");
 
     expect(countBadge).toHaveTextContent("1");
-    expect(username).toBeInTheDocument();
     expect(email).toBeInTheDocument();
   });
 
   test("renders multiple contributors with correct count", async () => {
     const mockContributors = [
-      { id: 1, username: "contrib1", email: "contrib1@example.com" },
-      { id: 2, username: "contrib2", email: "contrib2@example.com" },
-      { id: 3, username: "contrib3", email: "contrib3@example.com" },
+      { id: 1, email: "contrib1@example.com" },
+      { id: 2, email: "contrib2@example.com" },
+      { id: 3, email: "contrib3@example.com" },
     ];
     setupFetchMock({ contributors: mockContributors });
 
     render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
-    await screen.findByText("contrib1");
+    await screen.findByText("contrib1@example.com");
 
     const countBadge = screen.getByLabelText("number of contributors");
     expect(countBadge).toHaveTextContent("3");
-    expect(screen.getByText("contrib1")).toBeInTheDocument();
-    expect(screen.getByText("contrib2")).toBeInTheDocument();
-    expect(screen.getByText("contrib3")).toBeInTheDocument();
+    expect(screen.getByText("contrib1@example.com")).toBeInTheDocument();
+    expect(screen.getByText("contrib2@example.com")).toBeInTheDocument();
+    expect(screen.getByText("contrib3@example.com")).toBeInTheDocument();
   });
 
   test("shows error notification when contributors fetch throws a network error", async () => {
@@ -151,16 +152,16 @@ describe("CurrentContributors Component", () => {
   });
 
   test("renders contributor with missing email without crashing", async () => {
-    const mockContributors = [{ id: 1, username: "noemail_user" }];
+    const mockContributors = [{ id: 1, email: "noemail_user@example.com" }];
     setupFetchMock({ contributors: mockContributors });
 
     render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
-    await screen.findByText("noemail_user");
+    const email = await screen.findByText("noemail_user@example.com");
 
     expect(screen.getByLabelText("number of contributors")).toHaveTextContent(
       "1",
     );
-    expect(screen.getByText("noemail_user")).toBeInTheDocument();
+    expect(email).toBeInTheDocument();
   });
 });
