@@ -31,7 +31,7 @@ async function handleSubmitAddData(
     }
 
     const response = await fetch(
-      `${currentUrl}/users/contributor/postal-codes`,
+      `${currentUrl}/users/contribution/postal-codes`,
       {
         mode: "cors",
         method: "post",

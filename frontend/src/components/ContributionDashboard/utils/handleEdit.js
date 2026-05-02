@@ -20,7 +20,7 @@ async function handleEdit(e, setSearchResult, addNotification, setLoading) {
     }
 
     const response = await fetch(
-      `${currentUrl}/users/contributor/postal-codes`,
+      `${currentUrl}/users/contribution/postal-codes`,
       {
         mode: "cors",
         method: "put",
