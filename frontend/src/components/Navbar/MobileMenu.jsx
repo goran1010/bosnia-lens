@@ -37,13 +37,13 @@ function MobileMenu({ setIsMenuOpen, userData }) {
           Universities
         </Link>
 
-        {(userData?.role === "ADMIN" || userData?.role === "CONTRIBUTOR") && (
+        {userData && (
           <Link
             className="menu-item block p-2 w-full text-center text-nowrap"
             to="/contributor-dashboard"
             onClick={() => setIsMenuOpen(false)}
           >
-            Contributor
+            Contribute
           </Link>
         )}
         {userData?.role === "ADMIN" && (

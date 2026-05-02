@@ -24,7 +24,6 @@ model Session {
 
 enum role {
   ADMIN
-  CONTRIBUTOR
   USER
 }
 
@@ -34,7 +33,6 @@ model User {
   password             String?
   githubId             String? @unique
   role                 role    @default(USER)
-  requestedContributor Boolean @default(false)
 
   @@map("users")
 }
