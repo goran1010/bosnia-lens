@@ -56,12 +56,10 @@ enum typeOfChange {
 
 model PendingChangesPostalCode {
   id           String        @id @default(uuid())
-  row          PostalCode    @relation(fields: [code], references: [code])
   code         Int
   typeOfChange typeOfChange
-  tableName    String
-  newCity      String?
-  newPost      postOperator?
+  city         String?
+  post         postOperator?
   userId       String
   user         User          @relation(fields: [userId], references: [id])
   createdAt    DateTime      @default(now())
@@ -76,10 +74,9 @@ enum postOperator {
 }
 
 model PostalCode {
-  code                      Int                        @id
-  city                      String
-  post                      postOperator?
-  pendingChangesPostalCodes PendingChangesPostalCode[]
+  code Int           @id
+  city String
+  post postOperator?
 
   @@map("postal_codes")
 }
