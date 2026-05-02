@@ -1,4 +1,4 @@
-import { postalCodesModel } from "../models/postalCodesModel.js";
+import { pendingChangesPostalCodeModel } from "../models/pendingChangesPostalCodeModel.js";
 import { matchedData } from "express-validator";
 import { sendSuccess } from "../utils/response.js";
 
@@ -6,7 +6,11 @@ class ContributionController {
   async createPostalCode(req, res) {
     const { city, code, post } = matchedData(req);
 
-    const result = await postalCodesModel.createNew(city, code, post);
+    const result = await pendingChangesPostalCodeModel.create({
+      city,
+      code,
+      post,
+    });
 
     return sendSuccess(res, {
       status: 201,
@@ -18,7 +22,10 @@ class ContributionController {
   async editPostalCode(req, res) {
     const { city, code, post } = matchedData(req);
 
-    const result = await postalCodesModel.edit(city, code, post);
+    const result = await pendingChangesPostalCodeModel.update(
+      { city, code },
+      { post },
+    );
 
     return sendSuccess(res, {
       status: 201,
@@ -30,7 +37,7 @@ class ContributionController {
   async deletePostalCode(req, res) {
     const { code } = matchedData(req);
 
-    const result = await postalCodesModel.deleteCode(code);
+    const result = await pendingChangesPostalCodeModel.delete({ code });
 
     return sendSuccess(res, {
       message: "Postal code row deleted.",

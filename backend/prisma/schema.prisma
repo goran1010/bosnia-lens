@@ -28,12 +28,12 @@ enum role {
 }
 
 model User {
-  id             String           @id @default(uuid())
-  email          String           @unique
+  id             String                     @id @default(uuid())
+  email          String                     @unique
   password       String?
-  githubId       String?          @unique
-  role           role             @default(USER)
-  pendingChanges PendingChanges[]
+  githubId       String?                    @unique
+  role           role                       @default(USER)
+  pendingChanges PendingChangesPostalCode[]
 
   @@map("users")
 }
@@ -51,21 +51,22 @@ model PendingUser {
 enum typeOfChange {
   UPDATE
   DELETE
-
   CREATE
 }
 
-model PendingChanges {
-  id           String       @id @default(uuid())
+model PendingChangesPostalCode {
+  id           String        @id @default(uuid())
+  row          PostalCode    @relation(fields: [code], references: [code])
+  code         Int
   typeOfChange typeOfChange
   tableName    String
-  rowId        String
-  newData      String?
+  newCity      String?
+  newPost      postOperator?
   userId       String
-  user         User         @relation(fields: [userId], references: [id])
-  createdAt    DateTime     @default(now())
+  user         User          @relation(fields: [userId], references: [id])
+  createdAt    DateTime      @default(now())
 
-  @@map("pending_changes")
+  @@map("pending_changes_postal_code")
 }
 
 enum postOperator {
@@ -75,10 +76,10 @@ enum postOperator {
 }
 
 model PostalCode {
-  id   String        @id @default(uuid())
-  code Int           @unique
-  city String
-  post postOperator?
+  code                      Int                        @id
+  city                      String
+  post                      postOperator?
+  pendingChangesPostalCodes PendingChangesPostalCode[]
 
   @@map("postal_codes")
 }
