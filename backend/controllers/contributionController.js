@@ -1,6 +1,7 @@
 import { pendingChangesPostalCodeModel } from "../models/pendingChangesPostalCodeModel.js";
 import { matchedData } from "express-validator";
 import { sendError, sendSuccess } from "../utils/response.js";
+import { logger } from "../utils/logger.js";
 
 class ContributionController {
   async createPostalCode(req, res) {
@@ -24,7 +25,7 @@ class ContributionController {
         data: result,
       });
     } catch (err) {
-      console.log(err);
+      logger.error(err);
       sendError(res, {
         status: 500,
         message: "An error occurred while suggesting a new postal code.",

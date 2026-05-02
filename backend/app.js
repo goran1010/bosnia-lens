@@ -16,10 +16,7 @@ const { csrfSynchronisedProtection } = csrfSync();
 
 import compression from "compression";
 
-import pino from "pino";
-const logger = pino({
-  timestamp: () => `,"time":"${new Date().toISOString()}"`,
-});
+import { logger } from "./utils/logger.js";
 
 import { sendError } from "./utils/response.js";
 
