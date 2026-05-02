@@ -2,7 +2,7 @@ import { postalCodesModel } from "../models/postalCodesModel.js";
 import { matchedData } from "express-validator";
 import { sendSuccess } from "../utils/response.js";
 
-class ContributorController {
+class ContributionController {
   async createPostalCode(req, res) {
     const { city, code, post } = matchedData(req);
 
@@ -39,6 +39,6 @@ class ContributorController {
   }
 }
 
-const contributorController = new ContributorController();
+const contributionController = new ContributionController();
 
-export { contributorController };
+export { contributionController };

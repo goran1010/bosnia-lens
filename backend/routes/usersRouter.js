@@ -3,8 +3,7 @@ const usersRouter = Router();
 import { usersController } from "../controllers/usersController.js";
 import { adminRouter } from "./adminRouter.js";
 import { isAdmin } from "../auth/isAdmin.js";
-import { contributorRouter } from "./contributorRouter.js";
-import { isContributor } from "../auth/isContributor.js";
+import { contributionRouter } from "./contributionRouter.js";
 
 usersRouter.get("/me", usersController.me);
 
@@ -14,6 +13,6 @@ usersRouter.post("/logout", usersController.logout);
 
 usersRouter.use("/admin", isAdmin, adminRouter);
 
-usersRouter.use("/contributor", isContributor, contributorRouter);
+usersRouter.use("/contribution", contributionRouter);
 
 export { usersRouter };
