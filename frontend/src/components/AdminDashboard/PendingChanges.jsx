@@ -6,7 +6,7 @@ import { NotificationContext } from "../../contextData/NotificationContext";
 import { Button } from "../sharedComponents/Button";
 import { Spinner } from "../../utils/Spinner";
 
-function PendingChanges({ setCurrentContributors }) {
+function PendingChanges() {
   const [loading, setLoading] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
 
@@ -61,7 +61,6 @@ function PendingChanges({ setCurrentContributors }) {
                     handleConfirm(
                       change,
                       setPendingChanges,
-                      setCurrentContributors,
                       addNotification,
                       setButtonLoading,
                     );

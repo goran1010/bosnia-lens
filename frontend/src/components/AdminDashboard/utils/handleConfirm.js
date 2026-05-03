@@ -2,9 +2,8 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 import { getCsrfToken } from "../../utils/getCsrfToken";
 
 async function handleConfirm(
-  user,
-  setPendingRequests,
-  setCurrentContributors,
+  change,
+  setPendingChanges,
   addNotification,
   setButtonLoading,
 ) {
@@ -20,23 +19,28 @@ async function handleConfirm(
       return;
     }
 
-    const response = await fetch(`${BACKEND_URL}/users/admin/add-contributor`, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-        "x-csrf-token": csrfToken,
+    const response = await fetch(
+      `${BACKEND_URL}/users/admin/approve-pending-change`,
+      {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+          "x-csrf-token": csrfToken,
+        },
+        body: JSON.stringify({
+          id: change.id,
+          typeOfChange: change.typeOfChange,
+        }),
+        credentials: "include",
       },
-      body: JSON.stringify({ userId: user.id }),
-      credentials: "include",
-    });
+    );
     const result = await response.json();
 
     if (response.ok) {
-      setPendingRequests((prev) =>
-        prev.filter((request) => request.id !== user.id),
+      setPendingChanges((prev) =>
+        prev.filter((request) => request.id !== change.id),
       );
-      setCurrentContributors((prev) => [...prev, user]);
       addNotification({
         type: "success",
         message: result.message,
@@ -48,14 +52,17 @@ async function handleConfirm(
       message:
         result?.error?.message ||
         result?.error ||
-        "Failed to approve contributor.",
+        "Failed to approve pending change.",
     });
   } catch (error) {
     addNotification({
       type: "error",
-      message: `Error promoting ${user.email} to contributor.`,
+      message: `Error approving pending change for ${change.user.email}.`,
     });
-    console.error(`Error promoting ${user.email} to contributor:`, error);
+    console.error(
+      `Error approving pending change for ${change.user.email}:`,
+      error,
+    );
   } finally {
     setButtonLoading(false);
   }
