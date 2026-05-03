@@ -12,7 +12,7 @@ function useGetPendingChanges(setLoading) {
         setLoading(true);
 
         const response = await fetch(
-          `${BACKEND_URL}/users/admin/pending-changes`,
+          `${BACKEND_URL}/users/contribution/pending-changes/postal-codes`,
           {
             method: "GET",
             mode: "cors",
@@ -52,7 +52,7 @@ function useGetPendingChanges(setLoading) {
     fetchPendingChanges();
   }, [addNotification, setLoading]);
 
-  return { pendingChanges, setPendingChanges };
+  return { pendingChanges };
 }
 
 export { useGetPendingChanges };

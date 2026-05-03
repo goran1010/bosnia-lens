@@ -15,37 +15,6 @@ class UsersController {
     });
   }
 
-  async becomeContributor(req, res) {
-    const { id, role } = req.user;
-
-    if (role !== "USER") {
-      return sendError(res, {
-        status: 403,
-        message:
-          "Request denied: only regular users can request contributor access.",
-      });
-    }
-
-    const updatedUser = await usersModel.update(
-      { id },
-      { requestedContributor: true },
-    );
-
-    if (!updatedUser) {
-      return sendError(res, {
-        status: 400,
-        message:
-          "Request failed: contributor request could not be saved. Try again.",
-      });
-    }
-
-    return sendSuccess(res, {
-      message:
-        "You've asked to become a contributor! An admin will review your request soon.",
-      data: sanitizeUser(updatedUser),
-    });
-  }
-
   logout(req, res) {
     req.logout((err) => {
       if (err) {

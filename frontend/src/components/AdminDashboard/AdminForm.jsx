@@ -1,4 +1,4 @@
-import { PendingChanges } from "./PendingChanges";
+import { PendingChangesAdmin } from "./PendingChangesAdmin";
 
 function AdminForm() {
   return (
@@ -8,7 +8,7 @@ function AdminForm() {
           Admin Dashboard
         </h1>
 
-        <PendingChanges />
+        <PendingChangesAdmin />
       </section>
     </div>
   );

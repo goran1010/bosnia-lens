@@ -7,8 +7,6 @@ import { contributionRouter } from "./contributionRouter.js";
 
 usersRouter.get("/me", usersController.me);
 
-usersRouter.post("/become-contributor", usersController.becomeContributor);
-
 usersRouter.post("/logout", usersController.logout);
 
 usersRouter.use("/admin", isAdmin, adminRouter);

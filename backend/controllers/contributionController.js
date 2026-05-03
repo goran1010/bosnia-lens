@@ -4,6 +4,18 @@ import { sendError, sendSuccess } from "../utils/response.js";
 import { logger } from "../utils/logger.js";
 
 class ContributionController {
+  async getPendingChanges(req, res) {
+    const { id } = req.user;
+    const pendingChanges = await pendingChangesPostalCodeModel.findMany({
+      userId: id,
+    });
+
+    return sendSuccess(res, {
+      data: pendingChanges,
+      message: "Pending changes retrieved successfully.",
+    });
+  }
+
   async createPostalCode(req, res) {
     try {
       const userId = req.user.id;

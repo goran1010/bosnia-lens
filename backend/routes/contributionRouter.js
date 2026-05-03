@@ -4,6 +4,11 @@ const contributionRouter = Router();
 import { contributionController } from "../controllers/contributionController.js";
 import { contributionValidation } from "../validation/contributionValidation.js";
 
+contributionRouter.get(
+  "/pending-changes/postal-codes",
+  contributionController.getPendingChanges,
+);
+
 contributionRouter.post(
   "/postal-codes",
   contributionValidation.createPostalCode,

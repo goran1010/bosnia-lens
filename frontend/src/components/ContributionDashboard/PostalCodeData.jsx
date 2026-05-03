@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ContributionPostalCodes } from "./ContributionPostalCodes";
 import { AddNewData } from "./AddNewData";
+import { PendingChanges } from "./PendingChanges";
 
 function PostalCodeData() {
   const [searchResult, setSearchResult] = useState([]);
@@ -8,6 +9,7 @@ function PostalCodeData() {
 
   return (
     <>
+      <PendingChanges />
       <AddNewData
         setSearchResult={setSearchResult}
         loading={loading}

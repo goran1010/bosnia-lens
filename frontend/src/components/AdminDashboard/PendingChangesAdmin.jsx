@@ -1,18 +1,18 @@
 import { handleConfirm } from "./utils/handleConfirm";
 import { handleDecline } from "./utils/handleDecline";
-import { useGetPendingChanges } from "./customHooks/useGetPendingChanges";
+import { useGetPendingChangesAdmin } from "./customHooks/useGetPendingChangesAdmin";
 import { useContext, useState } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { Button } from "../sharedComponents/Button";
 import { Spinner } from "../../utils/Spinner";
 
-function PendingChanges() {
+function PendingChangesAdmin() {
   const [loading, setLoading] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
 
   const { addNotification } = useContext(NotificationContext);
   const { pendingChanges, setPendingChanges } =
-    useGetPendingChanges(setLoading);
+    useGetPendingChangesAdmin(setLoading);
 
   if (loading) {
     return <Spinner />;
@@ -98,4 +98,4 @@ function PendingChanges() {
   );
 }
 
-export { PendingChanges };
+export { PendingChangesAdmin };
