@@ -6,4 +6,9 @@ import { adminValidation } from "../validation/adminValidation.js";
 
 adminRouter.get("/pending-changes", adminController.getPendingChanges);
 
+adminRouter.delete(
+  "/decline-pending-change",
+  adminController.declinePendingChange,
+);
+
 export { adminRouter };

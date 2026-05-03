@@ -12,6 +12,16 @@ class AdminController {
       message: "Pending changes retrieved successfully.",
     });
   }
+
+  async declinePendingChange(req, res) {
+    const { id } = req.body;
+
+    await pendingChangesPostalCodeModel.delete({ id });
+
+    return sendSuccess(res, {
+      message: "Pending change declined successfully.",
+    });
+  }
 }
 
 const adminController = new AdminController();
