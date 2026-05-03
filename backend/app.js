@@ -78,7 +78,7 @@ app.use((req, res) => {
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  logger.error(JSON.stringify(err));
+  logger.error(err);
 
   return sendError(res, {
     status: err.statusCode || 500,

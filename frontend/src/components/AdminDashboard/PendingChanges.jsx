@@ -1,18 +1,18 @@
 import { handleConfirm } from "./utils/handleConfirm";
 import { handleDecline } from "./utils/handleDecline";
-import { useGetPendingRequests } from "./customHooks/useGetPendingRequests";
+import { useGetPendingChanges } from "./customHooks/useGetPendingChanges";
 import { useContext, useState } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { Button } from "../sharedComponents/Button";
 import { Spinner } from "../../utils/Spinner";
 
-function PendingRequests({ setCurrentContributors }) {
+function PendingChanges({ setCurrentContributors }) {
   const [loading, setLoading] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
 
   const { addNotification } = useContext(NotificationContext);
-  const { pendingRequests, setPendingRequests } =
-    useGetPendingRequests(setLoading);
+  const { pendingChanges, setPendingChanges } =
+    useGetPendingChanges(setLoading);
 
   if (loading) {
     return <Spinner />;
@@ -22,16 +22,16 @@ function PendingRequests({ setCurrentContributors }) {
     <section className="panel-card p-3">
       <h2 className="text-md text-center font-semibold flex items-center gap-1 p-1 flex-1">
         <span
-          aria-label="pending requests count"
+          aria-label="pending changes count"
           className="badge-warning px-2 py-1 rounded-full text-sm font-bold"
         >
-          {pendingRequests.length}
+          {pendingChanges.length}
         </span>
-        <span className="flex-1">Pending Requests</span>
+        <span className="flex-1">Pending Changes</span>
       </h2>
       <ul className="space-y-3">
-        {pendingRequests.length > 0 ? (
-          pendingRequests.map((user) => (
+        {pendingChanges.length > 0 ? (
+          pendingChanges.map((user) => (
             <li
               key={user.id}
               className="panel-subtle flex sm:items-center flex-wrap flex-col justify-between gap-3 p-3 transition-colors duration-200"
@@ -47,7 +47,7 @@ function PendingRequests({ setCurrentContributors }) {
                   onClick={() => {
                     handleConfirm(
                       user,
-                      setPendingRequests,
+                      setPendingChanges,
                       setCurrentContributors,
                       addNotification,
                       setButtonLoading,
@@ -63,7 +63,7 @@ function PendingRequests({ setCurrentContributors }) {
                   onClick={() => {
                     handleDecline(
                       user,
-                      setPendingRequests,
+                      setPendingChanges,
                       addNotification,
                       setButtonLoading,
                     );
@@ -78,7 +78,7 @@ function PendingRequests({ setCurrentContributors }) {
           ))
         ) : (
           <li className="label-muted italic text-center py-8 panel-subtle border-dashed">
-            No pending requests
+            No pending changes
           </li>
         )}
       </ul>
@@ -86,4 +86,4 @@ function PendingRequests({ setCurrentContributors }) {
   );
 }
 
-export { PendingRequests };
+export { PendingChanges };

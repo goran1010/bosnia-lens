@@ -8,7 +8,6 @@ async function handleDelete(e, setSearchResult, addNotification, setLoading) {
     const code = e.currentTarget.dataset.postalcode;
     const city = e.currentTarget.dataset.city;
     const post = e.currentTarget.dataset.post;
-    console.log("Deleting postal code:", { code, city, post });
 
     const csrfToken = await getCsrfToken();
 

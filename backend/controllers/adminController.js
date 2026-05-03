@@ -3,69 +3,7 @@ import { usersModel } from "../models/usersModel.js";
 import { sendSuccess } from "../utils/response.js";
 import { sanitizeUser, sanitizeUsers } from "../utils/sanitizeUser.js";
 
-class AdminController {
-  async getAllContributors(req, res) {
-    const contributors = await usersModel.findMany({
-      role: "CONTRIBUTOR",
-    });
-    return sendSuccess(res, {
-      message: "All contributors fetched successfully.",
-      data: sanitizeUsers(contributors),
-    });
-  }
-
-  async getRequestedContributors(req, res) {
-    const requestedContributors = await usersModel.findMany({
-      requestedContributor: true,
-    });
-    return sendSuccess(res, {
-      message: "Users requested contributor role fetched successfully.",
-      data: sanitizeUsers(requestedContributors),
-    });
-  }
-
-  async addContributor(req, res) {
-    const { userId } = matchedData(req);
-    const updatedUser = await usersModel.update(
-      { id: userId },
-      { role: "CONTRIBUTOR", requestedContributor: false },
-    );
-
-    return sendSuccess(res, {
-      status: 201,
-      message: "User promoted to contributor successfully.",
-      data: sanitizeUser(updatedUser),
-    });
-  }
-
-  async removeContributor(req, res) {
-    const { userId } = matchedData(req);
-    const updatedUser = await usersModel.update(
-      { id: userId },
-      { role: "USER", requestedContributor: false },
-    );
-
-    return sendSuccess(res, {
-      status: 201,
-      message: "User removed from contributors successfully.",
-      data: sanitizeUser(updatedUser),
-    });
-  }
-
-  async declineContributor(req, res) {
-    const { userId } = matchedData(req);
-    const updatedUser = await usersModel.update(
-      { id: userId },
-      { requestedContributor: false },
-    );
-
-    return sendSuccess(res, {
-      status: 201,
-      message: "User's contributor request declined successfully.",
-      data: sanitizeUser(updatedUser),
-    });
-  }
-}
+class AdminController {}
 
 const adminController = new AdminController();
 
