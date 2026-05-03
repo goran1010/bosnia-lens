@@ -31,22 +31,35 @@ function PendingChanges({ setCurrentContributors }) {
       </h2>
       <ul className="space-y-3">
         {pendingChanges.length > 0 ? (
-          pendingChanges.map((user) => (
+          pendingChanges.map((change) => (
             <li
-              key={user.id}
+              key={change.id}
               className="panel-subtle flex sm:items-center flex-wrap flex-col justify-between gap-3 p-3 transition-colors duration-200"
             >
-              <div className="flex-1 flex flex-col sm:flex-row sm:items-center sm:gap-2 min-w-0 lg:flex-col">
+              <div className="flex-1 flex sm:flex-row sm:items-center sm:gap-2 min-w-0">
                 <span className="font-bold text-lg break-all text-center">
-                  {user.email}
+                  {change.typeOfChange}
+                </span>
+                <span className="text-lg break-all text-center">
+                  {change.code}
+                </span>
+                <span className="text-lg break-all text-center">
+                  {change.city}
+                </span>
+                <span className="text-lg break-all text-center">
+                  {change.post}
+                </span>
+                <span className="font-bold text-lg break-all text-center">
+                  {change.user.email}
                 </span>
               </div>
+
               <div className="flex flex-col sm:flex-row gap-2">
                 <Button
                   className="btn-success px-3 py-2 text-sm"
                   onClick={() => {
                     handleConfirm(
-                      user,
+                      change,
                       setPendingChanges,
                       setCurrentContributors,
                       addNotification,
@@ -62,7 +75,7 @@ function PendingChanges({ setCurrentContributors }) {
                   className="btn-danger px-3 py-2 text-sm"
                   onClick={() => {
                     handleDecline(
-                      user,
+                      change,
                       setPendingChanges,
                       addNotification,
                       setButtonLoading,

@@ -16,9 +16,14 @@ class PendingChangesPostalCodeModel {
 
   findMany(where) {
     if (!where) {
-      return prisma.pendingChangesPostalCode.findMany();
+      return prisma.pendingChangesPostalCode.findMany({
+        include: { user: { select: { email: true } } },
+      });
     }
-    return prisma.pendingChangesPostalCode.findMany({ where: { ...where } });
+    return prisma.pendingChangesPostalCode.findMany({
+      where: { ...where },
+      include: { user: { select: { email: true } } },
+    });
   }
 
   async delete(query) {
