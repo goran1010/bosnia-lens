@@ -58,6 +58,8 @@ const PostalCodeRow = memo(
           <Button
             type="button"
             data-postalcode={result.code}
+            data-city={result.city}
+            data-post={result.post}
             onClick={handleDeleteForm}
             className="w-full bg-red-600 py-2 text-white hover:bg-red-700"
             loading={loading}

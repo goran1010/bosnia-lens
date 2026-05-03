@@ -6,6 +6,9 @@ async function handleDelete(e, setSearchResult, addNotification, setLoading) {
     e.preventDefault();
     setLoading(true);
     const code = e.currentTarget.dataset.postalcode;
+    const city = e.currentTarget.dataset.city;
+    const post = e.currentTarget.dataset.post;
+    console.log("Deleting postal code:", { code, city, post });
 
     const csrfToken = await getCsrfToken();
 
@@ -27,7 +30,7 @@ async function handleDelete(e, setSearchResult, addNotification, setLoading) {
           "x-csrf-token": csrfToken,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ code }),
+        body: JSON.stringify({ code, city, post }),
       },
     );
     const result = await response.json();

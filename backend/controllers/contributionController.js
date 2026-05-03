@@ -58,11 +58,14 @@ class ContributionController {
     const userId = req.user.id;
     const typeOfChange = "DELETE";
     const { code } = matchedData(req);
+    const { city, post } = req.body;
 
     const result = await pendingChangesPostalCodeModel.create({
       userId,
       code: Number(code),
       typeOfChange,
+      city,
+      post,
     });
 
     return sendSuccess(res, {

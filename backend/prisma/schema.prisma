@@ -58,7 +58,7 @@ model PendingChangesPostalCode {
   id           String        @id @default(uuid())
   code         Int
   typeOfChange typeOfChange
-  city         String?
+  city         String
   post         postOperator?
   userId       String
   user         User          @relation(fields: [userId], references: [id])
