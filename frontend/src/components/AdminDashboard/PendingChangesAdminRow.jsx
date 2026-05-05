@@ -7,7 +7,7 @@ import { handleConfirm } from "./utils/handleConfirm";
 import { handleDecline } from "./utils/handleDecline";
 
 const PendingChangesAdminRow = memo(
-  ({ result, addNotification, setPendingChanges }) => {
+  ({ change, addNotification, setPendingChanges }) => {
     const [loading, setLoading] = useState(false);
 
     return (
@@ -15,23 +15,23 @@ const PendingChangesAdminRow = memo(
         <div className="grid gap-2 w-full p-2 border border-gray-200 dark:border-gray-500 rounded-md sm:border-0 sm:rounded-none sm:p-1 sm:gap-1 sm:grid-cols-5">
           <div className="flex justify-between sm:justify-center items-center ">
             <span className="sm:hidden font-semibold">Change</span>
-            <span>{result.typeOfChange}</span>
+            <span>{change.typeOfChange}</span>
           </div>
           <div className="flex justify-between sm:justify-center items-center">
             <span className="sm:hidden font-semibold">Code</span>
-            <span>{result.code}</span>
+            <span>{change.code}</span>
           </div>
           <div className="flex justify-between sm:justify-center items-center">
             <span className="sm:hidden font-semibold">City</span>
-            <span>{result.city}</span>
+            <span>{change.city}</span>
           </div>
           <div className="flex justify-between sm:justify-center items-center">
             <span className="sm:hidden font-semibold">Post</span>
-            <span>{result.post}</span>
+            <span>{change.post}</span>
           </div>
           <div className="flex justify-between sm:justify-center items-center">
             <span className="sm:hidden font-semibold">User</span>
-            <span>{result.user.email}</span>
+            <span>{change.user.email}</span>
           </div>
         </div>
 
@@ -40,7 +40,7 @@ const PendingChangesAdminRow = memo(
             className="btn-success px-3 py-2 text-sm max-w-25"
             onClick={() => {
               handleConfirm(
-                result,
+                change,
                 setPendingChanges,
                 addNotification,
                 setLoading,
@@ -55,7 +55,7 @@ const PendingChangesAdminRow = memo(
             className="btn-danger px-3 py-2 text-sm max-w-25"
             onClick={() => {
               handleDecline(
-                result,
+                change,
                 setPendingChanges,
                 addNotification,
                 setLoading,

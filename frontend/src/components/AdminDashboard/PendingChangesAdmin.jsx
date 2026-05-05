@@ -27,28 +27,35 @@ function PendingChangesAdmin() {
         </span>
         <span className="flex-1">Pending Changes</span>
       </h2>
-
-      <section className="flex flex-col justify-center items-center p-1 w-full">
-        <ul className="w-full max-w-4xl flex flex-col border border-gray-400 dark:border-gray-600 rounded-md p-2 bg-white dark:bg-gray-700 gap-1">
-          <li className="hidden sm:grid sm:gap-1 text-center w-full p-2 border border-gray-400 dark:border-gray-600 rounded-md font-bold text-gray-800 dark:text-white bg-gray-50 dark:bg-gray-600 sm:grid-cols-5">
-            <div>Change</div>
-            <div>Code</div>
-            <div>City</div>
-            <div>Post</div>
-            <div>User</div>
-          </li>
-          {pendingChanges.map((result) => {
-            return (
-              <PendingChangesAdminRow
-                key={result.id}
-                result={result}
-                addNotification={addNotification}
-                setPendingChanges={setPendingChanges}
-              />
-            );
-          })}
-        </ul>
-      </section>
+      {pendingChanges.length > 0 ? (
+        <section className="flex flex-col justify-center items-center p-1 w-full">
+          <ul className="w-full max-w-4xl flex flex-col border border-gray-400 dark:border-gray-600 rounded-md p-2 bg-white dark:bg-gray-700 gap-1">
+            <li className="hidden sm:grid sm:gap-1 text-center w-full p-2 border border-gray-400 dark:border-gray-600 rounded-md font-bold text-gray-800 dark:text-white bg-gray-50 dark:bg-gray-600 sm:grid-cols-5">
+              <div>Change</div>
+              <div>Code</div>
+              <div>City</div>
+              <div>Post</div>
+              <div>User</div>
+            </li>
+            {pendingChanges.map((result) => {
+              return (
+                <PendingChangesAdminRow
+                  key={result.id}
+                  change={result}
+                  addNotification={addNotification}
+                  setPendingChanges={setPendingChanges}
+                />
+              );
+            })}
+          </ul>
+        </section>
+      ) : (
+        <section className="flex flex-col justify-center items-center p-1 w-full">
+          <p className="text-gray-600 dark:text-gray-300">
+            There are no pending changes at the moment.
+          </p>
+        </section>
+      )}
     </section>
   );
 }
