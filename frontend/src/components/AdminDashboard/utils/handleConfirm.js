@@ -2,7 +2,7 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 import { getCsrfToken } from "../../utils/getCsrfToken";
 
 async function handleConfirm(
-  change,
+  result,
   setPendingChanges,
   addNotification,
   setButtonLoading,
@@ -29,8 +29,8 @@ async function handleConfirm(
           "x-csrf-token": csrfToken,
         },
         body: JSON.stringify({
-          id: change.id,
-          typeOfChange: change.typeOfChange,
+          id: result.id,
+          typeOfChange: result.typeOfChange,
         }),
         credentials: "include",
       },
@@ -39,7 +39,7 @@ async function handleConfirm(
 
     if (response.ok) {
       setPendingChanges((prev) =>
-        prev.filter((request) => request.id !== change.id),
+        prev.filter((request) => request.id !== result.id),
       );
       addNotification({
         type: "success",
@@ -57,10 +57,10 @@ async function handleConfirm(
   } catch (error) {
     addNotification({
       type: "error",
-      message: `Error approving pending change for ${change.user.email}.`,
+      message: `Error approving pending change for ${result.user.email}.`,
     });
     console.error(
-      `Error approving pending change for ${change.user.email}:`,
+      `Error approving pending change for ${result.user.email}:`,
       error,
     );
   } finally {

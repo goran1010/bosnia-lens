@@ -1,14 +1,12 @@
-import { handleConfirm } from "./utils/handleConfirm";
-import { handleDecline } from "./utils/handleDecline";
 import { useGetPendingChangesAdmin } from "./customHooks/useGetPendingChangesAdmin";
 import { useContext, useState } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { Button } from "../sharedComponents/Button";
 import { Spinner } from "../../utils/Spinner";
+import { PendingChangesAdminRow } from "./PendingChangesAdminRow";
 
 function PendingChangesAdmin() {
   const [loading, setLoading] = useState(true);
-  const [buttonLoading, setButtonLoading] = useState(false);
 
   const { addNotification } = useContext(NotificationContext);
   const { pendingChanges, setPendingChanges } =
@@ -19,7 +17,7 @@ function PendingChangesAdmin() {
   }
 
   return (
-    <section className="panel-card p-3">
+    <section className="panel-card p-3 w-full max-w-4xl">
       <h2 className="text-md text-center font-semibold flex items-center gap-1 p-1 flex-1">
         <span
           aria-label="pending changes count"
@@ -29,71 +27,28 @@ function PendingChangesAdmin() {
         </span>
         <span className="flex-1">Pending Changes</span>
       </h2>
-      <ul className="space-y-3">
-        {pendingChanges.length > 0 ? (
-          pendingChanges.map((change) => (
-            <li
-              key={change.id}
-              className="panel-subtle flex sm:items-center flex-wrap flex-col justify-between gap-3 p-3 transition-colors duration-200"
-            >
-              <div className="flex-1 flex sm:flex-row sm:items-center sm:gap-2 min-w-0">
-                <span className="font-bold text-lg break-all text-center">
-                  {change.typeOfChange}
-                </span>
-                <span className="text-lg break-all text-center">
-                  {change.code}
-                </span>
-                <span className="text-lg break-all text-center">
-                  {change.city}
-                </span>
-                <span className="text-lg break-all text-center">
-                  {change.post}
-                </span>
-                <span className="font-bold text-lg break-all text-center">
-                  {change.user.email}
-                </span>
-              </div>
 
-              <div className="flex flex-col sm:flex-row gap-2">
-                <Button
-                  className="btn-success px-3 py-2 text-sm"
-                  onClick={() => {
-                    handleConfirm(
-                      change,
-                      setPendingChanges,
-                      addNotification,
-                      setButtonLoading,
-                    );
-                  }}
-                  type="submit"
-                  loading={buttonLoading}
-                >
-                  Confirm
-                </Button>
-                <Button
-                  className="btn-danger px-3 py-2 text-sm"
-                  onClick={() => {
-                    handleDecline(
-                      change,
-                      setPendingChanges,
-                      addNotification,
-                      setButtonLoading,
-                    );
-                  }}
-                  type="submit"
-                  loading={buttonLoading}
-                >
-                  Decline
-                </Button>
-              </div>
-            </li>
-          ))
-        ) : (
-          <li className="label-muted italic text-center py-8 panel-subtle border-dashed">
-            No pending changes
+      <section className="flex flex-col justify-center items-center p-1 w-full">
+        <ul className="w-full max-w-4xl flex flex-col border border-gray-400 dark:border-gray-600 rounded-md p-2 bg-white dark:bg-gray-700 gap-1">
+          <li className="hidden sm:grid sm:gap-1 text-center w-full p-2 border border-gray-400 dark:border-gray-600 rounded-md font-bold text-gray-800 dark:text-white bg-gray-50 dark:bg-gray-600 sm:grid-cols-5">
+            <div>Change</div>
+            <div>Code</div>
+            <div>City</div>
+            <div>Post</div>
+            <div>User</div>
           </li>
-        )}
-      </ul>
+          {pendingChanges.map((result) => {
+            return (
+              <PendingChangesAdminRow
+                key={result.id}
+                result={result}
+                addNotification={addNotification}
+                setPendingChanges={setPendingChanges}
+              />
+            );
+          })}
+        </ul>
+      </section>
     </section>
   );
 }

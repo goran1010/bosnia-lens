@@ -2,7 +2,7 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 import { getCsrfToken } from "../../utils/getCsrfToken";
 
 async function handleDecline(
-  change,
+  result,
   setPendingChanges,
   addNotification,
   setButtonLoading,
@@ -28,7 +28,7 @@ async function handleDecline(
           "Content-Type": "application/json",
           "x-csrf-token": csrfToken,
         },
-        body: JSON.stringify({ id: change.id }),
+        body: JSON.stringify({ id: result.id }),
         credentials: "include",
       },
     );
@@ -36,7 +36,7 @@ async function handleDecline(
 
     if (response.ok) {
       setPendingChanges((prev) =>
-        prev.filter((request) => request.id !== change.id),
+        prev.filter((request) => request.id !== result.id),
       );
       addNotification({
         type: "success",
@@ -52,9 +52,9 @@ async function handleDecline(
   } catch (error) {
     addNotification({
       type: "error",
-      message: `Error declining ${change.user.email}'s request.`,
+      message: `Error declining ${result.user.email}'s request.`,
     });
-    console.error(`Error declining ${change.user.email}'s request:`, error);
+    console.error(`Error declining ${result.user.email}'s request:`, error);
   } finally {
     setButtonLoading(false);
   }
