@@ -7,6 +7,7 @@ function ContributionPostalCodes({
   setSearchResult,
   loading,
   setLoading,
+  setPendingChanges,
 }) {
   return (
     <div className="flex flex-col w-full items-center">
@@ -25,7 +26,7 @@ function ContributionPostalCodes({
       </section>
       <PostalCodesResultContribution
         searchResult={searchResult}
-        setSearchResult={setSearchResult}
+        setPendingChanges={setPendingChanges}
       />
 
       <div className="relative"></div>

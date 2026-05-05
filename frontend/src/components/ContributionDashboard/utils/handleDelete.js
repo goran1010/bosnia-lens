@@ -1,7 +1,7 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 import { getCsrfToken } from "../../utils/getCsrfToken";
 
-async function handleDelete(e, setSearchResult, addNotification, setLoading) {
+async function handleDelete(e, addNotification, setLoading, setPendingChanges) {
   try {
     e.preventDefault();
     setLoading(true);
@@ -35,9 +35,16 @@ async function handleDelete(e, setSearchResult, addNotification, setLoading) {
     const result = await response.json();
 
     if (response.ok) {
-      setSearchResult((previousState) =>
-        previousState.filter((item) => Number(item.code) !== Number(code)),
-      );
+      setPendingChanges((prev) => [
+        ...prev,
+        {
+          typeOfChange: "DELETE",
+          code,
+          city,
+          post,
+          user: result.data.user,
+        },
+      ]);
       addNotification({
         type: "success",
         message: result.message,

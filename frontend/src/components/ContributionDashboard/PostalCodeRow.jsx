@@ -6,15 +6,15 @@ import { handleEdit } from "./utils/handleEdit";
 import { handleDelete } from "./utils/handleDelete";
 
 const PostalCodeRow = memo(
-  ({ result, handleInputChange, setSearchResult, addNotification }) => {
+  ({ result, handleInputChange, addNotification, setPendingChanges }) => {
     const [loading, setLoading] = useState(false);
 
     const handleEditForm = (e) => {
-      handleEdit(e, setSearchResult, addNotification, setLoading);
+      handleEdit(e, addNotification, setLoading, setPendingChanges);
     };
 
     const handleDeleteForm = (e) => {
-      handleDelete(e, setSearchResult, addNotification, setLoading);
+      handleDelete(e, addNotification, setLoading, setPendingChanges);
     };
     return (
       <form

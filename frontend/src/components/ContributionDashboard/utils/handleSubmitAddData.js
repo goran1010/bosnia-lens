@@ -10,6 +10,7 @@ async function handleSubmitAddData(
   setLoading,
   cityInput,
   codeInput,
+  setPendingChanges,
 ) {
   try {
     e.preventDefault();
@@ -52,9 +53,16 @@ async function handleSubmitAddData(
 
       const newItem = result.data;
 
-      setSearchResult((previous) =>
-        [...previous, newItem].sort((a, b) => Number(a.code) - Number(b.code)),
-      );
+      setPendingChanges((prev) => [
+        ...prev,
+        {
+          typeOfChange: "ADD",
+          code,
+          city,
+          post,
+          user: newItem.user,
+        },
+      ]);
       return;
     }
 

@@ -6,7 +6,12 @@ import { Button } from "../sharedComponents/Button";
 import { Input } from "../sharedComponents/Input";
 import { Label } from "../sharedComponents/Label";
 
-function AddNewData({ setSearchResult, loading, setLoading }) {
+function AddNewData({
+  setSearchResult,
+  loading,
+  setLoading,
+  setPendingChanges,
+}) {
   const [input, setInput] = useState({ city: "", code: "", post: "" });
   const { addNotification } = useContext(NotificationContext);
 
@@ -76,6 +81,7 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
                   setLoading,
                   cityInput,
                   codeInput,
+                  setPendingChanges,
                 )
               }
               type="button"

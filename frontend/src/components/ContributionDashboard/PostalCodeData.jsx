@@ -2,18 +2,23 @@ import { useState } from "react";
 import { ContributionPostalCodes } from "./ContributionPostalCodes";
 import { AddNewData } from "./AddNewData";
 import { PendingChanges } from "./PendingChanges";
+import { useGetPendingChanges } from "./customHooks/useGetPendingChanges";
 
 function PostalCodeData() {
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const { pendingChanges, setPendingChanges } =
+    useGetPendingChanges(setLoading);
+
   return (
     <>
-      <PendingChanges />
+      <PendingChanges pendingChanges={pendingChanges} loading={loading} />
       <AddNewData
         setSearchResult={setSearchResult}
         loading={loading}
         setLoading={setLoading}
+        setPendingChanges={setPendingChanges}
       />
 
       <ContributionPostalCodes
@@ -21,6 +26,7 @@ function PostalCodeData() {
         setSearchResult={setSearchResult}
         loading={loading}
         setLoading={setLoading}
+        setPendingChanges={setPendingChanges}
       />
     </>
   );

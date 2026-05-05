@@ -1,7 +1,7 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 import { getCsrfToken } from "../../utils/getCsrfToken";
 
-async function handleEdit(e, setSearchResult, addNotification, setLoading) {
+async function handleEdit(e, addNotification, setLoading, setPendingChanges) {
   try {
     e.preventDefault();
     setLoading(true);
@@ -35,11 +35,16 @@ async function handleEdit(e, setSearchResult, addNotification, setLoading) {
     const result = await response.json();
 
     if (response.ok) {
-      setSearchResult((prevState) => {
-        return prevState.map((item) =>
-          item.code === result.data.code ? result.data : item,
-        );
-      });
+      setPendingChanges((prev) => [
+        ...prev,
+        {
+          typeOfChange: "UPDATE",
+          code,
+          city,
+          post,
+          user: result.data.user,
+        },
+      ]);
       addNotification({
         type: "success",
         message: result.message,

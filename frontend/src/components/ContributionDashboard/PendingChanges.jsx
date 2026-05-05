@@ -1,14 +1,8 @@
-import { useGetPendingChanges } from "./customHooks/useGetPendingChanges";
-import { useState } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { Button } from "../sharedComponents/Button";
 import { Spinner } from "../../utils/Spinner";
 
-function PendingChanges() {
-  const [loading, setLoading] = useState(true);
-
-  const { pendingChanges } = useGetPendingChanges(setLoading);
-
+function PendingChanges({ pendingChanges, loading }) {
   if (loading) {
     return <Spinner />;
   }
@@ -45,7 +39,7 @@ function PendingChanges() {
                   {change.post}
                 </span>
                 <span className="font-bold text-lg break-all text-center">
-                  {change.user.email}
+                  {change.user?.email}
                 </span>
               </div>
             </li>

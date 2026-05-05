@@ -52,7 +52,7 @@ function useGetPendingChanges(setLoading) {
     fetchPendingChanges();
   }, [addNotification, setLoading]);
 
-  return { pendingChanges };
+  return { pendingChanges, setPendingChanges };
 }
 
 export { useGetPendingChanges };
