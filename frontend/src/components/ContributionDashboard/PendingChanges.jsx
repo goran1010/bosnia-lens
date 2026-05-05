@@ -1,14 +1,28 @@
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { Button } from "../sharedComponents/Button";
 import { Spinner } from "../../utils/Spinner";
+import { PendingChangesRow } from "./PendingChangesRow";
+import { useContext } from "react";
 
-function PendingChanges({ pendingChanges, loading }) {
+function PendingChanges({ pendingChanges, loading, setPendingChanges }) {
+  const { addNotification } = useContext(NotificationContext);
+
   if (loading) {
     return <Spinner />;
   }
 
+  if (pendingChanges.length === 0 || !pendingChanges) {
+    return (
+      <section section className="flex justify-center items-center p-4">
+        <p className="text-gray-500 dark:text-gray-300">
+          No pending changes to display.
+        </p>
+      </section>
+    );
+  }
+
   return (
-    <section className="panel-card p-3">
+    <section className="panel-card p-3 w-full max-w-4xl">
       <h2 className="text-md text-center font-semibold flex items-center gap-1 p-1 flex-1">
         <span
           aria-label="pending changes count"
@@ -18,38 +32,28 @@ function PendingChanges({ pendingChanges, loading }) {
         </span>
         <span className="flex-1">Pending Changes</span>
       </h2>
-      <ul className="space-y-3">
-        {pendingChanges.length > 0 ? (
-          pendingChanges.map((change) => (
-            <li
-              key={change.id}
-              className="panel-subtle flex sm:items-center flex-wrap flex-col justify-between gap-3 p-3 transition-colors duration-200"
-            >
-              <div className="flex-1 flex sm:flex-row sm:items-center sm:gap-2 min-w-0">
-                <span className="font-bold text-lg break-all text-center">
-                  {change.typeOfChange}
-                </span>
-                <span className="text-lg break-all text-center">
-                  {change.code}
-                </span>
-                <span className="text-lg break-all text-center">
-                  {change.city}
-                </span>
-                <span className="text-lg break-all text-center">
-                  {change.post}
-                </span>
-                <span className="font-bold text-lg break-all text-center">
-                  {change.user?.email}
-                </span>
-              </div>
-            </li>
-          ))
-        ) : (
-          <li className="label-muted italic text-center py-8 panel-subtle border-dashed">
-            No pending changes
+
+      <section className="flex flex-col justify-center items-center p-1 w-full">
+        <ul className="w-full max-w-4xl max-h-128 flex flex-col overflow-auto border border-gray-400 dark:border-gray-600 rounded-md p-2 bg-white dark:bg-gray-700 gap-1">
+          <li className="hidden sm:grid sm:gap-1 text-center w-full p-2 border border-gray-400 dark:border-gray-600 rounded-md font-bold text-gray-800 dark:text-white bg-gray-50 dark:bg-gray-600 sm:grid-cols-5">
+            <div>Change</div>
+            <div>Code</div>
+            <div>City</div>
+            <div>Post</div>
+            <div>Delete</div>
           </li>
-        )}
-      </ul>
+          {pendingChanges.map((result) => {
+            return (
+              <PendingChangesRow
+                key={result.id}
+                result={result}
+                addNotification={addNotification}
+                setPendingChanges={setPendingChanges}
+              />
+            );
+          })}
+        </ul>
+      </section>
     </section>
   );
 }

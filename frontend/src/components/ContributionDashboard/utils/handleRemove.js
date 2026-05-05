@@ -1,0 +1,81 @@
+const currentUrl = import.meta.env.VITE_BACKEND_URL;
+import { getCsrfToken } from "../../utils/getCsrfToken";
+
+async function handleRemove(
+  e,
+  result,
+  userData,
+  addNotification,
+  setLoading,
+  setPendingChanges,
+) {
+  try {
+    e.preventDefault();
+    setLoading(true);
+    const code = e.currentTarget.dataset.postalcode;
+    const city = e.currentTarget.dataset.city;
+    const post = e.currentTarget.dataset.post;
+
+    const csrfToken = await getCsrfToken();
+
+    if (!csrfToken) {
+      addNotification({
+        type: "error",
+        message: "Failed to retrieve CSRF token.",
+      });
+      return;
+    }
+
+    const response = await fetch(
+      `${currentUrl}/users/contribution/postal-codes`,
+      {
+        mode: "cors",
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+          "x-csrf-token": csrfToken,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ code, city, post }),
+      },
+    );
+    const result = await response.json();
+    const { data } = result;
+
+    if (response.ok) {
+      setPendingChanges((prev) => [
+        ...prev,
+        {
+          id: data.id,
+          typeOfChange: data.typeOfChange,
+          code: data.code,
+          city: data.city,
+          post: data.post,
+          user: { email: userData.email },
+        },
+      ]);
+      addNotification({
+        type: "success",
+        message: result.message,
+      });
+      return;
+    }
+    addNotification({
+      type: "error",
+      message:
+        result?.error?.message ||
+        result?.error ||
+        "Failed to delete postal code.",
+    });
+  } catch (err) {
+    addNotification({
+      type: "error",
+      message: "An error occurred while deleting the postal code.",
+    });
+    console.error("Error deleting postal code:", err);
+  } finally {
+    setLoading(false);
+  }
+}
+
+export { handleRemove };

@@ -13,7 +13,6 @@ function PostalCodeData() {
 
   return (
     <>
-      <PendingChanges pendingChanges={pendingChanges} loading={loading} />
       <AddNewData
         setSearchResult={setSearchResult}
         loading={loading}
@@ -28,6 +27,7 @@ function PostalCodeData() {
         setLoading={setLoading}
         setPendingChanges={setPendingChanges}
       />
+      <PendingChanges pendingChanges={pendingChanges} loading={loading} />
     </>
   );
 }
