@@ -11,6 +11,7 @@ async function handleSubmitAddData(
   cityInput,
   codeInput,
   setPendingChanges,
+  userData,
 ) {
   try {
     e.preventDefault();
@@ -56,11 +57,12 @@ async function handleSubmitAddData(
       setPendingChanges((prev) => [
         ...prev,
         {
-          typeOfChange: "ADD",
-          code,
-          city,
-          post,
-          user: newItem.user,
+          id: newItem.id,
+          typeOfChange: newItem.typeOfChange,
+          code: newItem.code,
+          city: newItem.city,
+          post: newItem.post,
+          user: { email: userData.email },
         },
       ]);
       return;

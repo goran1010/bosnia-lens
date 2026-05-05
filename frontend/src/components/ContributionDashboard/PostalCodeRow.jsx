@@ -1,20 +1,22 @@
-import { memo } from "react";
+import { memo, useContext } from "react";
 import { Button } from "../sharedComponents/Button";
 import { Input } from "../sharedComponents/Input";
 import { useState } from "react";
 import { handleEdit } from "./utils/handleEdit";
 import { handleDelete } from "./utils/handleDelete";
+import { UserDataContext } from "../../contextData/UserDataContext";
 
 const PostalCodeRow = memo(
   ({ result, handleInputChange, addNotification, setPendingChanges }) => {
     const [loading, setLoading] = useState(false);
+    const { userData } = useContext(UserDataContext);
 
     const handleEditForm = (e) => {
-      handleEdit(e, addNotification, setLoading, setPendingChanges);
+      handleEdit(e, addNotification, setLoading, setPendingChanges, userData);
     };
 
     const handleDeleteForm = (e) => {
-      handleDelete(e, addNotification, setLoading, setPendingChanges);
+      handleDelete(e, addNotification, setLoading, setPendingChanges, userData);
     };
     return (
       <form

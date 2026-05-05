@@ -5,6 +5,7 @@ import { validateAddData } from "./utils/validateAddData";
 import { Button } from "../sharedComponents/Button";
 import { Input } from "../sharedComponents/Input";
 import { Label } from "../sharedComponents/Label";
+import { UserDataContext } from "../../contextData/UserDataContext";
 
 function AddNewData({
   setSearchResult,
@@ -12,6 +13,7 @@ function AddNewData({
   setLoading,
   setPendingChanges,
 }) {
+  const { userData } = useContext(UserDataContext);
   const [input, setInput] = useState({ city: "", code: "", post: "" });
   const { addNotification } = useContext(NotificationContext);
 
@@ -82,6 +84,7 @@ function AddNewData({
                   cityInput,
                   codeInput,
                   setPendingChanges,
+                  userData,
                 )
               }
               type="button"

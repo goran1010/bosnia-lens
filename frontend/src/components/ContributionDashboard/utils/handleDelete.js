@@ -1,7 +1,13 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 import { getCsrfToken } from "../../utils/getCsrfToken";
 
-async function handleDelete(e, addNotification, setLoading, setPendingChanges) {
+async function handleDelete(
+  e,
+  addNotification,
+  setLoading,
+  setPendingChanges,
+  userData,
+) {
   try {
     e.preventDefault();
     setLoading(true);
@@ -33,16 +39,18 @@ async function handleDelete(e, addNotification, setLoading, setPendingChanges) {
       },
     );
     const result = await response.json();
+    const { data } = result;
 
     if (response.ok) {
       setPendingChanges((prev) => [
         ...prev,
         {
-          typeOfChange: "DELETE",
-          code,
-          city,
-          post,
-          user: result.data.user,
+          id: data.id,
+          typeOfChange: data.typeOfChange,
+          code: data.code,
+          city: data.city,
+          post: data.post,
+          user: { email: userData.email },
         },
       ]);
       addNotification({
