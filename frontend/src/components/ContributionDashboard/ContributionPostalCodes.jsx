@@ -10,7 +10,7 @@ function ContributionPostalCodes({
   setPendingChanges,
 }) {
   return (
-    <div className="flex flex-col w-full items-center">
+    <div className="flex flex-col w-full items-center gap-2">
       <h2>View and edit all data:</h2>
       <section className="relative flex flex-col justify-center gap-2 p-2">
         <SearchPostalCode

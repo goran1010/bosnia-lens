@@ -17,7 +17,7 @@ function PendingChangesAdmin() {
   }
 
   return (
-    <section className="panel-card p-3 w-full max-w-4xl">
+    <section className="panel-card p-3 w-full">
       <h2 className="text-md text-center font-semibold flex items-center gap-1 p-1 flex-1">
         <span
           aria-label="pending changes count"

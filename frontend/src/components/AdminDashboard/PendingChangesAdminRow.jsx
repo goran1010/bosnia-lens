@@ -11,33 +11,33 @@ const PendingChangesAdminRow = memo(
     const [loading, setLoading] = useState(false);
 
     return (
-      <form className="">
-        <div className="grid gap-2 w-full p-2 border border-gray-200 dark:border-gray-500 rounded-md sm:border-0 sm:rounded-none sm:p-1 sm:gap-1 sm:grid-cols-5">
+      <form className="border border-gray-200 dark:border-gray-500 rounded-md">
+        <div className="grid gap-2 w-full p-1 sm:p-1 sm:gap-1 sm:grid-cols-5">
           <div className="flex justify-between sm:justify-center items-center ">
             <span className="sm:hidden font-semibold">Change</span>
             <span>{change.typeOfChange}</span>
           </div>
-          <div className="flex justify-between sm:justify-center items-center">
+          <div className="flex justify-between sm:justify-center items-center flex-wrap gap-1">
             <span className="sm:hidden font-semibold">Code</span>
             <span>{change.code}</span>
           </div>
-          <div className="flex justify-between sm:justify-center items-center">
+          <div className="flex justify-between sm:justify-center items-center flex-wrap gap-1">
             <span className="sm:hidden font-semibold">City</span>
             <span>{change.city}</span>
           </div>
-          <div className="flex justify-between sm:justify-center items-center">
+          <div className="flex justify-between sm:justify-center items-center flex-wrap gap-1">
             <span className="sm:hidden font-semibold">Post</span>
             <span>{change.post}</span>
           </div>
-          <div className="flex justify-between sm:justify-center items-center">
+          <div className="flex justify-between sm:justify-center items-center flex-wrap gap-1">
             <span className="sm:hidden font-semibold">User</span>
-            <span>{change.user.email}</span>
+            <span className="break-all">{change.user.email}</span>
           </div>
         </div>
 
-        <div className="flex justify-center sm:flex-row gap-2">
+        <div className="flex justify-center sm:flex-row gap-2 p-1">
           <Button
-            className="btn-success px-3 py-2 text-sm max-w-25"
+            className="btn-success px-3 py-2 text-sm sm:max-w-25"
             onClick={() => {
               handleConfirm(
                 change,
@@ -52,7 +52,7 @@ const PendingChangesAdminRow = memo(
             Confirm
           </Button>
           <Button
-            className="btn-danger px-3 py-2 text-sm max-w-25"
+            className="btn-danger px-3 py-2 text-sm sm:max-w-25"
             onClick={() => {
               handleDecline(
                 change,
