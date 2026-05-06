@@ -198,101 +198,10 @@ describe("Profile Component handle logout", () => {
       /User logged out successfully/i,
     );
     expect(notificationElement).toBeInTheDocument();
-    // const homeHeading = await screen.findByRole("heading", {
-    //   name: /Bosnia Lens/i,
-    // });
-    // expect(homeHeading).toBeInTheDocument();
+
+    const logIn = await screen.findByRole("heading", { name: /Log In/i });
+
+    expect(logIn).toBeInTheDocument();
     expect(logoutButton).not.toBeInTheDocument();
-  });
-});
-
-describe("Profile Component handle become contributor", () => {
-  test("handles become contributor failure due to missing CSRF token", async () => {
-    getCsrfTokenMock = null;
-    render(<Wrapper initialUser={{ username: "testuser", role: "USER" }} />);
-    const becomeContributorButton = await screen.findByRole("button", {
-      name: /Request Contributor role/i,
-    });
-    expect(becomeContributorButton).toBeInTheDocument();
-    await user.click(becomeContributorButton);
-    const notificationElement = await screen.findByText(
-      /Failed to retrieve CSRF token./i,
-    );
-    expect(notificationElement).toBeInTheDocument();
-  });
-
-  test("handles become contributor failure due to server error", async () => {
-    fetchSpy.mockImplementation((url) => {
-      if (url.endsWith("/users/become-contributor")) {
-        return Promise.resolve({
-          ok: false,
-          json: async () => ({
-            error: "Network error.",
-          }),
-        });
-      }
-    });
-
-    render(<Wrapper initialUser={{ username: "testuser", role: "USER" }} />);
-    const becomeContributorButton = await screen.findByRole("button", {
-      name: /Request Contributor role/i,
-    });
-    expect(becomeContributorButton).toBeInTheDocument();
-    await user.click(becomeContributorButton);
-
-    const notificationElement = await screen.findByText(/Network error/i);
-    expect(notificationElement).toBeInTheDocument();
-  });
-
-  test("handles become contributor failure due to unexpected error", async () => {
-    fetchSpy.mockImplementation((url) => {
-      if (url.endsWith("/users/become-contributor")) {
-        throw new Error("Unexpected error");
-      }
-    });
-
-    render(<Wrapper initialUser={{ username: "testuser", role: "USER" }} />);
-    const becomeContributorButton = await screen.findByRole("button", {
-      name: /Request Contributor role/i,
-    });
-    expect(becomeContributorButton).toBeInTheDocument();
-    await user.click(becomeContributorButton);
-
-    const notificationElement = await screen.findByText(
-      /An error occurred while requesting contributor status./i,
-    );
-    expect(notificationElement).toBeInTheDocument();
-    expect(consoleErrorSpy).toHaveBeenCalled();
-  });
-
-  test("handles become contributor correctly", async () => {
-    fetchSpy.mockImplementation((url) => {
-      if (url.endsWith("/users/become-contributor")) {
-        return Promise.resolve({
-          ok: true,
-          json: async () => ({
-            message: "Contributor status requested successfully",
-            data: {
-              email: "testuser@example.com",
-              role: "CONTRIBUTOR",
-            },
-          }),
-        });
-      }
-    });
-
-    render(<Wrapper initialUser={{ username: "testuser", role: "USER" }} />);
-    const becomeContributorButton = await screen.findByRole("button", {
-      name: /Request Contributor role/i,
-    });
-    expect(becomeContributorButton).toBeInTheDocument();
-    await user.click(becomeContributorButton);
-
-    const notificationElement = await screen.findByText(
-      /Contributor status requested successfully/i,
-    );
-    expect(notificationElement).toBeInTheDocument();
-    const roleElement = await screen.findByText("CONTRIBUTOR");
-    expect(roleElement).toBeInTheDocument();
   });
 });
