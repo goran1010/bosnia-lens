@@ -42,13 +42,14 @@ function PendingChanges({ pendingChanges, loading, setPendingChanges }) {
             <div>Post</div>
             <div>Delete</div>
           </li>
-          {pendingChanges.map((result) => {
+          {pendingChanges.map((result, index) => {
             return (
               <PendingChangesRow
                 key={result.id}
                 change={result}
                 addNotification={addNotification}
                 setPendingChanges={setPendingChanges}
+                index={index}
               />
             );
           })}

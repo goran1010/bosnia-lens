@@ -31,11 +31,7 @@ function AddNewData({
 
   return (
     <form className="relative flex flex-col justify-center items-center gap-2 p-2">
-      <Button
-        type="button"
-        className="text-white"
-        onClick={() => setIsOpen(!isOpen)}
-      >
+      <Button type="button" onClick={() => setIsOpen(!isOpen)}>
         {isOpen ? "Close form" : "Add new data"}
       </Button>
       {isOpen && (
@@ -89,7 +85,7 @@ function AddNewData({
               }
               type="button"
               loading={loading}
-              className="text-white"
+              className="btn-success"
             >
               Add data
             </Button>

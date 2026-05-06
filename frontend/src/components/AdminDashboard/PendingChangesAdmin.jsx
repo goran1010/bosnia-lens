@@ -30,20 +30,21 @@ function PendingChangesAdmin() {
       {pendingChanges.length > 0 ? (
         <section className="flex flex-col justify-center items-center p-1 w-full">
           <ul className="w-full max-w-4xl flex flex-col border border-gray-400 dark:border-gray-600 rounded-md p-2 bg-white dark:bg-gray-700 gap-1">
-            <li className="hidden sm:grid sm:gap-1 text-center w-full p-2 border border-gray-400 dark:border-gray-600 rounded-md font-bold text-gray-800 dark:text-white bg-gray-50 dark:bg-gray-600 sm:grid-cols-5">
+            <li className="hidden sm:grid sm:gap-1 text-center w-full p-2 border border-gray-400 dark:border-gray-600 rounded-md font-bold text-gray-800 dark:text-white bg-gray-50 dark:bg-gray-600 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,2fr)]">
               <div>Change</div>
               <div>Code</div>
               <div>City</div>
               <div>Post</div>
               <div>User</div>
             </li>
-            {pendingChanges.map((result) => {
+            {pendingChanges.map((result, index) => {
               return (
                 <PendingChangesAdminRow
                   key={result.id}
                   change={result}
                   addNotification={addNotification}
                   setPendingChanges={setPendingChanges}
+                  index={index}
                 />
               );
             })}

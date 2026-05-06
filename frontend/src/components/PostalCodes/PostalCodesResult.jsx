@@ -25,7 +25,7 @@ function PostalCodesResult({ searchResult }) {
             className={`flex flex-col gap-1 px-4 py-3 md:grid md:grid-cols-3 md:items-center md:gap-0 md:py-2.5 transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/60 ${
               index % 2 === 0
                 ? "bg-white dark:bg-gray-800"
-                : "bg-gray-50/60 dark:bg-gray-800/60"
+                : "bg-gray-100 dark:bg-gray-800/60"
             }`}
           >
             <div className="flex justify-between md:block">

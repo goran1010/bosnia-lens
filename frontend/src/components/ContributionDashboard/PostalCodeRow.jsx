@@ -7,7 +7,13 @@ import { handleDelete } from "./utils/handleDelete";
 import { UserDataContext } from "../../contextData/UserDataContext";
 
 const PostalCodeRow = memo(
-  ({ result, handleInputChange, addNotification, setPendingChanges }) => {
+  ({
+    result,
+    handleInputChange,
+    addNotification,
+    setPendingChanges,
+    index = 0,
+  }) => {
     const [loading, setLoading] = useState(false);
     const { userData } = useContext(UserDataContext);
 
@@ -21,11 +27,17 @@ const PostalCodeRow = memo(
     return (
       <form
         onSubmit={handleEditForm}
-        className="grid gap-2 w-full p-2 border border-gray-200 dark:border-gray-500 rounded-md sm:border-0 sm:rounded-none sm:p-1 sm:gap-1 sm:grid-cols-5"
+        className={`grid gap-2 w-full p-2 border border-gray-200 dark:border-gray-500 rounded-md sm:border-0 sm:rounded-none sm:p-1 sm:gap-1 sm:grid-cols-5 transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/60 ${
+          index % 2 === 0
+            ? "bg-white dark:bg-gray-800"
+            : "bg-gray-100 dark:bg-gray-800/60"
+        }`}
       >
         <div className="flex justify-between sm:justify-center items-center">
           <span className="sm:hidden font-semibold">Code</span>
-          <span>{result.code}</span>
+          <span className="font-mono font-medium text-gray-800 dark:text-gray-100">
+            {result.code}
+          </span>
         </div>
         <Input
           name="city"
@@ -50,7 +62,7 @@ const PostalCodeRow = memo(
         <div>
           <Button
             type="submit"
-            className="w-full py-2 text-white"
+            className="btn-success w-full py-2"
             loading={loading}
           >
             Save
@@ -63,7 +75,7 @@ const PostalCodeRow = memo(
             data-city={result.city}
             data-post={result.post}
             onClick={handleDeleteForm}
-            className="w-full bg-red-600 py-2 text-white hover:bg-red-700"
+            className="btn-danger w-full py-2"
             loading={loading}
           >
             Delete

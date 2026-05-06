@@ -42,7 +42,7 @@ function PostalCodesResultContribution({ searchResult, setPendingChanges }) {
           <div>Save</div>
           <div>Delete</div>
         </li>
-        {searchResult.map((result) => {
+        {searchResult.map((result, index) => {
           const rowValue = inputValuesByCode.get(result.code) || result;
           return (
             <PostalCodeRow
@@ -51,6 +51,7 @@ function PostalCodesResultContribution({ searchResult, setPendingChanges }) {
               handleInputChange={handleInputChange}
               setPendingChanges={setPendingChanges}
               addNotification={addNotification}
+              index={index}
             />
           );
         })}
