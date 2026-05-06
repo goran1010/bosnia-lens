@@ -89,7 +89,7 @@ const PendingChangesAdminRow = memo(
                 setLoading,
               );
             }}
-            type="submit"
+            type="button"
             loading={loading}
           >
             Approve
@@ -105,7 +105,7 @@ const PendingChangesAdminRow = memo(
                 setLoading,
               );
             }}
-            type="submit"
+            type="button"
             loading={loading}
           >
             Reject

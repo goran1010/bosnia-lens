@@ -4,6 +4,19 @@ import { NotificationContext } from "../../../src/contextData/NotificationContex
 import { UserDataContext } from "../../../src/contextData/UserDataContext";
 import userEvent from "@testing-library/user-event";
 
+const mockChanges = [
+  {
+    city: "Divičani",
+    code: 70204,
+    createdAt: "2026-05-06T07:34:01.967Z",
+    id: "8687b282-fcc6-4f69-8744-0f8e1585d991",
+    post: "HP_MOSTAR",
+    typeOfChange: "UPDATE",
+    user: { email: "johndoe@examplemail.com" },
+    userId: "058d1adc-58e4-4f31-8021-64e37e7d0dd0",
+  },
+];
+
 const createFetchResponse = (data, ok = true) => ({
   ok,
   json: async () => data,
@@ -12,50 +25,39 @@ const createFetchResponse = (data, ok = true) => ({
 const fetchMock = vi.fn();
 
 const setupFetchMock = ({
-  contributors = [],
   pendingRequests = [],
   csrfToken = "csrf-token",
-  addContributorResponse = {
-    message: "User promoted to contributor successfully.",
-  },
-  declineContributorResponse = {
-    message: "User's request declined successfully.",
-  },
-  removeContributorResponse = {
-    message: "User removed from contributors successfully.",
-  },
 } = {}) => {
   fetchMock.mockImplementation((url) => {
     const requestUrl = String(url);
-
-    if (requestUrl.includes("/users/admin/contributors")) {
-      return Promise.resolve(
-        createFetchResponse({ data: contributors, message: "Success" }),
-      );
-    }
-
-    if (requestUrl.includes("/users/admin/requested-contributors")) {
-      return Promise.resolve(
-        createFetchResponse({ data: pendingRequests, message: "Success" }),
-      );
-    }
-
     if (requestUrl.includes("/csrf-token")) {
       return Promise.resolve(
         createFetchResponse({ data: csrfToken, message: "Success" }),
       );
     }
-
-    if (requestUrl.includes("/users/admin/add-contributor")) {
-      return Promise.resolve(createFetchResponse(addContributorResponse));
+    if (requestUrl.includes("/users/admin/pending-changes")) {
+      return Promise.resolve(
+        createFetchResponse({
+          data: pendingRequests,
+          message: "Pending requests fetched successfully.",
+        }),
+      );
     }
 
-    if (requestUrl.includes("/users/admin/decline-contributor")) {
-      return Promise.resolve(createFetchResponse(declineContributorResponse));
+    if (requestUrl.includes("/approve-pending-change")) {
+      return Promise.resolve(
+        createFetchResponse({
+          message: "Pending change approved successfully.",
+        }),
+      );
     }
 
-    if (requestUrl.includes("/users/admin/remove-contributor")) {
-      return Promise.resolve(createFetchResponse(removeContributorResponse));
+    if (requestUrl.includes("/decline-pending-change")) {
+      return Promise.resolve(
+        createFetchResponse({
+          message: "Pending change declined successfully.",
+        }),
+      );
     }
 
     throw new Error(`Unexpected fetch request: ${requestUrl}`);
@@ -107,136 +109,58 @@ describe("AdminForm component rendering", () => {
       await screen.findByRole("heading", { name: /Admin Dashboard/i }),
     ).toBeInTheDocument();
 
-    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
-  test("renders contributors list with mock contributor", async () => {
-    const mockAdmin = {
-      id: 1,
-      email: "john.doe@example.com",
-      role: "ADMIN",
-    };
-    setupFetchMock({ contributors: [mockAdmin] });
+  test("renders pending changes list", async () => {
+    setupFetchMock({ pendingRequests: mockChanges });
 
-    render(<Wrapper initialUser={mockAdmin} />);
-    const email = await screen.findByText(/john.doe@example.com/i);
+    render(<Wrapper initialUser={{ role: "ADMIN" }} />);
+
+    const email = await screen.findByText(/johndoe@examplemail.com/i);
 
     expect(email).toBeInTheDocument();
   });
 });
 
-describe("AdminForm component pending requests and contributors interaction", () => {
-  test("updates contributors list when a pending request is approved", async () => {
-    const mockContributor = {
-      id: 1,
-      username: "John Doe",
-      email: "test_mail@example.com",
-    };
-    setupFetchMock({ pendingRequests: [mockContributor] });
+describe("AdminForm component pending changes interaction", () => {
+  test("updates pending changes list when a pending request is approved", async () => {
+    setupFetchMock({ pendingRequests: mockChanges });
     render(<Wrapper initialUser={{ role: "ADMIN" }} />);
+
+    const pendingCount = await screen.findByLabelText(/pending changes count/i);
+    expect(pendingCount).toHaveTextContent("1");
 
     const user = userEvent.setup();
 
-    expect(await screen.findByText("Pending Requests")).toBeInTheDocument();
+    expect(await screen.findByText("Pending Changes")).toBeInTheDocument();
     const confirmButton = await screen.findByRole("button", {
-      name: /Confirm/i,
+      name: /Approve/i,
     });
 
     await user.click(confirmButton);
 
-    expect(fetchMock).toHaveBeenCalledWith(
-      expect.stringContaining("/users/admin/add-contributor"),
-      expect.objectContaining({
-        method: "POST",
-        body: JSON.stringify({ userId: 1 }),
-        headers: expect.objectContaining({
-          "Content-Type": "application/json",
-          "x-csrf-token": "csrf-token",
-        }),
-        credentials: "include",
-      }),
-    );
-
-    const pendingCount = await screen.findByLabelText(
-      /pending requests count/i,
-    );
     expect(pendingCount).toHaveTextContent("0");
 
-    const contributorsCount = await screen.findByLabelText(
-      /number of contributors/i,
-    );
-    expect(contributorsCount).toHaveTextContent("1");
-
-    expect(screen.getByText(/No pending requests/i)).toBeInTheDocument();
-    expect(screen.getByText(/test_mail@example.com/i)).toBeInTheDocument();
+    expect(screen.getByText(/No pending changes/i)).toBeInTheDocument();
   });
 
   test("removes pending request from the list when declined", async () => {
-    const mockRequest = {
-      id: 1,
-      username: "John Doe",
-      email: "john.doe@example.com",
-    };
-    setupFetchMock({ pendingRequests: [mockRequest] });
+    setupFetchMock({ pendingRequests: mockChanges });
     render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
     const user = userEvent.setup();
 
-    expect(await screen.findByText("Pending Requests")).toBeInTheDocument();
-    const declineButton = await screen.findByRole("button", {
-      name: /Decline/i,
+    expect(await screen.findByText("Pending Changes")).toBeInTheDocument();
+    const rejectButton = await screen.findByRole("button", {
+      name: /Reject/i,
     });
 
-    await user.click(declineButton);
+    await user.click(rejectButton);
 
-    expect(fetchMock).toHaveBeenCalledWith(
-      expect.stringContaining("/users/admin/decline-contributor"),
-      expect.objectContaining({
-        method: "POST",
-        body: JSON.stringify({ userId: 1 }),
-        headers: expect.objectContaining({
-          "Content-Type": "application/json",
-          "x-csrf-token": "csrf-token",
-        }),
-        credentials: "include",
-      }),
-    );
-
-    const pendingCount = await screen.findByLabelText(
-      /pending requests count/i,
-    );
+    const pendingCount = await screen.findByLabelText(/pending changes count/i);
     expect(pendingCount).toHaveTextContent("0");
 
-    expect(screen.getByText(/No pending requests/i)).toBeInTheDocument();
-  });
-
-  test("removes contributor from the list when removed", async () => {
-    const mockContributor = {
-      id: 1,
-      username: "John Doe",
-      email: "john.doe@example.com",
-    };
-    setupFetchMock({ contributors: [mockContributor] });
-    render(<Wrapper initialUser={{ role: "ADMIN" }} />);
-
-    const contributorsCount = await screen.findByLabelText(
-      /number of contributors/i,
-    );
-    const user = userEvent.setup();
-
-    expect(contributorsCount).toBeInTheDocument();
-
-    expect(contributorsCount).toHaveTextContent("1");
-
-    expect(await screen.findByText("Current Contributors")).toBeInTheDocument();
-    const removeButton = await screen.findByRole("button", {
-      name: /Remove/i,
-    });
-
-    await user.click(removeButton);
-
-    expect(contributorsCount).toHaveTextContent("0");
-
-    expect(screen.getByText(/No contributors/i)).toBeInTheDocument();
+    expect(screen.getByText(/No pending changes/i)).toBeInTheDocument();
   });
 });
