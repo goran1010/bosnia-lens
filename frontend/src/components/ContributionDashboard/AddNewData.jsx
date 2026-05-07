@@ -5,8 +5,15 @@ import { validateAddData } from "./utils/validateAddData";
 import { Button } from "../sharedComponents/Button";
 import { Input } from "../sharedComponents/Input";
 import { Label } from "../sharedComponents/Label";
+import { UserDataContext } from "../../contextData/UserDataContext";
 
-function AddNewData({ setSearchResult, loading, setLoading }) {
+function AddNewData({
+  setSearchResult,
+  loading,
+  setLoading,
+  setPendingChanges,
+}) {
+  const { userData } = useContext(UserDataContext);
   const [input, setInput] = useState({ city: "", code: "", post: "" });
   const { addNotification } = useContext(NotificationContext);
 
@@ -26,8 +33,8 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
     <form className="relative flex flex-col justify-center items-center gap-2 p-2">
       <Button
         type="button"
-        className="text-white"
         onClick={() => setIsOpen(!isOpen)}
+        variant="secondary"
       >
         {isOpen ? "Close form" : "Add new data"}
       </Button>
@@ -76,11 +83,14 @@ function AddNewData({ setSearchResult, loading, setLoading }) {
                   setLoading,
                   cityInput,
                   codeInput,
+                  setPendingChanges,
+                  userData,
                 )
               }
               type="button"
               loading={loading}
-              className="text-white"
+              variant="success"
+              className=""
             >
               Add data
             </Button>

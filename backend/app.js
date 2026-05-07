@@ -16,10 +16,7 @@ const { csrfSynchronisedProtection } = csrfSync();
 
 import compression from "compression";
 
-import pino from "pino";
-const logger = pino({
-  timestamp: () => `,"time":"${new Date().toISOString()}"`,
-});
+import { logger } from "./utils/logger.js";
 
 import { sendError } from "./utils/response.js";
 
@@ -81,7 +78,7 @@ app.use((req, res) => {
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  logger.error(JSON.stringify(err));
+  logger.error(err);
 
   return sendError(res, {
     status: err.statusCode || 500,

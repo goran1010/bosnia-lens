@@ -234,6 +234,14 @@
     transform: none;
   }
 
+  .btn-primary[aria-disabled="true"] {
+    background: var(--accent-disabled);
+    color: var(--disabled-text);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+
   .btn-success {
     background: #15803d;
     color: #f0fdf4;
@@ -247,6 +255,21 @@
   .btn-success:disabled {
     background: #4ade80;
     color: #dcfce7;
+  }
+
+  .btn-update {
+    background: #2563eb;
+    color: #eff6ff;
+    box-shadow: 0 8px 16px rgba(37, 99, 235, 0.22);
+  }
+
+  .btn-update:hover:not(:disabled) {
+    background: #1d4ed8;
+  }
+
+  .btn-update:disabled {
+    background: #93c5fd;
+    color: #dbeafe;
   }
 
   .btn-warning {
@@ -303,24 +326,27 @@
   }
 
   .notification-success {
-    background: #15803d;
-    border: 1px solid rgba(187, 247, 208, 0.45);
+    background: #86efac;
+    color: #15803d;
+    border: 1px solid #4ade80;
   }
 
   .notification-error {
-    background: #b91c1c;
-    border: 1px solid rgba(254, 202, 202, 0.4);
+    background: #fca5a5;
+    color: #991b1b;
+    border: 1px solid #f87171;
   }
 
   .notification-warning {
-    background: #facc15;
-    color: #1f2937;
-    border: 1px solid rgba(120, 53, 15, 0.22);
+    background: #fef08a;
+    color: #92400e;
+    border: 1px solid #fcd34d;
   }
 
   .notification-info {
-    background: #0369a1;
-    border: 1px solid rgba(186, 230, 253, 0.4);
+    background: #7dd3fc;
+    color: #0c4a6e;
+    border: 1px solid #38bdf8;
   }
 
   .badge-primary {

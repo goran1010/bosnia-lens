@@ -1,16 +1,19 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 import { getCsrfToken } from "../../utils/getCsrfToken";
 
-async function handleDeleteContributor(
+async function handleDelete(
   e,
-  setSearchResult,
   addNotification,
   setLoading,
+  setPendingChanges,
+  userData,
 ) {
   try {
     e.preventDefault();
     setLoading(true);
     const code = e.currentTarget.dataset.postalcode;
+    const city = e.currentTarget.dataset.city;
+    const post = e.currentTarget.dataset.post;
 
     const csrfToken = await getCsrfToken();
 
@@ -23,7 +26,7 @@ async function handleDeleteContributor(
     }
 
     const response = await fetch(
-      `${currentUrl}/users/contributor/postal-codes`,
+      `${currentUrl}/users/contribution/postal-codes`,
       {
         mode: "cors",
         method: "DELETE",
@@ -32,15 +35,24 @@ async function handleDeleteContributor(
           "x-csrf-token": csrfToken,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ code }),
+        body: JSON.stringify({ code, city, post }),
       },
     );
     const result = await response.json();
+    const { data } = result;
 
     if (response.ok) {
-      setSearchResult((previousState) =>
-        previousState.filter((item) => Number(item.code) !== Number(code)),
-      );
+      setPendingChanges((prev) => [
+        ...prev,
+        {
+          id: data.id,
+          typeOfChange: data.typeOfChange,
+          code: data.code,
+          city: data.city,
+          post: data.post,
+          user: { email: userData.email },
+        },
+      ]);
       addNotification({
         type: "success",
         message: result.message,
@@ -65,4 +77,4 @@ async function handleDeleteContributor(
   }
 }
 
-export { handleDeleteContributor };
+export { handleDelete };

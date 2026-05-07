@@ -1,15 +1,16 @@
 import { SearchPostalCode } from "../PostalCodes/SearchPostalCode";
 import { GetAllPostalCodes } from "../PostalCodes/GetAllPostalCodes";
-import { PostalCodesResultContributor } from "./PostalCodesResultContributor";
+import { PostalCodesResultContribution } from "./PostalCodesResultContribution";
 
-function ContributorPostalCodes({
+function ContributionPostalCodes({
   searchResult,
   setSearchResult,
   loading,
   setLoading,
+  setPendingChanges,
 }) {
   return (
-    <div className="flex flex-col w-full items-center">
+    <div className="flex flex-col w-full items-center gap-2">
       <h2>View and edit all data:</h2>
       <section className="relative flex flex-col justify-center gap-2 p-2">
         <SearchPostalCode
@@ -23,9 +24,9 @@ function ContributorPostalCodes({
           setLoading={setLoading}
         />
       </section>
-      <PostalCodesResultContributor
+      <PostalCodesResultContribution
         searchResult={searchResult}
-        setSearchResult={setSearchResult}
+        setPendingChanges={setPendingChanges}
       />
 
       <div className="relative"></div>
@@ -33,4 +34,4 @@ function ContributorPostalCodes({
   );
 }
 
-export { ContributorPostalCodes };
+export { ContributionPostalCodes };

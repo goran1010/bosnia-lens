@@ -1,18 +1,26 @@
 const currentUrl = import.meta.env.VITE_BACKEND_URL;
 import { getCsrfToken } from "../../utils/getCsrfToken";
+import { validateSubmitAddData } from "./validateSubmitAddData";
 
-async function handleEditContributor(
+async function handleSubmitAddData(
   e,
+  input,
   setSearchResult,
   addNotification,
   setLoading,
+  cityInput,
+  codeInput,
+  setPendingChanges,
+  userData,
 ) {
   try {
     e.preventDefault();
     setLoading(true);
-    const code = e.target.children[0].children[1].textContent;
-    const city = e.target[0].value;
-    const post = e.target[1].value;
+    const { city, code, post } = input;
+
+    if (!validateSubmitAddData(cityInput, codeInput)) {
+      return;
+    }
 
     const csrfToken = await getCsrfToken();
 
@@ -25,10 +33,10 @@ async function handleEditContributor(
     }
 
     const response = await fetch(
-      `${currentUrl}/users/contributor/postal-codes`,
+      `${currentUrl}/users/contribution/postal-codes`,
       {
         mode: "cors",
-        method: "put",
+        method: "post",
         credentials: "include",
         headers: {
           "x-csrf-token": csrfToken,
@@ -38,35 +46,42 @@ async function handleEditContributor(
       },
     );
     const result = await response.json();
-
     if (response.ok) {
-      setSearchResult((prevState) => {
-        return prevState.map((item) =>
-          item.code === result.data.code ? result.data : item,
-        );
-      });
       addNotification({
         type: "success",
         message: result.message,
       });
+
+      const newItem = result.data;
+
+      setPendingChanges((prev) => [
+        ...prev,
+        {
+          id: newItem.id,
+          typeOfChange: newItem.typeOfChange,
+          code: newItem.code,
+          city: newItem.city,
+          post: newItem.post,
+          user: { email: userData.email },
+        },
+      ]);
       return;
     }
+
     addNotification({
       type: "error",
       message:
-        result?.error?.message ||
-        result?.error ||
-        "Failed to update postal code.",
+        result?.error?.message || result?.error || "Failed to add postal code.",
     });
   } catch (err) {
+    console.error("Error adding postal code:", err);
     addNotification({
       type: "error",
-      message: "An error occurred while updating the postal code.",
+      message: "Error occurred while adding the postal code.",
     });
-    console.error("Error updating postal code:", err);
   } finally {
     setLoading(false);
   }
 }
 
-export { handleEditContributor };
+export { handleSubmitAddData };

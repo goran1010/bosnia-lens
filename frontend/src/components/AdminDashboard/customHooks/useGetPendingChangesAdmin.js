@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
-import { useContext } from "react";
-import { NotificationContext } from "../../../contextData/NotificationContext";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+import { useContext, useEffect, useState } from "react";
+import { NotificationContext } from "../../../contextData/NotificationContext";
 
-function useGetAllContributors(setLoading) {
+function useGetPendingChangesAdmin(setLoading) {
   const { addNotification } = useContext(NotificationContext);
-  const [currentContributors, setCurrentContributors] = useState([]);
+  const [pendingChanges, setPendingChanges] = useState([]);
 
   useEffect(() => {
-    async function handleGetAllContributors() {
+    const fetchPendingChanges = async () => {
       try {
         setLoading(true);
+
         const response = await fetch(
-          `${BACKEND_URL}/users/admin/contributors`,
+          `${BACKEND_URL}/users/admin/pending-changes`,
           {
             method: "GET",
             mode: "cors",
@@ -25,7 +25,7 @@ function useGetAllContributors(setLoading) {
         const result = await response.json();
 
         if (response.ok) {
-          setCurrentContributors(result.data);
+          setPendingChanges(result.data);
           addNotification({
             type: "success",
             message: result.message,
@@ -37,22 +37,22 @@ function useGetAllContributors(setLoading) {
           message:
             result?.error?.message ||
             result?.error ||
-            "Failed to load contributors.",
+            "Failed to load pending changes.",
         });
       } catch (error) {
+        console.error("Error fetching pending changes:", error);
         addNotification({
           type: "error",
-          message: "Error fetching current contributors.",
+          message: "Error fetching pending changes.",
         });
-        console.error("Error fetching current contributors:", error);
       } finally {
         setLoading(false);
       }
-    }
-    handleGetAllContributors();
+    };
+    fetchPendingChanges();
   }, [addNotification, setLoading]);
 
-  return { currentContributors, setCurrentContributors };
+  return { pendingChanges, setPendingChanges };
 }
 
-export { useGetAllContributors };
+export { useGetPendingChangesAdmin };

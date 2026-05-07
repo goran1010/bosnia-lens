@@ -1,8 +1,6 @@
 import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { NotificationContext } from "../../../src/contextData/NotificationContext";
-import { UserDataContext } from "../../../src/contextData/UserDataContext";
-import userEvent from "@testing-library/user-event";
 
 const mockChanges = [
   {
@@ -25,7 +23,7 @@ const createFetchResponse = (data, ok = true) => ({
 const fetchMock = vi.fn();
 
 const setupFetchMock = ({
-  pendingRequests = [],
+  pendingRequests = mockChanges,
   csrfToken = "csrf-token",
 } = {}) => {
   fetchMock.mockImplementation((url) => {
@@ -69,6 +67,7 @@ import { useNotification } from "../../../src/customHooks/useNotification";
 import { Notifications } from "../../../src/components/Notifications";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
+import { UserDataContext } from "../../../src/contextData/UserDataContext";
 
 function Wrapper({ initialUser = null }) {
   const [userData, setUserData] = useState(initialUser);
@@ -100,67 +99,82 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-describe("AdminForm component rendering", () => {
-  test("renders AdminForm component's heading", async () => {
+describe("PendingChanges Component", () => {
+  test("renders PendingChanges with 1 request", async () => {
     setupFetchMock();
+
     render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
-    expect(
-      await screen.findByRole("heading", { name: /Admin Dashboard/i }),
-    ).toBeInTheDocument();
+    const numberOfRequests = await screen.findByLabelText(
+      /pending changes count/i,
+    );
+    await screen.findAllByText(/Pending Changes/i);
 
-    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(numberOfRequests).toHaveTextContent("1");
+
+    expect(screen.getByLabelText(/pending changes count/i)).toHaveTextContent(
+      "1",
+    );
   });
 
-  test("renders pending changes list", async () => {
-    setupFetchMock({ pendingRequests: mockChanges });
+  test("renders multiple pending requests with correct count", async () => {
+    const mockChangesMore = [
+      {
+        city: "Divičani",
+        code: 70204,
+        createdAt: "2026-05-06T07:34:01.967Z",
+        id: "8687b282-fcc6-4f69-8744-0f8e1585d991",
+        post: "HP_MOSTAR",
+        typeOfChange: "UPDATE",
+        user: { email: "johndoe@examplemail.com" },
+        userId: "058d1adc-58e4-4f31-8021-64e37e7d0dd0",
+      },
+      {
+        city: "Sarajevo",
+        code: 71000,
+        createdAt: "2026-05-07T10:20:30.000Z",
+        id: "12345678-90ab-cdef-1234-567890abcdef",
+        post: "HP_SARAJEVO",
+        typeOfChange: "ADD",
+        user: { email: "janedoe@examplemail.com" },
+        userId: "12345678-90ab-cdef-1234-567890abcdef",
+      },
+    ];
+    setupFetchMock({ pendingRequests: mockChangesMore });
 
     render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
-    const email = await screen.findByText(/johndoe@examplemail.com/i);
+    await screen.findByText("johndoe@examplemail.com");
 
-    expect(email).toBeInTheDocument();
+    expect(screen.getByLabelText(/pending changes count/i)).toHaveTextContent(
+      "2",
+    );
+
+    expect(screen.getByText("janedoe@examplemail.com")).toBeInTheDocument();
   });
-});
 
-describe("AdminForm component pending changes interaction", () => {
-  test("updates pending changes list when a pending request is approved", async () => {
-    setupFetchMock({ pendingRequests: mockChanges });
-    render(<Wrapper initialUser={{ role: "ADMIN" }} />);
+  test("shows no pending requests when fetch throws a network error", async () => {
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
 
-    const pendingCount = await screen.findByLabelText(/pending changes count/i);
-    expect(pendingCount).toHaveTextContent("1");
+    fetchMock.mockImplementation((url) => {
+      const requestUrl = String(url);
+      if (requestUrl.includes("/csrf-token")) {
+        return Promise.resolve(
+          createFetchResponse({ data: "someToken", message: "Success" }),
+        );
+      }
 
-    const user = userEvent.setup();
-
-    expect(await screen.findByText("Pending Changes")).toBeInTheDocument();
-    const confirmButton = await screen.findByRole("button", {
-      name: /Approve/i,
+      return Promise.reject(new Error("Network error"));
     });
 
-    await user.click(confirmButton);
-
-    expect(pendingCount).toHaveTextContent("0");
-
-    expect(screen.getByText(/No pending changes/i)).toBeInTheDocument();
-  });
-
-  test("removes pending request from the list when declined", async () => {
-    setupFetchMock({ pendingRequests: mockChanges });
     render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
-    const user = userEvent.setup();
-
-    expect(await screen.findByText("Pending Changes")).toBeInTheDocument();
-    const rejectButton = await screen.findByRole("button", {
-      name: /Reject/i,
-    });
-
-    await user.click(rejectButton);
-
-    const pendingCount = await screen.findByLabelText(/pending changes count/i);
-    expect(pendingCount).toHaveTextContent("0");
-
+    const countBadge = await screen.findByLabelText(/pending changes count/i);
+    expect(countBadge).toHaveTextContent("0");
     expect(screen.getByText(/No pending changes/i)).toBeInTheDocument();
+
+    consoleErrorSpy.mockRestore();
   });
 });

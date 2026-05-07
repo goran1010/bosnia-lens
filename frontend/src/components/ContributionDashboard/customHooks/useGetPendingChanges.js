@@ -2,17 +2,17 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 import { useContext, useEffect, useState } from "react";
 import { NotificationContext } from "../../../contextData/NotificationContext";
 
-function useGetPendingRequests(setLoading) {
+function useGetPendingChanges(setLoading) {
   const { addNotification } = useContext(NotificationContext);
-  const [pendingRequests, setPendingRequests] = useState([]);
+  const [pendingChanges, setPendingChanges] = useState([]);
 
   useEffect(() => {
-    const fetchPendingRequests = async () => {
+    const fetchPendingChanges = async () => {
       try {
         setLoading(true);
 
         const response = await fetch(
-          `${BACKEND_URL}/users/admin/requested-contributors`,
+          `${BACKEND_URL}/users/contribution/pending-changes/postal-codes`,
           {
             method: "GET",
             mode: "cors",
@@ -25,7 +25,7 @@ function useGetPendingRequests(setLoading) {
         const result = await response.json();
 
         if (response.ok) {
-          setPendingRequests(result.data);
+          setPendingChanges(result.data);
           addNotification({
             type: "success",
             message: result.message,
@@ -37,22 +37,22 @@ function useGetPendingRequests(setLoading) {
           message:
             result?.error?.message ||
             result?.error ||
-            "Failed to load pending contributor requests.",
+            "Failed to load pending changes.",
         });
       } catch (error) {
-        console.error("Error fetching pending requests:", error);
+        console.error("Error fetching pending changes:", error);
         addNotification({
           type: "error",
-          message: "Error fetching pending contributor requests.",
+          message: "Error fetching pending changes.",
         });
       } finally {
         setLoading(false);
       }
     };
-    fetchPendingRequests();
+    fetchPendingChanges();
   }, [addNotification, setLoading]);
 
-  return { pendingRequests, setPendingRequests };
+  return { pendingChanges, setPendingChanges };
 }
 
-export { useGetPendingRequests };
+export { useGetPendingChanges };

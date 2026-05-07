@@ -6,7 +6,7 @@ const availableRoutes = {
   "/home": "Home - Bosnia Lens",
   "/universities": "Universities - Bosnia Lens",
   "/postal-codes": "Postal Codes - Bosnia Lens",
-  "/contributor-dashboard": "Contributor Dashboard - Bosnia Lens",
+  "/contribution-dashboard": "Contribution Dashboard - Bosnia Lens",
   "/admin-dashboard": "Admin Dashboard - Bosnia Lens",
   "/profile": "Profile - Bosnia Lens",
   "/login": "Log In - Bosnia Lens",

@@ -1,68 +1,55 @@
 import { matchedData } from "express-validator";
-import { usersModel } from "../models/usersModel.js";
+import { pendingChangesPostalCodeModel } from "../models/pendingChangesPostalCodeModel.js";
+import { postalCodesModel } from "../models/postalCodesModel.js";
 import { sendSuccess } from "../utils/response.js";
 import { sanitizeUser, sanitizeUsers } from "../utils/sanitizeUser.js";
 
 class AdminController {
-  async getAllContributors(req, res) {
-    const contributors = await usersModel.findMany({
-      role: "CONTRIBUTOR",
-    });
+  async getPendingChanges(req, res) {
+    const pendingChanges = await pendingChangesPostalCodeModel.findMany();
+
     return sendSuccess(res, {
-      message: "All contributors fetched successfully.",
-      data: sanitizeUsers(contributors),
+      data: pendingChanges,
+      message: "Pending changes retrieved successfully.",
     });
   }
 
-  async getRequestedContributors(req, res) {
-    const requestedContributors = await usersModel.findMany({
-      requestedContributor: true,
-    });
-    return sendSuccess(res, {
-      message: "Users requested contributor role fetched successfully.",
-      data: sanitizeUsers(requestedContributors),
-    });
-  }
+  async declinePendingChange(req, res) {
+    const { id } = req.body;
 
-  async addContributor(req, res) {
-    const { userId } = matchedData(req);
-    const updatedUser = await usersModel.update(
-      { id: userId },
-      { role: "CONTRIBUTOR", requestedContributor: false },
-    );
+    await pendingChangesPostalCodeModel.delete({ id });
 
     return sendSuccess(res, {
-      status: 201,
-      message: "User promoted to contributor successfully.",
-      data: sanitizeUser(updatedUser),
+      message: "Pending change declined successfully.",
     });
   }
 
-  async removeContributor(req, res) {
-    const { userId } = matchedData(req);
-    const updatedUser = await usersModel.update(
-      { id: userId },
-      { role: "USER", requestedContributor: false },
-    );
+  async confirmPendingChange(req, res) {
+    const { id, typeOfChange } = req.body;
+
+    const pendingChange = await pendingChangesPostalCodeModel.findMany({ id });
+
+    if (!pendingChange || pendingChange.length === 0) {
+      return res.status(404).json({
+        error: "Pending change not found.",
+      });
+    }
+
+    const change = pendingChange[0];
+
+    if (typeOfChange === "CREATE") {
+      await postalCodesModel.createNew(change.city, change.code, change.post);
+    } else if (typeOfChange === "UPDATE") {
+      await postalCodesModel.edit(change.city, change.code, change.post);
+    } else if (typeOfChange === "DELETE") {
+      await postalCodesModel.deleteCode(change.code);
+    }
+
+    await pendingChangesPostalCodeModel.delete({ id: change.id });
+    // To-do: handle the case when deleting from pending changes fails after the postal code has been updated/created/deleted
 
     return sendSuccess(res, {
-      status: 201,
-      message: "User removed from contributors successfully.",
-      data: sanitizeUser(updatedUser),
-    });
-  }
-
-  async declineContributor(req, res) {
-    const { userId } = matchedData(req);
-    const updatedUser = await usersModel.update(
-      { id: userId },
-      { requestedContributor: false },
-    );
-
-    return sendSuccess(res, {
-      status: 201,
-      message: "User's contributor request declined successfully.",
-      data: sanitizeUser(updatedUser),
+      message: "Pending change approved successfully.",
     });
   }
 }

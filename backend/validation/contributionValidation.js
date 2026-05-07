@@ -4,7 +4,7 @@ import { validationError } from "./validationError.js";
 
 const validPosts = ["BH_POSTA", "POSTE_SRP", "HP_MOSTAR"];
 
-class ContributorValidation {
+class ContributionValidation {
   createPostalCode = [
     body("code")
       .trim()
@@ -86,5 +86,5 @@ class ContributorValidation {
   ];
 }
 
-const contributorValidation = new ContributorValidation();
-export { contributorValidation };
+const contributionValidation = new ContributionValidation();
+export { contributionValidation };
