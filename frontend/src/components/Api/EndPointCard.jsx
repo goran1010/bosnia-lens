@@ -1,20 +1,32 @@
 const methodColor = {
-  GET: "text-green-600 dark:text-green-400",
+  GET: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300",
+  POST: "bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-300",
+  PUT: "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300",
+  PATCH:
+    "bg-violet-100 text-violet-800 dark:bg-violet-900/40 dark:text-violet-300",
+  DELETE: "bg-rose-100 text-rose-800 dark:bg-rose-900/40 dark:text-rose-300",
 };
 
 function EndpointCard({ endpoint }) {
   return (
-    <div className="border rounded-lg p-5 flex flex-col gap-3">
-      <div className="flex items-center gap-3">
-        <span className={`font-mono font-bold ${methodColor[endpoint.method]}`}>
+    <article className="border border-gray-200 dark:border-gray-700 rounded-lg p-5 flex flex-col gap-4 bg-white dark:bg-gray-800/70">
+      <div className="flex flex-wrap items-center gap-3">
+        <span
+          className={`inline-flex items-center rounded-md px-2 py-1 font-mono text-xs font-bold ${
+            methodColor[endpoint.method] ||
+            "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-100"
+          }`}
+        >
           {endpoint.method}
         </span>
-        <code className="font-mono text-sm">{endpoint.path}</code>
+        <code className="font-mono text-sm break-all">{endpoint.path}</code>
       </div>
-      <p className="text-sm">{endpoint.description}</p>
+      <p className="text-sm text-gray-700 dark:text-gray-300">
+        {endpoint.description}
+      </p>
 
       {endpoint.params && (
-        <div>
+        <div className="rounded-md border border-gray-200 dark:border-gray-700 p-3">
           <p className="text-sm font-semibold mb-1">Query parameters</p>
           <table className="w-full text-sm border-collapse">
             <thead>
@@ -39,7 +51,7 @@ function EndpointCard({ endpoint }) {
 
       <div>
         <p className="text-sm font-semibold mb-1">Success response</p>
-        <pre className="bg-gray-100 dark:bg-gray-800 rounded p-3 text-xs overflow-x-auto">
+        <pre className="bg-gray-100 dark:bg-gray-900/80 rounded p-3 text-xs overflow-x-auto border border-gray-200 dark:border-gray-700">
           {endpoint.successExample}
         </pre>
       </div>
@@ -47,12 +59,12 @@ function EndpointCard({ endpoint }) {
       {endpoint.errorExample && (
         <div>
           <p className="text-sm font-semibold mb-1">Error responses</p>
-          <pre className="bg-gray-100 dark:bg-gray-800 rounded p-3 text-xs overflow-x-auto">
+          <pre className="bg-gray-100 dark:bg-gray-900/80 rounded p-3 text-xs overflow-x-auto border border-gray-200 dark:border-gray-700">
             {endpoint.errorExample}
           </pre>
         </div>
       )}
-    </div>
+    </article>
   );
 }
 
