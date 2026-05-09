@@ -25,12 +25,14 @@ describe("Admin Router - GET /users/admin/pending-changes", () => {
     await createAndLoginUser(agent, { role: "ADMIN" });
 
     const response = await agent.get("/users/admin/pending-changes");
+    const expectedResponse = {
+      status: 200,
+      body: expect.objectContaining({
+        message: "Pending changes retrieved successfully.",
+      }),
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.status).toBe(200);
-    expect(response.body.message).toEqual(
-      "Pending changes retrieved successfully.",
-    );
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
 
     await pendingChangesPostalCodeModel.delete({ code: 1234 });
     await usersModel.deleteUser({ id: userInDb.id });
@@ -60,12 +62,14 @@ describe("Admin Router - DELETE /users/admin/decline-pending-change", () => {
       .send({
         id: "1234",
       });
+    const expectedResponse = {
+      status: 200,
+      body: expect.objectContaining({
+        message: "Pending change declined successfully.",
+      }),
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.status).toBe(200);
-    expect(response.body.message).toEqual(
-      "Pending change declined successfully.",
-    );
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
 
     await pendingChangesPostalCodeModel.delete({ code: 1234 });
     await usersModel.deleteUser({ id: userInDb.id });
@@ -96,13 +100,15 @@ describe("Admin Router - POST /users/admin/approve-pending-change", () => {
         id: pendingChange.id,
         typeOfChange: "DELETE",
       });
+    const expectedResponse = {
+      status: 200,
+      body: {
+        data: null,
+        message: "Pending change approved successfully.",
+      },
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual({
-      data: null,
-      message: "Pending change approved successfully.",
-    });
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
 
     await pendingChangesPostalCodeModel.delete({ code: 1234 });
     await usersModel.deleteUser({ id: userInDb.id });

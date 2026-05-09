@@ -17,13 +17,15 @@ describe("Contributor Router - POST /users/contribution/postal-codes", () => {
     const response = await agent
       .post("/users/contribution/postal-codes")
       .send(newPostalCode);
+    const expectedResponse = {
+      status: 201,
+      body: expect.objectContaining({
+        message:
+          "New postal code suggested. Admin will review the suggestion and decide whether to accept it or not.",
+      }),
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-
-    expect(response.body.message).toBe(
-      "New postal code suggested. Admin will review the suggestion and decide whether to accept it or not.",
-    );
-    expect(response.status).toBe(201);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
 
     await pendingChangesPostalCodeModel.delete({ code: 12345 });
     await usersModel.deleteUser({ id: loginResponse.body.data.id });
@@ -49,13 +51,15 @@ describe("Contributor Router - PUT  /users/contribution/postal-codes", () => {
     const response = await agent
       .put("/users/contribution/postal-codes")
       .send(editedPostalCode);
+    const expectedResponse = {
+      status: 201,
+      body: expect.objectContaining({
+        message:
+          "Postal code edit suggested. Admin will review the suggestion and decide whether to accept it or not.",
+      }),
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-
-    expect(response.body.message).toBe(
-      "Postal code edit suggested. Admin will review the suggestion and decide whether to accept it or not.",
-    );
-    expect(response.status).toBe(201);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
 
     await pendingChangesPostalCodeModel.delete({ code: 12345 });
     await usersModel.deleteUser({ id: loginResponse.body.data.id });
@@ -75,13 +79,15 @@ describe("Contributor Router - DELETE /users/contribution/postal-codes", () => {
     const response = await agent
       .delete("/users/contribution/postal-codes")
       .send({ code: "12345", city: "Test", post: "BH_POSTA" });
+    const expectedResponse = {
+      status: 200,
+      body: expect.objectContaining({
+        message:
+          "Postal code deletion suggested. Admin will review the suggestion and decide whether to accept it or not.",
+      }),
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-
-    expect(response.body.message).toBe(
-      "Postal code deletion suggested. Admin will review the suggestion and decide whether to accept it or not.",
-    );
-    expect(response.status).toBe(200);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
 
     await pendingChangesPostalCodeModel.delete({ code: 12345 });
     await usersModel.deleteUser({ id: loginResponse.body.data.id });
@@ -96,13 +102,14 @@ describe("Contributor Router - GET /users/contribution/pending-changes/postal-co
     const response = await agent.get(
       "/users/contribution/pending-changes/postal-codes",
     );
+    const expectedResponse = {
+      status: 200,
+      body: expect.objectContaining({
+        message: "Pending changes retrieved successfully.",
+      }),
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-
-    expect(response.body.message).toBe(
-      "Pending changes retrieved successfully.",
-    );
-    expect(response.status).toBe(200);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
 
     await usersModel.deleteUser({ id: loginResponse.body.data.id });
   });
@@ -124,11 +131,15 @@ describe("Contributor Router - DELETE /users/contribution/pending-changes/postal
     const response = await agent
       .delete("/users/contribution/pending-changes/postal-codes")
       .send({ id: pendingChange.id });
+    const expectedResponse = {
+      status: 200,
+      body: {
+        message: "Pending change deleted successfully.",
+        data: null,
+      },
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-
-    expect(response.body.message).toBe("Pending change deleted successfully.");
-    expect(response.status).toBe(200);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
 
     await usersModel.deleteUser({ id: loginResponse.body.data.id });
   });

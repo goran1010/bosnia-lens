@@ -5,9 +5,13 @@ import { describe, test, expect } from "vitest";
 describe("CSRF Router", () => {
   test("should return a CSRF token", async () => {
     const response = await request(app).get("/csrf-token");
+    const expectedResponse = {
+      status: 200,
+      body: expect.objectContaining({
+        data: expect.any(String),
+      }),
+    };
 
-    expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty("data");
-    expect(typeof response.body.data).toBe("string");
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 });

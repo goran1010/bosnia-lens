@@ -6,7 +6,7 @@ describe("process.env variable missing or undefined", () => {
 
     let error;
     try {
-      await import("../../config/envCheck.js");
+      await import("../config/envCheck.js");
     } catch (err) {
       error = err;
     }

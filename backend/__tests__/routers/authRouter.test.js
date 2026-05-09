@@ -41,9 +41,16 @@ describe("POST /auth/signup", () => {
     };
 
     const response = await request(app).post("/auth/signup").send(newUser);
+    const expectedResponse = {
+      status: 400,
+      body: expect.objectContaining({
+        error: expect.objectContaining({
+          message: expect.stringContaining(responseData.error.message),
+        }),
+      }),
+    };
 
-    expect(response.body.error.message).toContain(responseData.error.message);
-    expect(response.status).toBe(400);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("responds with status 400 and message for incorrect confirm-password input", async () => {
@@ -58,9 +65,16 @@ describe("POST /auth/signup", () => {
     };
 
     const response = await request(app).post("/auth/signup").send(newUser);
+    const expectedResponse = {
+      status: 400,
+      body: expect.objectContaining({
+        error: expect.objectContaining({
+          message: expect.stringContaining(responseData.error.message),
+        }),
+      }),
+    };
 
-    expect(response.body.error.message).toContain(responseData.error.message);
-    expect(response.status).toBe(400);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("successfully create a user and returns status 201 and message", async () => {
@@ -78,15 +92,18 @@ describe("POST /auth/signup", () => {
     );
 
     const response = await request(app).post("/auth/signup").send(newUser);
+    const expectedResponse = {
+      status: 201,
+      body: {
+        data: expect.objectContaining({
+          email: newUser.email,
+        }),
+        message: "Registration successful! Check your email.",
+      },
+    };
 
     expect(sendConfirmationEmail).toHaveBeenCalled();
-    expect(response.body).toEqual({
-      data: expect.objectContaining({
-        email: newUser.email,
-      }),
-      message: "Registration successful! Check your email.",
-    });
-    expect(response.status).toBe(201);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("responds with json 400, Email already in use, if given email exists", async () => {
@@ -102,36 +119,49 @@ describe("POST /auth/signup", () => {
     };
 
     const response = await request(app).post("/auth/signup").send(newUser);
+    const expectedResponse = {
+      status: 400,
+      body: expect.objectContaining({
+        error: expect.objectContaining({
+          message: expect.stringContaining(responseData.error.message),
+        }),
+      }),
+    };
 
-    expect(response.body.error.message).toContain(responseData.error.message);
-    expect(response.status).toBe(400);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 });
 
 describe("GET /auth/confirm/:token", () => {
   test("responds with status 404 and message for no token provided", async () => {
     const response = await request(app).get("/auth/confirm/");
-
-    expect(response.body).toEqual({
-      error: {
-        message: "Route not found: check the URL and HTTP method.",
+    const expectedResponse = {
+      status: 404,
+      body: {
+        error: {
+          message: "Route not found: check the URL and HTTP method.",
+        },
       },
-    });
-    expect(response.status).toBe(404);
+    };
+
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("responds with status 400 and message for invalid token", async () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
 
     const response = await request(app).get("/auth/confirm/12345");
-
-    expect(response.body).toEqual({
-      error: {
-        message:
-          "Email confirmation failed: token is invalid or expired. Request a new confirmation email.",
+    const expectedResponse = {
+      status: 400,
+      body: {
+        error: {
+          message:
+            "Email confirmation failed: token is invalid or expired. Request a new confirmation email.",
+        },
       },
-    });
-    expect(response.status).toBe(400);
+    };
+
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("responds with status 200 and HTML for valid token", async () => {
@@ -157,8 +187,11 @@ describe("GET /auth/confirm/:token", () => {
     vi.spyOn(usersModel, "update").mockResolvedValueOnce(true);
 
     const response = await request(app).get(`/auth/confirm/${token}`);
+    const expectedResponse = {
+      status: 200,
+    };
 
-    expect(response.status).toBe(200);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
     expect(response.text).toContain(emailConfirmHTML());
   });
 });
@@ -174,9 +207,16 @@ describe("POST /auth/login", () => {
     };
 
     const response = await request(app).post("/auth/login").send(newUser);
+    const expectedResponse = {
+      status: 401,
+      body: expect.objectContaining({
+        error: expect.objectContaining({
+          message: expect.stringContaining(responseData.error.message),
+        }),
+      }),
+    };
 
-    expect(response.body.error.message).toContain(responseData.error.message);
-    expect(response.status).toBe(401);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("responds with User test_user logged in successfully for correct input", async () => {
@@ -187,10 +227,12 @@ describe("POST /auth/login", () => {
 
     const response = await request(app).post("/auth/login").send(newUser);
 
-    const responseData = {
-      message: `Logged in successfully`,
+    const expectedResponse = {
+      status: 200,
+      body: expect.objectContaining({
+        message: "Logged in successfully",
+      }),
     };
-    expect(response.body.message).toEqual(responseData.message);
-    expect(response.status).toBe(200);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 });

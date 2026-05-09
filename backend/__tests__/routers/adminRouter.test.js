@@ -28,13 +28,15 @@ beforeEach(() => {
 describe("Admin Router - GET /users/admin//pending-changes", () => {
   test("Responds with You need to be logged in and an admin to access this route if not logged in", async () => {
     const response = await request(app).get("/users/admin/pending-changes");
+    const expectedResponse = {
+      status: 401,
+      body: {
+        error: "You are not logged in.",
+        details: [{ msg: null }],
+      },
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.status).toBe(401);
-    expect(response.body).toEqual({
-      error: "You are not logged in.",
-      details: [{ msg: null }],
-    });
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("Responds with You need to be admin to access this route if role USER", async () => {
@@ -46,15 +48,16 @@ describe("Admin Router - GET /users/admin//pending-changes", () => {
     };
 
     const response = await request(app).get("/users/admin//pending-changes");
-
-    expect(response.header["content-type"]).toMatch(/json/);
-
-    expect(response.body).toEqual({
-      error: {
-        message: "Access denied: admin role is required.",
+    const expectedResponse = {
+      status: 403,
+      body: {
+        error: {
+          message: "Access denied: admin role is required.",
+        },
       },
-    });
-    expect(response.status).toBe(403);
+    };
+
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("Responds with status 200 and all pending changes if role ADMIN", async () => {
@@ -76,21 +79,23 @@ describe("Admin Router - GET /users/admin//pending-changes", () => {
     };
 
     const response = await request(app).get("/users/admin/pending-changes");
+    const expectedResponse = {
+      status: 200,
+      body: {
+        message: "Pending changes retrieved successfully.",
+        data: [
+          {
+            id: 1,
+            city: "Pending City",
+            code: 54321,
+            post: "",
+            typeOfChange: "DELETE",
+          },
+        ],
+      },
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual({
-      message: "Pending changes retrieved successfully.",
-      data: [
-        {
-          id: 1,
-          city: "Pending City",
-          code: 54321,
-          post: "",
-          typeOfChange: "DELETE",
-        },
-      ],
-    });
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 });
 
@@ -99,13 +104,15 @@ describe("Admin Router - DELETE /decline-pending-change", () => {
     const response = await request(app).delete(
       "/users/admin/decline-pending-change",
     );
+    const expectedResponse = {
+      status: 401,
+      body: {
+        error: "You are not logged in.",
+        details: [{ msg: null }],
+      },
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.status).toBe(401);
-    expect(response.body).toEqual({
-      error: "You are not logged in.",
-      details: [{ msg: null }],
-    });
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("Responds with You need to be admin to access this route if role USER", async () => {
@@ -119,14 +126,16 @@ describe("Admin Router - DELETE /decline-pending-change", () => {
     const response = await request(app).delete(
       "/users/admin/decline-pending-change",
     );
-
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.status).toBe(403);
-    expect(response.body).toEqual({
-      error: {
-        message: "Access denied: admin role is required.",
+    const expectedResponse = {
+      status: 403,
+      body: {
+        error: {
+          message: "Access denied: admin role is required.",
+        },
       },
-    });
+    };
+
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("Responds with status 200 and all pending changes if role ADMIN", async () => {
@@ -144,13 +153,15 @@ describe("Admin Router - DELETE /decline-pending-change", () => {
     const response = await request(app)
       .delete("/users/admin/decline-pending-change")
       .send({ id: 1 });
+    const expectedResponse = {
+      status: 200,
+      body: {
+        message: "Pending change declined successfully.",
+        data: null,
+      },
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual({
-      message: "Pending change declined successfully.",
-      data: null,
-    });
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 });
 
@@ -159,13 +170,15 @@ describe("Admin Router - POST /users/admin/approve-pending-change", () => {
     const response = await request(app).post(
       "/users/admin/approve-pending-change",
     );
+    const expectedResponse = {
+      status: 401,
+      body: {
+        error: "You are not logged in.",
+        details: [{ msg: null }],
+      },
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.status).toBe(401);
-    expect(response.body).toEqual({
-      error: "You are not logged in.",
-      details: [{ msg: null }],
-    });
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("Responds with You need to be admin to access this route if role USER", async () => {
@@ -179,14 +192,16 @@ describe("Admin Router - POST /users/admin/approve-pending-change", () => {
     const response = await request(app).post(
       "/users/admin/approve-pending-change",
     );
-
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.status).toBe(403);
-    expect(response.body).toEqual({
-      error: {
-        message: "Access denied: admin role is required.",
+    const expectedResponse = {
+      status: 403,
+      body: {
+        error: {
+          message: "Access denied: admin role is required.",
+        },
       },
-    });
+    };
+
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("Responds with status 404 and Pending change not found if no valid id is provided", async () => {
@@ -204,10 +219,14 @@ describe("Admin Router - POST /users/admin/approve-pending-change", () => {
     const response = await request(app)
       .post("/users/admin/approve-pending-change")
       .send({ id: 999, typeOfChange: "CREATE" });
+    const expectedResponse = {
+      status: 404,
+      body: expect.objectContaining({
+        error: expect.stringContaining("Pending change not found"),
+      }),
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.status).toBe(404);
-    expect(response.body.error).toContain("Pending change not found");
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("Responds with status 200 and message if pending change approved successfully", async () => {
@@ -242,13 +261,15 @@ describe("Admin Router - POST /users/admin/approve-pending-change", () => {
     const response = await request(app)
       .post("/users/admin/approve-pending-change")
       .send({ id: 1, typeOfChange: "CREATE" });
+    const expectedResponse = {
+      status: 200,
+      body: {
+        data: null,
+        message: "Pending change approved successfully.",
+      },
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual({
-      data: null,
-      message: "Pending change approved successfully.",
-    });
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
 
     expect(postalCodesModel.createNew).toHaveBeenCalledWith(
       "Test City",
