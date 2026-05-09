@@ -13,36 +13,51 @@ afterEach(() => {
 describe("postalCodesModel", () => {
   test("getAllPostalCodes returns all postal codes", async () => {
     const postalCodes = await postalCodesModel.getAllPostalCodes();
+    const expectedResult = {
+      isArray: true,
+      length: 3,
+    };
 
-    expect(Array.isArray(postalCodes)).toBe(true);
-    expect(postalCodes.length).toBe(3);
+    expect({
+      isArray: Array.isArray(postalCodes),
+      length: postalCodes.length,
+    }).toEqual(expectedResult);
   });
 
   test("getPostalCodeByCode returns null for non-existent code", async () => {
     const postalCode = await postalCodesModel.getPostalCodeByCode(99999);
+    const expectedResult = null;
 
-    expect(postalCode).toBeNull();
+    expect(postalCode).toBe(expectedResult);
   });
 
   test("getPostalCodeByCode returns correct postal code", async () => {
     const postalCode = await postalCodesModel.getPostalCodeByCode(71000);
-
-    expect(postalCode).toEqual({
+    const expectedResult = {
       code: 71000,
       city: "Sarajevo",
       post: "BH_POSTA",
-    });
+    };
+
+    expect(postalCode).toEqual(expectedResult);
   });
 
   test("getPostalCodesByCity returns correct postal codes", async () => {
     const postalCodes = await postalCodesModel.getPostalCodesByCity("Sarajevo");
+    const expectedResult = {
+      isArray: true,
+      length: 2,
+      data: [
+        { code: 71000, city: "Sarajevo", post: "BH_POSTA" },
+        { code: 71001, city: "Sarajevo", post: "POSTE_SRP" },
+      ],
+    };
 
-    expect(Array.isArray(postalCodes)).toBe(true);
-    expect(postalCodes.length).toBe(2);
-    expect(postalCodes).toEqual([
-      { code: 71000, city: "Sarajevo", post: "BH_POSTA" },
-      { code: 71001, city: "Sarajevo", post: "POSTE_SRP" },
-    ]);
+    expect({
+      isArray: Array.isArray(postalCodes),
+      length: postalCodes.length,
+      data: postalCodes,
+    }).toEqual(expectedResult);
   });
 
   test("createMany creates multiple postal codes", async () => {
@@ -50,8 +65,9 @@ describe("postalCodesModel", () => {
       { postalCode: 72000, city: "Tuzla", post: "BH_POSTA" },
       { postalCode: 73000, city: "Mostar", post: "HP_MOSTAR" },
     ]);
+    const expectedResult = { count: 2 };
 
-    expect(result).toEqual({ count: 2 });
+    expect(result).toEqual(expectedResult);
   });
 
   test("createNew creates a new postal code with valid post", async () => {
@@ -60,11 +76,13 @@ describe("postalCodesModel", () => {
       75000,
       "POSTE_SRP",
     );
-    expect(newPostalCode).toEqual({
+    const expectedResult = {
       code: 75000,
       city: "Zenica",
       post: "POSTE_SRP",
-    });
+    };
+
+    expect(newPostalCode).toEqual(expectedResult);
   });
 
   test("createNew creates a new postal code without post if post is invalid", async () => {
@@ -73,11 +91,13 @@ describe("postalCodesModel", () => {
       73000,
       "INVALID_POST",
     );
-    expect(newPostalCode).toEqual({
+    const expectedResult = {
       code: 73000,
       city: "Mostar",
       post: null,
-    });
+    };
+
+    expect(newPostalCode).toEqual(expectedResult);
   });
 
   test("edit updates an existing postal code with valid post", async () => {
@@ -86,11 +106,13 @@ describe("postalCodesModel", () => {
       71000,
       "HP_MOSTAR",
     );
-    expect(updatedPostalCode).toEqual({
+    const expectedResult = {
       code: 71000,
       city: "Sarajevo",
       post: "HP_MOSTAR",
-    });
+    };
+
+    expect(updatedPostalCode).toEqual(expectedResult);
   });
 
   test("edit updates an existing postal code without post if post is invalid", async () => {
@@ -99,19 +121,23 @@ describe("postalCodesModel", () => {
       71001,
       "INVALID_POST",
     );
-    expect(updatedPostalCode).toEqual({
+    const expectedResult = {
       code: 71001,
       city: "Sarajevo",
       post: null,
-    });
+    };
+
+    expect(updatedPostalCode).toEqual(expectedResult);
   });
 
   test("deleteCode deletes a postal code", async () => {
     const deletedPostalCode = await postalCodesModel.deleteCode(78000);
-    expect(deletedPostalCode).toEqual({
+    const expectedResult = {
       code: 78000,
       city: "Deleted City",
       post: "Deleted Post",
-    });
+    };
+
+    expect(deletedPostalCode).toEqual(expectedResult);
   });
 });
