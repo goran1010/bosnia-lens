@@ -25,6 +25,14 @@ function createFormElements() {
   };
 }
 
+async function submitLogInForm({ email, password }) {
+  const { emailField, passwordField, logInButton } = createFormElements();
+
+  await user.type(emailField, email);
+  await user.type(passwordField, password);
+  await user.click(logInButton);
+}
+
 beforeEach(async () => {
   function Wrapper() {
     const [userData, setUserData] = useState(null);
@@ -156,12 +164,11 @@ describe("LogIn Form Submit", () => {
       }),
     });
 
-    const { logInButton, emailField, passwordField } = createFormElements();
+    await submitLogInForm({
+      email: "existing@user.com",
+      password: "Password123!",
+    });
 
-    await user.type(emailField, "existing@user.com");
-    await user.type(passwordField, "Password123!");
-
-    await user.click(logInButton);
     const errorMessage = await screen.findByText(/Invalid email or password/i);
 
     expect(fetch).toHaveBeenCalledTimes(1);
@@ -177,16 +184,12 @@ describe("LogIn Form Submit", () => {
       }),
     });
 
-    const { emailField, passwordField, logInButton } = createFormElements();
+    await submitLogInForm({ email: "new@user.com", password: "Password123!" });
 
-    await user.type(emailField, "new@user.com");
-    await user.type(passwordField, "Password123!");
-
-    await user.click(logInButton);
-
-    expect(
-      await screen.findByText(/A free, open-source project/i),
-    ).toBeInTheDocument();
+    const homePageText = await screen.findByText(
+      /A free, open-source project/i,
+    );
+    expect(homePageText).toBeInTheDocument();
   });
 
   test("shows error message when network request throws", async () => {
@@ -198,16 +201,15 @@ describe("LogIn Form Submit", () => {
       new Error("Network error"),
     );
 
-    const { logInButton, emailField, passwordField } = createFormElements();
+    await submitLogInForm({
+      email: "existing@user.com",
+      password: "Password123!",
+    });
 
-    await user.type(emailField, "existing@user.com");
-    await user.type(passwordField, "Password123!");
-
-    await user.click(logInButton);
-
-    expect(
-      await screen.findByText(/An error occurred while logging in/i),
-    ).toBeInTheDocument();
+    const networkErrorMessage = await screen.findByText(
+      /An error occurred while logging in/i,
+    );
+    expect(networkErrorMessage).toBeInTheDocument();
 
     consoleErrorSpy.mockRestore();
   });

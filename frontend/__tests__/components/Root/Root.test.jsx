@@ -43,6 +43,14 @@ function renderRoot() {
   render(<RouterProvider router={router} />);
 }
 
+async function expectNotificationAndLink({ notificationText, linkName }) {
+  const notification = await screen.findByText(notificationText);
+  const link = await screen.findByRole("link", { name: linkName });
+
+  expect(notification).toBeInTheDocument();
+  expect(link).toBeInTheDocument();
+}
+
 describe("Root component", () => {
   test("renders Home heading if server is live", async () => {
     renderRoot();
@@ -69,23 +77,19 @@ describe("Root component", () => {
 
     renderRoot();
 
-    const notificationSuccess = await screen.findByText(
-      /User retrieved successfully./i,
-    );
-    expect(notificationSuccess).toBeInTheDocument();
-    const profileLink = await screen.findByRole("link", { name: /Profile/i });
-    expect(profileLink).toBeInTheDocument();
+    await expectNotificationAndLink({
+      notificationText: /User retrieved successfully./i,
+      linkName: /Profile/i,
+    });
   });
 
   test("renders Log In link when user is not logged in", async () => {
     renderRoot();
 
-    const notificationError = await screen.findByText(
-      /User not authenticated./i,
-    );
-    expect(notificationError).toBeInTheDocument();
-    const loginLink = await screen.findByRole("link", { name: /Log In/i });
-    expect(loginLink).toBeInTheDocument();
+    await expectNotificationAndLink({
+      notificationText: /User not authenticated./i,
+      linkName: /Log In/i,
+    });
   });
 });
 

@@ -9,12 +9,18 @@ const user = userEvent.setup();
 
 vi.spyOn(console, "warn").mockImplementation(() => {});
 
-const router = createMemoryRouter(routes, {
-  initialEntries: ["/non-existent-route"],
-});
-
 function renderErrorPage() {
+  const router = createMemoryRouter(routes, {
+    initialEntries: ["/non-existent-route"],
+  });
+
   render(<RouterProvider router={router} />);
+}
+
+async function getGoHomeLink() {
+  return screen.findByRole("link", {
+    name: /Go to Home Page/i,
+  });
 }
 
 describe("ErrorPage component", () => {
@@ -28,9 +34,9 @@ describe("ErrorPage component", () => {
 
   test("renders Go Home link with correct href", async () => {
     renderErrorPage();
-    const goHomeLink = await screen.findByRole("link", {
-      name: /Go to Home Page/i,
-    });
+
+    const goHomeLink = await getGoHomeLink();
+
     expect(goHomeLink).toBeInTheDocument();
     expect(goHomeLink).toHaveAttribute("href", "/");
   });
@@ -40,9 +46,8 @@ describe("ErrorPage navigation", () => {
   test("navigates to home page when Go Home link is clicked", async () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     renderErrorPage();
-    const goHomeLink = await screen.findByRole("link", {
-      name: /Go to Home Page/i,
-    });
+
+    const goHomeLink = await getGoHomeLink();
     await user.click(goHomeLink);
 
     const homePageHeading = await screen.findByRole("heading", {

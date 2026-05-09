@@ -105,9 +105,11 @@ describe("AdminForm component rendering", () => {
     setupFetchMock();
     render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
-    expect(
-      await screen.findByRole("heading", { name: /Admin Dashboard/i }),
-    ).toBeInTheDocument();
+    const heading = await screen.findByRole("heading", {
+      name: /Admin Dashboard/i,
+    });
+
+    expect(heading).toBeInTheDocument();
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
@@ -133,7 +135,9 @@ describe("AdminForm component pending changes interaction", () => {
 
     const user = userEvent.setup();
 
-    expect(await screen.findByText("Pending Changes")).toBeInTheDocument();
+    const pendingChangesHeading = await screen.findByText("Pending Changes");
+    expect(pendingChangesHeading).toBeInTheDocument();
+
     const confirmButton = await screen.findByRole("button", {
       name: /Approve/i,
     });
@@ -151,7 +155,9 @@ describe("AdminForm component pending changes interaction", () => {
 
     const user = userEvent.setup();
 
-    expect(await screen.findByText("Pending Changes")).toBeInTheDocument();
+    const pendingChangesHeading = await screen.findByText("Pending Changes");
+    expect(pendingChangesHeading).toBeInTheDocument();
+
     const rejectButton = await screen.findByRole("button", {
       name: /Reject/i,
     });

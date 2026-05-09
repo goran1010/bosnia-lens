@@ -34,6 +34,25 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
+async function openMobileMenu() {
+  const menuButton = await screen.findByRole("button", {
+    name: /Toggle navigation menu/i,
+  });
+
+  await userEvent.click(menuButton);
+
+  return {
+    menuButton,
+    mobileMenu: await screen.findByText(/Close/i),
+  };
+}
+
+function expectSharedNavbarLinks() {
+  expect(screen.getByText(/Home/i)).toBeInTheDocument();
+  expect(screen.getByText(/Universities/i)).toBeInTheDocument();
+  expect(screen.getByText(/Postal Codes/i)).toBeInTheDocument();
+}
+
 describe("Render Navbar on root route", () => {
   function Wrapper({ initialUser = null }) {
     const [userData, setUserData] = useState(initialUser);
@@ -57,18 +76,15 @@ describe("Render Navbar on root route", () => {
   }
   test("user not logged in", async () => {
     render(<Wrapper initialUser={null} />);
-    const home = await screen.findByText(/Home/i);
-    const universities = screen.getByText(/Universities/i);
-    const postalCodes = screen.getByText(/Postal Codes/i);
+    await screen.findByText(/Home/i);
+
     const profile = screen.queryByRole("link", { name: /profile/i });
 
     expect(profile).not.toBeInTheDocument();
     expect(
       screen.queryByRole("link", { name: /^Log In$/i }),
     ).toBeInTheDocument();
-    expect(home).toBeInTheDocument();
-    expect(universities).toBeInTheDocument();
-    expect(postalCodes).toBeInTheDocument();
+    expectSharedNavbarLinks();
   });
 
   test("user logged in", async () => {
@@ -77,18 +93,15 @@ describe("Render Navbar on root route", () => {
         initialUser={{ id: "1", username: "Test User", role: "USER" }}
       />,
     );
-    const home = await screen.findByText(/Home/i);
-    const universities = screen.getByText(/Universities/i);
-    const postalCodes = screen.getByText(/Postal Codes/i);
+    await screen.findByText(/Home/i);
+
     const profile = await screen.findByRole("link", { name: /profile/i });
 
     expect(profile).toBeInTheDocument();
     expect(
       screen.queryByRole("link", { name: /^Log In$/i }),
     ).not.toBeInTheDocument();
-    expect(home).toBeInTheDocument();
-    expect(universities).toBeInTheDocument();
-    expect(postalCodes).toBeInTheDocument();
+    expectSharedNavbarLinks();
   });
 });
 
@@ -106,60 +119,19 @@ function NavbarWrapper({ role = "ADMIN" }) {
   );
 }
 
-describe("render Navbar depending on open menu state", () => {
-  test("mobile menu is closed", async () => {
-    render(<NavbarWrapper />);
-    const menuButton = await screen.findByRole("button", {
-      name: /Toggle navigation menu/i,
-    });
-    expect(menuButton).toBeInTheDocument();
+describe("render Navbar mobile menu", () => {
+  test.each(["ADMIN", "CONTRIBUTOR"])(
+    "opens mobile menu for %s role",
+    async (role) => {
+      render(<NavbarWrapper role={role} />);
 
-    await userEvent.click(menuButton);
+      const { menuButton, mobileMenu } = await openMobileMenu();
 
-    const mobileMenu = await screen.findByText(/Close/i);
-    expect(mobileMenu).toBeInTheDocument();
-    expect(screen.queryByText("Menu")).not.toBeInTheDocument();
-  });
-
-  test("mobile menu is open", async () => {
-    render(<NavbarWrapper />);
-
-    const menuButton = await screen.findByRole("button", {
-      name: /Toggle navigation menu/i,
-    });
-    await userEvent.click(menuButton);
-
-    const mobileMenu = await screen.findByText(/Close/i);
-    expect(mobileMenu).toBeInTheDocument();
-  });
-});
-
-describe("render Navbar when user is admin or contributor", () => {
-  test("mobile menu is closed", async () => {
-    render(<NavbarWrapper />);
-    const menuButton = await screen.findByRole("button", {
-      name: /Toggle navigation menu/i,
-    });
-    expect(menuButton).toBeInTheDocument();
-
-    await userEvent.click(menuButton);
-
-    const mobileMenu = await screen.findByText(/Close/i);
-    expect(mobileMenu).toBeInTheDocument();
-    expect(screen.queryByText("Menu")).not.toBeInTheDocument();
-  });
-
-  test("mobile menu is open", async () => {
-    render(<NavbarWrapper />);
-
-    const menuButton = await screen.findByRole("button", {
-      name: /Toggle navigation menu/i,
-    });
-    await userEvent.click(menuButton);
-
-    const mobileMenu = await screen.findByText(/Close/i);
-    expect(mobileMenu).toBeInTheDocument();
-  });
+      expect(menuButton).toBeInTheDocument();
+      expect(mobileMenu).toBeInTheDocument();
+      expect(screen.queryByText("Menu")).not.toBeInTheDocument();
+    },
+  );
 });
 
 describe("render Menu based on viewport size", () => {
