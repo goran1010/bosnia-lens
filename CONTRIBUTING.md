@@ -24,6 +24,22 @@ Contributions of any kind are welcome - bug fixes, new features, data, documenta
 - Run `npm run test:all` locally before pushing to ensure all tests pass
 - Follow existing code style and patterns in the codebase
 
+## In-App Data Contributions (Postal Codes)
+
+If you want to contribute data through the Bosnia Lens app (instead of opening a code PR), use the current workflow below:
+
+1. Create an account and confirm your email.
+2. Log in and open `/contribution-dashboard`.
+3. Choose the Postal Codes dataset.
+4. Submit a suggestion to create, edit, or delete a postal code.
+5. Your suggestion is stored as a pending change.
+6. Admin users review pending changes and either approve or reject them.
+
+Notes:
+
+- Approved suggestions are applied to the live postal code dataset by admins.
+- You can remove your own pending suggestion before review from the pending changes list in the dashboard.
+
 ## Reporting Issues
 
 For bugs or feature requests, open a GitHub issue. For security vulnerabilities, email <goran1010jovic@gmail.com> instead of opening a public issue.
