@@ -256,3 +256,110 @@ describe("DELETE /users/contribution/postal-codes", () => {
     expect(responseCode.status).toBe(200);
   });
 });
+
+describe("GET /users/contribution/pending-changes/postal-codes", () => {
+  test("responds with status 401 and You need to be logged in to access this route if not logged in", async () => {
+    const notLoggedInResponse = {
+      error: "You are not logged in.",
+      details: [{ msg: null }],
+    };
+
+    const response = await request(app).get(
+      "/users/contribution/pending-changes/postal-codes",
+    );
+
+    expect(response.header["content-type"]).toMatch(/json/);
+    expect(response.body).toEqual(notLoggedInResponse);
+    expect(response.status).toBe(401);
+  });
+
+  test("Valid request responds with status 200 and Pending changes retrieved successfully", async () => {
+    const pendingChanges = [
+      {
+        id: 1,
+        userId: 1,
+        code: "12345",
+        post: "",
+        typeOfChange: "CREATE",
+        city: "TestCity",
+      },
+    ];
+
+    vi.spyOn(pendingChangesPostalCodeModel, "findMany").mockResolvedValue(
+      pendingChanges,
+    );
+
+    mockedUser = {
+      id: 1,
+      username: "user1",
+      email: "user1@example.com",
+    };
+    const agent = request.agent(app);
+
+    const expectedResponse = {
+      message: "Pending changes retrieved successfully.",
+      data: pendingChanges,
+    };
+
+    const response = await agent.get(
+      "/users/contribution/pending-changes/postal-codes",
+    );
+
+    expect(response.header["content-type"]).toMatch(/json/);
+    expect(response.body).toEqual(expectedResponse);
+    expect(response.status).toBe(200);
+  });
+});
+
+describe("DELETE /users/contribution/pending-changes/postal-codes", () => {
+  test("responds with status 401 and You need to be logged in to access this route if not logged in", async () => {
+    const notLoggedInResponse = {
+      error: "You are not logged in.",
+      details: [{ msg: null }],
+    };
+
+    const response = await request(app).delete(
+      "/users/contribution/pending-changes/postal-codes",
+    );
+
+    expect(response.header["content-type"]).toMatch(/json/);
+    expect(response.body).toEqual(notLoggedInResponse);
+    expect(response.status).toBe(401);
+  });
+
+  test("Valid request responds with status 200 and Pending change deleted successfully", async () => {
+    const pendingChange = {
+      id: "1",
+      userId: "1",
+      code: "12345",
+      post: "",
+      typeOfChange: "CREATE",
+      city: "TestCity",
+    };
+
+    vi.spyOn(pendingChangesPostalCodeModel, "findMany").mockResolvedValue([
+      pendingChange,
+    ]);
+
+    mockedUser = {
+      id: "1",
+      username: "user1",
+      email: "user1@example.com",
+    };
+    const agent = request.agent(app);
+
+    const expectedResponse = {
+      status: 200,
+      body: {
+        message: "Pending change deleted successfully.",
+        data: null,
+      },
+    };
+
+    const response = await agent
+      .delete("/users/contribution/pending-changes/postal-codes")
+      .send({ id: pendingChange.id });
+
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
+  });
+});
