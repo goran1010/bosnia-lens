@@ -34,10 +34,12 @@ describe("GET /me", () => {
     };
 
     const response = await request(app).get("/users/me");
+    const expectedResponse = {
+      status: 401,
+      body: notLoggedInResponse,
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.body).toEqual(notLoggedInResponse);
-    expect(response.status).toBe(401);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("responds with status 200 and user data if logged in", async () => {
@@ -46,13 +48,15 @@ describe("GET /me", () => {
     const safeUser = sanitizeUser(user);
 
     const response = await request(app).get("/users/me");
+    const expectedResponse = {
+      status: 200,
+      body: {
+        message: "User info retrieved",
+        data: safeUser,
+      },
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.body).toEqual({
-      message: "User info retrieved",
-      data: safeUser,
-    });
-    expect(response.status).toBe(200);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 });
 
@@ -62,13 +66,16 @@ describe("POST /logout", () => {
     mockedUser = user;
 
     const response = await request(app).post("/users/logout");
-
-    expect(response.body).toEqual({
-      data: {
-        success: true,
+    const expectedResponse = {
+      status: 200,
+      body: {
+        data: {
+          success: true,
+        },
+        message: "User logged out successfully",
       },
-      message: "User logged out successfully",
-    });
-    expect(response.status).toBe(200);
+    };
+
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 });

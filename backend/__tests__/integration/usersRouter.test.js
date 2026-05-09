@@ -6,17 +6,19 @@ import { createNewUser } from "../utils/createNewUser.js";
 
 describe("usersRouter", () => {
   test("successfully create a user and returns status 201 and message", async () => {
-    const responseData = {
-      data: expect.any(Object),
-      message: "Registration successful! Check your email.",
+    const expectedResponse = {
+      status: 201,
+      body: {
+        data: expect.any(Object),
+        message: "Registration successful! Check your email.",
+      },
     };
 
     const newUserData = createNewUser();
 
     const response = await request(app).post("/auth/signup").send(newUserData);
 
-    expect(response.body).toEqual(responseData);
-    expect(response.status).toBe(201);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("responds with 200 and User test_user logged in successfully for correct login input", async () => {
@@ -24,13 +26,14 @@ describe("usersRouter", () => {
     const newUserData = createNewUser();
 
     const response = await createAndLoginUser(agent, newUserData);
-
-    const expectedData = {
-      message: `Logged in successfully`,
+    const expectedResponse = {
+      status: 200,
+      body: expect.objectContaining({
+        message: "Logged in successfully",
+      }),
     };
 
-    expect(response.status).toBe(200);
-    expect(response.body.message).toEqual(expectedData.message);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("responds User logged out successfully", async () => {
@@ -39,13 +42,16 @@ describe("usersRouter", () => {
     await createAndLoginUser(agent, userData);
 
     const response = await agent.post("/users/logout");
-
-    expect(response.body).toEqual({
-      data: {
-        success: true,
+    const expectedResponse = {
+      status: 200,
+      body: {
+        data: {
+          success: true,
+        },
+        message: "User logged out successfully",
       },
-      message: "User logged out successfully",
-    });
-    expect(response.status).toBe(200);
+    };
+
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 });

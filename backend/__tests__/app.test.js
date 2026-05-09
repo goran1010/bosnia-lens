@@ -23,25 +23,31 @@ describe("app", () => {
     const { app } = await import("../app.js");
 
     const response = await request(app).get("/api");
-
-    expect(response.body).toEqual({
-      error: {
-        message: "Server error: please try again later.",
+    const expectedResponse = {
+      status: 500,
+      body: {
+        error: {
+          message: "Server error: please try again later.",
+        },
       },
-    });
-    expect(response.status).toBe(500);
+    };
+
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("app responds with status 404 for unknown routes", async () => {
     const { app } = await import("../app.js");
 
     const response = await request(app).get("/unknown-route");
-
-    expect(response.body).toEqual({
-      error: {
-        message: "Route not found: check the URL and HTTP method.",
+    const expectedResponse = {
+      status: 404,
+      body: {
+        error: {
+          message: "Route not found: check the URL and HTTP method.",
+        },
       },
-    });
-    expect(response.status).toBe(404);
+    };
+
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 });

@@ -65,6 +65,17 @@ function Wrapper({ initialUser = null }) {
   );
 }
 
+async function clickLogout() {
+  const logoutButton = await screen.findByRole("button", {
+    name: /Log out/i,
+  });
+
+  expect(logoutButton).toBeInTheDocument();
+  await user.click(logoutButton);
+
+  return logoutButton;
+}
+
 describe("Profile Component", () => {
   test("renders profile component when user is not logged in", async () => {
     render(<Wrapper />);
@@ -123,11 +134,9 @@ describe("Profile Component handle logout", () => {
   test("handles logout failure due to missing CSRF token", async () => {
     getCsrfTokenMock = null;
     render(<Wrapper initialUser={{ username: "testuser" }} />);
-    const logoutButton = await screen.findByRole("button", {
-      name: /Log out/i,
-    });
-    expect(logoutButton).toBeInTheDocument();
-    await user.click(logoutButton);
+
+    await clickLogout();
+
     const notificationElement = await screen.findByText(
       /Failed to retrieve CSRF token./i,
     );
@@ -143,11 +152,8 @@ describe("Profile Component handle logout", () => {
     });
 
     render(<Wrapper initialUser={{ username: "testuser" }} />);
-    const logoutButton = await screen.findByRole("button", {
-      name: /Log out/i,
-    });
-    expect(logoutButton).toBeInTheDocument();
-    await user.click(logoutButton);
+
+    await clickLogout();
 
     const notificationElement = await screen.findByText(/Network error./i);
     expect(notificationElement).toBeInTheDocument();
@@ -161,11 +167,8 @@ describe("Profile Component handle logout", () => {
     });
 
     render(<Wrapper initialUser={{ username: "testuser" }} />);
-    const logoutButton = await screen.findByRole("button", {
-      name: /Log out/i,
-    });
-    expect(logoutButton).toBeInTheDocument();
-    await user.click(logoutButton);
+
+    await clickLogout();
 
     const notificationElement = await screen.findByText(
       /An error occurred while logging out./i,
@@ -188,11 +191,7 @@ describe("Profile Component handle logout", () => {
     });
 
     render(<Wrapper initialUser={{ username: "testuser" }} />);
-    const logoutButton = await screen.findByRole("button", {
-      name: /Log out/i,
-    });
-    expect(logoutButton).toBeInTheDocument();
-    await user.click(logoutButton);
+    const logoutButton = await clickLogout();
 
     const notificationElement = await screen.findByText(
       /User logged out successfully/i,

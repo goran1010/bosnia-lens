@@ -35,10 +35,12 @@ describe("POST /users/contribution/postal-codes", () => {
     const response = await request(app).post(
       "/users/contribution/postal-codes",
     );
+    const expectedResponse = {
+      status: 401,
+      body: notLoggedInResponse,
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.body).toEqual(notLoggedInResponse);
-    expect(response.status).toBe(401);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("No code sent responds with status 400 and Code is required", async () => {
@@ -51,10 +53,16 @@ describe("POST /users/contribution/postal-codes", () => {
 
     const expectedResponse = "Validation failed: code: Code is required";
     const response = await agent.post("/users/contribution/postal-codes");
+    const expectedResponseData = {
+      status: 400,
+      body: expect.objectContaining({
+        error: expect.objectContaining({
+          message: expect.stringContaining(expectedResponse),
+        }),
+      }),
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.body.error.message).toContain(expectedResponse);
-    expect(response.status).toBe(400);
+    expect(response).toEqual(expect.objectContaining(expectedResponseData));
   });
 
   test("Responds with status 400 and Postal codes must have 5 numbers if code sent is not 5 numbers", async () => {
@@ -69,10 +77,16 @@ describe("POST /users/contribution/postal-codes", () => {
     const responseCode = await agent
       .post("/users/contribution/postal-codes")
       .send({ city: "TestCity", code: "1234", post: "" });
+    const expectedResponseData = {
+      status: 400,
+      body: expect.objectContaining({
+        error: expect.objectContaining({
+          message: expect.stringContaining(expectedResponse),
+        }),
+      }),
+    };
 
-    expect(responseCode.header["content-type"]).toMatch(/json/);
-    expect(responseCode.body.error.message).toContain(expectedResponse);
-    expect(responseCode.status).toBe(400);
+    expect(responseCode).toEqual(expect.objectContaining(expectedResponseData));
   });
 
   test("Responds with status 400 and Must be a number if code sent is not a number", async () => {
@@ -87,10 +101,16 @@ describe("POST /users/contribution/postal-codes", () => {
     const responseCode = await agent
       .post("/users/contribution/postal-codes")
       .send({ city: "TestCity", code: "abcde", post: "" });
+    const expectedResponseData = {
+      status: 400,
+      body: expect.objectContaining({
+        error: expect.objectContaining({
+          message: expect.stringContaining(expectedResponse),
+        }),
+      }),
+    };
 
-    expect(responseCode.header["content-type"]).toMatch(/json/);
-    expect(responseCode.body.error.message).toContain(expectedResponse);
-    expect(responseCode.status).toBe(400);
+    expect(responseCode).toEqual(expect.objectContaining(expectedResponseData));
   });
 
   test("Valid request responds with status 201 and New postal code row created", async () => {
@@ -117,10 +137,12 @@ describe("POST /users/contribution/postal-codes", () => {
     const response = await agent
       .post("/users/contribution/postal-codes")
       .send({ city: "TestCity", code: "12345", post: "" });
+    const expectedResponseData = {
+      status: 201,
+      body: expectedResponse,
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.body).toEqual(expectedResponse);
-    expect(response.status).toBe(201);
+    expect(response).toEqual(expect.objectContaining(expectedResponseData));
   });
 });
 
@@ -132,10 +154,12 @@ describe("PUT /users/contribution/postal-codes", () => {
     };
 
     const response = await request(app).put("/users/contribution/postal-codes");
+    const expectedResponse = {
+      status: 401,
+      body: notLoggedInResponse,
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.body).toEqual(notLoggedInResponse);
-    expect(response.status).toBe(401);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("No code sent responds with status 400 and Code is required", async () => {
@@ -148,10 +172,16 @@ describe("PUT /users/contribution/postal-codes", () => {
 
     const expectedResponse = "Code is required";
     const responseCode = await agent.put("/users/contribution/postal-codes");
+    const expectedResponseData = {
+      status: 400,
+      body: expect.objectContaining({
+        error: expect.objectContaining({
+          message: expect.stringContaining(expectedResponse),
+        }),
+      }),
+    };
 
-    expect(responseCode.header["content-type"]).toMatch(/json/);
-    expect(responseCode.body.error.message).toContain(expectedResponse);
-    expect(responseCode.status).toBe(400);
+    expect(responseCode).toEqual(expect.objectContaining(expectedResponseData));
   });
 
   test("Valid request responds with status 201 and Postal code edit suggested", async () => {
@@ -183,10 +213,12 @@ describe("PUT /users/contribution/postal-codes", () => {
     const response = await agent
       .put("/users/contribution/postal-codes")
       .send({ city: "TestCity", code: "12345", post: "" });
+    const expectedResponseData = {
+      status: 201,
+      body: expectedResponse,
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.body).toEqual(expectedResponse);
-    expect(response.status).toBe(201);
+    expect(response).toEqual(expect.objectContaining(expectedResponseData));
   });
 });
 
@@ -200,10 +232,12 @@ describe("DELETE /users/contribution/postal-codes", () => {
     const response = await request(app).delete(
       "/users/contribution/postal-codes",
     );
+    const expectedResponse = {
+      status: 401,
+      body: notLoggedInResponse,
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.body).toEqual(notLoggedInResponse);
-    expect(response.status).toBe(401);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("No code sent responds with status 400 and Code is required", async () => {
@@ -216,10 +250,16 @@ describe("DELETE /users/contribution/postal-codes", () => {
 
     const expectedResponse = "Code is required";
     const responseCode = await agent.delete("/users/contribution/postal-codes");
+    const expectedResponseData = {
+      status: 400,
+      body: expect.objectContaining({
+        error: expect.objectContaining({
+          message: expect.stringContaining(expectedResponse),
+        }),
+      }),
+    };
 
-    expect(responseCode.header["content-type"]).toMatch(/json/);
-    expect(responseCode.body.error.message).toContain(expectedResponse);
-    expect(responseCode.status).toBe(400);
+    expect(responseCode).toEqual(expect.objectContaining(expectedResponseData));
   });
 
   test("Valid request responds with status 200 and Postal code row deleted", async () => {
@@ -250,10 +290,12 @@ describe("DELETE /users/contribution/postal-codes", () => {
     const responseCode = await agent
       .delete("/users/contribution/postal-codes")
       .send({ code: "12345" });
+    const expectedResponseData = {
+      status: 200,
+      body: expectedResponse,
+    };
 
-    expect(responseCode.header["content-type"]).toMatch(/json/);
-    expect(responseCode.body).toEqual(expectedResponse);
-    expect(responseCode.status).toBe(200);
+    expect(responseCode).toEqual(expect.objectContaining(expectedResponseData));
   });
 });
 
@@ -267,10 +309,12 @@ describe("GET /users/contribution/pending-changes/postal-codes", () => {
     const response = await request(app).get(
       "/users/contribution/pending-changes/postal-codes",
     );
+    const expectedResponse = {
+      status: 401,
+      body: notLoggedInResponse,
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.body).toEqual(notLoggedInResponse);
-    expect(response.status).toBe(401);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("Valid request responds with status 200 and Pending changes retrieved successfully", async () => {
@@ -304,10 +348,12 @@ describe("GET /users/contribution/pending-changes/postal-codes", () => {
     const response = await agent.get(
       "/users/contribution/pending-changes/postal-codes",
     );
+    const expectedResponseData = {
+      status: 200,
+      body: expectedResponse,
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.body).toEqual(expectedResponse);
-    expect(response.status).toBe(200);
+    expect(response).toEqual(expect.objectContaining(expectedResponseData));
   });
 });
 
@@ -321,10 +367,12 @@ describe("DELETE /users/contribution/pending-changes/postal-codes", () => {
     const response = await request(app).delete(
       "/users/contribution/pending-changes/postal-codes",
     );
+    const expectedResponse = {
+      status: 401,
+      body: notLoggedInResponse,
+    };
 
-    expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.body).toEqual(notLoggedInResponse);
-    expect(response.status).toBe(401);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("Valid request responds with status 200 and Pending change deleted successfully", async () => {

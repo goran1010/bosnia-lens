@@ -56,6 +56,16 @@ function createFormElements() {
   };
 }
 
+async function submitSignUpForm({ email, password, confirmPassword, button }) {
+  const { emailField, passwordField, confirmPasswordField, signUpButton } =
+    createFormElements();
+
+  await user.type(emailField, email);
+  await user.type(passwordField, password);
+  await user.type(confirmPasswordField, confirmPassword);
+  await user.click(button ?? signUpButton);
+}
+
 describe("Render SignUp Component", () => {
   test("SignUp component heading", () => {
     const linkElement = screen.getByRole("heading", {
@@ -211,19 +221,16 @@ describe("SignUp Form Submit", () => {
         },
       }),
     });
-    const { emailField, passwordField, confirmPasswordField, signUpButton } =
-      createFormElements();
-
-    await user.type(emailField, "newemail@mail.com");
-    await user.type(passwordField, "Password123!");
-    await user.type(confirmPasswordField, "Password123!");
-
-    await user.click(signUpButton);
+    await submitSignUpForm({
+      email: "newemail@mail.com",
+      password: "Password123!",
+      confirmPassword: "Password123!",
+    });
 
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(
-      await screen.findByText(/Email already in use/i),
-    ).toBeInTheDocument();
+
+    const emailInUseMessage = await screen.findByText(/Email already in use/i);
+    expect(emailInUseMessage).toBeInTheDocument();
   });
 
   test("Redirects to LogIn on successful form submit", async () => {
@@ -235,21 +242,19 @@ describe("SignUp Form Submit", () => {
       }),
     });
 
-    const { emailField, passwordField, confirmPasswordField, signUpButton } =
-      createFormElements();
-
-    await user.type(emailField, "newemail@mail.com");
-    await user.type(passwordField, "Password123!");
-    await user.type(confirmPasswordField, "Password123!");
-
-    await user.click(signUpButton);
+    await submitSignUpForm({
+      email: "newemail@mail.com",
+      password: "Password123!",
+      confirmPassword: "Password123!",
+    });
 
     const logInButton = await screen.findByRole("button", { name: /Log In/i });
     expect(logInButton).toBeInTheDocument();
 
-    expect(
-      await screen.findByText(/Registration successful! Check your email./i),
-    ).toBeInTheDocument();
+    const successMessage = await screen.findByText(
+      /Registration successful! Check your email./i,
+    );
+    expect(successMessage).toBeInTheDocument();
   });
 
   test("shows error message when network request throws", async () => {
@@ -261,18 +266,16 @@ describe("SignUp Form Submit", () => {
       new Error("Network error"),
     );
 
-    const { emailField, passwordField, confirmPasswordField, signUpButton } =
-      createFormElements();
+    await submitSignUpForm({
+      email: "newemail@mail.com",
+      password: "Password123!",
+      confirmPassword: "Password123!",
+    });
 
-    await user.type(emailField, "newemail@mail.com");
-    await user.type(passwordField, "Password123!");
-    await user.type(confirmPasswordField, "Password123!");
-
-    await user.click(signUpButton);
-
-    expect(
-      await screen.findByText(/An error occurred during registration/i),
-    ).toBeInTheDocument();
+    const networkErrorMessage = await screen.findByText(
+      /An error occurred during registration/i,
+    );
+    expect(networkErrorMessage).toBeInTheDocument();
 
     consoleErrorSpy.mockRestore();
   });

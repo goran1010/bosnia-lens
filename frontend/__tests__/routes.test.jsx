@@ -18,14 +18,28 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
+function renderRoute(route, { withUserDataContext = false } = {}) {
+  const router = createMemoryRouter(routes, {
+    initialEntries: [route],
+  });
+
+  if (withUserDataContext) {
+    render(
+      <UserDataContext value={{ message: [], setMessage: () => {} }}>
+        <RouterProvider router={router} />
+      </UserDataContext>,
+    );
+    return;
+  }
+
+  render(<RouterProvider router={router} />);
+}
+
 describe("Loading components when visiting an address", () => {
   test("render Error Page when visiting non-existent address", async () => {
     const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
-    const router = createMemoryRouter(routes, {
-      initialEntries: ["/non-existent-address"],
-    });
-    render(<RouterProvider router={router} />);
+    renderRoute("/non-existent-address");
 
     const linkElement = await screen.findByText(
       /There is nothing here, sorry./i,
@@ -37,34 +51,21 @@ describe("Loading components when visiting an address", () => {
   });
 
   test("visit universities page", async () => {
-    const router = createMemoryRouter(routes, {
-      initialEntries: ["/universities"],
-    });
-    render(<RouterProvider router={router} />);
+    renderRoute("/universities");
 
     const linkElements = await screen.findAllByText(/Universities/i);
     expect(linkElements[0]).toBeInTheDocument();
   });
 
   test("visit postal codes page", async () => {
-    const router = createMemoryRouter(routes, {
-      initialEntries: ["/postal-codes"],
-    });
-    render(
-      <UserDataContext value={{ message: [], setMessage: () => {} }}>
-        <RouterProvider router={router} />
-      </UserDataContext>,
-    );
+    renderRoute("/postal-codes", { withUserDataContext: true });
 
     const linkElement = await screen.findByText(/Postal Code or Municipality/i);
     expect(linkElement).toBeInTheDocument();
   });
 
   test("visit home page", async () => {
-    const router = createMemoryRouter(routes, {
-      initialEntries: ["/"],
-    });
-    render(<RouterProvider router={router} />);
+    renderRoute("/");
 
     const linkElement = await screen.findByRole("heading", {
       name: /Bosnia Lens/i,
@@ -76,10 +77,7 @@ describe("Loading components when visiting an address", () => {
   test.each(["/", "/postal-codes", "/universities"])(
     "render Footer on every page",
     async (route) => {
-      const router = createMemoryRouter(routes, {
-        initialEntries: [route],
-      });
-      render(<RouterProvider router={router} />);
+      renderRoute(route);
 
       const footerEmail = await screen.findByText(/goran1010jovic@gmail.com/i);
       const footerAuthor = await screen.findByText(/Goran Jović/i);
@@ -91,10 +89,7 @@ describe("Loading components when visiting an address", () => {
   test.each(["/", "/postal-codes", "/universities"])(
     "render Navbar on every page",
     async (route) => {
-      const router = createMemoryRouter(routes, {
-        initialEntries: [route],
-      });
-      render(<RouterProvider router={router} />);
+      renderRoute(route);
 
       const homeLink = await screen.findByRole("link", { name: /Home/i });
       const universitiesLink = await screen.findByRole("link", {

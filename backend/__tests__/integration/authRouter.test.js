@@ -9,14 +9,16 @@ describe("Auth Router - POST /auth/signup", () => {
   test("responds with status 201 and Registration successful! Check your email message if user created successfully", async () => {
     const newUser = createNewUser();
 
-    const responseData = {
-      data: expect.any(Object),
-      message: "Registration successful! Check your email.",
+    const expectedResponse = {
+      status: 201,
+      body: {
+        data: expect.any(Object),
+        message: "Registration successful! Check your email.",
+      },
     };
     const response = await request(app).post("/auth/signup").send(newUser);
 
-    expect(response.body).toEqual(responseData);
-    expect(response.status).toBe(201);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 });
 
@@ -32,9 +34,12 @@ describe("Auth Router - GET /auth/confirm/:token", () => {
     const token = users[0].token;
 
     const response = await agent.get(`/auth/confirm/${token}`);
+    const expectedResponse = {
+      status: 200,
+    };
 
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
     expect(response.text).toContain(emailConfirmHTML());
-    expect(response.status).toBe(200);
   });
 });
 
@@ -55,8 +60,13 @@ describe("Auth Router - POST /auth/login", () => {
       email: newUser.email,
       password: newUser.password,
     });
+    const expectedResponse = {
+      status: 200,
+      body: expect.objectContaining({
+        message: "Logged in successfully",
+      }),
+    };
 
-    expect(response.body.message).toBe("Logged in successfully");
-    expect(response.status).toBe(200);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 });

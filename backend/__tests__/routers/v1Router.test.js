@@ -36,28 +36,32 @@ vi.spyOn(postalCodesModel, "getPostalCodeByCode").mockImplementation(
 describe("GET /", () => {
   test("responds with status 200 when LIVE", async () => {
     const response = await request(app).get("/api/v1/");
-
-    expect(response.headers["content-type"]).toMatch(/json/);
-    expect(response.body).toEqual({
-      data: {
-        status: "ok",
+    const expectedResponse = {
+      status: 200,
+      body: {
+        data: {
+          status: "ok",
+        },
+        message: "API v1 server is running",
       },
-      message: "API v1 server is running",
-    });
-    expect(response.status).toBe(200);
+    };
+
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 });
 
 describe("GET /api/v1/postal-codes", () => {
   test("responds with status 200 and an array with dummy data", async () => {
     const response = await request(app).get("/api/v1/postal-codes");
+    const expectedResponse = {
+      status: 200,
+      body: {
+        message: "Postal codes retrieved successfully",
+        data: dummyData.data,
+      },
+    };
 
-    expect(response.headers["content-type"]).toMatch(/json/);
-    expect(response.body).toEqual({
-      message: "Postal codes retrieved successfully",
-      data: dummyData.data,
-    });
-    expect(response.status).toBe(200);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 });
 
@@ -70,10 +74,14 @@ describe("GET /api/v1/postal-codes/search", () => {
     const dummyDataFiltered = dummyData.data.filter(
       (postalCode) => postalCode.city === "Sarajevo",
     );
+    const expectedResponse = {
+      status: 200,
+      body: expect.objectContaining({
+        data: dummyDataFiltered,
+      }),
+    };
 
-    expect(response.headers["content-type"]).toMatch(/json/);
-    expect(response.body.data).toEqual(dummyDataFiltered);
-    expect(response.status).toBe(200);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("responds with status 200 and postal code for /postal-codes/search?searchTerm=71000", async () => {
@@ -84,31 +92,44 @@ describe("GET /api/v1/postal-codes/search", () => {
     const dummyDataFiltered = [
       dummyData.data.find((postalCode) => postalCode.code === 71000),
     ];
+    const expectedResponse = {
+      status: 200,
+      body: expect.objectContaining({
+        data: dummyDataFiltered,
+      }),
+    };
 
-    expect(response.headers["content-type"]).toMatch(/json/);
-    expect(response.body.data).toEqual(dummyDataFiltered);
-    expect(response.status).toBe(200);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("responds with status 404 and No postal code found for /postal-codes/search?searchTerm=non-existent-code", async () => {
     const response = await request(app).get(
       "/api/v1/postal-codes/search?searchTerm=non-existent-code",
     );
-
-    expect(response.headers["content-type"]).toMatch(/json/);
-    expect(response.body).toEqual({
-      error: {
-        message: "Postal code not found: verify the search term and try again.",
+    const expectedResponse = {
+      status: 404,
+      body: {
+        error: {
+          message:
+            "Postal code not found: verify the search term and try again.",
+        },
       },
-    });
-    expect(response.status).toBe(404);
+    };
+
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
   test("responds with status 400 and error message for missing searchTerm", async () => {
     const response = await request(app).get("/api/v1/postal-codes/search");
+    const expectedResponse = {
+      status: 400,
+      body: expect.objectContaining({
+        error: expect.objectContaining({
+          message: expect.stringContaining("Search term is required"),
+        }),
+      }),
+    };
 
-    expect(response.headers["content-type"]).toMatch(/json/);
-    expect(response.body.error.message).toContain("Search term is required");
-    expect(response.status).toBe(400);
+    expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 });
