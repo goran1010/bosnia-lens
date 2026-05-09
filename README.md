@@ -17,6 +17,7 @@ For more info on how to connect your app to the REST API, visit <https://bosnia-
 - [Getting Started](#getting-started)
 - [Available Scripts](#available-scripts)
 - [API Overview](#api-overview)
+- [Authenticated Data Contribution Flow](#authenticated-data-contribution-flow)
 - [Running the Tests](#running-the-tests)
 - [Deployment](#deployment)
 - [Built With](#built-with)
@@ -32,7 +33,7 @@ For more info on how to connect your app to the REST API, visit <https://bosnia-
 - **Postal Code Search**: Browse all postal codes or search by code and city name
 - **Session Authentication**: Passport-based auth with email/password signup, login, logout, and email confirmation
 - **GitHub Login**: Optional OAuth2 authentication with GitHub
-- **Role-based Access**: Contributor and admin roles with protected dashboards for data management
+- **Suggestion-based Data Workflow**: Any authenticated user can suggest postal code changes - admins review and approve or reject them
 - **CSRF Protection**: Synchronised CSRF tokens required for all mutating requests to authenticated routes
 - **First-party cookies**: Frontend proxies authenticated requests through Netlify (`/backend/*`) so session cookies are always same-site
 
@@ -202,17 +203,15 @@ Success example:
 
 ```json
 {
-  "data": {
-    "postalCodes": [
-      {
-        "id": "unique-identifier",
-        "code": 71000,
-        "city": "Sarajevo",
-        "post": "BH_POSTA"
-      }
-    ]
-  },
-  "message": "Postal codes retrieved successfully."
+  "message": "Postal codes retrieved successfully",
+  "data": [
+    {
+      "id": "unique-identifier",
+      "code": 71000,
+      "city": "Sarajevo",
+      "post": "BH_POSTA"
+    }
+  ]
 }
 ```
 
@@ -256,6 +255,41 @@ All public endpoints are available under `https://round-leann-goran-jovic-1010-c
 ```
 
 The `post` field indicates the postal operator and can be `BH_POSTA`, `POSTE_SRP`, `HP_MOSTAR`, or `null`.
+
+## Authenticated Data Contribution Flow
+
+These endpoints require an authenticated session (`credentials: include`) and are protected by CSRF for mutating requests.
+
+### CSRF token endpoint
+
+- `GET /csrf-token` - Issue a CSRF token used in `x-csrf-token` for mutating requests
+
+### Auth endpoints
+
+- `POST /auth/signup` - Register a pending account and send a confirmation email
+- `GET /auth/confirm/:token` - Confirm signup token and create the user account
+- `POST /auth/login` - Log in with email/password
+- `GET /auth/github` - Start GitHub OAuth login flow
+- `GET /auth/github/callback` - Complete GitHub OAuth login flow
+
+### User endpoints (authenticated)
+
+- `GET /users/me` - Get current user profile
+- `POST /users/logout` - End session
+
+### Contribution endpoints (authenticated users)
+
+- `POST /users/contribution/postal-codes` - Suggest a new postal code (stored as pending change)
+- `PUT /users/contribution/postal-codes` - Suggest an edit to a postal code (stored as pending change)
+- `DELETE /users/contribution/postal-codes` - Suggest deletion of a postal code (stored as pending change)
+- `GET /users/contribution/pending-changes/postal-codes` - List your own pending suggestions
+- `DELETE /users/contribution/pending-changes/postal-codes` - Remove one of your own pending suggestions
+
+### Admin endpoints (authenticated admin users)
+
+- `GET /users/admin/pending-changes` - List all pending suggestions
+- `POST /users/admin/approve-pending-change` - Approve a pending suggestion and apply it to the live dataset
+- `DELETE /users/admin/decline-pending-change` - Reject a pending suggestion
 
 ## Running the tests
 
@@ -319,7 +353,7 @@ The public REST API (`/api/v1/...`) is served directly from the backend with ope
 
 ## Current Status
 
-The repository already contains structure for universities, contributor flows, and admin flows, but the currently complete public dataset and API surface is centered on postal codes.
+The currently complete public dataset and API surface are centered on postal codes. Universities remain planned. Data changes are handled through a pending-suggestion workflow where authenticated users submit proposals and admins moderate them.
 
 ## Contributing
 
