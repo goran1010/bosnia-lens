@@ -19,15 +19,6 @@ class ContributionValidation {
           throw new Error("Must be a number");
         }
         return true;
-      })
-      .custom(async (value) => {
-        const codeExists = await postalCodesModel.getPostalCodeByCode(
-          Number(value),
-        );
-        if (codeExists) {
-          throw new Error("Code already exists");
-        }
-        return true;
       }),
 
     body("city").trim().notEmpty().withMessage("City is required"),

@@ -6,19 +6,19 @@ import { contributionValidation } from "../validation/contributionValidation.js"
 
 contributionRouter.post(
   "/postal-codes",
-  // contributionValidation.createPostalCode,
+  contributionValidation.createPostalCode,
   contributionController.createPostalCode,
 );
 
 contributionRouter.put(
   "/postal-codes",
-  // contributionValidation.editPostalCode,
+  contributionValidation.editPostalCode,
   contributionController.editPostalCode,
 );
 
 contributionRouter.delete(
   "/postal-codes",
-  // contributionValidation.deletePostalCode,
+  contributionValidation.deletePostalCode,
   contributionController.deletePostalCode,
 );
 
