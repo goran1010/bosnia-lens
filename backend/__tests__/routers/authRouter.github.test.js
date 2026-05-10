@@ -31,12 +31,57 @@ describe("Auth Router - GET /auth/github", () => {
       "https://github.com/login/oauth/authorize",
     );
 
-    expect(passport.authenticate).toHaveBeenCalled();
+    expect(passport.authenticate).toHaveBeenCalledWith("github", {
+      scope: ["user:email"],
+    });
   });
 });
 
 describe("Auth Router - GET /auth/github/callback", () => {
-  test("responds with status 302 and redirects to frontend if GitHub authentication is successful", async () => {
+  test("responds with status 302 and redirects to frontend if GitHub authentication fails", async () => {
+    passport.authenticate.mockImplementation(() => {
+      return (req, res) => {
+        res.redirect(`${process.env.FRONTEND_URL}/login?error=github`);
+      };
+    });
+
+    const response = await request(app).get("/auth/github/callback");
+
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe(
+      `${process.env.FRONTEND_URL}/login?error=github`,
+    );
+
+    expect(passport.authenticate).toHaveBeenCalledWith(
+      "github",
+      expect.any(Function),
+    );
+  });
+
+  test("responds with status 302 and redirects to frontend if GitHub authentication is successful when session doesn't exist", async () => {
+    const fakeGithubUser = {
+      id: "user-1",
+      email: "github-user@example.com",
+    };
+    passport.authenticate.mockImplementation((strategy, callback) => {
+      return (req) => {
+        req.logIn = (user, done) => done(null);
+        callback(null, fakeGithubUser);
+      };
+    });
+
+    const response = await request(app).get("/auth/github/callback");
+
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe(process.env.FRONTEND_URL);
+
+    expect(passport.authenticate).toHaveBeenCalledWith(
+      "github",
+      expect.any(Function),
+    );
+  });
+
+  test("responds with status 302 and redirects to frontend if GitHub authentication is successful when session exists", async () => {
     const fakeGithubUser = {
       id: "user-1",
       email: "github-user@example.com",
