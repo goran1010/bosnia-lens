@@ -71,7 +71,7 @@ describe("Contributor Router - DELETE /users/contribution/postal-codes", () => {
     await pendingChangesPostalCodeModel.delete({ code: 12345 });
     await postalCodesModel.deleteCode(12345);
 
-    await postalCodesModel.createNew("Test", "12345", "BH_POSTA");
+    await postalCodesModel.createNew("Test", 12345, "BH_POSTA");
 
     const agent = request.agent(app);
     const loginResponse = await createAndLoginUser(agent);
