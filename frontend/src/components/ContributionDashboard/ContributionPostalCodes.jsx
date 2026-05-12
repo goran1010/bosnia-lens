@@ -27,6 +27,7 @@ function ContributionPostalCodes({
       <PostalCodesResultContribution
         searchResult={searchResult}
         setPendingChanges={setPendingChanges}
+        loading={loading}
       />
 
       <div className="relative"></div>
