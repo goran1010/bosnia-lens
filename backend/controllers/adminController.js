@@ -1,7 +1,7 @@
 import { pendingChangesPostalCodeModel } from "../models/pendingChangesPostalCodeModel.js";
+import { transactionModel } from "../models/transactionModel.js";
 import { sendError, sendSuccess } from "../utils/response.js";
 import { matchedData } from "express-validator";
-import { prisma } from "../db/prisma.js";
 
 class AdminController {
   async getPendingChanges(req, res) {
@@ -25,43 +25,9 @@ class AdminController {
 
   async confirmPendingChange(req, res) {
     const { id, typeOfChange } = matchedData(req);
-
-    const wasApplied = await prisma.$transaction(async (tx) => {
-      const change = await tx.pendingChangesPostalCode.findUnique({
-        where: { id },
-      });
-
-      if (!change) {
-        return false;
-      }
-
-      if (typeOfChange === "CREATE") {
-        await tx.postalCode.create({
-          data: {
-            city: change.city,
-            code: change.code,
-            post: change.post,
-          },
-        });
-      } else if (typeOfChange === "UPDATE") {
-        await tx.postalCode.updateMany({
-          where: { code: change.code },
-          data: {
-            city: change.city,
-            post: change.post,
-          },
-        });
-      } else if (typeOfChange === "DELETE") {
-        await tx.postalCode.deleteMany({
-          where: { code: change.code },
-        });
-      }
-
-      await tx.pendingChangesPostalCode.delete({
-        where: { id: change.id },
-      });
-
-      return true;
+    const wasApplied = await transactionModel.approvePendingChange({
+      id,
+      typeOfChange,
     });
 
     if (!wasApplied) {

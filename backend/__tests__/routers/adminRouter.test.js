@@ -2,7 +2,7 @@ import request from "supertest";
 import { describe, test, expect, vi, beforeEach } from "vitest";
 import { app } from "../../app.js";
 import { pendingChangesPostalCodeModel } from "../../models/pendingChangesPostalCodeModel.js";
-import { prisma } from "../../db/prisma.js";
+import { transactionModel } from "../../models/transactionModel.js";
 
 let mockedUser = null;
 
@@ -24,6 +24,12 @@ beforeEach(() => {
   vi.clearAllMocks();
   mockedUser = null;
 });
+
+function mockTransactionWrapper(result = true) {
+  return vi
+    .spyOn(transactionModel, "approvePendingChange")
+    .mockResolvedValue(result);
+}
 
 describe("Admin Router - GET /users/admin//pending-changes", () => {
   test("Responds with You need to be logged in and an admin to access this route if not logged in", async () => {
@@ -212,7 +218,7 @@ describe("Admin Router - POST /users/admin/approve-pending-change", () => {
       role: "ADMIN",
     };
 
-    vi.spyOn(prisma, "$transaction").mockResolvedValueOnce(false);
+    mockTransactionWrapper(false);
 
     const response = await request(app)
       .post("/users/admin/approve-pending-change")
@@ -233,7 +239,7 @@ describe("Admin Router - POST /users/admin/approve-pending-change", () => {
   });
 
   test("Responds with status 200 and message if pending change approved successfully", async () => {
-    vi.spyOn(prisma, "$transaction").mockResolvedValueOnce(true);
+    mockTransactionWrapper(true);
 
     mockedUser = {
       id: 1,
@@ -257,6 +263,9 @@ describe("Admin Router - POST /users/admin/approve-pending-change", () => {
     };
 
     expect(response).toEqual(expect.objectContaining(expectedResponse));
-    expect(prisma.$transaction).toHaveBeenCalledTimes(1);
+    expect(transactionModel.approvePendingChange).toHaveBeenCalledWith({
+      id: "a1b2c3d4-e5f6-4789-abcd-000000000001",
+      typeOfChange: "CREATE",
+    });
   });
 });
