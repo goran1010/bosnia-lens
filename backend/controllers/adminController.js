@@ -1,6 +1,7 @@
 import { pendingChangesPostalCodeModel } from "../models/pendingChangesPostalCodeModel.js";
-import { postalCodesModel } from "../models/postalCodesModel.js";
-import { sendSuccess } from "../utils/response.js";
+import { transactionModel } from "../models/transactionModel.js";
+import { sendError, sendSuccess } from "../utils/response.js";
+import { matchedData } from "express-validator";
 
 class AdminController {
   async getPendingChanges(req, res) {
@@ -13,7 +14,7 @@ class AdminController {
   }
 
   async declinePendingChange(req, res) {
-    const { id } = req.body;
+    const { id } = matchedData(req);
 
     await pendingChangesPostalCodeModel.delete({ id });
 
@@ -23,28 +24,18 @@ class AdminController {
   }
 
   async confirmPendingChange(req, res) {
-    const { id, typeOfChange } = req.body;
+    const { id, typeOfChange } = matchedData(req);
+    const wasApplied = await transactionModel.approvePendingChange({
+      id,
+      typeOfChange,
+    });
 
-    const pendingChange = await pendingChangesPostalCodeModel.findMany({ id });
-
-    if (!pendingChange || pendingChange.length === 0) {
-      return res.status(404).json({
-        error: "Pending change not found.",
+    if (!wasApplied) {
+      return sendError(res, {
+        status: 404,
+        message: "Pending change not found.",
       });
     }
-
-    const change = pendingChange[0];
-
-    if (typeOfChange === "CREATE") {
-      await postalCodesModel.createNew(change.city, change.code, change.post);
-    } else if (typeOfChange === "UPDATE") {
-      await postalCodesModel.edit(change.city, change.code, change.post);
-    } else if (typeOfChange === "DELETE") {
-      await postalCodesModel.deleteCode(change.code);
-    }
-
-    await pendingChangesPostalCodeModel.delete({ id: change.id });
-    // To-do: handle the case when deleting from pending changes fails after the postal code has been updated/created/deleted
 
     return sendSuccess(res, {
       message: "Pending change approved successfully.",

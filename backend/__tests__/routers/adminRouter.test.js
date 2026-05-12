@@ -2,7 +2,7 @@ import request from "supertest";
 import { describe, test, expect, vi, beforeEach } from "vitest";
 import { app } from "../../app.js";
 import { pendingChangesPostalCodeModel } from "../../models/pendingChangesPostalCodeModel.js";
-import { postalCodesModel } from "../../models/postalCodesModel.js";
+import { transactionModel } from "../../models/transactionModel.js";
 
 let mockedUser = null;
 
@@ -24,6 +24,12 @@ beforeEach(() => {
   vi.clearAllMocks();
   mockedUser = null;
 });
+
+function mockTransactionWrapper(result = true) {
+  return vi
+    .spyOn(transactionModel, "approvePendingChange")
+    .mockResolvedValue(result);
+}
 
 describe("Admin Router - GET /users/admin//pending-changes", () => {
   test("Responds with You need to be logged in and an admin to access this route if not logged in", async () => {
@@ -152,7 +158,7 @@ describe("Admin Router - DELETE /decline-pending-change", () => {
 
     const response = await request(app)
       .delete("/users/admin/decline-pending-change")
-      .send({ id: 1 });
+      .send({ id: "a1b2c3d4-e5f6-4789-abcd-000000000001" });
     const expectedResponse = {
       status: 200,
       body: {
@@ -212,17 +218,20 @@ describe("Admin Router - POST /users/admin/approve-pending-change", () => {
       role: "ADMIN",
     };
 
-    vi.spyOn(pendingChangesPostalCodeModel, "findMany").mockResolvedValueOnce(
-      [],
-    );
+    mockTransactionWrapper(false);
 
     const response = await request(app)
       .post("/users/admin/approve-pending-change")
-      .send({ id: 999, typeOfChange: "CREATE" });
+      .send({
+        id: "a1b2c3d4-e5f6-4789-abcd-000000000999",
+        typeOfChange: "CREATE",
+      });
     const expectedResponse = {
       status: 404,
       body: expect.objectContaining({
-        error: expect.stringContaining("Pending change not found"),
+        error: expect.objectContaining({
+          message: expect.stringContaining("Pending change not found"),
+        }),
       }),
     };
 
@@ -230,26 +239,7 @@ describe("Admin Router - POST /users/admin/approve-pending-change", () => {
   });
 
   test("Responds with status 200 and message if pending change approved successfully", async () => {
-    vi.spyOn(pendingChangesPostalCodeModel, "findMany").mockResolvedValueOnce([
-      {
-        id: 1,
-        city: "Test City",
-        code: 12345,
-        post: "",
-        typeOfChange: "CREATE",
-      },
-    ]);
-
-    vi.spyOn(postalCodesModel, "createNew").mockResolvedValueOnce({
-      id: 10,
-      city: "Test City",
-      code: 12345,
-      post: "",
-    });
-
-    vi.spyOn(pendingChangesPostalCodeModel, "delete").mockResolvedValueOnce({
-      count: 1,
-    });
+    mockTransactionWrapper(true);
 
     mockedUser = {
       id: 1,
@@ -260,7 +250,10 @@ describe("Admin Router - POST /users/admin/approve-pending-change", () => {
 
     const response = await request(app)
       .post("/users/admin/approve-pending-change")
-      .send({ id: 1, typeOfChange: "CREATE" });
+      .send({
+        id: "a1b2c3d4-e5f6-4789-abcd-000000000001",
+        typeOfChange: "CREATE",
+      });
     const expectedResponse = {
       status: 200,
       body: {
@@ -270,14 +263,9 @@ describe("Admin Router - POST /users/admin/approve-pending-change", () => {
     };
 
     expect(response).toEqual(expect.objectContaining(expectedResponse));
-
-    expect(postalCodesModel.createNew).toHaveBeenCalledWith(
-      "Test City",
-      12345,
-      "",
-    );
-    expect(pendingChangesPostalCodeModel.delete).toHaveBeenCalledWith({
-      id: 1,
+    expect(transactionModel.approvePendingChange).toHaveBeenCalledWith({
+      id: "a1b2c3d4-e5f6-4789-abcd-000000000001",
+      typeOfChange: "CREATE",
     });
   });
 });

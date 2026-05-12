@@ -1,4 +1,3 @@
-import { usersModel } from "../models/usersModel.js";
 import { sendError, sendSuccess } from "../utils/response.js";
 import { sanitizeUser } from "../utils/sanitizeUser.js";
 
@@ -7,6 +6,13 @@ const NUMBER_OF_DAYS = 30;
 
 class UsersController {
   async me(req, res) {
+    if (!req.user) {
+      return sendSuccess(res, {
+        message: "No user logged in",
+        data: null,
+      });
+    }
+
     const loggedInUser = sanitizeUser(req.user);
 
     return sendSuccess(res, {

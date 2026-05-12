@@ -16,6 +16,15 @@ class AuthController {
   async signup(req, res) {
     try {
       const { email, password } = matchedData(req);
+
+      const existingUser = await usersModel.findOne({ email });
+      if (existingUser) {
+        return sendError(res, {
+          status: 400,
+          message: "Signup failed: check your input and try again.",
+        });
+      }
+
       const hashedPassword = await bcrypt.hash(password, 10);
 
       const confirmationToken = crypto.randomBytes(32).toString("hex");
@@ -98,7 +107,7 @@ class AuthController {
 
       if (!user) {
         return sendError(res, {
-          status: 404,
+          status: 500,
           message: "Email confirmation failed: account couldn't be created.",
         });
       }

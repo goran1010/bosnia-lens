@@ -73,6 +73,27 @@ class ContributionValidation {
         return true;
       }),
 
+    body("city").trim().notEmpty().withMessage("City is required"),
+
+    body("post").custom((value) => {
+      if (!validPosts.includes(value) && value !== "") {
+        throw new Error("Invalid post");
+      }
+      return true;
+    }),
+
+    validationError,
+  ];
+
+  deletePendingChange = [
+    body("id")
+      .trim()
+      .notEmpty()
+      .withMessage("Pending change ID is required")
+      .bail()
+      .isUUID()
+      .withMessage("Pending change ID must be a valid UUID"),
+
     validationError,
   ];
 }

@@ -106,7 +106,7 @@ describe("POST /auth/signup", () => {
     expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
-  test("responds with json 400, Email already in use, if given email exists", async () => {
+  test("responds with generic 400 error if given email exists", async () => {
     const newUser = createNewUser();
     vi.spyOn(usersModel, "findOne").mockResolvedValueOnce({
       email: newUser.email,
@@ -114,7 +114,7 @@ describe("POST /auth/signup", () => {
 
     const responseData = {
       error: {
-        message: "Email already in use",
+        message: "Signup failed: check your input and try again.",
       },
     };
 

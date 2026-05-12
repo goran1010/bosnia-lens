@@ -71,11 +71,11 @@ describe("postalCodesModel", () => {
   });
 
   test("createNew creates a new postal code with valid post", async () => {
-    const newPostalCode = await postalCodesModel.createNew(
-      "Zenica",
-      75000,
-      "POSTE_SRP",
-    );
+    const newPostalCode = await postalCodesModel.createNew({
+      city: "Zenica",
+      code: 75000,
+      post: "POSTE_SRP",
+    });
     const expectedResult = {
       code: 75000,
       city: "Zenica",
@@ -86,11 +86,11 @@ describe("postalCodesModel", () => {
   });
 
   test("createNew creates a new postal code without post if post is invalid", async () => {
-    const newPostalCode = await postalCodesModel.createNew(
-      "Mostar",
-      73000,
-      "INVALID_POST",
-    );
+    const newPostalCode = await postalCodesModel.createNew({
+      city: "Mostar",
+      code: 73000,
+      post: "INVALID_POST",
+    });
     const expectedResult = {
       code: 73000,
       city: "Mostar",
@@ -101,11 +101,11 @@ describe("postalCodesModel", () => {
   });
 
   test("edit updates an existing postal code with valid post", async () => {
-    const updatedPostalCode = await postalCodesModel.edit(
-      "Sarajevo",
-      71000,
-      "HP_MOSTAR",
-    );
+    const updatedPostalCode = await postalCodesModel.edit({
+      city: "Sarajevo",
+      code: 71000,
+      post: "HP_MOSTAR",
+    });
     const expectedResult = {
       code: 71000,
       city: "Sarajevo",
@@ -116,11 +116,11 @@ describe("postalCodesModel", () => {
   });
 
   test("edit updates an existing postal code without post if post is invalid", async () => {
-    const updatedPostalCode = await postalCodesModel.edit(
-      "Sarajevo",
-      71001,
-      "INVALID_POST",
-    );
+    const updatedPostalCode = await postalCodesModel.edit({
+      city: "Sarajevo",
+      code: 71001,
+      post: "INVALID_POST",
+    });
     const expectedResult = {
       code: 71001,
       city: "Sarajevo",
@@ -131,7 +131,9 @@ describe("postalCodesModel", () => {
   });
 
   test("deleteCode deletes a postal code", async () => {
-    const deletedPostalCode = await postalCodesModel.deleteCode(78000);
+    const deletedPostalCode = await postalCodesModel.deleteCode({
+      code: 78000,
+    });
     const expectedResult = {
       code: 78000,
       city: "Deleted City",
