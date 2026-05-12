@@ -12,8 +12,10 @@ function useStatusCheck(setLoading, addNotification, longWait) {
     async function checkLogin() {
       let response;
       try {
-        response = await fetch(`${BACKEND_URL}/api/me`, {
+        response = await fetch(`${BACKEND_URL}/users/me`, {
+          mode: "cors",
           method: "GET",
+          credentials: "include",
           signal: abortController.signal,
         });
 

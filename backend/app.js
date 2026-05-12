@@ -23,7 +23,6 @@ import { sendError } from "./utils/response.js";
 import { apiRouter } from "./routes/apiRouter.js";
 import { authRouter } from "./routes/authRouter.js";
 import { usersRouter } from "./routes/usersRouter.js";
-import { isAuthenticated } from "./auth/isAuthenticated.js";
 
 const FRONTEND_URL = process.env.FRONTEND_URL;
 
@@ -41,9 +40,6 @@ app.use((req, res, next) => {
 app.use(helmet());
 app.use(compression());
 
-app.use(sessionMiddleware);
-app.use(passport.session());
-
 // Public API routes
 app.use("/api", cors(), rateLimiter.api, apiRouter);
 // -----------------
@@ -58,16 +54,13 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(sessionMiddleware);
+app.use(passport.session());
+
 app.use(csrfRouter);
 
 app.use("/auth", rateLimiter.auth, authRouter);
-app.use(
-  "/users",
-  rateLimiter.users,
-  csrfSynchronisedProtection,
-  isAuthenticated,
-  usersRouter,
-);
+app.use("/users", rateLimiter.users, csrfSynchronisedProtection, usersRouter);
 
 app.use((req, res) => {
   return sendError(res, {

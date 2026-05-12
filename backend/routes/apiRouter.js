@@ -6,8 +6,6 @@ import { apiController } from "../controllers/apiController.js";
 
 apiRouter.get("/", apiController.status);
 
-apiRouter.get("/me", apiController.me);
-
 apiRouter.use("/v1", v1Router);
 
 export { apiRouter };
