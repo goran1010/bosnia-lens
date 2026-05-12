@@ -37,11 +37,19 @@ class AdminController {
     const change = pendingChange[0];
 
     if (typeOfChange === "CREATE") {
-      await postalCodesModel.createNew(change.city, change.code, change.post);
+      await postalCodesModel.createNew({
+        city: change.city,
+        code: change.code,
+        post: change.post,
+      });
     } else if (typeOfChange === "UPDATE") {
-      await postalCodesModel.edit(change.city, change.code, change.post);
+      await postalCodesModel.edit({
+        city: change.city,
+        code: change.code,
+        post: change.post,
+      });
     } else if (typeOfChange === "DELETE") {
-      await postalCodesModel.deleteCode(change.code);
+      await postalCodesModel.deleteCode({ code: change.code });
     }
 
     await pendingChangesPostalCodeModel.delete({ id: change.id });

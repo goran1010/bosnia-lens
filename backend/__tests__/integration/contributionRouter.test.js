@@ -44,16 +44,16 @@ describe("Contributor Router - POST /users/contribution/postal-codes", () => {
 describe("Contributor Router - PUT  /users/contribution/postal-codes", () => {
   test("Responds with status 200 and message if pending change edit added successfully", async () => {
     await pendingChangesPostalCodeModel.delete({ code: EDIT_EXISTING_CODE });
-    await postalCodesModel.deleteCode(EDIT_EXISTING_CODE);
+    await postalCodesModel.deleteCode({ code: EDIT_EXISTING_CODE });
 
     const agent = request.agent(app);
     const loginResponse = await createAndLoginUser(agent);
 
-    await postalCodesModel.createNew(
-      "Test",
-      String(EDIT_EXISTING_CODE),
-      "BH_POSTA",
-    );
+    await postalCodesModel.createNew({
+      city: "Test",
+      code: String(EDIT_EXISTING_CODE),
+      post: "BH_POSTA",
+    });
 
     const editedPostalCode = {
       city: "Edited Test",
@@ -75,7 +75,7 @@ describe("Contributor Router - PUT  /users/contribution/postal-codes", () => {
     expect(response).toEqual(expect.objectContaining(expectedResponse));
 
     await pendingChangesPostalCodeModel.delete({ code: EDIT_EXISTING_CODE });
-    await postalCodesModel.deleteCode(EDIT_EXISTING_CODE);
+    await postalCodesModel.deleteCode({ code: EDIT_EXISTING_CODE });
     await usersModel.deleteUser({ id: loginResponse.body.data.id });
   });
 });
@@ -83,9 +83,13 @@ describe("Contributor Router - PUT  /users/contribution/postal-codes", () => {
 describe("Contributor Router - DELETE /users/contribution/postal-codes", () => {
   test("Responds with status 201 and message if pending change deletion added successfully", async () => {
     await pendingChangesPostalCodeModel.delete({ code: DELETE_EXISTING_CODE });
-    await postalCodesModel.deleteCode(DELETE_EXISTING_CODE);
+    await postalCodesModel.deleteCode({ code: DELETE_EXISTING_CODE });
 
-    await postalCodesModel.createNew("Test", DELETE_EXISTING_CODE, "BH_POSTA");
+    await postalCodesModel.createNew({
+      city: "Test",
+      code: DELETE_EXISTING_CODE,
+      post: "BH_POSTA",
+    });
 
     const agent = request.agent(app);
     const loginResponse = await createAndLoginUser(agent);
@@ -108,7 +112,7 @@ describe("Contributor Router - DELETE /users/contribution/postal-codes", () => {
     expect(response).toEqual(expect.objectContaining(expectedResponse));
 
     await pendingChangesPostalCodeModel.delete({ code: DELETE_EXISTING_CODE });
-    await postalCodesModel.deleteCode(DELETE_EXISTING_CODE);
+    await postalCodesModel.deleteCode({ code: DELETE_EXISTING_CODE });
     await usersModel.deleteUser({ id: loginResponse.body.data.id });
   });
 });

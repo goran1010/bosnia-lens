@@ -34,7 +34,7 @@ class PostalCodesModel {
     });
   }
 
-  createNew(city, code, post) {
+  createNew({ city, code, post }) {
     let capitalizedCity = city
       .split(" ")
       .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
@@ -54,7 +54,7 @@ class PostalCodesModel {
     });
   }
 
-  edit(city, code, post) {
+  edit({ city, code, post }) {
     let capitalizedCity = city
       .split(" ")
       .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
@@ -76,7 +76,7 @@ class PostalCodesModel {
     });
   }
 
-  deleteCode(code) {
+  deleteCode({ code }) {
     const codeNumber = Number(code);
 
     return prisma.postalCode.deleteMany({ where: { code: codeNumber } });

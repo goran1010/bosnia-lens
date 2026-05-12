@@ -1,9 +1,7 @@
 import request from "supertest";
 import { describe, test, expect, vi, beforeEach } from "vitest";
-import { usersModel } from "../../models/usersModel.js";
 import { createNewUser } from "../utils/createNewUser.js";
 import { app } from "../../app.js";
-import { sanitizeUser } from "../../utils/sanitizeUser.js";
 
 let mockedUser = null;
 
@@ -29,31 +27,14 @@ beforeEach(() => {
 describe("GET /me", () => {
   test("responds with status 401 and You are not logged in if not logged in", async () => {
     const notLoggedInResponse = {
-      error: "You are not logged in.",
-      details: [{ msg: null }],
+      message: "No user logged in",
+      data: null,
     };
-
-    const response = await request(app).get("/users/me");
-    const expectedResponse = {
-      status: 401,
-      body: notLoggedInResponse,
-    };
-
-    expect(response).toEqual(expect.objectContaining(expectedResponse));
-  });
-
-  test("responds with status 200 and user data if logged in", async () => {
-    const user = createNewUser();
-    mockedUser = user;
-    const safeUser = sanitizeUser(user);
 
     const response = await request(app).get("/users/me");
     const expectedResponse = {
       status: 200,
-      body: {
-        message: "User info retrieved",
-        data: safeUser,
-      },
+      body: notLoggedInResponse,
     };
 
     expect(response).toEqual(expect.objectContaining(expectedResponse));

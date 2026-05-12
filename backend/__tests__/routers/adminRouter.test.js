@@ -277,11 +277,11 @@ describe("Admin Router - POST /users/admin/approve-pending-change", () => {
 
     expect(response).toEqual(expect.objectContaining(expectedResponse));
 
-    expect(postalCodesModel.createNew).toHaveBeenCalledWith(
-      "Test City",
-      12345,
-      "",
-    );
+    expect(postalCodesModel.createNew).toHaveBeenCalledWith({
+      city: "Test City",
+      code: 12345,
+      post: "",
+    });
     expect(pendingChangesPostalCodeModel.delete).toHaveBeenCalledWith({
       id: "a1b2c3d4-e5f6-4789-abcd-000000000001",
     });

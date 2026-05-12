@@ -23,13 +23,13 @@ describe("GET /", () => {
 describe("GET /api/v1/postal-codes", () => {
   test("responds with status 200 and postal codes", async () => {
     const postalCode = { city: "Test", code: "12345", post: "BH_POSTA" };
-    await postalCodesModel.deleteCode(postalCode.code);
+    await postalCodesModel.deleteCode({ code: postalCode.code });
 
-    const codeInDb = await postalCodesModel.createNew(
-      postalCode.city,
-      postalCode.code,
-      postalCode.post,
-    );
+    const codeInDb = await postalCodesModel.createNew({
+      city: postalCode.city,
+      code: postalCode.code,
+      post: postalCode.post,
+    });
 
     const response = await request(app).get("/api/v1/postal-codes");
     const expectedResponse = {
@@ -47,20 +47,20 @@ describe("GET /api/v1/postal-codes", () => {
     };
 
     expect(response).toEqual(expect.objectContaining(expectedResponse));
-    await postalCodesModel.deleteCode(postalCode.code);
+    await postalCodesModel.deleteCode({ code: postalCode.code });
   });
 });
 
 describe("GET /api/v1/postal-codes/search", () => {
   test("responds with status 200 and postal codes for searchTerm=Sarajevo", async () => {
     const postalCode = { city: "Sarajevo", code: "12345", post: "BH_POSTA" };
-    await postalCodesModel.deleteCode(postalCode.code);
+    await postalCodesModel.deleteCode({ code: postalCode.code });
 
-    const codeInDb = await postalCodesModel.createNew(
-      postalCode.city,
-      postalCode.code,
-      postalCode.post,
-    );
+    const codeInDb = await postalCodesModel.createNew({
+      city: postalCode.city,
+      code: postalCode.code,
+      post: postalCode.post,
+    });
 
     const response = await request(app).get(
       "/api/v1/postal-codes/search?searchTerm=Sarajevo",
@@ -79,18 +79,18 @@ describe("GET /api/v1/postal-codes/search", () => {
     };
     expect(response).toEqual(expect.objectContaining(expectedResponse));
 
-    await postalCodesModel.deleteCode(postalCode.code);
+    await postalCodesModel.deleteCode({ code: postalCode.code });
   });
 
   test("responds with status 200 and postal code for searchTerm=71000", async () => {
     const postalCode = { city: "Test", code: "71000", post: "BH_POSTA" };
-    await postalCodesModel.deleteCode(postalCode.code);
+    await postalCodesModel.deleteCode({ code: postalCode.code });
 
-    const codeInDb = await postalCodesModel.createNew(
-      postalCode.city,
-      postalCode.code,
-      postalCode.post,
-    );
+    const codeInDb = await postalCodesModel.createNew({
+      city: postalCode.city,
+      code: postalCode.code,
+      post: postalCode.post,
+    });
 
     const response = await request(app).get(
       "/api/v1/postal-codes/search?searchTerm=71000",
@@ -109,6 +109,6 @@ describe("GET /api/v1/postal-codes/search", () => {
     };
     expect(response).toEqual(expect.objectContaining(expectedResponse));
 
-    await postalCodesModel.deleteCode(postalCode.code);
+    await postalCodesModel.deleteCode({ code: postalCode.code });
   });
 });
