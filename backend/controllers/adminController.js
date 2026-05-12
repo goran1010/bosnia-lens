@@ -1,7 +1,7 @@
 import { pendingChangesPostalCodeModel } from "../models/pendingChangesPostalCodeModel.js";
-import { postalCodesModel } from "../models/postalCodesModel.js";
-import { sendSuccess } from "../utils/response.js";
+import { sendError, sendSuccess } from "../utils/response.js";
 import { matchedData } from "express-validator";
+import { prisma } from "../db/prisma.js";
 
 class AdminController {
   async getPendingChanges(req, res) {
@@ -26,34 +26,50 @@ class AdminController {
   async confirmPendingChange(req, res) {
     const { id, typeOfChange } = matchedData(req);
 
-    const pendingChange = await pendingChangesPostalCodeModel.findMany({ id });
+    const wasApplied = await prisma.$transaction(async (tx) => {
+      const change = await tx.pendingChangesPostalCode.findUnique({
+        where: { id },
+      });
 
-    if (!pendingChange || pendingChange.length === 0) {
-      return res.status(404).json({
-        error: "Pending change not found.",
+      if (!change) {
+        return false;
+      }
+
+      if (typeOfChange === "CREATE") {
+        await tx.postalCode.create({
+          data: {
+            city: change.city,
+            code: change.code,
+            post: change.post,
+          },
+        });
+      } else if (typeOfChange === "UPDATE") {
+        await tx.postalCode.updateMany({
+          where: { code: change.code },
+          data: {
+            city: change.city,
+            post: change.post,
+          },
+        });
+      } else if (typeOfChange === "DELETE") {
+        await tx.postalCode.deleteMany({
+          where: { code: change.code },
+        });
+      }
+
+      await tx.pendingChangesPostalCode.delete({
+        where: { id: change.id },
+      });
+
+      return true;
+    });
+
+    if (!wasApplied) {
+      return sendError(res, {
+        status: 404,
+        message: "Pending change not found.",
       });
     }
-
-    const change = pendingChange[0];
-
-    if (typeOfChange === "CREATE") {
-      await postalCodesModel.createNew({
-        city: change.city,
-        code: change.code,
-        post: change.post,
-      });
-    } else if (typeOfChange === "UPDATE") {
-      await postalCodesModel.edit({
-        city: change.city,
-        code: change.code,
-        post: change.post,
-      });
-    } else if (typeOfChange === "DELETE") {
-      await postalCodesModel.deleteCode({ code: change.code });
-    }
-
-    await pendingChangesPostalCodeModel.delete({ id: change.id });
-    // To-do: handle the case when deleting from pending changes fails after the postal code has been updated/created/deleted
 
     return sendSuccess(res, {
       message: "Pending change approved successfully.",

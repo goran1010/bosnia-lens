@@ -8,7 +8,7 @@ class ContributionController {
     try {
       const userId = req.user.id;
       const typeOfChange = "CREATE";
-      const { city, code, post } = req.body;
+      const { city, code, post } = matchedData(req);
 
       const result = await pendingChangesPostalCodeModel.create({
         userId,
@@ -26,7 +26,7 @@ class ContributionController {
       });
     } catch (err) {
       logger.error(err);
-      sendError(res, {
+      return sendError(res, {
         status: 500,
         message: "An error occurred while suggesting a new postal code.",
       });
@@ -36,7 +36,7 @@ class ContributionController {
   async editPostalCode(req, res) {
     const userId = req.user.id;
     const typeOfChange = "UPDATE";
-    const { city, code, post } = req.body;
+    const { city, code, post } = matchedData(req);
 
     const result = await pendingChangesPostalCodeModel.create({
       userId,
@@ -57,7 +57,7 @@ class ContributionController {
   async deletePostalCode(req, res) {
     const userId = req.user.id;
     const typeOfChange = "DELETE";
-    const { code, city, post } = req.body;
+    const { code, city, post } = matchedData(req);
 
     const result = await pendingChangesPostalCodeModel.create({
       userId,

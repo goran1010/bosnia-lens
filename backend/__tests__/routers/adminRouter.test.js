@@ -2,7 +2,7 @@ import request from "supertest";
 import { describe, test, expect, vi, beforeEach } from "vitest";
 import { app } from "../../app.js";
 import { pendingChangesPostalCodeModel } from "../../models/pendingChangesPostalCodeModel.js";
-import { postalCodesModel } from "../../models/postalCodesModel.js";
+import { prisma } from "../../db/prisma.js";
 
 let mockedUser = null;
 
@@ -212,9 +212,7 @@ describe("Admin Router - POST /users/admin/approve-pending-change", () => {
       role: "ADMIN",
     };
 
-    vi.spyOn(pendingChangesPostalCodeModel, "findMany").mockResolvedValueOnce(
-      [],
-    );
+    vi.spyOn(prisma, "$transaction").mockResolvedValueOnce(false);
 
     const response = await request(app)
       .post("/users/admin/approve-pending-change")
@@ -225,7 +223,9 @@ describe("Admin Router - POST /users/admin/approve-pending-change", () => {
     const expectedResponse = {
       status: 404,
       body: expect.objectContaining({
-        error: expect.stringContaining("Pending change not found"),
+        error: expect.objectContaining({
+          message: expect.stringContaining("Pending change not found"),
+        }),
       }),
     };
 
@@ -233,26 +233,7 @@ describe("Admin Router - POST /users/admin/approve-pending-change", () => {
   });
 
   test("Responds with status 200 and message if pending change approved successfully", async () => {
-    vi.spyOn(pendingChangesPostalCodeModel, "findMany").mockResolvedValueOnce([
-      {
-        id: "a1b2c3d4-e5f6-4789-abcd-000000000001",
-        city: "Test City",
-        code: 12345,
-        post: "",
-        typeOfChange: "CREATE",
-      },
-    ]);
-
-    vi.spyOn(postalCodesModel, "createNew").mockResolvedValueOnce({
-      id: 10,
-      city: "Test City",
-      code: 12345,
-      post: "",
-    });
-
-    vi.spyOn(pendingChangesPostalCodeModel, "delete").mockResolvedValueOnce({
-      count: 1,
-    });
+    vi.spyOn(prisma, "$transaction").mockResolvedValueOnce(true);
 
     mockedUser = {
       id: 1,
@@ -276,14 +257,6 @@ describe("Admin Router - POST /users/admin/approve-pending-change", () => {
     };
 
     expect(response).toEqual(expect.objectContaining(expectedResponse));
-
-    expect(postalCodesModel.createNew).toHaveBeenCalledWith({
-      city: "Test City",
-      code: 12345,
-      post: "",
-    });
-    expect(pendingChangesPostalCodeModel.delete).toHaveBeenCalledWith({
-      id: "a1b2c3d4-e5f6-4789-abcd-000000000001",
-    });
+    expect(prisma.$transaction).toHaveBeenCalledTimes(1);
   });
 });

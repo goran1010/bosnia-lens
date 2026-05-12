@@ -73,6 +73,15 @@ class ContributionValidation {
         return true;
       }),
 
+    body("city").trim().notEmpty().withMessage("City is required"),
+
+    body("post").custom((value) => {
+      if (!validPosts.includes(value) && value !== "") {
+        throw new Error("Invalid post");
+      }
+      return true;
+    }),
+
     validationError,
   ];
 

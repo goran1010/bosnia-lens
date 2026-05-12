@@ -289,7 +289,7 @@ describe("DELETE /users/contribution/postal-codes", () => {
 
     const responseCode = await agent
       .delete("/users/contribution/postal-codes")
-      .send({ code: "12345" });
+      .send({ code: "12345", city: "TestCity", post: "" });
     const expectedResponseData = {
       status: 201,
       body: expectedResponse,

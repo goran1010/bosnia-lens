@@ -1,5 +1,4 @@
 import { body, param } from "express-validator";
-import { usersModel } from "../models/usersModel.js";
 import { validationError } from "./validationError.js";
 
 class AuthValidation {
@@ -7,14 +6,7 @@ class AuthValidation {
     body("email")
       .normalizeEmail()
       .isEmail()
-      .withMessage("Invalid email address")
-      .custom(async (email) => {
-        const user = await usersModel.findOne({ email });
-        if (user) {
-          throw new Error("Email already in use");
-        }
-        return true;
-      }),
+      .withMessage("Invalid email address"),
 
     body("password")
       .trim()
