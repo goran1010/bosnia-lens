@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { UserDataContext } from "../../contextData/UserDataContext";
 
-function Status() {
+function Status({ setIsMenuOpen }) {
   const { userData } = useContext(UserDataContext);
 
   if (userData) {
@@ -11,6 +11,7 @@ function Status() {
         <Link
           className="menu-item block py-3 px-4 cursor-pointer rounded-lg lg:px-2"
           to="/profile"
+          onClick={() => setIsMenuOpen(false)}
         >
           Profile
         </Link>
@@ -23,6 +24,7 @@ function Status() {
       <Link
         className="menu-item block py-3 px-2 cursor-pointer rounded-lg lg:px-2"
         to="/login"
+        onClick={() => setIsMenuOpen(false)}
       >
         Log In
       </Link>

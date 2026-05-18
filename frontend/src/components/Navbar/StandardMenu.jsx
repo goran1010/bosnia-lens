@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
+import { Status } from "./Status";
 
-function StandardMenu({ userData }) {
+function StandardMenu({ setIsMenuOpen, userData }) {
   return (
     <div className="hidden lg:flex justify-between items-center">
       <ul className="flex items-center gap-1">
@@ -46,6 +47,9 @@ function StandardMenu({ userData }) {
             </Link>
           </li>
         )}
+        <div className="flex justify-center items-center">
+          <Status setIsMenuOpen={setIsMenuOpen} />
+        </div>
       </ul>
     </div>
   );

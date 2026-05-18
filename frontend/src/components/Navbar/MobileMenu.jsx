@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Status } from "./Status";
 
 function MobileMenu({ setIsMenuOpen, userData }) {
   return (
@@ -55,6 +56,9 @@ function MobileMenu({ setIsMenuOpen, userData }) {
             Admin
           </Link>
         )}
+        <div className="flex justify-center items-center">
+          <Status setIsMenuOpen={setIsMenuOpen} />
+        </div>
       </ul>
     </div>
   );

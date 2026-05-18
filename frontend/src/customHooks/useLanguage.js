@@ -7,7 +7,9 @@ import { setInitialLanguage } from "../utils/setInitialLanguage";
 const translations = { en, sr };
 
 function useLanguage() {
-  const [language, setLanguageState] = useState(() => setInitialLanguage());
+  const [language, setLanguageState] = useState(
+    () => localStorage.getItem("language") ?? setInitialLanguage(),
+  );
 
   useEffect(() => {
     localStorage.setItem("language", language);

@@ -1,4 +1,3 @@
-import { Status } from "./Status";
 import { useContext } from "react";
 import { UserDataContext } from "../../contextData/UserDataContext";
 import { useTheme } from "../../customHooks/useTheme";
@@ -64,11 +63,7 @@ function Navbar({ closeMenu }) {
         <MobileMenu setIsMenuOpen={setIsMenuOpen} userData={userData} />
       )}
 
-      <StandardMenu userData={userData} />
-
-      <div className="flex justify-center items-center">
-        <Status />
-      </div>
+      <StandardMenu setIsMenuOpen={setIsMenuOpen} userData={userData} />
     </nav>
   );
 }
