@@ -8,10 +8,12 @@ import { NotificationContext } from "../../contextData/NotificationContext";
 import { Button } from "../sharedComponents/Button";
 import { Input } from "../sharedComponents/Input";
 import { Label } from "../sharedComponents/Label";
+import { LanguageContext } from "../../contextData/LanguageContext";
 
 function SignUpForm({ loading, setLoading }) {
   const navigate = useNavigate();
   const { addNotification } = useContext(NotificationContext);
+  const { t } = useContext(LanguageContext);
 
   const passwordInput = useRef();
   const confirmPasswordInput = useRef();
@@ -48,7 +50,7 @@ function SignUpForm({ loading, setLoading }) {
       }
     >
       <div>
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{t("form.email")}</Label>
         <Input
           ref={emailInput}
           value={inputFields.email}
@@ -60,7 +62,7 @@ function SignUpForm({ loading, setLoading }) {
         />
       </div>
       <div>
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">{t("form.password")}</Label>
         <Input
           ref={passwordInput}
           value={inputFields.password}
@@ -72,7 +74,7 @@ function SignUpForm({ loading, setLoading }) {
         />
       </div>
       <div>
-        <Label htmlFor="confirm-password">Confirm Password</Label>
+        <Label htmlFor="confirm-password">{t("form.confirmPassword")}</Label>
         <Input
           ref={confirmPasswordInput}
           value={inputFields["confirm-password"]}
@@ -96,7 +98,7 @@ function SignUpForm({ loading, setLoading }) {
           loading={loading}
           className="text-white"
         >
-          Create
+          {t("form.create")}
         </Button>
       </div>
     </form>

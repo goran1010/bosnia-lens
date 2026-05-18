@@ -1,8 +1,10 @@
 import { useContext } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
+import { LanguageContext } from "../../contextData/LanguageContext";
 
 function ThemeSwitcher({ setMode, setThemeMenuOpen }) {
   const { addNotification } = useContext(NotificationContext);
+  const { t } = useContext(LanguageContext);
 
   return (
     <div className="menu-shell z-50 pb-2 absolute top-full left-0 w-full text-center rounded-b user-select-none cursor-pointer backdrop-blur-sm ">
@@ -15,12 +17,12 @@ function ThemeSwitcher({ setMode, setThemeMenuOpen }) {
               setMode("system");
               addNotification({
                 type: "info",
-                message: "Switched to system theme",
+                message: t("theme.switched.system"),
               });
               setThemeMenuOpen(false);
             }}
           >
-            System
+            {t("theme.system")}
           </button>
         </li>
         <li>
@@ -31,12 +33,12 @@ function ThemeSwitcher({ setMode, setThemeMenuOpen }) {
               setMode("light");
               addNotification({
                 type: "info",
-                message: "Switched to light theme",
+                message: t("theme.switched.light"),
               });
               setThemeMenuOpen(false);
             }}
           >
-            Light
+            {t("theme.light")}
           </button>
         </li>
         <li>
@@ -47,12 +49,12 @@ function ThemeSwitcher({ setMode, setThemeMenuOpen }) {
               setMode("dark");
               addNotification({
                 type: "info",
-                message: "Switched to dark theme",
+                message: t("theme.switched.dark"),
               });
               setThemeMenuOpen(false);
             }}
           >
-            Dark
+            {t("theme.dark")}
           </button>
         </li>
       </ul>

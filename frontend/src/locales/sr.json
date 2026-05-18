@@ -8,6 +8,7 @@
     "admin": "Admin",
     "profile": "Profil",
     "login": "Prijava",
+    "language": "Jezik",
     "theme": "Tema",
     "choose": "Izaberi",
     "close": "Zatvori",
@@ -16,6 +17,7 @@
     "toggleMenuAria": "Prikaži navigacioni meni"
   },
   "notifications": {
+    "title": "Obavijesti",
     "dismiss": "Zatvori obavijest"
   },
   "theme": {
@@ -29,20 +31,31 @@
     }
   },
   "language": {
+    "browser": "Jezik pregledača",
     "english": "Engleski",
     "serbian": "Srpski",
-    "switchAria": "Promijeni jezik"
+    "switchAria": "Promijeni jezik",
+    "switched": {
+      "browser": "Prebačeno na jezik pregledača",
+      "english": "Prebačeno na engleski",
+      "serbian": "Prebačeno na srpski"
+    }
   },
   "auth": {
     "or": "ILI",
+    "pageSuffix": "stranicu.",
     "continueWithGithub": "Nastavi preko GitHub-a",
     "login": {
+      "linkText": "Prijava",
+      "noAccountPrefix": "Nemate nalog ? Idite na",
       "heading": "Prijava",
       "githubFailed": "GitHub prijava nije uspjela. Pokušajte ponovo.",
       "alreadyLoggedIn": "Već ste prijavljeni. Preusmereni ste na početnu stranicu.",
       "noAccount": "Nemate nalog ? Idite na stranicu Registracija."
     },
     "signup": {
+      "linkText": "Registracija",
+      "haveAccountPrefix": "Već imate nalog ? Vratite se na",
       "heading": "Kreirajte svoj nalog",
       "blockedWhileLoggedIn": "Ne možete se registrovati dok ste prijavljeni. Preusmereni ste na početnu stranicu.",
       "haveAccount": "Već imate nalog ? Vratite se na stranicu Prijava."
@@ -79,6 +92,8 @@
     "plannedData": "Planirani podaci",
     "plannedDataUniversities": "Univerziteti i njihovi programi",
     "contributing": "Doprinos",
+    "contributingReadmePrefix": "Pročitajte",
+    "contributingReadmeSuffix": "za detalje o pravilima ponašanja i postupku slanja pull request-ova.",
     "contributingReadme": "Pročitajte CONTRIBUTING.md za detalje o pravilima ponašanja i postupku slanja pull request-ova.",
     "contributingWelcome": "Dobrodošli su doprinosi kroz podatke, unapređenja koda, dokumentaciju i prijave grešaka.",
     "getStarted": "Počni",
@@ -151,6 +166,9 @@
     "pendingChanges": "Izmjene na čekanju",
     "noPendingChanges": "Nema izmjena na čekanju za prikaz.",
     "change": "Izmjena",
+    "pendingChangesCountAria": "broj izmjena na čekanju",
+    "searchResultsCountAria": "broj rezultata pretrage",
+    "searchResults": "Rezultati pretrage",
     "user": "Korisnik",
     "dataset": {
       "postalCodes": "Poštanski brojevi",
@@ -162,6 +180,7 @@
     "needAdmin": "Morate biti admin da biste vidjeli admin kontrolnu tablu.",
     "needLoginAndAdmin": "Morate biti prijavljeni i imati admin ulogu da biste vidjeli admin kontrolnu tablu.",
     "dashboardTitle": "Admin kontrolna tabla",
+    "pendingChangesCountAria": "broj izmjena na čekanju",
     "pendingChanges": "Izmjene na čekanju",
     "noPendingChanges": "Trenutno nema izmjena na čekanju."
   },

@@ -1,9 +1,11 @@
 import { useContext } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { setInitialLanguage } from "../../utils/setInitialLanguage";
+import { LanguageContext } from "../../contextData/LanguageContext";
 
 function LanguageSwitcher({ setLanguageMenuOpen, setLanguage }) {
   const { addNotification } = useContext(NotificationContext);
+  const { t } = useContext(LanguageContext);
 
   return (
     <div className="menu-shell z-50 pb-2 absolute top-full left-0 w-full text-center rounded-b user-select-none cursor-pointer backdrop-blur-sm ">
@@ -16,12 +18,12 @@ function LanguageSwitcher({ setLanguageMenuOpen, setLanguage }) {
               setLanguage(setInitialLanguage());
               addNotification({
                 type: "info",
-                message: "Switched to browser language",
+                message: t("language.switched.browser"),
               });
               setLanguageMenuOpen(false);
             }}
           >
-            Browser Language
+            {t("language.browser")}
           </button>
         </li>
 
@@ -33,12 +35,12 @@ function LanguageSwitcher({ setLanguageMenuOpen, setLanguage }) {
               setLanguage("en");
               addNotification({
                 type: "info",
-                message: "Switched to English",
+                message: t("language.switched.english"),
               });
               setLanguageMenuOpen(false);
             }}
           >
-            English
+            {t("language.english")}
           </button>
         </li>
 
@@ -50,12 +52,12 @@ function LanguageSwitcher({ setLanguageMenuOpen, setLanguage }) {
               setLanguage("sr");
               addNotification({
                 type: "info",
-                message: "Switched to Serbian",
+                message: t("language.switched.serbian"),
               });
               setLanguageMenuOpen(false);
             }}
           >
-            Serbian
+            {t("language.serbian")}
           </button>
         </li>
       </ul>

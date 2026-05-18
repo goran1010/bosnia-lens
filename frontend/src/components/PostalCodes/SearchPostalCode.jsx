@@ -4,6 +4,7 @@ import { NotificationContext } from "../../contextData/NotificationContext";
 import { Button } from "../sharedComponents/Button";
 import { Input } from "../sharedComponents/Input";
 import { Label } from "../sharedComponents/Label";
+import { LanguageContext } from "../../contextData/LanguageContext";
 
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 
@@ -11,6 +12,7 @@ function SearchPostalCode({ setSearchResult, loading, setLoading }) {
   const [searchTerm, setSearchTerm] = useState("");
   const searchInput = useRef();
   const { addNotification } = useContext(NotificationContext);
+  const { t } = useContext(LanguageContext);
 
   function handleSearch(e) {
     checkPostalCodesValidity(searchInput);
@@ -30,19 +32,22 @@ function SearchPostalCode({ setSearchResult, loading, setLoading }) {
       if (!response.ok) {
         addNotification({
           type: "error",
-          message: result?.error?.message || result?.error || "Search failed.",
+          message:
+            result?.error?.message ||
+            result?.error ||
+            t("postal.search.failed"),
         });
         return;
       }
       addNotification({
         type: "success",
-        message: "Postal codes retrieved successfully.",
+        message: t("postal.search.success"),
       });
       setSearchResult(result.data);
     } catch (err) {
       addNotification({
         type: "error",
-        message: "An error occurred while searching for postal codes.",
+        message: t("postal.search.error"),
       });
       console.error(err);
     } finally {
@@ -55,7 +60,7 @@ function SearchPostalCode({ setSearchResult, loading, setLoading }) {
       onSubmit={handleSubmit}
       className="flex flex-col justify-center items-center gap-2 w-full"
     >
-      <Label htmlFor="search-term">Search by Postal Code or Municipality</Label>
+      <Label htmlFor="search-term">{t("postal.search.label")}</Label>
 
       <div className="flex gap-2 w-full max-w-xl flex-wrap sm:flex-nowrap">
         <Input
@@ -75,7 +80,7 @@ function SearchPostalCode({ setSearchResult, loading, setLoading }) {
           loading={loading}
           className="sm:w-auto text-white"
         >
-          Search
+          {t("form.search")}
         </Button>
       </div>
     </form>

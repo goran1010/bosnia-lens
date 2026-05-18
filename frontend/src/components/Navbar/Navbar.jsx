@@ -20,7 +20,7 @@ function Navbar({ closeMenu }) {
   } = closeMenu;
   const { setMode } = useTheme();
   const { userData } = useContext(UserDataContext);
-  const { setLanguage } = useContext(LanguageContext);
+  const { setLanguage, t } = useContext(LanguageContext);
 
   return (
     <nav
@@ -31,7 +31,7 @@ function Navbar({ closeMenu }) {
       <div className="relative">
         <ButtonNavbar
           id="theme-switcher"
-          aria-label="Toggle theme menu"
+          aria-label={t("nav.toggleThemeAria")}
           aria-controls="theme-menu"
           aria-expanded={isThemeMenuOpen}
           onClick={() => {
@@ -39,7 +39,7 @@ function Navbar({ closeMenu }) {
             setIsMenuOpen(false);
           }}
         >
-          {isThemeMenuOpen ? "Choose" : "Theme"}
+          {isThemeMenuOpen ? t("nav.choose") : t("nav.theme")}
         </ButtonNavbar>
         {isThemeMenuOpen && (
           <ThemeSwitcher
@@ -52,7 +52,7 @@ function Navbar({ closeMenu }) {
         <ButtonNavbar
           id="mobile-menu-toggle"
           type="button"
-          aria-label="Toggle navigation menu"
+          aria-label={t("nav.toggleMenuAria")}
           aria-controls="mobile-menu"
           aria-expanded={isMenuOpen}
           onClick={() => {
@@ -60,7 +60,7 @@ function Navbar({ closeMenu }) {
             setThemeMenuOpen(false);
           }}
         >
-          {isMenuOpen ? "Close" : "Menu"}
+          {isMenuOpen ? t("nav.close") : t("nav.menu")}
         </ButtonNavbar>
       </div>
 
@@ -73,7 +73,7 @@ function Navbar({ closeMenu }) {
       <div className="relative">
         <ButtonNavbar
           id="language-switcher"
-          aria-label="Toggle language menu"
+          aria-label={t("language.switchAria")}
           aria-controls="language-menu"
           aria-expanded={isLanguageMenuOpen}
           onClick={() => {
@@ -81,7 +81,7 @@ function Navbar({ closeMenu }) {
             setIsMenuOpen(false);
           }}
         >
-          {isLanguageMenuOpen ? "Choose" : "Language"}
+          {isLanguageMenuOpen ? t("nav.choose") : t("nav.language")}
         </ButtonNavbar>
         {isLanguageMenuOpen && (
           <LanguageSwitcher

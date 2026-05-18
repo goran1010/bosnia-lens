@@ -1,18 +1,22 @@
 import { Link } from "react-router-dom";
 import { Status } from "./Status";
+import { useContext } from "react";
+import { LanguageContext } from "../../contextData/LanguageContext";
 
 function StandardMenu({ setIsMenuOpen, userData }) {
+  const { t } = useContext(LanguageContext);
+
   return (
     <div className="hidden lg:flex justify-between items-center">
       <ul className="flex items-center gap-1">
         <li>
           <Link className="menu-item block py-3 px-2" to="/">
-            Home
+            {t("nav.home")}
           </Link>
         </li>
         <li>
           <Link className="menu-item block py-3 px-2" to="/api-docs">
-            API Docs
+            {t("nav.apiDocs")}
           </Link>
         </li>
         <li>
@@ -20,13 +24,13 @@ function StandardMenu({ setIsMenuOpen, userData }) {
             className="menu-item block py-3 px-2 text-nowrap"
             to="/postal-codes"
           >
-            Postal Codes
+            {t("nav.postalCodes")}
           </Link>
         </li>
 
         <li>
           <Link className="menu-item block py-3 px-2" to="/universities">
-            Universities
+            {t("nav.universities")}
           </Link>
         </li>
 
@@ -36,14 +40,14 @@ function StandardMenu({ setIsMenuOpen, userData }) {
               className="menu-item block py-3 px-2"
               to="/contribution-dashboard"
             >
-              Contribute
+              {t("nav.contribute")}
             </Link>
           </li>
         )}
         {userData?.role === "ADMIN" && (
           <li>
             <Link className="menu-item block py-3 px-2" to="/admin-dashboard">
-              Admin
+              {t("nav.admin")}
             </Link>
           </li>
         )}

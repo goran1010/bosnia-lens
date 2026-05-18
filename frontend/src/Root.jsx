@@ -38,31 +38,31 @@ function Root() {
     longWait,
   );
 
-  if (longWait || serverIsDown) {
-    return <LongWaitInfo serverIsDown={serverIsDown} />;
-  }
-
   return (
     <LanguageContext value={{ language, setLanguage, t }}>
-      <NotificationContext
-        value={{
-          notifications,
-          addNotification,
-          removeNotification,
-        }}
-      >
-        <UserDataContext value={{ userData, setUserData }}>
-          <>
-            <Navbar closeMenu={closeMenu} />
-            <Notifications />
-            <main className="app-main flex-1 flex flex-col items-center justify-center px-2 md:px-5 lg:px-10 xl:px-25 2xl:px-50 relative">
-              {loading ? <Spinner /> : <Outlet />}
-            </main>
+      {longWait || serverIsDown ? (
+        <LongWaitInfo serverIsDown={serverIsDown} />
+      ) : (
+        <NotificationContext
+          value={{
+            notifications,
+            addNotification,
+            removeNotification,
+          }}
+        >
+          <UserDataContext value={{ userData, setUserData }}>
+            <>
+              <Navbar closeMenu={closeMenu} />
+              <Notifications />
+              <main className="app-main flex-1 flex flex-col items-center justify-center px-2 md:px-5 lg:px-10 xl:px-25 2xl:px-50 relative">
+                {loading ? <Spinner /> : <Outlet />}
+              </main>
 
-            <Footer />
-          </>
-        </UserDataContext>
-      </NotificationContext>
+              <Footer />
+            </>
+          </UserDataContext>
+        </NotificationContext>
+      )}
     </LanguageContext>
   );
 }
