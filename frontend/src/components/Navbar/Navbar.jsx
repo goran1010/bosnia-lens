@@ -5,6 +5,8 @@ import { ThemeSwitcher } from "./ThemeSwitcher";
 import { MobileMenu } from "./MobileMenu";
 import { StandardMenu } from "./StandardMenu";
 import { ButtonNavbar } from "./ButtonNavbar";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+import { LanguageContext } from "../../contextData/LanguageContext";
 
 function Navbar({ closeMenu }) {
   const {
@@ -13,9 +15,12 @@ function Navbar({ closeMenu }) {
     setIsMenuOpen,
     isThemeMenuOpen,
     setThemeMenuOpen,
+    isLanguageMenuOpen,
+    setLanguageMenuOpen,
   } = closeMenu;
   const { setMode } = useTheme();
   const { userData } = useContext(UserDataContext);
+  const { setLanguage } = useContext(LanguageContext);
 
   return (
     <nav
@@ -64,6 +69,27 @@ function Navbar({ closeMenu }) {
       )}
 
       <StandardMenu setIsMenuOpen={setIsMenuOpen} userData={userData} />
+
+      <div className="relative">
+        <ButtonNavbar
+          id="language-switcher"
+          aria-label="Toggle language menu"
+          aria-controls="language-menu"
+          aria-expanded={isLanguageMenuOpen}
+          onClick={() => {
+            setLanguageMenuOpen((prev) => !prev);
+            setIsMenuOpen(false);
+          }}
+        >
+          {isLanguageMenuOpen ? "Choose" : "Language"}
+        </ButtonNavbar>
+        {isLanguageMenuOpen && (
+          <LanguageSwitcher
+            setLanguageMenuOpen={setLanguageMenuOpen}
+            setLanguage={setLanguage}
+          />
+        )}
+      </div>
     </nav>
   );
 }
