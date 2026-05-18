@@ -2,6 +2,12 @@ import { prisma } from "../db/prisma.js";
 
 class PendingChangesPostalCodeModel {
   async create(data) {
+    if (!data.post) {
+      delete data.post;
+      return await prisma.pendingChangesPostalCode.create({
+        data,
+      });
+    }
     return await prisma.pendingChangesPostalCode.create({
       data,
     });
