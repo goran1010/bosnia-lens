@@ -10,7 +10,7 @@ function ThemeSwitcher({ setMode, setThemeMenuOpen }) {
         <li>
           <button
             type="button"
-            className="menu-item block w-full py-2 px-4"
+            className="menu-item block w-full py-1 px-2 wrap-break-word text-sm"
             onClick={() => {
               setMode("system");
               addNotification({
@@ -26,7 +26,7 @@ function ThemeSwitcher({ setMode, setThemeMenuOpen }) {
         <li>
           <button
             type="button"
-            className="menu-item block w-full py-2 px-4"
+            className="menu-item block w-full py-1 px-2 wrap-break-word text-sm"
             onClick={() => {
               setMode("light");
               addNotification({
@@ -42,7 +42,7 @@ function ThemeSwitcher({ setMode, setThemeMenuOpen }) {
         <li>
           <button
             type="button"
-            className="menu-item block w-full py-2 px-4"
+            className="menu-item block w-full py-1 px-2 wrap-break-word text-sm"
             onClick={() => {
               setMode("dark");
               addNotification({
