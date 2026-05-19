@@ -8,7 +8,6 @@ import { useStatusCheck } from "./customHooks/useStatusCheck";
 import { Notifications } from "./components/Notifications";
 import { NotificationContext } from "./contextData/NotificationContext";
 import { useNotification } from "./customHooks/useNotification";
-import { useTitle } from "./customHooks/useTitle";
 import { LongWaitInfo } from "./utils/longWaitInfo";
 import { useServerWakeUp } from "./customHooks/useServerWakeUp";
 import { useCloseMenu } from "./customHooks/useCloseMenu";
@@ -22,8 +21,6 @@ function Root() {
     useNotification();
   const [serverIsDown, setServerIsDown] = useState(false);
   const { language, setLanguage, t } = useLanguage();
-
-  useTitle();
 
   const closeMenu = useCloseMenu();
 
