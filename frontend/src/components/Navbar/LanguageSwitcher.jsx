@@ -8,12 +8,12 @@ function LanguageSwitcher({ setLanguageMenuOpen, setLanguage }) {
   const { t } = useContext(LanguageContext);
 
   return (
-    <div className="menu-shell z-50 pb-2 absolute top-full left-0 w-full text-center rounded-b user-select-none cursor-pointer backdrop-blur-sm ">
+    <div className="menu-shell z-50 absolute top-full left-0 w-full text-center rounded-b user-select-none cursor-pointer backdrop-blur-sm">
       <ul className="flex flex-col">
         <li>
           <button
             type="button"
-            className="menu-item block w-full py-1 px-2 wrap-break-word text-sm"
+            className="menu-item block w-full py-1 px-1 wrap-break-word text-sm"
             onClick={() => {
               setLanguage(setInitialLanguage());
               addNotification({
@@ -30,7 +30,7 @@ function LanguageSwitcher({ setLanguageMenuOpen, setLanguage }) {
         <li>
           <button
             type="button"
-            className="menu-item block w-full py-1 px-2 wrap-break-word text-sm"
+            className="menu-item block w-full py-1 px-1 wrap-break-word text-sm"
             onClick={() => {
               setLanguage("en");
               addNotification({
@@ -47,7 +47,7 @@ function LanguageSwitcher({ setLanguageMenuOpen, setLanguage }) {
         <li>
           <button
             type="button"
-            className="menu-item block w-full py-1 px-2 wrap-break-word text-sm"
+            className="menu-item block w-full py-1 px-1 wrap-break-word text-sm"
             onClick={() => {
               setLanguage("sr");
               addNotification({

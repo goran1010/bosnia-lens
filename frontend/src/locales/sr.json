@@ -136,6 +136,37 @@
     "endpoints": "Endpoint-i",
     "authFlowTitle": "Autentifikovani tok za doprinos podacima",
     "authFlowBody": "Ovi endpoint-i zahtijevaju autentifikovanu sesiju (credentials: include) i koriste CSRF zaštitu za zahtjeve koji mijenjaju podatke.",
+    "postalObjectExample": "{\n  \"id\":   string   - jedinstveni identifikator\n  \"code\": number   - poštanski broj od 5 cifara\n  \"city\": string   - naziv grada\n  \"post\": \"BH_POSTA\" | \"POSTE_SRP\" | \"HP_MOSTAR\" | null\n}",
+    "groups": {
+      "csrf": "CSRF",
+      "auth": "Autentifikacija",
+      "users": "Korisnici (autentifikovani)",
+      "contributions": "Doprinosi (autentifikovani korisnici)",
+      "admin": "Admin (autentifikovani admin korisnici)"
+    },
+    "endpointsData": {
+      "apiStatus": "Provjera statusa API-ja.",
+      "apiV1Status": "Provjera statusa API v1.",
+      "getAllPostalCodes": "Preuzimanje svih poštanskih brojeva, sortiranih rastuće po broju.",
+      "searchPostalCodes": "Pretraga poštanskih brojeva po numeričkom kodu (tačno poklapanje od 5 cifara) ili po nazivu grada (neosjetljivo na velika/mala slova, najmanje 2 karaktera).",
+      "searchTermParam": "Poštanski broj od 5 cifara (npr. 71000) ili naziv grada (npr. Sarajevo, najmanje 2 karaktera).",
+      "csrfIssue": "Izdavanje CSRF tokena koji se koristi u x-csrf-token headeru za zahtjeve koji mijenjaju podatke.",
+      "authSignup": "Registracija naloga na čekanju i slanje emaila za potvrdu.",
+      "authConfirm": "Potvrda signup tokena i kreiranje korisničkog naloga.",
+      "authLogin": "Prijava putem emaila i lozinke.",
+      "authGithubStart": "Pokretanje GitHub OAuth toka prijave.",
+      "authGithubCallback": "Završetak GitHub OAuth toka prijave.",
+      "usersMe": "Dobavljanje profila trenutnog korisnika.",
+      "usersLogout": "Zatvaranje sesije.",
+      "contributionCreate": "Predlaganje novog poštanskog broja (čuva se kao izmjena na čekanju).",
+      "contributionUpdate": "Predlaganje izmjene poštanskog broja (čuva se kao izmjena na čekanju).",
+      "contributionDelete": "Predlaganje brisanja poštanskog broja (čuva se kao izmjena na čekanju).",
+      "contributionPendingList": "Prikaz vlastitih prijedloga na čekanju.",
+      "contributionPendingDelete": "Uklanjanje jednog vlastitog prijedloga na čekanju.",
+      "adminPendingList": "Prikaz svih prijedloga na čekanju.",
+      "adminApprove": "Odobravanje prijedloga na čekanju i primjena na aktivni skup podataka.",
+      "adminDecline": "Odbijanje prijedloga na čekanju."
+    },
     "method": {
       "get": "GET",
       "post": "POST",
@@ -195,5 +226,55 @@
   "footer": {
     "name": "Goran Jović",
     "email": "goran1010jovic@gmail.com"
+  },
+  "validation": {
+    "email": {
+      "invalid": "Unesite ispravnu email adresu",
+      "minLength": "Email mora imati najmanje 3 karaktera",
+      "missingAt": "U email adresi mora postojati znak '@'. U '{{email}}' nedostaje '@'.",
+      "missingDomain": "Unesite dio adrese nakon '@'. {{email}} nije potpuna adresa."
+    },
+    "password": {
+      "minLength": "Lozinka mora imati najmanje 6 karaktera",
+      "mustMatch": "Lozinka i potvrda lozinke moraju biti iste"
+    },
+    "postalCode": {
+      "fiveDigits": "Poštanski broj mora imati 5 cifara"
+    },
+    "search": {
+      "minLength": "Pretraga mora imati najmanje 2 karaktera"
+    },
+    "city": {
+      "required": "Naziv grada ne može biti prazan"
+    }
+  },
+  "messages": {
+    "csrfTokenFailed": "Neuspjelo preuzimanje CSRF tokena.",
+    "pendingChanges": {
+      "loadFailed": "Neuspjelo učitavanje izmjena na čekanju.",
+      "fetchError": "Greška pri preuzimanju izmjena na čekanju."
+    },
+    "postal": {
+      "addFailed": "Neuspjelo dodavanje poštanskog broja.",
+      "addError": "Došlo je do greške pri dodavanju poštanskog broja.",
+      "updateFailed": "Neuspjelo ažuriranje poštanskog broja.",
+      "updateError": "Došlo je do greške pri ažuriranju poštanskog broja.",
+      "deleteFailed": "Neuspjelo brisanje poštanskog broja.",
+      "deleteError": "Došlo je do greške pri brisanju poštanskog broja."
+    },
+    "auth": {
+      "loginFailed": "Prijava nije uspjela.",
+      "loginError": "Došlo je do greške tokom prijave.",
+      "registrationFailed": "Registracija nije uspjela.",
+      "registrationError": "Došlo je do greške tokom registracije.",
+      "logoutFailed": "Odjava nije uspjela.",
+      "logoutError": "Došlo je do greške tokom odjave."
+    },
+    "admin": {
+      "approveFailed": "Neuspjelo odobravanje izmjene na čekanju.",
+      "approveError": "Greška pri odobravanju izmjene na čekanju za {{email}}.",
+      "declineFailed": "Neuspjelo odbijanje zahtjeva.",
+      "declineError": "Greška pri odbijanju zahtjeva korisnika {{email}}."
+    }
   }
 }

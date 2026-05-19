@@ -43,12 +43,9 @@ function Api() {
 
       <section className="flex flex-col gap-4">
         <h2 className="text-xl font-bold">{t("api.postalObject")}</h2>
-        <pre className="bg-gray-100 dark:bg-gray-800 rounded p-3 text-xs overflow-x-auto">{`{
-  "id":   string   — unique identifier
-  "code": number   — 5-digit postal code
-  "city": string   — city name
-  "post": "BH_POSTA" | "POSTE_SRP" | "HP_MOSTAR" | null
-}`}</pre>
+        <pre className="bg-gray-100 dark:bg-gray-800 rounded p-3 text-xs overflow-x-auto">
+          {t("api.postalObjectExample")}
+        </pre>
       </section>
 
       <section className="flex flex-col gap-4">
@@ -64,14 +61,16 @@ function Api() {
         <div className="grid gap-4">
           {authenticatedGroups.map((group) => (
             <div
-              key={group.title}
+              key={group.titleKey}
               className="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/70 p-4"
             >
-              <h3 className="text-lg font-semibold mb-3">{group.title}</h3>
+              <h3 className="text-lg font-semibold mb-3">
+                {t(group.titleKey)}
+              </h3>
               <ul className="space-y-2">
                 {group.endpoints.map((endpoint) => (
                   <li
-                    key={`${group.title}-${endpoint.method}-${endpoint.path}`}
+                    key={`${group.titleKey}-${endpoint.method}-${endpoint.path}`}
                     className="rounded-md border border-gray-200 dark:border-gray-700 px-3 py-2"
                   >
                     <div className="flex flex-wrap items-center gap-2">
@@ -81,7 +80,7 @@ function Api() {
                       </code>
                     </div>
                     <p className="text-sm mt-1 text-gray-700 dark:text-gray-300">
-                      {endpoint.description}
+                      {t(endpoint.descriptionKey)}
                     </p>
                   </li>
                 ))}

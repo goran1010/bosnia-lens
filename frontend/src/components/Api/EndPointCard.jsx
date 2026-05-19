@@ -27,7 +27,7 @@ function EndpointCard({ endpoint }) {
         <code className="font-mono text-sm break-all">{endpoint.path}</code>
       </div>
       <p className="text-sm text-gray-700 dark:text-gray-300">
-        {endpoint.description}
+        {t(endpoint.descriptionKey)}
       </p>
 
       {endpoint.params && (
@@ -50,7 +50,7 @@ function EndpointCard({ endpoint }) {
                   <td className="pt-1 pr-4">
                     {p.required ? t("endpoint.yes") : t("endpoint.no")}
                   </td>
-                  <td className="pt-1">{p.description}</td>
+                  <td className="pt-1">{t(p.descriptionKey)}</td>
                 </tr>
               ))}
             </tbody>

@@ -25,7 +25,7 @@ function AddNewData({
   function handleInput(e) {
     const newInput = { ...input };
     newInput[e.target.name] = e.target.value;
-    validateAddData(e);
+    validateAddData(e, t);
     setInput(newInput);
   }
 
@@ -87,6 +87,7 @@ function AddNewData({
                   codeInput,
                   setPendingChanges,
                   userData,
+                  t,
                 )
               }
               type="button"

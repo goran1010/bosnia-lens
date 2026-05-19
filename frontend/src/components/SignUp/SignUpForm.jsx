@@ -31,6 +31,7 @@ function SignUpForm({ loading, setLoading }) {
       passwordInput,
       confirmPasswordInput,
       emailInput,
+      t,
     );
 
     setInputFields({ ...inputFields, [e.target.name]: e.target.value });
@@ -46,6 +47,7 @@ function SignUpForm({ loading, setLoading }) {
           inputFields,
           addNotification,
           navigate,
+          t,
         )
       }
     >
@@ -92,6 +94,7 @@ function SignUpForm({ loading, setLoading }) {
               passwordInput,
               confirmPasswordInput,
               emailInput,
+              t,
             )
           }
           type="submit"

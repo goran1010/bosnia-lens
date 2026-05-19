@@ -20,11 +20,25 @@ const PostalCodeRow = memo(
     const { t } = useContext(LanguageContext);
 
     const handleEditForm = (e) => {
-      handleEdit(e, addNotification, setLoading, setPendingChanges, userData);
+      handleEdit(
+        e,
+        addNotification,
+        setLoading,
+        setPendingChanges,
+        userData,
+        t,
+      );
     };
 
     const handleDeleteForm = (e) => {
-      handleDelete(e, addNotification, setLoading, setPendingChanges, userData);
+      handleDelete(
+        e,
+        addNotification,
+        setLoading,
+        setPendingChanges,
+        userData,
+        t,
+      );
     };
     return (
       <form

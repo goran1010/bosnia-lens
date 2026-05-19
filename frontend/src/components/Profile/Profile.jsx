@@ -61,7 +61,13 @@ function Profile() {
         <div className="flex flex-col gap-2 w-full max-w-sm">
           <Button
             onClick={() =>
-              handleLogout(addNotification, navigate, setUserData, setLoading)
+              handleLogout(
+                addNotification,
+                navigate,
+                setUserData,
+                setLoading,
+                t,
+              )
             }
             variant="danger"
             className="px-6 py-3 font-semibold"

@@ -136,6 +136,37 @@
     "endpoints": "Endpoints",
     "authFlowTitle": "Authenticated Data Contribution Flow",
     "authFlowBody": "These endpoints require an authenticated session (credentials: include) and use CSRF protection for mutating requests.",
+    "postalObjectExample": "{\n  \"id\":   string   - unique identifier\n  \"code\": number   - 5-digit postal code\n  \"city\": string   - city name\n  \"post\": \"BH_POSTA\" | \"POSTE_SRP\" | \"HP_MOSTAR\" | null\n}",
+    "groups": {
+      "csrf": "CSRF",
+      "auth": "Auth",
+      "users": "Users (Authenticated)",
+      "contributions": "Contributions (Authenticated Users)",
+      "admin": "Admin (Authenticated Admin Users)"
+    },
+    "endpointsData": {
+      "apiStatus": "Check API status.",
+      "apiV1Status": "Check API v1 status.",
+      "getAllPostalCodes": "Retrieve all postal codes, ordered by code ascending.",
+      "searchPostalCodes": "Search postal codes by numeric code (exact 5-digit match) or by city name (case-insensitive, minimum 2 characters).",
+      "searchTermParam": "A 5-digit postal code (e.g. 71000) or a city name (e.g. Sarajevo, minimum 2 characters).",
+      "csrfIssue": "Issue a CSRF token used in the x-csrf-token header for mutating requests.",
+      "authSignup": "Register a pending account and send a confirmation email.",
+      "authConfirm": "Confirm signup token and create the user account.",
+      "authLogin": "Log in with email/password.",
+      "authGithubStart": "Start GitHub OAuth login flow.",
+      "authGithubCallback": "Complete GitHub OAuth login flow.",
+      "usersMe": "Get current user profile.",
+      "usersLogout": "End session.",
+      "contributionCreate": "Suggest a new postal code (stored as pending change).",
+      "contributionUpdate": "Suggest an edit to a postal code (stored as pending change).",
+      "contributionDelete": "Suggest deletion of a postal code (stored as pending change).",
+      "contributionPendingList": "List your own pending suggestions.",
+      "contributionPendingDelete": "Remove one of your own pending suggestions.",
+      "adminPendingList": "List all pending suggestions.",
+      "adminApprove": "Approve a pending suggestion and apply it to the live dataset.",
+      "adminDecline": "Reject a pending suggestion."
+    },
     "method": {
       "get": "GET",
       "post": "POST",
@@ -195,5 +226,55 @@
   "footer": {
     "name": "Goran Jović",
     "email": "goran1010jovic@gmail.com"
+  },
+  "validation": {
+    "email": {
+      "invalid": "Please enter a valid email address",
+      "minLength": "Email must have at least 3 characters",
+      "missingAt": "Please include an '@' in the email address. '{{email}}' is missing an '@'.",
+      "missingDomain": "Please enter a part following '@'. {{email}} is incomplete."
+    },
+    "password": {
+      "minLength": "Password must have at least 6 characters",
+      "mustMatch": "Password and confirm password fields must match"
+    },
+    "postalCode": {
+      "fiveDigits": "Postal code must be a 5-digit number"
+    },
+    "search": {
+      "minLength": "Search must have at least 2 characters"
+    },
+    "city": {
+      "required": "City name cannot be empty"
+    }
+  },
+  "messages": {
+    "csrfTokenFailed": "Failed to retrieve CSRF token.",
+    "pendingChanges": {
+      "loadFailed": "Failed to load pending changes.",
+      "fetchError": "Error fetching pending changes."
+    },
+    "postal": {
+      "addFailed": "Failed to add postal code.",
+      "addError": "An error occurred while adding the postal code.",
+      "updateFailed": "Failed to update postal code.",
+      "updateError": "An error occurred while updating the postal code.",
+      "deleteFailed": "Failed to delete postal code.",
+      "deleteError": "An error occurred while deleting the postal code."
+    },
+    "auth": {
+      "loginFailed": "Login failed.",
+      "loginError": "An error occurred while logging in.",
+      "registrationFailed": "Registration failed.",
+      "registrationError": "An error occurred during registration.",
+      "logoutFailed": "Logout failed.",
+      "logoutError": "An error occurred while logging out."
+    },
+    "admin": {
+      "approveFailed": "Failed to approve pending change.",
+      "approveError": "Error approving pending change for {{email}}.",
+      "declineFailed": "Failed to decline request.",
+      "declineError": "Error declining {{email}}'s request."
+    }
   }
 }

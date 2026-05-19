@@ -100,6 +100,7 @@ const PendingChangesAdminRow = memo(
                 setPendingChanges,
                 addNotification,
                 setLoading,
+                t,
               );
             }}
             type="button"
@@ -116,6 +117,7 @@ const PendingChangesAdminRow = memo(
                 setPendingChanges,
                 addNotification,
                 setLoading,
+                t,
               );
             }}
             type="button"

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import en from "../locales/en.json";
 import sr from "../locales/sr.json";
-import { LanguageContext } from "../contextData/LanguageContext";
 import { setInitialLanguage } from "../utils/setInitialLanguage";
 
 const translations = { en, sr };
@@ -19,14 +18,19 @@ function useLanguage() {
     setLanguageState(lang);
   }
 
-  function t(key) {
+  function t(key, params = {}) {
     const keys = key.split(".");
     let value = translations[language];
     for (const k of keys) {
       if (value == null) return key;
       value = value[k];
     }
-    return value ?? key;
+    if (typeof value !== "string") return value ?? key;
+
+    return value.replace(/\{\{\s*(\w+)\s*\}\}/g, (_, token) => {
+      const replacement = params[token];
+      return replacement == null ? "" : String(replacement);
+    });
   }
 
   return { language, setLanguage, t };

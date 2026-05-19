@@ -11,8 +11,10 @@ function PendingChangesAdmin() {
 
   const { addNotification } = useContext(NotificationContext);
   const { t } = useContext(LanguageContext);
-  const { pendingChanges, setPendingChanges } =
-    useGetPendingChangesAdmin(setLoading);
+  const { pendingChanges, setPendingChanges } = useGetPendingChangesAdmin(
+    setLoading,
+    t,
+  );
 
   if (loading) {
     return <Spinner />;

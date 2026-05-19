@@ -25,7 +25,7 @@ function LogInForm({ loading, setLoading }) {
   const passwordInput = useRef();
 
   function handleInputFields(e) {
-    checkLoginFormValidity(e.target.name, emailInput, passwordInput);
+    checkLoginFormValidity(e.target.name, emailInput, passwordInput, t);
     setInputFields({ ...inputFields, [e.target.name]: e.target.value });
   }
 
@@ -39,6 +39,7 @@ function LogInForm({ loading, setLoading }) {
           addNotification,
           setLoading,
           navigate,
+          t,
         )
       }
       className="flex flex-col gap-3"
@@ -69,7 +70,9 @@ function LogInForm({ loading, setLoading }) {
       </div>
       <div>
         <Button
-          onClick={() => checkLoginFormClickValidity(emailInput, passwordInput)}
+          onClick={() =>
+            checkLoginFormClickValidity(emailInput, passwordInput, t)
+          }
           type="submit"
           loading={loading}
           className="text-white"

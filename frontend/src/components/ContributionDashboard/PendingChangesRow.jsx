@@ -98,6 +98,7 @@ const PendingChangesRow = memo(
                 addNotification,
                 setPendingChanges,
                 setLoading,
+                t,
               )
             }
           >

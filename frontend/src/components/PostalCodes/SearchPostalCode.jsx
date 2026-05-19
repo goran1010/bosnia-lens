@@ -15,7 +15,7 @@ function SearchPostalCode({ setSearchResult, loading, setLoading }) {
   const { t } = useContext(LanguageContext);
 
   function handleSearch(e) {
-    checkPostalCodesValidity(searchInput);
+    checkPostalCodesValidity(searchInput, t);
     setSearchTerm(e.target.value);
   }
 
@@ -75,7 +75,7 @@ function SearchPostalCode({ setSearchResult, loading, setLoading }) {
         <Button
           type="submit"
           onClick={() => {
-            checkPostalCodesValidity(searchInput);
+            checkPostalCodesValidity(searchInput, t);
           }}
           loading={loading}
           className="sm:w-auto text-white"
