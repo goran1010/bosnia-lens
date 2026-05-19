@@ -217,7 +217,8 @@
   },
   "error": {
     "notFound": "There is nothing here, sorry.",
-    "goHome": "Go to Home Page"
+    "goHome": "Go to Home Page",
+    "pageTitle": "Page Not Found"
   },
   "longWait": {
     "unreachable": "Server can't be reached after multiple attempts. Please try again later.",

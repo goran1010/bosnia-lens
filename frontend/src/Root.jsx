@@ -13,6 +13,7 @@ import { useServerWakeUp } from "./customHooks/useServerWakeUp";
 import { useCloseMenu } from "./customHooks/useCloseMenu";
 import { LanguageContext } from "./contextData/LanguageContext";
 import { useLanguage } from "./customHooks/useLanguage";
+import { HelmetProvider } from "react-helmet-async";
 
 function Root() {
   const [loading, setLoading] = useState(true);
@@ -37,29 +38,30 @@ function Root() {
 
   return (
     <LanguageContext value={{ language, setLanguage, t }}>
-      {longWait || serverIsDown ? (
-        <LongWaitInfo serverIsDown={serverIsDown} />
-      ) : (
-        <NotificationContext
-          value={{
-            notifications,
-            addNotification,
-            removeNotification,
-          }}
-        >
-          <UserDataContext value={{ userData, setUserData }}>
-            <>
-              <Navbar closeMenu={closeMenu} />
-              <Notifications />
-              <main className="app-main flex-1 flex flex-col items-center justify-center px-2 md:px-5 lg:px-10 xl:px-25 2xl:px-50 relative">
-                {loading ? <Spinner /> : <Outlet />}
-              </main>
-
-              <Footer />
-            </>
-          </UserDataContext>
-        </NotificationContext>
-      )}
+      <HelmetProvider>
+        {longWait || serverIsDown ? (
+          <LongWaitInfo serverIsDown={serverIsDown} />
+        ) : (
+          <NotificationContext
+            value={{
+              notifications,
+              addNotification,
+              removeNotification,
+            }}
+          >
+            <UserDataContext value={{ userData, setUserData }}>
+              <>
+                <Navbar closeMenu={closeMenu} />
+                <Notifications />
+                <main className="app-main flex-1 flex flex-col items-center justify-center px-2 md:px-5 lg:px-10 xl:px-25 2xl:px-50 relative">
+                  {loading ? <Spinner /> : <Outlet />}
+                </main>
+                <Footer />
+              </>
+            </UserDataContext>
+          </NotificationContext>
+        )}
+      </HelmetProvider>
     </LanguageContext>
   );
 }

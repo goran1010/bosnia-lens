@@ -217,7 +217,8 @@
   },
   "error": {
     "notFound": "Ovdje nema ničega, izvinite.",
-    "goHome": "Idi na početnu stranicu"
+    "goHome": "Idi na početnu stranicu",
+    "pageTitle": "Stranica nije pronađena"
   },
   "longWait": {
     "unreachable": "Server nije dostupan ni nakon više pokušaja. Pokušajte ponovo kasnije.",
