@@ -1,4 +1,5 @@
 {
+  "appName": "Bosnia Lens",
   "nav": {
     "home": "Home",
     "apiDocs": "API Docs",
@@ -84,7 +85,8 @@
     "logout": "Log out"
   },
   "home": {
-    "title": "Bosnia Lens",
+    "title": "Home",
+    "heading": "Welcome to Bosnia Lens",
     "description1": "A free, open-source project providing structured public data about Bosnia and Herzegovina through a REST API and web interface.",
     "description2": "Currently focused on postal codes, with universities as the next planned dataset - making Bosnian public data open, searchable, and developer-friendly.",
     "availableData": "Available data",

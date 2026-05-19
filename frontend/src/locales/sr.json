@@ -1,4 +1,5 @@
 {
+  "appName": "Bosnia Lens",
   "nav": {
     "home": "Početna",
     "apiDocs": "API Dokumentacija",
@@ -84,7 +85,8 @@
     "logout": "Odjavi se"
   },
   "home": {
-    "title": "Bosnia Lens",
+    "title": "Početna stranica",
+    "heading": "Dobrodošli u Bosnia Lens",
     "description1": "Besplatan open-source projekat koji pruža strukturirane javne podatke o Bosni i Hercegovini kroz REST API i web interfejs.",
     "description2": "Trenutno je fokus na poštanskim brojevima, a univerziteti su sljedeći planirani skup podataka - sa ciljem da bosanski javni podaci budu otvoreni, pretraživi i prilagođeni programerima.",
     "availableData": "Dostupni podaci",
