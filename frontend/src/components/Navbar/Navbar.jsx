@@ -25,6 +25,11 @@ function Navbar({ closeMenu }) {
   return (
     <nav
       ref={navRef}
+      onClick={() => {
+        setThemeMenuOpen(false);
+        setLanguageMenuOpen(false);
+        setIsMenuOpen(false);
+      }}
       className="nav-shell z-40 px-3 py-1 w-full font-bold grid grid-cols-3 lg:flex lg:justify-between items-center gap-2 lg:gap-3 transition transform
      sticky top-0 left-0 shadow-md"
     >
@@ -34,8 +39,10 @@ function Navbar({ closeMenu }) {
           aria-label={t("nav.toggleThemeAria")}
           aria-controls="theme-menu"
           aria-expanded={isThemeMenuOpen}
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             setThemeMenuOpen((prev) => !prev);
+            setLanguageMenuOpen(false);
             setIsMenuOpen(false);
           }}
         >
@@ -55,8 +62,10 @@ function Navbar({ closeMenu }) {
           aria-label={t("nav.toggleMenuAria")}
           aria-controls="mobile-menu"
           aria-expanded={isMenuOpen}
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             setIsMenuOpen((prev) => !prev);
+            setLanguageMenuOpen(false);
             setThemeMenuOpen(false);
           }}
         >
@@ -76,9 +85,11 @@ function Navbar({ closeMenu }) {
           aria-label={t("language.switchAria")}
           aria-controls="language-menu"
           aria-expanded={isLanguageMenuOpen}
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             setLanguageMenuOpen((prev) => !prev);
             setIsMenuOpen(false);
+            setThemeMenuOpen(false);
           }}
         >
           {isLanguageMenuOpen ? t("nav.choose") : t("nav.language")}
