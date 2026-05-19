@@ -1,4 +1,29 @@
 {
+  "title": {
+    "app": "Bosnia Lens",
+    "home": "Početna",
+    "api": "API Dokumentacija",
+    "postal": "Poštanski brojevi",
+    "universities": "Univerziteti",
+    "contribute": "Doprinesi",
+    "admin": "Admin",
+    "profile": "Moj profil",
+    "login": "Prijava",
+    "signup": "Registracija",
+    "notFound": "Stranica nije pronađena",
+    "serverDown": "Server nije dostupan",
+    "wakingUp": "Budi se..."
+  },
+
+  "meta": {
+    "home": "Besplatni, open-source javni podaci o Bosni i Hercegovini. Pretražite poštanske brojeve i univerzitete putem REST API-ja ili interaktivnog sučelja.",
+    "postal": "Pretražite sve poštanske brojeve Bosne i Hercegovine. Pronađite grad ili oblast po poštanskom broju ili nazivu.",
+    "universities": "Istražite univerzitete i akademske programe u Bosni i Hercegovini.",
+    "api": "REST API dokumentacija za Bosnia Lens. Pristupite podacima o poštanskim brojevima i univerzitetima programski.",
+    "login": "Prijavite se na vaš Bosnia Lens nalog kako biste doprinijeli podacima i pratili vaše prijave.",
+    "signup": "Napravite besplatan Bosnia Lens nalog i počnite doprinositi podacima o poštanskim brojevima i univerzitetima."
+  },
+
   "nav": {
     "home": "Početna",
     "apiDocs": "API Dokumentacija",
@@ -84,7 +109,8 @@
     "logout": "Odjavi se"
   },
   "home": {
-    "title": "Bosnia Lens",
+    "title": "Početna stranica",
+    "heading": "Dobrodošli u Bosnia Lens",
     "description1": "Besplatan open-source projekat koji pruža strukturirane javne podatke o Bosni i Hercegovini kroz REST API i web interfejs.",
     "description2": "Trenutno je fokus na poštanskim brojevima, a univerziteti su sljedeći planirani skup podataka - sa ciljem da bosanski javni podaci budu otvoreni, pretraživi i prilagođeni programerima.",
     "availableData": "Dostupni podaci",
@@ -109,6 +135,7 @@
     }
   },
   "postal": {
+    "title": "Poštanski brojevi",
     "search": {
       "label": "Pretraga po poštanskom broju ili opštini",
       "success": "Poštanski brojevi su uspješno preuzeti.",
@@ -217,7 +244,8 @@
   },
   "error": {
     "notFound": "Ovdje nema ničega, izvinite.",
-    "goHome": "Idi na početnu stranicu"
+    "goHome": "Idi na početnu stranicu",
+    "pageTitle": "Stranica nije pronađena"
   },
   "longWait": {
     "unreachable": "Server nije dostupan ni nakon više pokušaja. Pokušajte ponovo kasnije.",

@@ -7,6 +7,7 @@ import { NotificationContext } from "../../contextData/NotificationContext.js";
 import { GitHubLoginLink } from "../sharedComponents/GitHubLoginLink.jsx";
 import { DividerOr } from "../sharedComponents/DividerOr.jsx";
 import { LanguageContext } from "../../contextData/LanguageContext.js";
+import { Helmet } from "react-helmet-async";
 
 function LogIn() {
   const [loading, setLoading] = useState(false);
@@ -42,30 +43,39 @@ function LogIn() {
   }, [userData, navigate, addNotification, t]);
 
   return (
-    <div className="panel-card relative min-h-full w-full max-w-xl mx-auto flex items-center justify-center p-4 sm:p-5">
-      <div className="w-full max-w-md p-1 sm:p-2 flex flex-col gap-4">
-        <h1 className="text-3xl text-center font-bold">
-          {t("auth.login.heading")}
-        </h1>
-        <LogInForm setLoading={setLoading} loading={loading} />
-
-        <DividerOr />
-
-        <GitHubLoginLink setLoading={setLoading} loading={loading} />
-
-        <DividerOr />
-
-        <div className="relative">
-          <p className="text-center">
-            {t("auth.login.noAccountPrefix")}{" "}
-            <Link className="hover:underline font-bold" to={"/signup"}>
-              {t("auth.signup.linkText")}
-            </Link>{" "}
-            {t("auth.pageSuffix")}
-          </p>
+    <>
+      <Helmet>
+        <title>{`${t("title.login")} | ${t("title.app")}`}</title>
+        <meta name="description" content={t("meta.login")} />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://bosnia-lens.netlify.app/login" />
+        <meta property="og:url" content="https://bosnia-lens.netlify.app/login" />
+        <meta property="og:title" content={`${t("title.login")} | ${t("title.app")}`} />
+        <meta property="og:description" content={t("meta.login")} />
+        <meta name="twitter:title" content={`${t("title.login")} | ${t("title.app")}`} />
+        <meta name="twitter:description" content={t("meta.login")} />
+      </Helmet>
+      <div className="panel-card relative min-h-full w-full max-w-xl mx-auto flex items-center justify-center p-4 sm:p-5">
+        <div className="w-full max-w-md p-1 sm:p-2 flex flex-col gap-4">
+          <h1 className="text-3xl text-center font-bold">
+            {t("auth.login.heading")}
+          </h1>
+          <LogInForm setLoading={setLoading} loading={loading} />
+          <DividerOr />
+          <GitHubLoginLink setLoading={setLoading} loading={loading} />
+          <DividerOr />
+          <div className="relative">
+            <p className="text-center">
+              {t("auth.login.noAccountPrefix")}{" "}
+              <Link className="hover:underline font-bold" to={"/signup"}>
+                {t("auth.signup.linkText")}
+              </Link>{" "}
+              {t("auth.pageSuffix")}
+            </p>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
