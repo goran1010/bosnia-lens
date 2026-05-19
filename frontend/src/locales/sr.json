@@ -111,6 +111,7 @@
     }
   },
   "postal": {
+    "title": "Poštanski brojevi",
     "search": {
       "label": "Pretraga po poštanskom broju ili opštini",
       "success": "Poštanski brojevi su uspješno preuzeti.",

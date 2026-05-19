@@ -111,6 +111,7 @@
     }
   },
   "postal": {
+    "title": "Postal Codes",
     "search": {
       "label": "Search by Postal Code or Municipality",
       "success": "Postal codes retrieved successfully.",
