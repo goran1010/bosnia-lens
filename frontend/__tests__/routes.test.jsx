@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { routes } from "../src/routes";
 import { UserDataContext } from "../src/contextData/UserDataContext";
+import { LanguageContext } from "../src/contextData/LanguageContext";
 
 beforeEach(() => {
   vi.spyOn(globalThis, "fetch").mockResolvedValue({
@@ -25,14 +26,20 @@ function renderRoute(route, { withUserDataContext = false } = {}) {
 
   if (withUserDataContext) {
     render(
-      <UserDataContext value={{ message: [], setMessage: () => {} }}>
-        <RouterProvider router={router} />
-      </UserDataContext>,
+      <LanguageContext value={{}}>
+        <UserDataContext value={{ message: [], setMessage: () => {} }}>
+          <RouterProvider router={router} />
+        </UserDataContext>
+      </LanguageContext>,
     );
     return;
   }
 
-  render(<RouterProvider router={router} />);
+  render(
+    <LanguageContext value={{}}>
+      <RouterProvider router={router} />
+    </LanguageContext>,
+  );
 }
 
 describe("Loading components when visiting an address", () => {
@@ -41,9 +48,7 @@ describe("Loading components when visiting an address", () => {
 
     renderRoute("/non-existent-address");
 
-    const linkElement = await screen.findByText(
-      /There is nothing here, sorry./i,
-    );
+    const linkElement = await screen.findByText(/Go to Home Page/i);
     expect(linkElement).toBeInTheDocument();
     expect(consoleSpy).toHaveBeenCalled();
 

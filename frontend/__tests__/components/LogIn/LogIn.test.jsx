@@ -9,6 +9,8 @@ import { useState } from "react";
 import { UserDataContext } from "../../../src/contextData/UserDataContext";
 import { useNotification } from "../../../src/customHooks/useNotification";
 import { Notifications } from "../../../src/components/Notifications";
+import { LanguageContext } from "../../../src/contextData/LanguageContext";
+import { useLanguage } from "../../../src/customHooks/useLanguage";
 
 vi.mock("../../../src/components/utils/getCsrfToken", () => ({
   getCsrfToken: async () => "mocked-csrf-token",
@@ -38,21 +40,24 @@ beforeEach(async () => {
     const [userData, setUserData] = useState(null);
     const { notifications, addNotification, removeNotification } =
       useNotification();
+    const { language, setLanguage, t } = useLanguage();
 
     return (
-      <NotificationContext
-        value={{ notifications, addNotification, removeNotification }}
-      >
-        <UserDataContext value={{ userData, setUserData }}>
-          <MemoryRouter initialEntries={["/login"]}>
-            <Notifications />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<LogIn />} />
-            </Routes>
-          </MemoryRouter>
-        </UserDataContext>
-      </NotificationContext>
+      <LanguageContext value={{ language, setLanguage, t }}>
+        <NotificationContext
+          value={{ notifications, addNotification, removeNotification }}
+        >
+          <UserDataContext value={{ userData, setUserData }}>
+            <MemoryRouter initialEntries={["/login"]}>
+              <Notifications />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<LogIn />} />
+              </Routes>
+            </MemoryRouter>
+          </UserDataContext>
+        </NotificationContext>
+      </LanguageContext>
     );
   }
 
