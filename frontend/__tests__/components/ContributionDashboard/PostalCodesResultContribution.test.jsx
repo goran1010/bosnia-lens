@@ -151,7 +151,7 @@ describe("PostalCodesResultContribution component", () => {
 
     const dataCodeRows = await screen.findAllByText("12345");
     const dataInputCity = await screen.findByRole("textbox", {
-      name: /city for postal code 12345/i,
+      name: /City 12345/i,
     });
     expect(dataCodeRows.length).toBeGreaterThan(0);
     expect(dataInputCity).toHaveValue("Test City");

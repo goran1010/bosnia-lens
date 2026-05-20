@@ -196,8 +196,6 @@ describe("PendingChangesRow Component", () => {
     const discardButton = screen.getByRole("button", { name: /discard/i });
     await user.click(discardButton);
 
-    screen.debug();
-
     expect(
       await screen.findByText(/No pending changes to display./i),
     ).toBeInTheDocument();
