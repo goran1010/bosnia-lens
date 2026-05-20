@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import en from "../locales/en.json";
 import sr from "../locales/sr.json";
 import { setInitialLanguage } from "../utils/setInitialLanguage";
@@ -14,24 +14,29 @@ function useLanguage() {
     localStorage.setItem("language", language);
   }, [language]);
 
-  function setLanguage(lang) {
+  const setLanguage = useCallback((lang) => {
     setLanguageState(lang);
-  }
+  }, []);
 
-  function t(key, params = {}) {
-    const keys = key.split(".");
-    let value = translations[language];
-    for (const k of keys) {
-      if (value == null) return key;
-      value = value[k];
-    }
-    if (typeof value !== "string") return value ?? key;
+  const t = useCallback(
+    (key, params = {}) => {
+      const keys = key.split(".");
+      let value = translations[language];
 
-    return value.replace(/\{\{\s*(\w+)\s*\}\}/g, (_, token) => {
-      const replacement = params[token];
-      return replacement == null ? "" : String(replacement);
-    });
-  }
+      for (const k of keys) {
+        if (value == null) return key;
+        value = value[k];
+      }
+
+      if (typeof value !== "string") return value ?? key;
+
+      return value.replace(/\{\{\s*(\w+)\s*\}\}/g, (_, token) => {
+        const replacement = params[token];
+        return replacement == null ? "" : String(replacement);
+      });
+    },
+    [language],
+  );
 
   return { language, setLanguage, t };
 }
