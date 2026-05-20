@@ -239,6 +239,7 @@
     "noPendingChanges": "There are no pending changes at the moment."
   },
   "error": {
+    "notFound": "There is nothing here, sorry.",
     "goHome": "Go to Home Page",
     "pageTitle": "Page Not Found"
   },
