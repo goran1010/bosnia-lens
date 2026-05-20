@@ -3,12 +3,25 @@ import { render, screen } from "@testing-library/react";
 import { Home } from "../../../src/components/Home/Home";
 import { NotificationContext } from "../../../src/contextData/NotificationContext";
 import { MemoryRouter } from "react-router-dom";
+import { LanguageContext } from "../../../src/contextData/LanguageContext";
+import { useLanguage } from "../../../src/customHooks/useLanguage";
+
+function Wrapper({ children }) {
+  const { language, setLanguage, t } = useLanguage();
+  return (
+    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+      {children}
+    </LanguageContext.Provider>
+  );
+}
 
 describe("Home component", () => {
   test("render component", async () => {
     render(
       <MemoryRouter>
-        <Home />
+        <Wrapper>
+          <Home />
+        </Wrapper>
       </MemoryRouter>,
     );
     const linkElement = await screen.findByRole("heading", {
@@ -21,7 +34,9 @@ describe("Home component", () => {
   test("render available data section", async () => {
     render(
       <MemoryRouter>
-        <Home />
+        <Wrapper>
+          <Home />
+        </Wrapper>
       </MemoryRouter>,
     );
     const linkElement = await screen.findByRole("heading", {
@@ -34,7 +49,9 @@ describe("Home component", () => {
   test("render contributing section", async () => {
     render(
       <MemoryRouter>
-        <Home />
+        <Wrapper>
+          <Home />
+        </Wrapper>
       </MemoryRouter>,
     );
     const linkElement = await screen.findByRole("heading", {
@@ -47,7 +64,9 @@ describe("Home component", () => {
   test("render get started section", async () => {
     render(
       <MemoryRouter>
-        <Home />
+        <Wrapper>
+          <Home />
+        </Wrapper>
       </MemoryRouter>,
     );
     const linkElement = await screen.findByRole("heading", {
@@ -60,7 +79,9 @@ describe("Home component", () => {
   test("render get started section with links", async () => {
     render(
       <MemoryRouter>
-        <Home />
+        <Wrapper>
+          <Home />
+        </Wrapper>
       </MemoryRouter>,
     );
     const linkElement = await screen.findByRole("link", {

@@ -8,6 +8,8 @@ import { useNotification } from "../../../src/customHooks/useNotification";
 import { Notifications } from "../../../src/components/Notifications";
 import { useState } from "react";
 import userEvent from "@testing-library/user-event";
+import { LanguageContext } from "../../../src/contextData/LanguageContext";
+import { useLanguage } from "../../../src/customHooks/useLanguage";
 
 const user = userEvent.setup();
 
@@ -31,20 +33,26 @@ afterEach(() => {
 });
 
 function Wrapper({ initialUser = null }) {
+  const { language, setLanguage, t } = useLanguage();
   const [userData, setUserData] = useState(initialUser);
-  const { notifications, addNotification, removeNotification } = useNotification();
+  const { notifications, addNotification, removeNotification } =
+    useNotification();
 
   return (
-    <NotificationContext value={{ notifications, addNotification, removeNotification }}>
-      <UserDataContext value={{ userData, setUserData }}>
-        <MemoryRouter initialEntries={["/postal-codes"]}>
-          <Notifications />
-          <Routes>
-            <Route path="/postal-codes" element={<PostalCodes />} />
-          </Routes>
-        </MemoryRouter>
-      </UserDataContext>
-    </NotificationContext>
+    <LanguageContext value={{ language, setLanguage, t }}>
+      <NotificationContext
+        value={{ notifications, addNotification, removeNotification }}
+      >
+        <UserDataContext value={{ userData, setUserData }}>
+          <MemoryRouter initialEntries={["/postal-codes"]}>
+            <Notifications />
+            <Routes>
+              <Route path="/postal-codes" element={<PostalCodes />} />
+            </Routes>
+          </MemoryRouter>
+        </UserDataContext>
+      </NotificationContext>
+    </LanguageContext>
   );
 }
 

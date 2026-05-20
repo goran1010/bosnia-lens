@@ -3,6 +3,8 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { GetAllPostalCodes } from "../../../src/components/PostalCodes/GetAllPostalCodes";
 import { NotificationContext } from "../../../src/contextData/NotificationContext";
+import { LanguageContext } from "../../../src/contextData/LanguageContext";
+import { useLanguage } from "../../../src/customHooks/useLanguage";
 
 const user = userEvent.setup();
 
@@ -23,24 +25,27 @@ describe("GetAllPostalCodes Component", () => {
     vi.restoreAllMocks();
   });
 
-  const renderComponent = () => {
+  const Wrapper = () => {
+    const { language, setLanguage, t } = useLanguage();
     const contextValue = {
       addNotification: mockAddNotification,
     };
 
-    return render(
-      <NotificationContext value={contextValue}>
-        <GetAllPostalCodes
-          setSearchResult={mockSetSearchResult}
-          setLoading={mockSetLoading}
-        />
-      </NotificationContext>,
+    return (
+      <LanguageContext value={{ language, setLanguage, t }}>
+        <NotificationContext value={contextValue}>
+          <GetAllPostalCodes
+            setSearchResult={mockSetSearchResult}
+            setLoading={mockSetLoading}
+          />
+        </NotificationContext>
+      </LanguageContext>
     );
   };
 
   describe("Rendering", () => {
     test("renders button with correct text", () => {
-      renderComponent();
+      render(<Wrapper />);
 
       const button = screen.getByRole("button", {
         name: /Get All/i,
@@ -49,7 +54,7 @@ describe("GetAllPostalCodes Component", () => {
     });
 
     test("renders as a form with submit type button", () => {
-      const { container } = renderComponent();
+      const { container } = render(<Wrapper />);
 
       const form = container.querySelector("form");
       expect(form).toBeInTheDocument();
@@ -74,7 +79,7 @@ describe("GetAllPostalCodes Component", () => {
         json: async () => ({ data: mockData }),
       });
 
-      renderComponent();
+      render(<Wrapper />);
 
       const button = screen.getByRole("button");
       await user.click(button);
@@ -97,7 +102,7 @@ describe("GetAllPostalCodes Component", () => {
         json: async () => ({ data: [] }),
       });
 
-      renderComponent();
+      render(<Wrapper />);
 
       const button = screen.getByRole("button");
       await user.click(button);
@@ -119,7 +124,7 @@ describe("GetAllPostalCodes Component", () => {
         }),
       });
 
-      renderComponent();
+      render(<Wrapper />);
 
       const button = screen.getByRole("button");
       await user.click(button);
@@ -140,7 +145,7 @@ describe("GetAllPostalCodes Component", () => {
         }),
       });
 
-      renderComponent();
+      render(<Wrapper />);
 
       const button = screen.getByRole("button");
       await user.click(button);
@@ -161,7 +166,7 @@ describe("GetAllPostalCodes Component", () => {
         }),
       });
 
-      renderComponent();
+      render(<Wrapper />);
 
       const button = screen.getByRole("button");
       await user.click(button);
@@ -181,7 +186,7 @@ describe("GetAllPostalCodes Component", () => {
       const networkError = new Error("Network error");
       fetchSpy.mockRejectedValueOnce(networkError);
 
-      renderComponent();
+      render(<Wrapper />);
 
       const button = screen.getByRole("button");
       await user.click(button);

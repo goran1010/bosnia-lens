@@ -1,10 +1,22 @@
 import { describe, test, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { PostalCodesResult } from "../../../src/components/PostalCodes/PostalCodesResult";
+import { LanguageContext } from "../../../src/contextData/LanguageContext";
+import { useLanguage } from "../../../src/customHooks/useLanguage";
+
+function Wrapper({ searchResult }) {
+  const { language, setLanguage, t } = useLanguage();
+
+  return (
+    <LanguageContext value={{ language, setLanguage, t }}>
+      <PostalCodesResult searchResult={searchResult} />
+    </LanguageContext>
+  );
+}
 
 describe("PostalCodesResult component", () => {
   test("renders no results message when searchResult is empty", () => {
-    render(<PostalCodesResult searchResult={[]} />);
+    render(<Wrapper searchResult={[]} />);
     const message = screen.getByText(/No results to display/i);
     expect(message).toBeInTheDocument();
   });
@@ -14,7 +26,7 @@ describe("PostalCodesResult component", () => {
       { code: "71000", city: "Sarajevo", post: "" },
       { code: "75000", city: "Tuzla", post: "" },
     ];
-    render(<PostalCodesResult searchResult={mockResults} />);
+    render(<Wrapper searchResult={mockResults} />);
     const code1 = screen.getByText(/71000/i);
     const city1 = screen.getByText(/Sarajevo/i);
     const code2 = screen.getByText(/75000/i);
@@ -27,12 +39,12 @@ describe("PostalCodesResult component", () => {
   });
 
   test("renders no results message when searchResult is null", () => {
-    render(<PostalCodesResult searchResult={null} />);
+    render(<Wrapper searchResult={null} />);
     expect(screen.getByText(/No results to display/i)).toBeInTheDocument();
   });
 
   test("renders no results message when searchResult is undefined", () => {
-    render(<PostalCodesResult />);
+    render(<Wrapper searchResult={undefined} />);
     expect(screen.getByText(/No results to display/i)).toBeInTheDocument();
   });
 
@@ -40,7 +52,7 @@ describe("PostalCodesResult component", () => {
     const mockResults = [
       { code: "71000", city: "Sarajevo", post: "Main Post" },
     ];
-    render(<PostalCodesResult searchResult={mockResults} />);
+    render(<Wrapper searchResult={mockResults} />);
     expect(screen.getByText("71000")).toBeInTheDocument();
     expect(screen.getByText("Sarajevo")).toBeInTheDocument();
     expect(screen.getByText("Main Post")).toBeInTheDocument();
@@ -48,14 +60,14 @@ describe("PostalCodesResult component", () => {
 
   test("renders result with null post field without crashing", () => {
     const mockResults = [{ code: "71000", city: "Sarajevo", post: null }];
-    render(<PostalCodesResult searchResult={mockResults} />);
+    render(<Wrapper searchResult={mockResults} />);
     expect(screen.getByText("71000")).toBeInTheDocument();
     expect(screen.getByText("Sarajevo")).toBeInTheDocument();
   });
 
   test("renders result with undefined post field without crashing", () => {
     const mockResults = [{ code: "71000", city: "Sarajevo" }];
-    render(<PostalCodesResult searchResult={mockResults} />);
+    render(<Wrapper searchResult={mockResults} />);
     expect(screen.getByText("71000")).toBeInTheDocument();
     expect(screen.getByText("Sarajevo")).toBeInTheDocument();
   });
