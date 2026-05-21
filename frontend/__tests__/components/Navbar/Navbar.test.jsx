@@ -23,6 +23,8 @@ function createUser(role = "ADMIN") {
 }
 
 beforeEach(() => {
+  localStorage.setItem("language", "en");
+
   vi.spyOn(globalThis, "fetch").mockResolvedValue({
     ok: true,
     json: async () => ({
@@ -110,19 +112,27 @@ describe("Render Navbar on root route", () => {
   });
 });
 
-function NavbarWrapper({ role = "ADMIN" }) {
+function NavbarWrapper({ role = "ADMIN", withUser = true }) {
   const { language, setLanguage, t } = useLanguage();
-  const userData = createUser(role);
+  const userData = withUser ? createUser(role) : null;
   const setUserData = vi.fn();
 
   const closeMenu = useCloseMenu();
   return (
     <LanguageContext value={{ language, setLanguage, t }}>
-      <UserDataContext value={{ userData, setUserData }}>
-        <MemoryRouter>
-          <Navbar closeMenu={closeMenu} />
-        </MemoryRouter>
-      </UserDataContext>
+      <NotificationContext
+        value={{
+          notifications: [],
+          addNotification: vi.fn(),
+          removeNotification: vi.fn(),
+        }}
+      >
+        <UserDataContext value={{ userData, setUserData }}>
+          <MemoryRouter>
+            <Navbar closeMenu={closeMenu} />
+          </MemoryRouter>
+        </UserDataContext>
+      </NotificationContext>
     </LanguageContext>
   );
 }
@@ -140,6 +150,93 @@ describe("render Navbar mobile menu", () => {
       expect(screen.queryByText("Menu")).not.toBeInTheDocument();
     },
   );
+
+  test("shows user-only links for contributor in mobile menu", async () => {
+    render(<NavbarWrapper role="CONTRIBUTOR" />);
+
+    await openMobileMenu();
+
+    const contributeLinks = document.querySelectorAll(
+      "#mobile-menu a[href='/contribution-dashboard']",
+    );
+    const adminLinks = document.querySelectorAll(
+      "#mobile-menu a[href='/admin-dashboard']",
+    );
+
+    expect(contributeLinks.length).toBe(1);
+    expect(adminLinks.length).toBe(0);
+  });
+
+  test("shows admin link for admin in mobile menu", async () => {
+    render(<NavbarWrapper role="ADMIN" />);
+
+    await openMobileMenu();
+
+    const contributeLinks = document.querySelectorAll(
+      "#mobile-menu a[href='/contribution-dashboard']",
+    );
+    const adminLinks = document.querySelectorAll(
+      "#mobile-menu a[href='/admin-dashboard']",
+    );
+
+    expect(contributeLinks.length).toBe(1);
+    expect(adminLinks.length).toBe(1);
+  });
+
+  test("hides user-only links when user is not logged in", async () => {
+    render(<NavbarWrapper withUser={false} />);
+
+    await openMobileMenu();
+
+    const contributeLinks = document.querySelectorAll(
+      "#mobile-menu a[href='/contribution-dashboard']",
+    );
+    const adminLinks = document.querySelectorAll(
+      "#mobile-menu a[href='/admin-dashboard']",
+    );
+    const loginLinks = document.querySelectorAll("a[href='/login']");
+
+    expect(contributeLinks.length).toBe(0);
+    expect(adminLinks.length).toBe(0);
+    expect(loginLinks.length).toBeGreaterThan(0);
+  });
+});
+
+describe("Navbar switchers", () => {
+  test("opens language menu and closes theme menu", async () => {
+    render(<NavbarWrapper />);
+
+    const themeButton = document.getElementById("theme-switcher");
+    const languageButton = document.getElementById("language-switcher");
+
+    expect(themeButton).toBeInTheDocument();
+    expect(languageButton).toBeInTheDocument();
+
+    await userEvent.click(themeButton);
+    expect(themeButton).toHaveAttribute("aria-expanded", "true");
+
+    await userEvent.click(languageButton);
+
+    expect(themeButton).toHaveAttribute("aria-expanded", "false");
+    expect(languageButton).toHaveAttribute("aria-expanded", "true");
+  });
+
+  test("closes open menus when navbar is clicked", async () => {
+    render(<NavbarWrapper />);
+
+    const languageButton = document.getElementById("language-switcher");
+    expect(languageButton).toBeInTheDocument();
+
+    await userEvent.click(languageButton);
+    expect(languageButton).toHaveAttribute("aria-expanded", "true");
+
+    const navigation = screen.getByRole("navigation");
+    expect(navigation).toBeInTheDocument();
+
+    await userEvent.click(navigation);
+
+    expect(languageButton).toHaveAttribute("aria-expanded", "false");
+  });
 });
 
 describe("render Menu based on viewport size", () => {
