@@ -31,7 +31,7 @@ function PendingChangesAdmin() {
   }
 
   return (
-    <section className="py-3 px-1 sm:px-4 w-full bg-(--surface-2) text-(--text-primary) border border-(--border-color) rounded-[0.9rem] shadow-(--card-shadow) backdrop-blur-[7px]">
+    <section className="py-3 px-1 sm:px-4 w-full bg-(--surface-2) text-(--text-primary) border border-(--border-color) rounded-2xl shadow-(--card-shadow) backdrop-blur-sm">
       <h2 className="text-md text-center font-semibold flex items-center gap-1 p-1 flex-1">
         <span
           aria-label={t("admin.pendingChangesCountAria")}

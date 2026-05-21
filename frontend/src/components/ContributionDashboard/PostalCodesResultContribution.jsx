@@ -36,7 +36,7 @@ function PostalCodesResultContribution({
 
   if (searchResult.length === 0) {
     return (
-      <section className="w-full max-w-4xl p-3 flex justify-center items-center bg-(--surface-2) text-(--text-primary) border border-(--border-color) rounded-[0.9rem] shadow-(--card-shadow) backdrop-blur-[7px]">
+      <section className="w-full max-w-4xl p-3 flex justify-center items-center bg-(--surface-2) text-(--text-primary) border border-(--border-color) rounded-2xl shadow-(--card-shadow) backdrop-blur-sm">
         <p className="text-center text-(--text-secondary)">
           {t("postal.results.none")}
         </p>
@@ -44,7 +44,7 @@ function PostalCodesResultContribution({
     );
   }
   return (
-    <section className="w-full max-w-4xl p-3 flex flex-col gap-3 bg-(--surface-2) text-(--text-primary) border border-(--border-color) rounded-[0.9rem] shadow-(--card-shadow) backdrop-blur-[7px]">
+    <section className="w-full max-w-4xl p-3 flex flex-col gap-3 bg-(--surface-2) text-(--text-primary) border border-(--border-color) rounded-2xl shadow-(--card-shadow) backdrop-blur-sm">
       <h2 className="text-md text-center font-semibold flex items-center justify-center gap-2 p-1">
         <span
           aria-label={t("contribution.searchResultsCountAria")}

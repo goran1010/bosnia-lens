@@ -15,7 +15,7 @@ function PendingChanges({ pendingChanges, loading, setPendingChanges }) {
 
   if (!pendingChanges || pendingChanges.length === 0) {
     return (
-      <section className="w-full max-w-4xl p-3 flex justify-center items-center bg-(--surface-2) text-(--text-primary) border border-(--border-color) rounded-[0.9rem] shadow-(--card-shadow) backdrop-blur-[7px]">
+      <section className="w-full max-w-4xl p-3 flex justify-center items-center bg-(--surface-2) text-(--text-primary) border border-(--border-color) rounded-2xl shadow-(--card-shadow) backdrop-blur-sm">
         <p className="text-center text-(--text-secondary)">
           {t("contribution.noPendingChanges")}
         </p>
@@ -24,7 +24,7 @@ function PendingChanges({ pendingChanges, loading, setPendingChanges }) {
   }
 
   return (
-    <section className="w-full max-w-4xl p-3 flex flex-col gap-3 bg-(--surface-2) text-(--text-primary) border border-(--border-color) rounded-[0.9rem] shadow-(--card-shadow) backdrop-blur-[7px]">
+    <section className="w-full max-w-4xl p-3 flex flex-col gap-3 bg-(--surface-2) text-(--text-primary) border border-(--border-color) rounded-2xl shadow-(--card-shadow) backdrop-blur-sm">
       <h2 className="text-md text-center font-semibold flex items-center gap-1 p-1 flex-1">
         <span
           aria-label={t("contribution.pendingChangesCountAria")}

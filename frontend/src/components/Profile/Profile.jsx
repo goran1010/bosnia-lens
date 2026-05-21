@@ -32,7 +32,7 @@ function Profile() {
         <title>{`${t("title.profile")} | ${t("title.app")}`}</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
-      <div className="w-full max-w-md mx-auto overflow-hidden bg-(--surface-2) text-(--text-primary) border border-(--border-color) rounded-[0.9rem] shadow-(--card-shadow) backdrop-blur-[7px]">
+      <div className="w-full max-w-md mx-auto overflow-hidden bg-(--surface-2) text-(--text-primary) border border-(--border-color) rounded-2xl shadow-(--card-shadow) backdrop-blur-sm">
         <div className="bg-linear-to-r from-blue-600 to-indigo-700 dark:from-blue-900 dark:to-indigo-900 p-4">
           <h1 className="text-2xl font-bold text-white text-center">
             {t("profile.title")}

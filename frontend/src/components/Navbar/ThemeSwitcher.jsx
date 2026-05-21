@@ -12,7 +12,7 @@ function ThemeSwitcher({ setMode, setThemeMenuOpen }) {
         <li>
           <button
             type="button"
-            className="block w-full py-1 px-1 wrap-break-word text-sm rounded-[0.6rem] transition-[background-color,color] duration-150 hover:bg-(--hover-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:bg-(--hover-surface)"
+            className="block w-full py-1 px-1 wrap-break-word text-sm rounded-lg transition-colors duration-150 hover:bg-(--hover-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:bg-(--hover-surface)"
             onClick={() => {
               setMode("system");
               addNotification({
@@ -28,7 +28,7 @@ function ThemeSwitcher({ setMode, setThemeMenuOpen }) {
         <li>
           <button
             type="button"
-            className="block w-full py-1 px-1 wrap-break-word text-sm rounded-[0.6rem] transition-[background-color,color] duration-150 hover:bg-(--hover-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:bg-(--hover-surface)"
+            className="block w-full py-1 px-1 wrap-break-word text-sm rounded-lg transition-colors duration-150 hover:bg-(--hover-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:bg-(--hover-surface)"
             onClick={() => {
               setMode("light");
               addNotification({
@@ -44,7 +44,7 @@ function ThemeSwitcher({ setMode, setThemeMenuOpen }) {
         <li>
           <button
             type="button"
-            className="block w-full py-1 px-1 wrap-break-word text-sm rounded-[0.6rem] transition-[background-color,color] duration-150 hover:bg-(--hover-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:bg-(--hover-surface)"
+            className="block w-full py-1 px-1 wrap-break-word text-sm rounded-lg transition-colors duration-150 hover:bg-(--hover-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:bg-(--hover-surface)"
             onClick={() => {
               setMode("dark");
               addNotification({
