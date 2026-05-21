@@ -1,0 +1,53 @@
+import { describe, test, expect, vi } from "vitest";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { MemoryRouter } from "react-router-dom";
+import { Status } from "../../../src/components/Navbar/Status";
+import { UserDataContext } from "../../../src/contextData/UserDataContext";
+import { LanguageContext } from "../../../src/contextData/LanguageContext";
+import { useLanguage } from "../../../src/customHooks/useLanguage";
+
+function Wrapper({ userData, setIsMenuOpen }) {
+  const { language, setLanguage, t } = useLanguage();
+
+  return (
+    <LanguageContext value={{ language, setLanguage, t }}>
+      <UserDataContext value={{ userData, setUserData: vi.fn() }}>
+        <MemoryRouter>
+          <Status setIsMenuOpen={setIsMenuOpen} />
+        </MemoryRouter>
+      </UserDataContext>
+    </LanguageContext>
+  );
+}
+
+describe("Status", () => {
+  test("renders Profile link for logged user", async () => {
+    const setIsMenuOpen = vi.fn();
+
+    render(
+      <Wrapper
+        userData={{ id: "1", username: "Test User", role: "USER" }}
+        setIsMenuOpen={setIsMenuOpen}
+      />,
+    );
+
+    const profileLink = screen.getByRole("link", { name: /Profile/i });
+    expect(profileLink).toBeInTheDocument();
+
+    await userEvent.click(profileLink);
+    expect(setIsMenuOpen).toHaveBeenCalledWith(false);
+  });
+
+  test("renders Log In link for guest user", async () => {
+    const setIsMenuOpen = vi.fn();
+
+    render(<Wrapper userData={null} setIsMenuOpen={setIsMenuOpen} />);
+
+    const loginLink = screen.getByRole("link", { name: /^Log In$/i });
+    expect(loginLink).toBeInTheDocument();
+
+    await userEvent.click(loginLink);
+    expect(setIsMenuOpen).toHaveBeenCalledWith(false);
+  });
+});
