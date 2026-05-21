@@ -3,31 +3,33 @@ import { Status } from "./Status";
 import { useContext } from "react";
 import { LanguageContext } from "../../contextData/LanguageContext";
 
+const menuShellClass =
+  "z-50 absolute top-full w-full left-0 bg-(--surface-2) text-(--text-primary) border border-(--border-color) shadow-(--card-shadow)";
+const menuItemClass =
+  "block p-2 w-full text-center text-nowrap rounded-lg transition-colors duration-150 hover:bg-(--hover-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:bg-(--hover-surface)";
+
 function MobileMenu({ setIsMenuOpen, userData }) {
   const { t } = useContext(LanguageContext);
 
   return (
-    <div
-      id="mobile-menu"
-      className="z-50 absolute top-full w-full left-0 bg-(--surface-2) text-(--text-primary) border border-(--border-color) shadow-(--card-shadow)"
-    >
+    <div id="mobile-menu" className={menuShellClass}>
       <ul className="flex flex-col items-center">
         <Link
-          className="block p-2 w-full text-center text-nowrap rounded-lg transition-colors duration-150 hover:bg-(--hover-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:bg-(--hover-surface)"
+          className={menuItemClass}
           to="/"
           onClick={() => setIsMenuOpen(false)}
         >
           {t("nav.home")}
         </Link>
         <Link
-          className="block p-2 w-full text-center text-nowrap rounded-lg transition-colors duration-150 hover:bg-(--hover-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:bg-(--hover-surface)"
+          className={menuItemClass}
           to="/api-docs"
           onClick={() => setIsMenuOpen(false)}
         >
           {t("nav.apiDocs")}
         </Link>
         <Link
-          className="block p-2 w-full text-center text-nowrap rounded-lg transition-colors duration-150 hover:bg-(--hover-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:bg-(--hover-surface)"
+          className={menuItemClass}
           to="/postal-codes"
           onClick={() => setIsMenuOpen(false)}
         >
@@ -35,7 +37,7 @@ function MobileMenu({ setIsMenuOpen, userData }) {
         </Link>
 
         <Link
-          className="block p-2 w-full text-center text-nowrap rounded-lg transition-colors duration-150 hover:bg-(--hover-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:bg-(--hover-surface)"
+          className={menuItemClass}
           to="/universities"
           onClick={() => setIsMenuOpen(false)}
         >
@@ -44,7 +46,7 @@ function MobileMenu({ setIsMenuOpen, userData }) {
 
         {userData && (
           <Link
-            className="block p-2 w-full text-center text-nowrap rounded-lg transition-colors duration-150 hover:bg-(--hover-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:bg-(--hover-surface)"
+            className={menuItemClass}
             to="/contribution-dashboard"
             onClick={() => setIsMenuOpen(false)}
           >
@@ -53,7 +55,7 @@ function MobileMenu({ setIsMenuOpen, userData }) {
         )}
         {userData?.role === "ADMIN" && (
           <Link
-            className="block p-2 w-full text-center text-nowrap rounded-lg transition-colors duration-150 hover:bg-(--hover-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:bg-(--hover-surface)"
+            className={menuItemClass}
             to="/admin-dashboard"
             onClick={() => setIsMenuOpen(false)}
           >

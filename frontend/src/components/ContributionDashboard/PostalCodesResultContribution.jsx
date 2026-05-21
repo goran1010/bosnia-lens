@@ -4,6 +4,9 @@ import { PostalCodeRow } from "./PostalCodeRow";
 import { Spinner } from "../../utils/Spinner";
 import { LanguageContext } from "../../contextData/LanguageContext";
 
+const panelClass =
+  "w-full max-w-4xl p-3 bg-(--surface-2) text-(--text-primary) border border-(--border-color) rounded-2xl shadow-(--card-shadow) backdrop-blur-sm";
+
 function PostalCodesResultContribution({
   searchResult,
   setPendingChanges,
@@ -36,7 +39,7 @@ function PostalCodesResultContribution({
 
   if (searchResult.length === 0) {
     return (
-      <section className="w-full max-w-4xl p-3 flex justify-center items-center bg-(--surface-2) text-(--text-primary) border border-(--border-color) rounded-2xl shadow-(--card-shadow) backdrop-blur-sm">
+      <section className={`${panelClass} flex justify-center items-center`}>
         <p className="text-center text-(--text-secondary)">
           {t("postal.results.none")}
         </p>
@@ -44,7 +47,7 @@ function PostalCodesResultContribution({
     );
   }
   return (
-    <section className="w-full max-w-4xl p-3 flex flex-col gap-3 bg-(--surface-2) text-(--text-primary) border border-(--border-color) rounded-2xl shadow-(--card-shadow) backdrop-blur-sm">
+    <section className={`${panelClass} flex flex-col gap-3`}>
       <h2 className="text-md text-center font-semibold flex items-center justify-center gap-2 p-1">
         <span
           aria-label={t("contribution.searchResultsCountAria")}

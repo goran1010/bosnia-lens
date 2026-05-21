@@ -2,17 +2,22 @@ import { useContext } from "react";
 import { NotificationContext } from "../../contextData/NotificationContext";
 import { LanguageContext } from "../../contextData/LanguageContext";
 
+const menuShellClass =
+  "z-50 absolute top-full left-0 w-full text-center rounded-b user-select-none cursor-pointer backdrop-blur-sm bg-(--surface-2) text-(--text-primary) border border-(--border-color) shadow-(--card-shadow)";
+const menuOptionClass =
+  "block w-full py-1 px-1 wrap-break-word text-sm rounded-lg transition-colors duration-150 hover:bg-(--hover-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:bg-(--hover-surface)";
+
 function ThemeSwitcher({ setMode, setThemeMenuOpen }) {
   const { addNotification } = useContext(NotificationContext);
   const { t } = useContext(LanguageContext);
 
   return (
-    <div className="z-50 absolute top-full left-0 w-full text-center rounded-b user-select-none cursor-pointer backdrop-blur-sm bg-(--surface-2) text-(--text-primary) border border-(--border-color) shadow-(--card-shadow)">
+    <div className={menuShellClass}>
       <ul className="flex flex-col">
         <li>
           <button
             type="button"
-            className="block w-full py-1 px-1 wrap-break-word text-sm rounded-lg transition-colors duration-150 hover:bg-(--hover-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:bg-(--hover-surface)"
+            className={menuOptionClass}
             onClick={() => {
               setMode("system");
               addNotification({
@@ -28,7 +33,7 @@ function ThemeSwitcher({ setMode, setThemeMenuOpen }) {
         <li>
           <button
             type="button"
-            className="block w-full py-1 px-1 wrap-break-word text-sm rounded-lg transition-colors duration-150 hover:bg-(--hover-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:bg-(--hover-surface)"
+            className={menuOptionClass}
             onClick={() => {
               setMode("light");
               addNotification({
@@ -44,7 +49,7 @@ function ThemeSwitcher({ setMode, setThemeMenuOpen }) {
         <li>
           <button
             type="button"
-            className="block w-full py-1 px-1 wrap-break-word text-sm rounded-lg transition-colors duration-150 hover:bg-(--hover-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:bg-(--hover-surface)"
+            className={menuOptionClass}
             onClick={() => {
               setMode("dark");
               addNotification({
