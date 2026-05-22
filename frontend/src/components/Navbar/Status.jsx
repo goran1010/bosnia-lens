@@ -4,7 +4,7 @@ import { UserDataContext } from "../../contextData/UserDataContext";
 import { LanguageContext } from "../../contextData/LanguageContext";
 
 const statusLinkClass =
-  "py-3 px-2 block cursor-pointer rounded-lg lg:px-2 transition-colors duration-150 hover:bg-(--hover-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:bg-(--hover-surface)";
+  "block h-full flex px-3 py-2 items-center justify-center cursor-pointer rounded-lg  transition-colors duration-150 hover:bg-(--hover-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:bg-(--hover-surface)";
 
 function Status({ setIsMenuOpen }) {
   const { userData } = useContext(UserDataContext);
