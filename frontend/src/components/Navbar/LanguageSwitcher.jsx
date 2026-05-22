@@ -30,7 +30,7 @@ function LanguageSwitcher({ language, setLanguage }) {
       aria-label={t("language.switchAria")}
       value={language}
       onChange={handleLanguageChange}
-      className="whitespace-normal text-center break-all h-full px-3 py-2 sm:min-w-38 w-full sm:w-auto relative inline-flex items-center justify-center rounded-md p-1 text-sm font-semibold bg-(--surface-1) text-(--text-primary) border border-(--border-color) shadow-(--card-shadow-soft) hover:shadow-(--card-shadow)"
+      className="whitespace-normal text-center break-all h-full py-2 sm:min-w-38 w-full sm:w-auto relative inline-flex items-center justify-center rounded-md p-1 text-sm font-semibold bg-(--surface-1) text-(--text-primary) border border-(--border-color) shadow-(--card-shadow-soft) hover:shadow-(--card-shadow)"
     >
       <option value="system">{t("language.system")}</option>
       <option value="en">{t("language.english")}</option>
