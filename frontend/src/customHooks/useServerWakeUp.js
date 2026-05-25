@@ -1,46 +1,81 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const ALLOWED_ATTEMPTS = 30;
 const DELAY_BETWEEN_ATTEMPTS = 2000;
-const LONG_WAIT_TIME = 3000;
+const SERVER_STATUS_NOTIFICATION_ID = "server-status";
 
-function useServerWakeUp({ setLongWait, setServerIsDown }) {
+function useServerWakeUp({ addNotification, removeNotification, t }) {
+  const isServerLiveRef = useRef(false);
+
   useEffect(() => {
+    const translate =
+      typeof t === "function"
+        ? t
+        : (key) => {
+            if (key === "longWait.wakingUp") {
+              return "Server is waking up.";
+            }
+            if (key === "longWait.unreachable") {
+              return "Server is currently unavailable.";
+            }
+            return key;
+          };
+
     // Limit the number of wake-up attempts to prevent infinite loops
+    let isCancelled = false;
     let currentNumberOfAttempts = 0;
-    const longWaitTimer = setTimeout(() => {
-      setLongWait(true);
-    }, LONG_WAIT_TIME);
+    let retryTimeoutId;
+
+    addNotification({
+      id: SERVER_STATUS_NOTIFICATION_ID,
+      type: "warning",
+      message: translate("longWait.wakingUp"),
+      duration: null,
+    });
 
     async function checkServer() {
+      isServerLiveRef.current = true;
+      if (isCancelled) {
+        return;
+      }
+
       if (currentNumberOfAttempts >= ALLOWED_ATTEMPTS) {
-        clearTimeout(longWaitTimer);
-        setServerIsDown(true);
-        setLongWait(false);
+        addNotification({
+          id: SERVER_STATUS_NOTIFICATION_ID,
+          type: "error",
+          message: translate("longWait.unreachable"),
+          duration: 0,
+        });
         console.error(
           "Server can't be reached after multiple attempts. Please try again later.",
         );
         return;
       }
+
       try {
         const response = await fetch(`${BACKEND_URL}/api`, {
           method: "GET",
           mode: "cors",
+          signal: AbortSignal.timeout(5000),
         });
-        await response.json();
+
         if (!response.ok) {
-          setTimeout(() => {
+          retryTimeoutId = setTimeout(() => {
             currentNumberOfAttempts++;
             checkServer();
           }, DELAY_BETWEEN_ATTEMPTS);
           return;
         }
-
-        setLongWait(false);
-        clearTimeout(longWaitTimer);
+        isServerLiveRef.current = false;
+        removeNotification(SERVER_STATUS_NOTIFICATION_ID);
       } catch (err) {
+        isServerLiveRef.current = false;
+        if (isCancelled || err?.name === "AbortError") {
+          return;
+        }
+
         console.error(err);
-        setTimeout(() => {
+        retryTimeoutId = setTimeout(() => {
           currentNumberOfAttempts++;
           checkServer();
         }, DELAY_BETWEEN_ATTEMPTS);
@@ -48,10 +83,16 @@ function useServerWakeUp({ setLongWait, setServerIsDown }) {
     }
 
     checkServer();
+
     return () => {
-      clearTimeout(longWaitTimer);
+      isServerLiveRef.current = false;
+      isCancelled = true;
+      clearTimeout(retryTimeoutId);
+      removeNotification(SERVER_STATUS_NOTIFICATION_ID);
     };
-  }, [setLongWait, setServerIsDown]);
+  }, [addNotification, removeNotification, t]);
+
+  return isServerLiveRef.current;
 }
 
 export { useServerWakeUp };

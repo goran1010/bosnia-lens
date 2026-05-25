@@ -26,7 +26,7 @@ function gracefulShutdown(signal, exitCode = 0) {
   setTimeout(() => {
     console.error("Forced shutdown due to timeout");
     process.exit(1);
-  }, 10_000).unref();
+  }, 10000).unref();
 }
 
 process.on("SIGTERM", () => {

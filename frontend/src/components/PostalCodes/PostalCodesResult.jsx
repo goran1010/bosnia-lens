@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { LanguageContext } from "../../contextData/LanguageContext";
+import { RootContext } from "../../contextData/RootContext";
 
 function PostalCodesResult({ searchResult }) {
-  const { t } = useContext(LanguageContext);
+  const { t } = useContext(RootContext);
 
   if (!searchResult || searchResult.length === 0) {
     return (

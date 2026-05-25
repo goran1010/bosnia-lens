@@ -4,12 +4,12 @@ import { AddNewData } from "./AddNewData";
 import { PendingChanges } from "./PendingChanges";
 import { useGetPendingChanges } from "./customHooks/useGetPendingChanges";
 import { useContext } from "react";
-import { LanguageContext } from "../../contextData/LanguageContext";
+import { RootContext } from "../../contextData/RootContext";
 
 function PostalCodeData() {
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { t } = useContext(LanguageContext);
+  const { t } = useContext(RootContext);
 
   const { pendingChanges, setPendingChanges } = useGetPendingChanges(
     setLoading,

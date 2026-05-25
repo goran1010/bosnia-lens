@@ -1,11 +1,10 @@
 import { useContext } from "react";
-import { NotificationContext } from "../../contextData/NotificationContext";
-import { LanguageContext } from "../../contextData/LanguageContext";
+import { RootContext } from "../../contextData/RootContext";
 import { Select } from "../sharedComponents/Select";
 
 function ThemeSwitcher({ theme, setMode }) {
-  const { addNotification } = useContext(NotificationContext);
-  const { t } = useContext(LanguageContext);
+  const { addNotification } = useContext(RootContext);
+  const { t } = useContext(RootContext);
 
   function handleThemeChange(e) {
     const nextTheme = e.target.value;

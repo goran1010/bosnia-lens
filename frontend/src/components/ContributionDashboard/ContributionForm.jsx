@@ -2,11 +2,11 @@ import { useState } from "react";
 import { PostalCodeData } from "./PostalCodeData";
 import { Select } from "../sharedComponents/Select";
 import { useContext } from "react";
-import { LanguageContext } from "../../contextData/LanguageContext";
+import { RootContext } from "../../contextData/RootContext";
 
 function ContributionForm() {
   const [datasetSelect, setDatasetSelect] = useState("");
-  const { t } = useContext(LanguageContext);
+  const { t } = useContext(RootContext);
 
   function handleDataset(e) {
     setDatasetSelect(e.target.value);

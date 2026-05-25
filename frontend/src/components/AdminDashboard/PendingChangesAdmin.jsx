@@ -1,10 +1,9 @@
 import { useGetPendingChangesAdmin } from "./customHooks/useGetPendingChangesAdmin";
 import { useContext, useState } from "react";
-import { NotificationContext } from "../../contextData/NotificationContext";
+import { RootContext } from "../../contextData/RootContext";
 import { Button } from "../sharedComponents/Button";
 import { Spinner } from "../../utils/Spinner";
 import { PendingChangesAdminRow } from "./PendingChangesAdminRow";
-import { LanguageContext } from "../../contextData/LanguageContext";
 
 const panelClass =
   "py-3 px-1 sm:px-4 w-full bg-(--surface-2) text-(--text-primary) border border-(--border-color) rounded-2xl shadow-(--card-shadow) backdrop-blur-sm";
@@ -12,8 +11,8 @@ const panelClass =
 function PendingChangesAdmin() {
   const [loading, setLoading] = useState(true);
 
-  const { addNotification } = useContext(NotificationContext);
-  const { t } = useContext(LanguageContext);
+  const { addNotification } = useContext(RootContext);
+  const { t } = useContext(RootContext);
   const { pendingChanges, setPendingChanges } = useGetPendingChangesAdmin(
     setLoading,
     t,

@@ -4,16 +4,15 @@ import { handleSignUpSubmit } from "./utils/handleSignUpSubmit";
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import { NotificationContext } from "../../contextData/NotificationContext";
+import { RootContext } from "../../contextData/RootContext";
 import { Button } from "../sharedComponents/Button";
 import { Input } from "../sharedComponents/Input";
 import { Label } from "../sharedComponents/Label";
-import { LanguageContext } from "../../contextData/LanguageContext";
 
 function SignUpForm({ loading, setLoading }) {
   const navigate = useNavigate();
-  const { addNotification } = useContext(NotificationContext);
-  const { t } = useContext(LanguageContext);
+  const { addNotification } = useContext(RootContext);
+  const { t } = useContext(RootContext);
 
   const passwordInput = useRef();
   const confirmPasswordInput = useRef();

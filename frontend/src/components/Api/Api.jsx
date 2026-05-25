@@ -1,7 +1,7 @@
 import { EndpointCard } from "./EndPointCard";
 import { endpoints, authenticatedGroups } from "./utils/endpoints";
 import { useContext } from "react";
-import { LanguageContext } from "../../contextData/LanguageContext";
+import { RootContext } from "../../contextData/RootContext";
 import { Helmet } from "react-helmet-async";
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
@@ -27,7 +27,7 @@ function MethodTag({ method }) {
 }
 
 function Api() {
-  const { t } = useContext(LanguageContext);
+  const { t } = useContext(RootContext);
 
   return (
     <>

@@ -2,15 +2,14 @@ import { memo, useContext } from "react";
 import { Button } from "../sharedComponents/Button";
 import { Input } from "../sharedComponents/Input";
 import { useState } from "react";
-import { UserDataContext } from "../../contextData/UserDataContext";
+import { RootContext } from "../../contextData/RootContext";
 import { handleDiscard } from "./utils/handleDiscard";
-import { LanguageContext } from "../../contextData/LanguageContext";
 
 const PendingChangesRow = memo(
   ({ change, addNotification, setPendingChanges, index = 0 }) => {
     const [loading, setLoading] = useState(false);
-    const { userData } = useContext(UserDataContext);
-    const { t } = useContext(LanguageContext);
+    const { userData } = useContext(RootContext);
+    const { t } = useContext(RootContext);
 
     const getChangeTypeStyles = (type) => {
       switch (type?.toLowerCase()) {

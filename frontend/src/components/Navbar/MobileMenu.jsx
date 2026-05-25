@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Status } from "./Status";
 import { useContext } from "react";
-import { LanguageContext } from "../../contextData/LanguageContext";
+import { RootContext } from "../../contextData/RootContext";
 
 const menuShellClass =
   "z-50 absolute top-full w-full left-0 bg-(--surface-2) text-(--text-primary) border border-(--border-color) shadow-(--card-shadow)";
@@ -9,7 +9,7 @@ const menuItemClass =
   "block p-2 w-full text-center text-nowrap rounded-lg transition-colors duration-150 hover:bg-(--hover-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:bg-(--hover-surface)";
 
 function MobileMenu({ setIsMenuOpen, userData }) {
-  const { t } = useContext(LanguageContext);
+  const { t } = useContext(RootContext);
 
   return (
     <div id="mobile-menu" className={menuShellClass}>

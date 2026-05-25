@@ -1,14 +1,13 @@
 import { useContext } from "react";
-import { NotificationContext } from "../../contextData/NotificationContext";
+import { RootContext } from "../../contextData/RootContext";
 import { Spinner } from "../../utils/Spinner";
 import { Button } from "../sharedComponents/Button";
-import { LanguageContext } from "../../contextData/LanguageContext";
 
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 
 function GetAllPostalCodes({ setSearchResult, loading, setLoading }) {
-  const { addNotification } = useContext(NotificationContext);
-  const { t } = useContext(LanguageContext);
+  const { addNotification } = useContext(RootContext);
+  const { t } = useContext(RootContext);
 
   async function handleGetAll(e) {
     try {

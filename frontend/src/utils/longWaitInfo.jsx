@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import { LanguageContext } from "../contextData/LanguageContext";
+import { RootContext } from "../contextData/RootContext";
 import { Helmet } from "react-helmet-async";
 
 function LongWaitInfo({ serverIsDown }) {
-  const { t } = useContext(LanguageContext);
+  const { t } = useContext(RootContext);
 
   if (serverIsDown) {
     return (

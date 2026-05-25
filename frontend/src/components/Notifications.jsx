@@ -1,6 +1,5 @@
 import { useContext, useEffect, useRef } from "react";
-import { NotificationContext } from "../contextData/NotificationContext";
-import { LanguageContext } from "../contextData/LanguageContext";
+import { RootContext } from "../contextData/RootContext";
 
 function getNotificationStyles(type) {
   switch (type) {
@@ -24,8 +23,8 @@ function getNotificationRole(type) {
 }
 
 function Notifications() {
-  const { notifications, removeNotification } = useContext(NotificationContext);
-  const { t } = useContext(LanguageContext);
+  const { notifications, removeNotification } = useContext(RootContext);
+  const { t } = useContext(RootContext);
   const timerMapRef = useRef(new Map());
 
   useEffect(() => {

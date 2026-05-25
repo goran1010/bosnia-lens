@@ -1,12 +1,10 @@
 import { useState, useContext, useRef } from "react";
-import { NotificationContext } from "../../contextData/NotificationContext";
+import { RootContext } from "../../contextData/RootContext";
 import { handleSubmitAddData } from "./utils/handleSubmitAddData";
 import { validateAddData } from "./utils/validateAddData";
 import { Button } from "../sharedComponents/Button";
 import { Input } from "../sharedComponents/Input";
 import { Label } from "../sharedComponents/Label";
-import { UserDataContext } from "../../contextData/UserDataContext";
-import { LanguageContext } from "../../contextData/LanguageContext";
 
 function AddNewData({
   setSearchResult,
@@ -14,10 +12,10 @@ function AddNewData({
   setLoading,
   setPendingChanges,
 }) {
-  const { userData } = useContext(UserDataContext);
-  const { t } = useContext(LanguageContext);
+  const { userData } = useContext(RootContext);
+  const { t } = useContext(RootContext);
   const [input, setInput] = useState({ city: "", code: "", post: "" });
-  const { addNotification } = useContext(NotificationContext);
+  const { addNotification } = useContext(RootContext);
 
   const cityInput = useRef();
   const codeInput = useRef();

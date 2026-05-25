@@ -4,8 +4,7 @@ import { Input } from "../sharedComponents/Input";
 import { useState } from "react";
 import { handleEdit } from "./utils/handleEdit";
 import { handleDelete } from "./utils/handleDelete";
-import { UserDataContext } from "../../contextData/UserDataContext";
-import { LanguageContext } from "../../contextData/LanguageContext";
+import { RootContext } from "../../contextData/RootContext";
 
 const PostalCodeRow = memo(
   ({
@@ -21,8 +20,8 @@ const PostalCodeRow = memo(
         : "bg-gray-100 dark:bg-gray-600";
 
     const [loading, setLoading] = useState(false);
-    const { userData } = useContext(UserDataContext);
-    const { t } = useContext(LanguageContext);
+    const { userData } = useContext(RootContext);
+    const { t } = useContext(RootContext);
 
     const handleEditForm = (e) => {
       handleEdit(

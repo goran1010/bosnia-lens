@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useLanguage } from "../customHooks/useLanguage";
-import { LanguageContext } from "../contextData/LanguageContext";
+import { RootContext } from "../contextData/RootContext";
 import { Helmet } from "react-helmet-async";
 
 function ErrorPage() {

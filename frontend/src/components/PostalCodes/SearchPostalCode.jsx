@@ -1,18 +1,17 @@
 import { useState, useRef, useContext } from "react";
 import { checkPostalCodesValidity } from "./utils/checkPostalCodesValidity";
-import { NotificationContext } from "../../contextData/NotificationContext";
+import { RootContext } from "../../contextData/RootContext";
 import { Button } from "../sharedComponents/Button";
 import { Input } from "../sharedComponents/Input";
 import { Label } from "../sharedComponents/Label";
-import { LanguageContext } from "../../contextData/LanguageContext";
 
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 
 function SearchPostalCode({ setSearchResult, loading, setLoading }) {
   const [searchTerm, setSearchTerm] = useState("");
   const searchInput = useRef();
-  const { addNotification } = useContext(NotificationContext);
-  const { t } = useContext(LanguageContext);
+  const { addNotification } = useContext(RootContext);
+  const { t } = useContext(RootContext);
 
   function handleSearch(e) {
     checkPostalCodesValidity(searchInput, t);

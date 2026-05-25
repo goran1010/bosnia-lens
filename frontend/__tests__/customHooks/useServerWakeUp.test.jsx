@@ -20,7 +20,11 @@ afterEach(() => {
 });
 
 function ServerWakeUpProbe({ setLongWait, setServerIsDown }) {
-  useServerWakeUp({ setLongWait, setServerIsDown });
+  useServerWakeUp({
+    addNotification: setLongWait,
+    removeNotification: setServerIsDown,
+    t: (key) => key,
+  });
 
   return <div data-testid="server-wake-up-probe">Probe</div>;
 }
@@ -46,9 +50,14 @@ describe("useServerWakeUp", () => {
     });
 
     expect(fetchSpy).toHaveBeenCalledTimes(1);
-    expect(setLongWait).toHaveBeenCalledWith(false);
+    expect(setLongWait).toHaveBeenCalledWith({
+      id: "server-status",
+      type: "warning",
+      message: "longWait.wakingUp",
+      duration: 0,
+    });
 
-    expect(setServerIsDown).not.toHaveBeenCalled();
+    expect(setServerIsDown).toHaveBeenCalledWith("server-status");
   });
 
   test("retries when response is not ok and then succeeds", async () => {
@@ -80,8 +89,13 @@ describe("useServerWakeUp", () => {
     });
 
     expect(fetchSpy).toHaveBeenCalledTimes(2);
-    expect(setLongWait).toHaveBeenCalledWith(false);
-    expect(setServerIsDown).not.toHaveBeenCalled();
+    expect(setLongWait).toHaveBeenCalledWith({
+      id: "server-status",
+      type: "warning",
+      message: "longWait.wakingUp",
+      duration: 0,
+    });
+    expect(setServerIsDown).toHaveBeenCalledWith("server-status");
   });
 
   test("sets server down after max attempts on repeated fetch errors", async () => {
@@ -102,8 +116,13 @@ describe("useServerWakeUp", () => {
       await flushMicrotasks();
     });
 
-    expect(setServerIsDown).toHaveBeenCalledWith(true);
-    expect(setLongWait).toHaveBeenCalledWith(false);
+    expect(setLongWait).toHaveBeenCalledWith({
+      id: "server-status",
+      type: "error",
+      message: "longWait.unreachable",
+      duration: 0,
+    });
+    expect(setServerIsDown).not.toHaveBeenCalled();
     expect(console.error).toHaveBeenCalled();
   });
 });

@@ -1,11 +1,10 @@
 import { useContext } from "react";
-import { NotificationContext } from "../../contextData/NotificationContext";
-import { LanguageContext } from "../../contextData/LanguageContext";
+import { RootContext } from "../../contextData/RootContext";
 import { Select } from "../sharedComponents/Select";
 
 function LanguageSwitcher({ language, setLanguage }) {
-  const { addNotification } = useContext(NotificationContext);
-  const { t } = useContext(LanguageContext);
+  const { addNotification } = useContext(RootContext);
+  const { t } = useContext(RootContext);
 
   function handleLanguageChange(e) {
     const nextLanguage = e.target.value;
