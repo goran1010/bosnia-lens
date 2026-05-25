@@ -54,7 +54,8 @@ describe("useServerWakeUp", () => {
       id: "server-status",
       type: "warning",
       message: "longWait.wakingUp",
-      duration: 0,
+      duration: null,
+      persistent: true,
     });
 
     expect(setServerIsDown).toHaveBeenCalledWith("server-status");
@@ -93,7 +94,8 @@ describe("useServerWakeUp", () => {
       id: "server-status",
       type: "warning",
       message: "longWait.wakingUp",
-      duration: 0,
+      duration: null,
+      persistent: true,
     });
     expect(setServerIsDown).toHaveBeenCalledWith("server-status");
   });
@@ -116,11 +118,12 @@ describe("useServerWakeUp", () => {
       await flushMicrotasks();
     });
 
-    expect(setLongWait).toHaveBeenCalledWith({
+    expect(setLongWait).toHaveBeenLastCalledWith({
       id: "server-status",
       type: "error",
       message: "longWait.unreachable",
-      duration: 0,
+      duration: null,
+      persistent: true,
     });
     expect(setServerIsDown).not.toHaveBeenCalled();
     expect(console.error).toHaveBeenCalled();

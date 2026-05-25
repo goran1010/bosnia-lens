@@ -32,7 +32,17 @@ function Notifications() {
 
     // Set timers for new notifications only
     notifications?.forEach((notification) => {
-      if (notification.duration && !newTimerRef.has(notification.id)) {
+      const shouldAutoDismiss =
+        !notification.persistent &&
+        typeof notification.duration === "number" &&
+        notification.duration > 0;
+
+      if (!shouldAutoDismiss && newTimerRef.has(notification.id)) {
+        clearTimeout(newTimerRef.get(notification.id));
+        newTimerRef.delete(notification.id);
+      }
+
+      if (shouldAutoDismiss && !newTimerRef.has(notification.id)) {
         const timer = setTimeout(() => {
           removeNotification(notification.id);
           newTimerRef.delete(notification.id);

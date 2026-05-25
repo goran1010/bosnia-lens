@@ -5,13 +5,14 @@ function useNotification() {
   const [notifications, setNotifications] = useState([]);
 
   const addNotification = useCallback(
-    ({ id, type = "info", message, duration = 3000 }) => {
+    ({ id, type = "info", message, duration = 3000, persistent = false }) => {
       const notificationId = id || crypto.randomUUID();
       const newNotification = {
         id: notificationId,
         type,
         message,
         duration,
+        persistent,
         createdAt: Date.now(),
       };
 
@@ -27,8 +28,20 @@ function useNotification() {
         }
 
         if (prev.length >= MAX_NOTIFICATIONS) {
-          return [...prev.slice(1), newNotification];
+          const removableIndex = prev.findIndex(
+            (notification) => !notification.persistent,
+          );
+
+          if (removableIndex === -1) {
+            return prev;
+          }
+
+          const nextNotifications = [...prev];
+          nextNotifications.splice(removableIndex, 1);
+
+          return [...nextNotifications, newNotification];
         }
+
         return [...prev, newNotification];
       });
 

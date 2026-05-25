@@ -31,10 +31,10 @@ function useServerWakeUp({ addNotification, removeNotification, t }) {
       type: "warning",
       message: translate("longWait.wakingUp"),
       duration: null,
+      persistent: true,
     });
 
     async function checkServer() {
-      isServerLiveRef.current = true;
       if (isCancelled) {
         return;
       }
@@ -44,7 +44,8 @@ function useServerWakeUp({ addNotification, removeNotification, t }) {
           id: SERVER_STATUS_NOTIFICATION_ID,
           type: "error",
           message: translate("longWait.unreachable"),
-          duration: 0,
+          duration: null,
+          persistent: true,
         });
         console.error(
           "Server can't be reached after multiple attempts. Please try again later.",
@@ -66,10 +67,9 @@ function useServerWakeUp({ addNotification, removeNotification, t }) {
           }, DELAY_BETWEEN_ATTEMPTS);
           return;
         }
-        isServerLiveRef.current = false;
+        isServerLiveRef.current = true;
         removeNotification(SERVER_STATUS_NOTIFICATION_ID);
       } catch (err) {
-        isServerLiveRef.current = false;
         if (isCancelled || err?.name === "AbortError") {
           return;
         }
@@ -85,7 +85,6 @@ function useServerWakeUp({ addNotification, removeNotification, t }) {
     checkServer();
 
     return () => {
-      isServerLiveRef.current = false;
       isCancelled = true;
       clearTimeout(retryTimeoutId);
       removeNotification(SERVER_STATUS_NOTIFICATION_ID);
