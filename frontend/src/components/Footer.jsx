@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { LanguageContext } from "../contextData/LanguageContext";
+import { RootContext } from "../contextData/RootContext";
 
 function Footer() {
-  const { t } = useContext(LanguageContext);
+  const { t } = useContext(RootContext);
 
   return (
     <footer className="w-full flex justify-between items-center font-bold px-3 py-2 text-(--text-primary) border-b border-(--border-color) backdrop-blur">

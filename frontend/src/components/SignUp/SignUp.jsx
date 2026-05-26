@@ -1,22 +1,20 @@
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserDataContext } from "../../contextData/UserDataContext.js";
+import { RootContext } from "../../contextData/RootContext.js";
 import { Link } from "react-router-dom";
 import { SignUpForm } from "./SignUpForm";
-import { NotificationContext } from "../../contextData/NotificationContext.js";
 import { GitHubLoginLink } from "../sharedComponents/GitHubLoginLink.jsx";
 import { DividerOr } from "../sharedComponents/DividerOr.jsx";
-import { LanguageContext } from "../../contextData/LanguageContext.js";
 import { Helmet } from "react-helmet-async";
 
 function SignUp() {
   const [loading, setLoading] = useState(false);
 
-  const { addNotification } = useContext(NotificationContext);
-  const { t } = useContext(LanguageContext);
+  const { addNotification } = useContext(RootContext);
+  const { t } = useContext(RootContext);
 
   const navigate = useNavigate();
-  const { userData } = useContext(UserDataContext);
+  const { userData } = useContext(RootContext);
 
   useEffect(() => {
     if (userData) {

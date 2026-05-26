@@ -1,17 +1,12 @@
 import { test, describe, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
-import { UserDataContext } from "../../../src/contextData/UserDataContext";
 import { Root } from "../../../src/Root";
-import { NotificationContext } from "../../../src/contextData/NotificationContext";
-import { useNotification } from "../../../src/customHooks/useNotification";
-import { useState } from "react";
 import { Notifications } from "../../../src/components/Notifications";
 import { Navbar } from "../../../src/components/Navbar/Navbar";
 import userEvent from "@testing-library/user-event";
 import { useCloseMenu } from "../../../src/customHooks/useCloseMenu";
-import { LanguageContext } from "../../../src/contextData/LanguageContext";
-import { useLanguage } from "../../../src/customHooks/useLanguage";
+import { RootContextProvider } from "../../rootContextProvider";
 
 function createUser(role = "ADMIN") {
   return {
@@ -59,26 +54,15 @@ function expectSharedNavbarLinks() {
 
 describe("Render Navbar on root route", () => {
   function Wrapper({ initialUser = null }) {
-    const { language, setLanguage, t } = useLanguage();
-    const [userData, setUserData] = useState(initialUser);
-    const { notifications, addNotification, removeNotification } =
-      useNotification();
-
     return (
-      <LanguageContext value={{ language, setLanguage, t }}>
-        <NotificationContext
-          value={{ notifications, addNotification, removeNotification }}
-        >
-          <UserDataContext value={{ userData, setUserData }}>
-            <MemoryRouter initialEntries={["/"]}>
-              <Notifications />
-              <Routes>
-                <Route path="/" element={<Root />} />
-              </Routes>
-            </MemoryRouter>
-          </UserDataContext>
-        </NotificationContext>
-      </LanguageContext>
+      <RootContextProvider initialUserData={initialUser}>
+        <MemoryRouter initialEntries={["/"]}>
+          <Notifications />
+          <Routes>
+            <Route path="/" element={<Root />} />
+          </Routes>
+        </MemoryRouter>
+      </RootContextProvider>
     );
   }
   test("user not logged in", async () => {
@@ -113,27 +97,15 @@ describe("Render Navbar on root route", () => {
 });
 
 function NavbarWrapper({ role = "ADMIN", withUser = true }) {
-  const { language, setLanguage, t } = useLanguage();
   const userData = withUser ? createUser(role) : null;
-  const setUserData = vi.fn();
 
   const closeMenu = useCloseMenu();
   return (
-    <LanguageContext value={{ language, setLanguage, t }}>
-      <NotificationContext
-        value={{
-          notifications: [],
-          addNotification: vi.fn(),
-          removeNotification: vi.fn(),
-        }}
-      >
-        <UserDataContext value={{ userData, setUserData }}>
-          <MemoryRouter>
-            <Navbar closeMenu={closeMenu} />
-          </MemoryRouter>
-        </UserDataContext>
-      </NotificationContext>
-    </LanguageContext>
+    <RootContextProvider rootValue={{ userData, setUserData: vi.fn() }}>
+      <MemoryRouter>
+        <Navbar closeMenu={closeMenu} />
+      </MemoryRouter>
+    </RootContextProvider>
   );
 }
 

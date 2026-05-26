@@ -1,12 +1,10 @@
 import { describe, test, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { Footer } from "../../src/components/Footer";
-import { LanguageContext } from "../../src/contextData/LanguageContext";
-import { useLanguage } from "../../src/customHooks/useLanguage";
+import { RootContextProvider } from "../rootContextProvider";
 
 function MockLanguageProvider({ children }) {
-  const languageData = useLanguage();
-  return <LanguageContext value={languageData}>{children}</LanguageContext>;
+  return <RootContextProvider>{children}</RootContextProvider>;
 }
 
 describe("ErrorPage Component", () => {

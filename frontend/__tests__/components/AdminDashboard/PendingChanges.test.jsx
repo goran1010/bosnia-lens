@@ -34,14 +34,12 @@ const setupFetchMock = ({
       return Promise.resolve(
         createFetchResponse({ data: csrfToken, message: "Success" }),
       );
-    }
-    if (requestUrl.includes("/users/admin/pending-changes")) {
-      return Promise.resolve(
         createFetchResponse({
           data: pendingRequests,
           message: "Pending requests fetched successfully.",
         }),
       );
+      import { RootContextProvider } from "../../rootContextProvider";
     }
 
     if (requestUrl.includes("/approve-pending-change")) {
@@ -109,26 +107,17 @@ describe("PendingChanges Component", () => {
 
     render(<Wrapper initialUser={{ role: "ADMIN" }} />);
 
-    const numberOfRequests = await screen.findByLabelText(
-      /pending changes count/i,
-    );
-    await screen.findAllByText(/Pending Changes/i);
+        const { notifications, addNotification, removeNotification } = useNotification();
 
     expect(numberOfRequests).toHaveTextContent("1");
-
-    expect(screen.getByLabelText(/pending changes count/i)).toHaveTextContent(
-      "1",
-    );
-  });
-
-  test("renders multiple pending requests with correct count", async () => {
-    const mockChangesMore = [
-      {
-        city: "Divičani",
-        code: 70204,
-        createdAt: "2026-05-06T07:34:01.967Z",
-        id: "8687b282-fcc6-4f69-8744-0f8e1585d991",
-        post: "HP_MOSTAR",
+          <RootContextProvider initialUserData={initialUser} rootValue={{ addNotification: vi.fn() }}>
+            <MemoryRouter initialEntries={["/admin-dashboard"]}>
+              <Notifications />
+              <Routes>
+                <Route path="/admin-dashboard" element={<AdminDashboard />} />
+              </Routes>
+            </MemoryRouter>
+          </RootContextProvider>
         typeOfChange: "UPDATE",
         user: { email: "johndoe@examplemail.com" },
         userId: "058d1adc-58e4-4f31-8021-64e37e7d0dd0",

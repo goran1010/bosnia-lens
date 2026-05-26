@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { LanguageContext } from "../../contextData/LanguageContext";
+import { RootContext } from "../../contextData/RootContext";
 
 function DividerOr() {
-  const { t } = useContext(LanguageContext);
+  const { t } = useContext(RootContext);
 
   return (
     <div className="relative flex items-center my-4">

@@ -1,18 +1,11 @@
 import { describe, test, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { Home } from "../../../src/components/Home/Home";
-import { NotificationContext } from "../../../src/contextData/NotificationContext";
 import { MemoryRouter } from "react-router-dom";
-import { LanguageContext } from "../../../src/contextData/LanguageContext";
-import { useLanguage } from "../../../src/customHooks/useLanguage";
+import { RootContextProvider } from "../../rootContextProvider";
 
 function Wrapper({ children }) {
-  const { language, setLanguage, t } = useLanguage();
-  return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
-      {children}
-    </LanguageContext.Provider>
-  );
+  return <RootContextProvider>{children}</RootContextProvider>;
 }
 
 describe("Home component", () => {

@@ -3,12 +3,12 @@ import { SearchPostalCode } from "./SearchPostalCode";
 import { GetAllPostalCodes } from "./GetAllPostalCodes";
 import { PostalCodesResult } from "./PostalCodesResult";
 import { Helmet } from "react-helmet-async";
-import { LanguageContext } from "../../contextData/LanguageContext";
+import { RootContext } from "../../contextData/RootContext";
 
 function PostalCodes() {
   const [loading, setLoading] = useState(false);
   const [searchResult, setSearchResult] = useState([]);
-  const { t } = useContext(LanguageContext);
+  const { t } = useContext(RootContext);
 
   return (
     <>

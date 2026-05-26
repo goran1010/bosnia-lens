@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef } from "react";
-import { NotificationContext } from "../contextData/NotificationContext";
-import { LanguageContext } from "../contextData/LanguageContext";
+import { RootContext } from "../contextData/RootContext";
+import { Spinner } from "../utils/Spinner";
 
 function getNotificationStyles(type) {
   switch (type) {
@@ -24,8 +24,8 @@ function getNotificationRole(type) {
 }
 
 function Notifications() {
-  const { notifications, removeNotification } = useContext(NotificationContext);
-  const { t } = useContext(LanguageContext);
+  const { notifications, removeNotification } = useContext(RootContext);
+  const { t } = useContext(RootContext);
   const timerMapRef = useRef(new Map());
 
   useEffect(() => {
@@ -33,7 +33,17 @@ function Notifications() {
 
     // Set timers for new notifications only
     notifications?.forEach((notification) => {
-      if (notification.duration && !newTimerRef.has(notification.id)) {
+      const shouldAutoDismiss =
+        !notification.persistent &&
+        typeof notification.duration === "number" &&
+        notification.duration > 0;
+
+      if (!shouldAutoDismiss && newTimerRef.has(notification.id)) {
+        clearTimeout(newTimerRef.get(notification.id));
+        newTimerRef.delete(notification.id);
+      }
+
+      if (shouldAutoDismiss && !newTimerRef.has(notification.id)) {
         const timer = setTimeout(() => {
           removeNotification(notification.id);
           newTimerRef.delete(notification.id);
@@ -81,9 +91,9 @@ function Notifications() {
               type="button"
               onClick={() => removeNotification(notification.id)}
               aria-label={t("notifications.dismiss")}
-              className="absolute top-2 right-2 text-sm opacity-80 hover:opacity-100 cursor-pointer"
+              className="absolute top-0 right-1 text-sm opacity-80 hover:opacity-100 cursor-pointer"
             >
-              ✕
+              ✖
             </button>
           </li>
         ))}

@@ -1,11 +1,10 @@
 import { useContext } from "react";
-import { NotificationContext } from "../../contextData/NotificationContext";
-import { LanguageContext } from "../../contextData/LanguageContext";
+import { RootContext } from "../../contextData/RootContext";
 import { Select } from "../sharedComponents/Select";
 
 function ThemeSwitcher({ theme, setMode }) {
-  const { addNotification } = useContext(NotificationContext);
-  const { t } = useContext(LanguageContext);
+  const { addNotification } = useContext(RootContext);
+  const { t } = useContext(RootContext);
 
   function handleThemeChange(e) {
     const nextTheme = e.target.value;
@@ -23,7 +22,7 @@ function ThemeSwitcher({ theme, setMode }) {
       aria-label={t("nav.toggleThemeAria")}
       value={theme}
       onChange={handleThemeChange}
-      className="whitespace-normal text-center break-all h-full px-3 py-2 sm:min-w-38 w-full sm:w-auto relative inline-flex items-center justify-center rounded-md p-1 text-sm font-semibold bg-(--surface-1) text-(--text-primary) border border-(--border-color) shadow-(--card-shadow-soft) hover:shadow-(--card-shadow)"
+      className="whitespace-normal text-center break-all h-full py-2 sm:min-w-38 w-full sm:w-auto relative inline-flex items-center justify-center rounded-md p-1 text-sm font-semibold bg-(--surface-1) text-(--text-primary) border border-(--border-color) shadow-(--card-shadow-soft) hover:shadow-(--card-shadow)"
     >
       <option value="system">{t("theme.system")}</option>
       <option value="light">{t("theme.light")}</option>

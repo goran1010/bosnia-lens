@@ -1,18 +1,19 @@
 import { useState, useRef, useContext } from "react";
 import { checkPostalCodesValidity } from "./utils/checkPostalCodesValidity";
-import { NotificationContext } from "../../contextData/NotificationContext";
+import { RootContext } from "../../contextData/RootContext";
 import { Button } from "../sharedComponents/Button";
 import { Input } from "../sharedComponents/Input";
 import { Label } from "../sharedComponents/Label";
-import { LanguageContext } from "../../contextData/LanguageContext";
+import { guardedFetch } from "../../utils/guardedFetch";
 
 const currentURL = import.meta.env.VITE_BACKEND_URL;
 
 function SearchPostalCode({ setSearchResult, loading, setLoading }) {
   const [searchTerm, setSearchTerm] = useState("");
   const searchInput = useRef();
-  const { addNotification } = useContext(NotificationContext);
-  const { t } = useContext(LanguageContext);
+  const { addNotification } = useContext(RootContext);
+  const { t } = useContext(RootContext);
+  const { serverStatus } = useContext(RootContext);
 
   function handleSearch(e) {
     checkPostalCodesValidity(searchInput, t);
@@ -24,9 +25,20 @@ function SearchPostalCode({ setSearchResult, loading, setLoading }) {
       setLoading(true);
       e.preventDefault();
 
-      const response = await fetch(
+      const response = await guardedFetch(
         `${currentURL}/api/v1/postal-codes/search?searchTerm=${searchTerm}`,
+        undefined,
+        {
+          serverStatus,
+          addNotification,
+          t,
+        },
       );
+
+      if (!response) {
+        return;
+      }
+
       const result = await response.json();
 
       if (!response.ok) {

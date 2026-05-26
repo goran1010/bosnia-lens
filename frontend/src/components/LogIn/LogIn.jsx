@@ -2,19 +2,17 @@ import { Link, useSearchParams } from "react-router-dom";
 import { useState, useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { LogInForm } from "./LogInForm.jsx";
-import { UserDataContext } from "../../contextData/UserDataContext.js";
-import { NotificationContext } from "../../contextData/NotificationContext.js";
+import { RootContext } from "../../contextData/RootContext.js";
 import { GitHubLoginLink } from "../sharedComponents/GitHubLoginLink.jsx";
 import { DividerOr } from "../sharedComponents/DividerOr.jsx";
-import { LanguageContext } from "../../contextData/LanguageContext.js";
 import { Helmet } from "react-helmet-async";
 
 function LogIn() {
   const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
-  const { t } = useContext(LanguageContext);
+  const { t } = useContext(RootContext);
 
-  const { addNotification } = useContext(NotificationContext);
+  const { addNotification } = useContext(RootContext);
 
   useEffect(() => {
     if (searchParams.get("error") === "github") {
@@ -26,7 +24,7 @@ function LogIn() {
   }, [searchParams, addNotification, t]);
 
   const navigate = useNavigate();
-  const { userData } = useContext(UserDataContext);
+  const { userData } = useContext(RootContext);
   const wasLoggedInOnPageLoad = useRef(Boolean(userData));
 
   useEffect(() => {

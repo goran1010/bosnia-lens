@@ -1,20 +1,19 @@
 import { checkLoginFormClickValidity } from "./utils/checkLoginFormClickValidity";
 import { checkLoginFormValidity } from "./utils/checkLoginFormValidity";
 import { useRef, useState, useContext } from "react";
-import { UserDataContext } from "../../contextData/UserDataContext";
+import { RootContext } from "../../contextData/RootContext";
 import { useNavigate } from "react-router-dom";
-import { NotificationContext } from "../../contextData/NotificationContext";
 import { handleSubmitLogIn } from "./utils/handleSubmitLogIn";
 import { Button } from "../sharedComponents/Button";
 import { Input } from "../sharedComponents/Input";
 import { Label } from "../sharedComponents/Label";
-import { LanguageContext } from "../../contextData/LanguageContext";
 
 function LogInForm({ loading, setLoading }) {
   const navigate = useNavigate();
-  const { setUserData } = useContext(UserDataContext);
-  const { addNotification } = useContext(NotificationContext);
-  const { t } = useContext(LanguageContext);
+  const { setUserData } = useContext(RootContext);
+  const { addNotification } = useContext(RootContext);
+  const { t } = useContext(RootContext);
+  const { serverStatus } = useContext(RootContext);
 
   const [inputFields, setInputFields] = useState({
     email: "",
@@ -40,6 +39,7 @@ function LogInForm({ loading, setLoading }) {
           setLoading,
           navigate,
           t,
+          serverStatus,
         )
       }
       className="flex flex-col gap-3"

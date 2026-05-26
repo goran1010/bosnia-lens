@@ -1,17 +1,16 @@
-import { NotificationContext } from "../../contextData/NotificationContext";
+import { RootContext } from "../../contextData/RootContext";
 import { useContext, useEffect } from "react";
-import { UserDataContext } from "../../contextData/UserDataContext";
 import { useNavigate } from "react-router-dom";
 import { handleLogout } from "./utils/handleLogout";
 import { Button } from "../sharedComponents/Button";
 import { useState } from "react";
-import { LanguageContext } from "../../contextData/LanguageContext";
 import { Helmet } from "react-helmet-async";
 
 function Profile() {
-  const { addNotification } = useContext(NotificationContext);
-  const { userData, setUserData } = useContext(UserDataContext);
-  const { t } = useContext(LanguageContext);
+  const { addNotification } = useContext(RootContext);
+  const { userData, setUserData } = useContext(RootContext);
+  const { t } = useContext(RootContext);
+  const { serverStatus } = useContext(RootContext);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -72,6 +71,7 @@ function Profile() {
                   setUserData,
                   setLoading,
                   t,
+                  serverStatus,
                 )
               }
               variant="danger"

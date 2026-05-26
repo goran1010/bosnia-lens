@@ -19,8 +19,14 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
+const identityTranslate = (key) => key;
+
 function ServerWakeUpProbe({ setLongWait, setServerIsDown }) {
-  useServerWakeUp({ setLongWait, setServerIsDown });
+  useServerWakeUp({
+    addNotification: setLongWait,
+    removeNotification: setServerIsDown,
+    t: identityTranslate,
+  });
 
   return <div data-testid="server-wake-up-probe">Probe</div>;
 }
@@ -46,9 +52,9 @@ describe("useServerWakeUp", () => {
     });
 
     expect(fetchSpy).toHaveBeenCalledTimes(1);
-    expect(setLongWait).toHaveBeenCalledWith(false);
+    expect(setLongWait).not.toHaveBeenCalled();
 
-    expect(setServerIsDown).not.toHaveBeenCalled();
+    expect(setServerIsDown).toHaveBeenCalledWith("server-status");
   });
 
   test("retries when response is not ok and then succeeds", async () => {
@@ -80,8 +86,14 @@ describe("useServerWakeUp", () => {
     });
 
     expect(fetchSpy).toHaveBeenCalledTimes(2);
-    expect(setLongWait).toHaveBeenCalledWith(false);
-    expect(setServerIsDown).not.toHaveBeenCalled();
+    expect(setLongWait).toHaveBeenCalledWith({
+      id: "server-status",
+      type: "warning",
+      message: "longWait.wakingUp",
+      duration: null,
+      persistent: true,
+    });
+    expect(setServerIsDown).toHaveBeenCalledWith("server-status");
   });
 
   test("sets server down after max attempts on repeated fetch errors", async () => {
@@ -102,8 +114,14 @@ describe("useServerWakeUp", () => {
       await flushMicrotasks();
     });
 
-    expect(setServerIsDown).toHaveBeenCalledWith(true);
-    expect(setLongWait).toHaveBeenCalledWith(false);
+    expect(setLongWait).toHaveBeenLastCalledWith({
+      id: "server-status",
+      type: "error",
+      message: "longWait.unreachable",
+      duration: null,
+      persistent: true,
+    });
+    expect(setServerIsDown).not.toHaveBeenCalled();
     expect(console.error).toHaveBeenCalled();
   });
 });

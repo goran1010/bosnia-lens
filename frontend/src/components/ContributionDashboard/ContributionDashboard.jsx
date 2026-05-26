@@ -1,12 +1,11 @@
 import { useContext } from "react";
-import { UserDataContext } from "../../contextData/UserDataContext";
+import { RootContext } from "../../contextData/RootContext";
 import { ContributionForm } from "./ContributionForm";
-import { LanguageContext } from "../../contextData/LanguageContext";
 import { Helmet } from "react-helmet-async";
 
 function ContributionDashboard() {
-  const { userData } = useContext(UserDataContext);
-  const { t } = useContext(LanguageContext);
+  const { userData } = useContext(RootContext);
+  const { t } = useContext(RootContext);
 
   if (userData) {
     return (

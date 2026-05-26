@@ -1,16 +1,14 @@
 import { describe, test, expect } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 import { Api } from "../../../src/components/Api/Api";
-import { LanguageContext } from "../../../src/contextData/LanguageContext";
-import { useLanguage } from "../../../src/customHooks/useLanguage";
+import { RootContextProvider } from "../../rootContextProvider";
 import {
   endpoints,
   authenticatedGroups,
 } from "../../../src/components/Api/utils/endpoints";
 
 function MockLanguageProvider({ children }) {
-  const languageData = useLanguage();
-  return <LanguageContext value={languageData}>{children}</LanguageContext>;
+  return <RootContextProvider>{children}</RootContextProvider>;
 }
 
 function renderApi() {

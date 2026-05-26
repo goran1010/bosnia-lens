@@ -1,16 +1,15 @@
-import { NotificationContext } from "../../contextData/NotificationContext";
+import { RootContext } from "../../contextData/RootContext";
 import { Button } from "../sharedComponents/Button";
 import { Spinner } from "../../utils/Spinner";
 import { PendingChangesRow } from "./PendingChangesRow";
 import { useContext } from "react";
-import { LanguageContext } from "../../contextData/LanguageContext";
 
 const panelClass =
   "w-full max-w-4xl p-3 bg-(--surface-2) text-(--text-primary) border border-(--border-color) rounded-2xl shadow-(--card-shadow) backdrop-blur-sm";
 
 function PendingChanges({ pendingChanges, loading, setPendingChanges }) {
-  const { addNotification } = useContext(NotificationContext);
-  const { t } = useContext(LanguageContext);
+  const { addNotification } = useContext(RootContext);
+  const { t } = useContext(RootContext);
 
   if (loading) {
     return <Spinner />;

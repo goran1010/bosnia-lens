@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 import { Status } from "./Status";
 import { useContext } from "react";
-import { LanguageContext } from "../../contextData/LanguageContext";
+import { RootContext } from "../../contextData/RootContext";
 
 const menuLinkClass =
   "block h-full px-3 py-2 flex items-center justify-center text-center rounded-lg transition-colors duration-150 hover:bg-(--hover-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:bg-(--hover-surface)";
 
 function StandardMenu({ setIsMenuOpen, userData }) {
-  const { t } = useContext(LanguageContext);
+  const { t } = useContext(RootContext);
 
   return (
     <div className="hidden lg:flex justify-between">

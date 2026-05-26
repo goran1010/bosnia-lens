@@ -2,7 +2,7 @@ import { SearchPostalCode } from "../PostalCodes/SearchPostalCode";
 import { GetAllPostalCodes } from "../PostalCodes/GetAllPostalCodes";
 import { PostalCodesResultContribution } from "./PostalCodesResultContribution";
 import { useContext } from "react";
-import { LanguageContext } from "../../contextData/LanguageContext";
+import { RootContext } from "../../contextData/RootContext";
 
 function ContributionPostalCodes({
   searchResult,
@@ -11,7 +11,7 @@ function ContributionPostalCodes({
   setLoading,
   setPendingChanges,
 }) {
-  const { t } = useContext(LanguageContext);
+  const { t } = useContext(RootContext);
 
   return (
     <div className="flex flex-col w-full items-center gap-2">

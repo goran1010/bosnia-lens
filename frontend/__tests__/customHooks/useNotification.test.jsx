@@ -50,6 +50,63 @@ function NotificationProbe() {
       </button>
       <button
         type="button"
+        onClick={() =>
+          addNotification({
+            id: "server-status",
+            type: "warning",
+            message: "Server waking up",
+            duration: null,
+            persistent: true,
+          })
+        }
+      >
+        Add Persistent
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          addNotification({
+            id: "p1",
+            message: "P1",
+            persistent: true,
+            duration: null,
+          });
+          addNotification({
+            id: "p2",
+            message: "P2",
+            persistent: true,
+            duration: null,
+          });
+          addNotification({
+            id: "p3",
+            message: "P3",
+            persistent: true,
+            duration: null,
+          });
+          addNotification({
+            id: "p4",
+            message: "P4",
+            persistent: true,
+            duration: null,
+          });
+          addNotification({
+            id: "p5",
+            message: "P5",
+            persistent: true,
+            duration: null,
+          });
+          addNotification({
+            id: "p6",
+            message: "P6",
+            persistent: true,
+            duration: null,
+          });
+        }}
+      >
+        Add Six Persistent
+      </button>
+      <button
+        type="button"
         onClick={() => {
           const firstId = notifications[0]?.id;
           if (firstId) removeNotification(firstId);
@@ -68,6 +125,9 @@ function NotificationProbe() {
       <div data-testid="first-type">{notifications[0]?.type ?? "none"}</div>
       <div data-testid="first-duration">
         {String(notifications[0]?.duration ?? "none")}
+      </div>
+      <div data-testid="first-persistent">
+        {String(notifications[0]?.persistent ?? "none")}
       </div>
     </div>
   );
@@ -107,7 +167,7 @@ describe("useNotification", () => {
   test("keeps max 5 notifications and removes oldest", async () => {
     render(<NotificationProbe />);
 
-    const addSixButton = screen.getByRole("button", { name: /Add Six/i });
+    const addSixButton = screen.getByRole("button", { name: /^Add Six$/i });
 
     expect(addSixButton).toBeInTheDocument();
     await userEvent.click(addSixButton);
@@ -137,5 +197,39 @@ describe("useNotification", () => {
 
     expect(screen.getByTestId("count")).toHaveTextContent("0");
     expect(screen.getByTestId("first-message")).toHaveTextContent("none");
+  });
+
+  test("keeps persistent notifications when max is exceeded", async () => {
+    render(<NotificationProbe />);
+
+    const addPersistentButton = screen.getByRole("button", {
+      name: /Add Persistent/i,
+    });
+    const addSixButton = screen.getByRole("button", { name: /^Add Six$/i });
+
+    await userEvent.click(addPersistentButton);
+    await userEvent.click(addSixButton);
+
+    expect(screen.getByTestId("count")).toHaveTextContent("5");
+    expect(screen.getByTestId("first-message")).toHaveTextContent(
+      "Server waking up",
+    );
+    expect(screen.getByTestId("last-message")).toHaveTextContent("N5");
+    expect(screen.getByTestId("first-persistent")).toHaveTextContent("true");
+  });
+
+  test("does not evict existing notifications when list is full of persistent notifications", async () => {
+    render(<NotificationProbe />);
+
+    const addSixPersistentButton = screen.getByRole("button", {
+      name: /Add Six Persistent/i,
+    });
+
+    await userEvent.click(addSixPersistentButton);
+
+    expect(screen.getByTestId("count")).toHaveTextContent("5");
+    expect(screen.getByText("P1")).toBeInTheDocument();
+    expect(screen.queryByText("P6")).not.toBeInTheDocument();
+    expect(screen.getByTestId("first-persistent")).toHaveTextContent("true");
   });
 });

@@ -1,18 +1,16 @@
 import { useContext } from "react";
-import { UserDataContext } from "../../contextData/UserDataContext";
+import { RootContext } from "../../contextData/RootContext";
 import { useTheme } from "../../customHooks/useTheme";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { MobileMenu } from "./MobileMenu";
 import { StandardMenu } from "./StandardMenu";
 import { ButtonNavbar } from "./ButtonNavbar";
 import { LanguageSwitcher } from "./LanguageSwitcher";
-import { LanguageContext } from "../../contextData/LanguageContext";
 
 function Navbar({ closeMenu }) {
   const { navRef, isMenuOpen, setIsMenuOpen } = closeMenu;
   const { theme, setMode } = useTheme();
-  const { userData } = useContext(UserDataContext);
-  const { language, setLanguage, t } = useContext(LanguageContext);
+  const { userData, language, setLanguage, t } = useContext(RootContext);
 
   return (
     <nav

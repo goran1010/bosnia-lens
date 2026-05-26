@@ -3,21 +3,15 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { Status } from "../../../src/components/Navbar/Status";
-import { UserDataContext } from "../../../src/contextData/UserDataContext";
-import { LanguageContext } from "../../../src/contextData/LanguageContext";
-import { useLanguage } from "../../../src/customHooks/useLanguage";
+import { RootContextProvider } from "../../rootContextProvider";
 
 function Wrapper({ userData, setIsMenuOpen }) {
-  const { language, setLanguage, t } = useLanguage();
-
   return (
-    <LanguageContext value={{ language, setLanguage, t }}>
-      <UserDataContext value={{ userData, setUserData: vi.fn() }}>
+    <RootContextProvider rootValue={{ userData, setUserData: vi.fn() }}>
         <MemoryRouter>
           <Status setIsMenuOpen={setIsMenuOpen} />
         </MemoryRouter>
-      </UserDataContext>
-    </LanguageContext>
+    </RootContextProvider>
   );
 }
 

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import { guardedFetch } from "../utils/guardedFetch";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-function useStatusCheck(setLoading, addNotification, longWait) {
+function useStatusCheck(addNotification, t, serverStatus) {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
@@ -12,12 +13,24 @@ function useStatusCheck(setLoading, addNotification, longWait) {
     async function checkLogin() {
       let response;
       try {
-        response = await fetch(`${BACKEND_URL}/users/me`, {
-          mode: "cors",
-          method: "GET",
-          credentials: "include",
-          signal: abortController.signal,
-        });
+        response = await guardedFetch(
+          `${BACKEND_URL}/users/me`,
+          {
+            mode: "cors",
+            method: "GET",
+            credentials: "include",
+            signal: abortController.signal,
+          },
+          {
+            serverStatus,
+            addNotification,
+            t,
+          },
+        );
+
+        if (!response) {
+          return;
+        }
 
         const result = await response.json();
 
@@ -33,7 +46,6 @@ function useStatusCheck(setLoading, addNotification, longWait) {
               result?.error ||
               "Failed to check login status.",
           });
-          setLoading(false);
           return;
         }
 
@@ -41,7 +53,6 @@ function useStatusCheck(setLoading, addNotification, longWait) {
           type: "success",
           message: result.message || "Login status verified.",
         });
-        setLoading(false);
         setUserData(result.data);
       } catch (err) {
         if (isCancelled || err?.name === "AbortError") {
@@ -52,25 +63,23 @@ function useStatusCheck(setLoading, addNotification, longWait) {
           message: "An error occurred while checking login status.",
         });
         console.error("Error checking login status:", err);
-        setLoading(false);
       }
     }
-    if (!longWait) {
-      // Need to add a slight delay before checking the server status to avoid race conditions ?!
-      // To-Do : Implement a more robust solution for this
-      checkLoginTimeoutId = setTimeout(() => {
-        if (!isCancelled) {
-          checkLogin();
-        }
-      }, 100);
-    }
+
+    // Need to add a slight delay before checking the server status to avoid race conditions ?!
+    // To-Do : Implement a more robust solution for this
+    checkLoginTimeoutId = setTimeout(() => {
+      if (!isCancelled) {
+        checkLogin();
+      }
+    }, 100);
 
     return () => {
       isCancelled = true;
       abortController.abort();
       clearTimeout(checkLoginTimeoutId);
     };
-  }, [addNotification, setLoading, longWait]);
+  }, [addNotification, t, serverStatus]);
 
   return { userData, setUserData };
 }

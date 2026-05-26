@@ -2,73 +2,64 @@ import { describe, test, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ThemeSwitcher } from "../../../src/components/Navbar/ThemeSwitcher";
-import { NotificationContext } from "../../../src/contextData/NotificationContext";
-import { LanguageContext } from "../../../src/contextData/LanguageContext";
-import { useLanguage } from "../../../src/customHooks/useLanguage";
+import { RootContextProvider } from "../../rootContextProvider";
 
 function Wrapper({ addNotification, setThemeMenuOpen, setMode }) {
-  const { language, setLanguage, t } = useLanguage();
-
   return (
-    <LanguageContext value={{ language, setLanguage, t }}>
-      <NotificationContext
-        value={{
-          notifications: [],
-          addNotification,
-          removeNotification: vi.fn(),
-        }}
-      >
-        <ThemeSwitcher setMode={setMode} setThemeMenuOpen={setThemeMenuOpen} />
-      </NotificationContext>
-    </LanguageContext>
+    <RootContextProvider
+      rootValue={{
+        addNotification,
+        removeNotification: vi.fn(),
+      }}
+    >
+      <ThemeSwitcher setMode={setMode} setThemeMenuOpen={setThemeMenuOpen} />
+    </RootContextProvider>
   );
 }
 
 describe("ThemeSwitcher", () => {
   test.each([
     {
-      themeButton: /^System$/i,
+      optionValue: "system",
       expectedMode: "system",
       expectedMessage: "Switched to system theme",
     },
     {
-      themeButton: /^Light$/i,
+      optionValue: "light",
       expectedMode: "light",
       expectedMessage: "Switched to light theme",
     },
     {
-      themeButton: /^Dark$/i,
+      optionValue: "dark",
       expectedMode: "dark",
       expectedMessage: "Switched to dark theme",
     },
   ])(
-    "changes mode using $themeButton",
-    async ({ themeButton, expectedMode, expectedMessage }) => {
+    "changes mode using $optionValue",
+    async ({ optionValue, expectedMode, expectedMessage }) => {
       const addNotification = vi.fn();
-      const setThemeMenuOpen = vi.fn();
       const setMode = vi.fn();
 
       render(
         <Wrapper
           addNotification={addNotification}
-          setThemeMenuOpen={setThemeMenuOpen}
+          setThemeMenuOpen={vi.fn()}
           setMode={setMode}
         />,
       );
 
-      const themeOptionButton = screen.getByRole("button", {
-        name: themeButton,
+      const themeSelect = screen.getByRole("combobox", {
+        name: /Toggle theme menu/i,
       });
 
-      expect(themeOptionButton).toBeInTheDocument();
-      await userEvent.click(themeOptionButton);
+      expect(themeSelect).toBeInTheDocument();
+      await userEvent.selectOptions(themeSelect, optionValue);
 
       expect(setMode).toHaveBeenCalledWith(expectedMode);
       expect(addNotification).toHaveBeenCalledWith({
         type: "info",
         message: expectedMessage,
       });
-      expect(setThemeMenuOpen).toHaveBeenCalledWith(false);
     },
   );
 });

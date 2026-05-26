@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { LanguageContext } from "../../contextData/LanguageContext";
+import { RootContext } from "../../contextData/RootContext";
 
 const methodColor = {
   GET: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300",
@@ -11,7 +11,7 @@ const methodColor = {
 };
 
 function EndpointCard({ endpoint }) {
-  const { t } = useContext(LanguageContext);
+  const { t } = useContext(RootContext);
 
   return (
     <article className="border border-gray-200 dark:border-gray-700 rounded-lg p-5 flex flex-col gap-4 bg-white dark:bg-gray-800/70">
