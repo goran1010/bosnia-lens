@@ -1,16 +1,11 @@
 import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { NotificationContext } from "../../../src/contextData/NotificationContext";
-import { UserDataContext } from "../../../src/contextData/UserDataContext";
-import { useNotification } from "../../../src/customHooks/useNotification";
 import { Notifications } from "../../../src/components/Notifications";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
-import { useState } from "react";
 import { Profile } from "../../../src/components/Profile/Profile";
 import { LogIn } from "../../../src/components/LogIn/LogIn";
 import userEvent from "@testing-library/user-event";
-import { LanguageContext } from "../../../src/contextData/LanguageContext";
-import { useLanguage } from "../../../src/customHooks/useLanguage";
+import { RootContextProvider } from "../../rootContextProvider";
 
 let getCsrfTokenMock = "mocked-csrf-token";
 
@@ -45,28 +40,17 @@ afterEach(() => {
 });
 
 function Wrapper({ initialUser = null }) {
-  const [userData, setUserData] = useState(initialUser);
-  const { notifications, addNotification, removeNotification } =
-    useNotification();
-  const { language, setLanguage, t } = useLanguage();
-
   return (
-    <LanguageContext value={{ language, setLanguage, t }}>
-      <NotificationContext
-        value={{ notifications, addNotification, removeNotification }}
-      >
-        <UserDataContext value={{ userData, setUserData }}>
-          <MemoryRouter initialEntries={["/profile"]}>
-            <Notifications />
-            <Routes>
-              <Route path="/" element={<div>Home Page</div>} />
-              <Route path="/login" element={<LogIn />} />
-              <Route path="/profile" element={<Profile />} />
-            </Routes>
-          </MemoryRouter>
-        </UserDataContext>
-      </NotificationContext>
-    </LanguageContext>
+    <RootContextProvider initialUserData={initialUser}>
+      <MemoryRouter initialEntries={["/profile"]}>
+        <Notifications />
+        <Routes>
+          <Route path="/" element={<div>Home Page</div>} />
+          <Route path="/login" element={<LogIn />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+      </MemoryRouter>
+    </RootContextProvider>
   );
 }
 

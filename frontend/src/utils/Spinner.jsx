@@ -10,8 +10,8 @@ function Spinner() {
   const spinnerImgStyle = {
     maxWidth: "40px",
     maxHeight: "40px",
-    minWidth: "30px",
-    minHeight: "30px",
+    minWidth: "20px",
+    minHeight: "20px",
     border: "3px solid #ccc",
     borderTop: "3px solid #3498db",
     borderRadius: "50%",

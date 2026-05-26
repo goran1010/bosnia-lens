@@ -52,13 +52,7 @@ describe("useServerWakeUp", () => {
     });
 
     expect(fetchSpy).toHaveBeenCalledTimes(1);
-    expect(setLongWait).toHaveBeenCalledWith({
-      id: "server-status",
-      type: "warning",
-      message: "longWait.wakingUp",
-      duration: null,
-      persistent: true,
-    });
+    expect(setLongWait).not.toHaveBeenCalled();
 
     expect(setServerIsDown).toHaveBeenCalledWith("server-status");
   });

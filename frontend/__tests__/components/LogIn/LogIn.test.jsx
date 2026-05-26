@@ -2,15 +2,10 @@ import { describe, test, expect, beforeEach, afterEach, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
-import { NotificationContext } from "../../../src/contextData/NotificationContext";
 import { LogIn } from "../../../src/components/LogIn/LogIn";
 import { Home } from "../../../src/components/Home/Home";
-import { useState } from "react";
-import { UserDataContext } from "../../../src/contextData/UserDataContext";
-import { useNotification } from "../../../src/customHooks/useNotification";
 import { Notifications } from "../../../src/components/Notifications";
-import { LanguageContext } from "../../../src/contextData/LanguageContext";
-import { useLanguage } from "../../../src/customHooks/useLanguage";
+import { RootContextProvider } from "../../rootContextProvider";
 
 vi.mock("../../../src/components/utils/getCsrfToken", () => ({
   getCsrfToken: async () => "mocked-csrf-token",
@@ -37,27 +32,16 @@ async function submitLogInForm({ email, password }) {
 
 beforeEach(async () => {
   function Wrapper() {
-    const [userData, setUserData] = useState(null);
-    const { notifications, addNotification, removeNotification } =
-      useNotification();
-    const { language, setLanguage, t } = useLanguage();
-
     return (
-      <LanguageContext value={{ language, setLanguage, t }}>
-        <NotificationContext
-          value={{ notifications, addNotification, removeNotification }}
-        >
-          <UserDataContext value={{ userData, setUserData }}>
-            <MemoryRouter initialEntries={["/login"]}>
-              <Notifications />
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<LogIn />} />
-              </Routes>
-            </MemoryRouter>
-          </UserDataContext>
-        </NotificationContext>
-      </LanguageContext>
+      <RootContextProvider>
+        <MemoryRouter initialEntries={["/login"]}>
+          <Notifications />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<LogIn />} />
+          </Routes>
+        </MemoryRouter>
+      </RootContextProvider>
     );
   }
 

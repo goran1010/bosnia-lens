@@ -2,9 +2,7 @@ import { describe, test, expect, beforeEach, vi, afterEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { GetAllPostalCodes } from "../../../src/components/PostalCodes/GetAllPostalCodes";
-import { NotificationContext } from "../../../src/contextData/NotificationContext";
-import { LanguageContext } from "../../../src/contextData/LanguageContext";
-import { useLanguage } from "../../../src/customHooks/useLanguage";
+import { RootContextProvider } from "../../rootContextProvider";
 
 const user = userEvent.setup();
 
@@ -26,20 +24,13 @@ describe("GetAllPostalCodes Component", () => {
   });
 
   const Wrapper = () => {
-    const { language, setLanguage, t } = useLanguage();
-    const contextValue = {
-      addNotification: mockAddNotification,
-    };
-
     return (
-      <LanguageContext value={{ language, setLanguage, t }}>
-        <NotificationContext value={contextValue}>
+      <RootContextProvider rootValue={{ addNotification: mockAddNotification }}>
           <GetAllPostalCodes
             setSearchResult={mockSetSearchResult}
             setLoading={mockSetLoading}
           />
-        </NotificationContext>
-      </LanguageContext>
+      </RootContextProvider>
     );
   };
 
@@ -210,13 +201,13 @@ describe("GetAllPostalCodes Component", () => {
   describe("Race condition prevention", () => {
     test("button is disabled when loading prop is true", () => {
       render(
-        <NotificationContext value={{ addNotification: mockAddNotification }}>
+        <RootContextProvider rootValue={{ addNotification: mockAddNotification }}>
           <GetAllPostalCodes
             setSearchResult={mockSetSearchResult}
             setLoading={mockSetLoading}
             loading={true}
           />
-        </NotificationContext>,
+        </RootContextProvider>,
       );
 
       expect(screen.getByRole("button")).toBeDisabled();
@@ -224,13 +215,13 @@ describe("GetAllPostalCodes Component", () => {
 
     test("does not submit when button is disabled during loading", async () => {
       render(
-        <NotificationContext value={{ addNotification: mockAddNotification }}>
+        <RootContextProvider rootValue={{ addNotification: mockAddNotification }}>
           <GetAllPostalCodes
             setSearchResult={mockSetSearchResult}
             setLoading={mockSetLoading}
             loading={true}
           />
-        </NotificationContext>,
+        </RootContextProvider>,
       );
 
       const button = screen.getByRole("button");

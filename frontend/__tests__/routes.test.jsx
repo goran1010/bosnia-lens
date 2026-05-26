@@ -1,9 +1,8 @@
 import { test, describe, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { routes } from "../src/routes";
-import { UserDataContext } from "../src/contextData/UserDataContext";
-import { LanguageContext } from "../src/contextData/LanguageContext";
+import { RootContextProvider } from "./rootContextProvider";
 
 beforeEach(() => {
   vi.spyOn(globalThis, "fetch").mockResolvedValue({
@@ -26,19 +25,22 @@ function renderRoute(route, { withUserDataContext = false } = {}) {
 
   if (withUserDataContext) {
     render(
-      <LanguageContext value={{}}>
-        <UserDataContext value={{ message: [], setMessage: () => {} }}>
+      <RootContextProvider
+        rootValue={{
+          userData: { message: [], setMessage: () => {} },
+          setUserData: () => {},
+        }}
+      >
           <RouterProvider router={router} />
-        </UserDataContext>
-      </LanguageContext>,
+      </RootContextProvider>,
     );
     return;
   }
 
   render(
-    <LanguageContext value={{}}>
+    <RootContextProvider>
       <RouterProvider router={router} />
-    </LanguageContext>,
+    </RootContextProvider>,
   );
 }
 
@@ -96,11 +98,12 @@ describe("Loading components when visiting an address", () => {
     async (route) => {
       renderRoute(route);
 
-      const homeLink = await screen.findByRole("link", { name: /Home/i });
-      const universitiesLink = await screen.findByRole("link", {
+      const nav = await screen.findByRole("navigation");
+      const homeLink = within(nav).getByRole("link", { name: /Home/i });
+      const universitiesLink = within(nav).getByRole("link", {
         name: /Universities/i,
       });
-      const postalCodesLink = await screen.findByRole("link", {
+      const postalCodesLink = within(nav).getByRole("link", {
         name: /Postal Codes/i,
       });
 

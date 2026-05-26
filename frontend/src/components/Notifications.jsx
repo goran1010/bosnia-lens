@@ -1,5 +1,6 @@
 import { useContext, useEffect, useRef } from "react";
 import { RootContext } from "../contextData/RootContext";
+import { Spinner } from "../utils/Spinner";
 
 function getNotificationStyles(type) {
   switch (type) {
@@ -90,9 +91,9 @@ function Notifications() {
               type="button"
               onClick={() => removeNotification(notification.id)}
               aria-label={t("notifications.dismiss")}
-              className="absolute top-2 right-2 text-sm opacity-80 hover:opacity-100 cursor-pointer"
+              className="absolute top-0 right-1 text-sm opacity-80 hover:opacity-100 cursor-pointer"
             >
-              ✕
+              ✖
             </button>
           </li>
         ))}

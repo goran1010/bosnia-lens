@@ -1,16 +1,13 @@
 import { describe, test, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { PostalCodesResult } from "../../../src/components/PostalCodes/PostalCodesResult";
-import { LanguageContext } from "../../../src/contextData/LanguageContext";
-import { useLanguage } from "../../../src/customHooks/useLanguage";
+import { RootContextProvider } from "../../rootContextProvider";
 
 function Wrapper({ searchResult }) {
-  const { language, setLanguage, t } = useLanguage();
-
   return (
-    <LanguageContext value={{ language, setLanguage, t }}>
+    <RootContextProvider>
       <PostalCodesResult searchResult={searchResult} />
-    </LanguageContext>
+    </RootContextProvider>
   );
 }
 

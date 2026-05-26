@@ -1,16 +1,13 @@
 import { render, screen } from "@testing-library/react";
 import { LongWaitInfo } from "../../../src/utils/longWaitInfo";
 import { describe, test, expect } from "vitest";
-import { LanguageContext } from "../../../src/contextData/LanguageContext";
-import { useLanguage } from "../../../src/customHooks/useLanguage";
+import { RootContextProvider } from "../../rootContextProvider";
 
 function Wrapper({ serverIsDown }) {
-  const { language, setLanguage, t } = useLanguage();
-
   return (
-    <LanguageContext value={{ language, setLanguage, t }}>
+    <RootContextProvider>
       <LongWaitInfo serverIsDown={serverIsDown} />
-    </LanguageContext>
+    </RootContextProvider>
   );
 }
 

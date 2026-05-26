@@ -2,10 +2,7 @@ import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { LanguageSwitcher } from "../../../src/components/Navbar/LanguageSwitcher";
-import { NotificationContext } from "../../../src/contextData/NotificationContext";
-import { LanguageContext } from "../../../src/contextData/LanguageContext";
-import { useLanguage } from "../../../src/customHooks/useLanguage";
-import * as languageUtils from "../../../src/utils/setInitialLanguage";
+import { RootContextProvider } from "../../rootContextProvider";
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -16,55 +13,47 @@ beforeEach(() => {
 });
 
 function Wrapper({ addNotification, setLanguageMenuOpen, setLanguage }) {
-  const { language, setLanguage: setLanguageState, t } = useLanguage();
-
   return (
-    <LanguageContext value={{ language, setLanguage: setLanguageState, t }}>
-      <NotificationContext
-        value={{
-          notifications: [],
-          addNotification,
-          removeNotification: vi.fn(),
-        }}
-      >
-        <LanguageSwitcher
-          setLanguageMenuOpen={setLanguageMenuOpen}
-          setLanguage={setLanguage}
-        />
-      </NotificationContext>
-    </LanguageContext>
+    <RootContextProvider
+      rootValue={{
+        addNotification,
+        removeNotification: vi.fn(),
+        setLanguage,
+      }}
+    >
+      <LanguageSwitcher
+        setLanguageMenuOpen={setLanguageMenuOpen}
+        setLanguage={setLanguage}
+      />
+    </RootContextProvider>
   );
 }
 
 describe("LanguageSwitcher", () => {
   test("switches to browser language", async () => {
-    vi.spyOn(languageUtils, "setInitialLanguage").mockReturnValue("sr");
-
     const addNotification = vi.fn();
-    const setLanguageMenuOpen = vi.fn();
     const setLanguage = vi.fn();
 
     render(
       <Wrapper
         addNotification={addNotification}
-        setLanguageMenuOpen={setLanguageMenuOpen}
+        setLanguageMenuOpen={vi.fn()}
         setLanguage={setLanguage}
       />,
     );
 
-    const browserLanguageButton = screen.getByRole("button", {
-      name: /Browser Language/i,
+    const languageSelect = screen.getByRole("combobox", {
+      name: /Toggle language/i,
     });
 
-    expect(browserLanguageButton).toBeInTheDocument();
-    await userEvent.click(browserLanguageButton);
+    expect(languageSelect).toBeInTheDocument();
+    await userEvent.selectOptions(languageSelect, "system");
 
-    expect(setLanguage).toHaveBeenCalledWith("sr");
+    expect(setLanguage).toHaveBeenCalledWith("system");
     expect(addNotification).toHaveBeenCalledWith({
       type: "info",
-      message: "Switched to browser language",
+      message: "Switched to system language",
     });
-    expect(setLanguageMenuOpen).toHaveBeenCalledWith(false);
   });
 
   test.each([
@@ -82,30 +71,28 @@ describe("LanguageSwitcher", () => {
     "switches language using $languageButton",
     async ({ languageButton, expectedLanguage, expectedMessage }) => {
       const addNotification = vi.fn();
-      const setLanguageMenuOpen = vi.fn();
       const setLanguage = vi.fn();
 
       render(
         <Wrapper
           addNotification={addNotification}
-          setLanguageMenuOpen={setLanguageMenuOpen}
+          setLanguageMenuOpen={vi.fn()}
           setLanguage={setLanguage}
         />,
       );
 
-      const languageOptionButton = screen.getByRole("button", {
-        name: languageButton,
+      const languageSelect = screen.getByRole("combobox", {
+        name: /Toggle language/i,
       });
 
-      expect(languageOptionButton).toBeInTheDocument();
-      await userEvent.click(languageOptionButton);
+      expect(languageSelect).toBeInTheDocument();
+      await userEvent.selectOptions(languageSelect, expectedLanguage);
 
       expect(setLanguage).toHaveBeenCalledWith(expectedLanguage);
       expect(addNotification).toHaveBeenCalledWith({
         type: "info",
         message: expectedMessage,
       });
-      expect(setLanguageMenuOpen).toHaveBeenCalledWith(false);
     },
   );
 });

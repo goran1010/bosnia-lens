@@ -3,25 +3,19 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { MobileMenu } from "../../../src/components/Navbar/MobileMenu";
-import { UserDataContext } from "../../../src/contextData/UserDataContext";
-import { LanguageContext } from "../../../src/contextData/LanguageContext";
-import { useLanguage } from "../../../src/customHooks/useLanguage";
+import { RootContextProvider } from "../../rootContextProvider";
 
 beforeEach(() => {
   localStorage.setItem("language", "en");
 });
 
 function Wrapper({ userData, setIsMenuOpen }) {
-  const { language, setLanguage, t } = useLanguage();
-
   return (
-    <LanguageContext value={{ language, setLanguage, t }}>
-      <UserDataContext value={{ userData, setUserData: vi.fn() }}>
+    <RootContextProvider rootValue={{ userData, setUserData: vi.fn() }}>
         <MemoryRouter>
           <MobileMenu setIsMenuOpen={setIsMenuOpen} userData={userData} />
         </MemoryRouter>
-      </UserDataContext>
-    </LanguageContext>
+    </RootContextProvider>
   );
 }
 
