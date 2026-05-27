@@ -51,11 +51,6 @@ enum typeOfChange {
   CREATE
 }
 
-enum ownership {
-  PUBLIC
-  PRIVATE
-}
-
 enum entity {
   FBIH
   RS
@@ -86,7 +81,7 @@ model University {
   acronym           String?
   city              String
   entity            entity
-  ownership         ownership
+  isPublic          Boolean
   foundedYear       String?
   website           String?
   accreditationFrom DateTime?
