@@ -57,6 +57,11 @@ enum entity {
   BD
 }
 
+enum ownership {
+  JAVNA
+  PRIVATNA
+}
+
 enum studyCycle {
   FIRST
   SECOND
@@ -81,7 +86,7 @@ model University {
   acronym           String?
   city              String
   entity            entity
-  isPublic          Boolean
+  ownership         ownership
   foundedYear       String?
   website           String?
   accreditationFrom DateTime?

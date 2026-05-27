@@ -23,6 +23,8 @@ const filePath = path.resolve(__dirname, "JSON_files/universities.json");
 const JSONdata = fs.readFileSync(filePath, "utf-8");
 const universities = JSON.parse(JSONdata);
 
+const toDateTime = (val) => (val ? new Date(val).toISOString() : null);
+
 async function main() {
   console.log("Seeding universities...");
 
@@ -32,14 +34,14 @@ async function main() {
       acronym: u.acronym,
       city: u.city,
       entity: u.entity,
-      isPublic: u.ownership === "Javna",
+      ownership: u.ownership === "Javna" ? "JAVNA" : "PRIVATNA",
       foundedYear: u.foundedYear,
       website: u.website,
-      accreditationFrom: u.accreditationFrom,
-      accreditationTo: u.accreditationTo,
+      accreditationFrom: toDateTime(u.accreditationFrom),
+      accreditationTo: toDateTime(u.accreditationTo),
       authority: u.authority,
       sourceUrl: u.sourceUrl,
-      lastChecked: u.lastChecked,
+      lastChecked: toDateTime(u.lastChecked),
     })),
     skipDuplicates: true,
   });

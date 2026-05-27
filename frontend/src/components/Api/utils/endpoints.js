@@ -29,7 +29,7 @@ const endpoints = [
     successExample: `{
   "message": "Universities retrieved successfully",
   "data": [
-    { "id": 1, "name": "University of Sarajevo", "acronym": "UNSA", "city": "Sarajevo", "entity": "FBIH", "isPublic": true },
+    { "id": 1, "name": "University of Sarajevo", "acronym": "UNSA", "city": "Sarajevo", "entity": "FBIH", "ownership": "JAVNA" },
     ...
   ]
 }`,
@@ -67,7 +67,7 @@ const endpoints = [
   "message": "University retrieved successfully",
   "data": {
     "id": 1, "name": "University of Sarajevo", "acronym": "UNSA",
-    "city": "Sarajevo", "entity": "FBIH", "isPublic": true,
+    "city": "Sarajevo", "entity": "FBIH", "ownership": "JAVNA",
     "faculties": [
       { "id": 1, "name": "Faculty of Science", "studyPrograms": [ ... ] }
     ]

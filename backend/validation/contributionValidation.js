@@ -5,6 +5,7 @@ const ENTITY_TYPES = ["UNIVERSITY", "FACULTY", "STUDY_PROGRAM", "SUBJECT"];
 const STUDY_CYCLES = ["FIRST", "SECOND", "THIRD"];
 const SUBJECT_TYPES = ["MANDATORY", "ELECTIVE"];
 const ENTITIES = ["FBIH", "RS", "BD"];
+const OWNERSHIP = ["JAVNA", "PRIVATNA"];
 
 class ContributionValidation {
   createEntity = [
@@ -40,13 +41,13 @@ class ContributionValidation {
       .isIn(ENTITIES)
       .withMessage("Invalid entity — must be FBIH, RS, or BD"),
 
-    body("data.isPublic")
+    body("data.ownership")
       .if((_, { req }) => req.body.entityType === "UNIVERSITY")
       .notEmpty()
-      .withMessage("isPublic is required")
+      .withMessage("ownership is required")
       .bail()
-      .isBoolean()
-      .withMessage("isPublic must be a boolean"),
+      .isIn(OWNERSHIP)
+      .withMessage("ownership must be JAVNA or PRIVATNA"),
 
     body("data.cycle")
       .if((_, { req }) => req.body.entityType === "STUDY_PROGRAM")
@@ -111,10 +112,10 @@ class ContributionValidation {
       .isIn(ENTITIES)
       .withMessage("Invalid entity — must be FBIH, RS, or BD"),
 
-    body("data.isPublic")
+    body("data.ownership")
       .optional()
-      .isBoolean()
-      .withMessage("isPublic must be a boolean"),
+      .isIn(OWNERSHIP)
+      .withMessage("ownership must be JAVNA or PRIVATNA"),
 
     body("data.durationYears")
       .optional({ values: "null" })

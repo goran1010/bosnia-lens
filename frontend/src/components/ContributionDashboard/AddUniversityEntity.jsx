@@ -81,7 +81,6 @@ function AddUniversityEntity({ setPendingChanges }) {
       onSubmit={handleSubmit}
       className="flex flex-col gap-4 w-full max-w-lg"
     >
-      {/* Entity type */}
       <div className="flex flex-col gap-1">
         <Label htmlFor="entityType">{t("contribution.entityType")}</Label>
         <Select
@@ -100,7 +99,6 @@ function AddUniversityEntity({ setPendingChanges }) {
         </Select>
       </div>
 
-      {/* Change type */}
       <div className="flex flex-col gap-1">
         <Label htmlFor="typeOfChange">{t("contribution.change")}</Label>
         <Select
@@ -118,7 +116,6 @@ function AddUniversityEntity({ setPendingChanges }) {
         </Select>
       </div>
 
-      {/* Parent ID (for CREATE non-university) */}
       {needsParent && (
         <DataField
           label={`${t("contribution.parentId")} — ${t(`contribution.parentIdHelp.${entityType}`)}`}
@@ -131,7 +128,6 @@ function AddUniversityEntity({ setPendingChanges }) {
         />
       )}
 
-      {/* Target ID (for UPDATE / DELETE) */}
       {needsTarget && (
         <DataField
           label={`ID`}
@@ -144,14 +140,12 @@ function AddUniversityEntity({ setPendingChanges }) {
         />
       )}
 
-      {/* Data fields — not shown for DELETE */}
       {needsDataFields && entityType && (
         <fieldset className="flex flex-col gap-3 border border-gray-200 dark:border-gray-600 rounded-lg p-3">
           <legend className="text-xs font-semibold px-1 text-gray-600 dark:text-gray-300">
             Data
           </legend>
 
-          {/* Name — required for CREATE, optional for UPDATE */}
           <DataField
             label={t("contribution.dataFields.name")}
             id="dataName"
@@ -161,7 +155,6 @@ function AddUniversityEntity({ setPendingChanges }) {
             onChange={(e) => setDataField("name", e.target.value)}
           />
 
-          {/* University-specific fields */}
           {entityType === "UNIVERSITY" && (
             <>
               <DataField
@@ -191,25 +184,27 @@ function AddUniversityEntity({ setPendingChanges }) {
                 </Select>
               </div>
               <div className="flex flex-col gap-1">
-                <Label htmlFor="dataIsPublic">
-                  {t("contribution.dataFields.isPublic")}
+                <Label htmlFor="dataOwnership">
+                  {t("contribution.dataFields.ownership")}
                 </Label>
                 <Select
-                  id="dataIsPublic"
-                  value={data.isPublic ?? ""}
+                  id="dataOwnership"
+                  value={data.ownership ?? ""}
                   onChange={(e) =>
                     setDataField(
-                      "isPublic",
-                      e.target.value === ""
-                        ? undefined
-                        : e.target.value === "true",
+                      "ownership",
+                      e.target.value === "" ? undefined : e.target.value,
                     )
                   }
                   required={typeOfChange === "CREATE"}
                 >
                   <option value="">—</option>
-                  <option value="true">{t("universitiesPage.isPublic")}</option>
-                  <option value="false">{t("universitiesPage.private")}</option>
+                  <option value="JAVNA">
+                    {t("universitiesPage.ownership.JAVNA")}
+                  </option>
+                  <option value="PRIVATNA">
+                    {t("universitiesPage.ownership.PRIVATNA")}
+                  </option>
                 </Select>
               </div>
               <DataField
@@ -222,7 +217,6 @@ function AddUniversityEntity({ setPendingChanges }) {
             </>
           )}
 
-          {/* StudyProgram-specific fields */}
           {entityType === "STUDY_PROGRAM" && (
             <>
               <div className="flex flex-col gap-1">
@@ -280,7 +274,6 @@ function AddUniversityEntity({ setPendingChanges }) {
             </>
           )}
 
-          {/* Subject-specific fields */}
           {entityType === "SUBJECT" && (
             <>
               <DataField

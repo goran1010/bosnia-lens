@@ -46,7 +46,7 @@ function StudyProgramRow({ program, t }) {
         className="w-full text-left flex justify-between items-center gap-2 py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
       >
         <span className="font-medium">{program.name}</span>
-        <span className="flex gap-2 items-center text-xs text-gray-500 dark:text-gray-400 flex-shrink-0">
+        <span className="flex gap-2 items-center text-xs text-gray-500 dark:text-gray-400 shrink-0">
           <span className="hidden sm:inline">
             {t(`universitiesPage.cycles.${program.cycle}`)}
           </span>
@@ -79,7 +79,7 @@ function FacultyRow({ faculty, t }) {
         className="w-full text-left flex justify-between items-center gap-2 py-1.5 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-semibold"
       >
         <span>{faculty.name}</span>
-        <span className="flex gap-2 items-center text-xs text-gray-500 dark:text-gray-400 flex-shrink-0">
+        <span className="flex gap-2 items-center text-xs text-gray-500 dark:text-gray-400 shrink-0">
           {faculty.studyPrograms?.length > 0 && (
             <span>
               {faculty.studyPrograms.length}{" "}
@@ -101,7 +101,7 @@ function FacultyRow({ faculty, t }) {
 }
 
 function UniversityCard({ university }) {
-  const { t, addNotification, serverStatus } = useContext(RootContext);
+  const { t, addNotification } = useContext(RootContext);
   const [expanded, setExpanded] = useState(false);
   const [detailData, setDetailData] = useState(null);
   const [loadingDetail, setLoadingDetail] = useState(false);
@@ -164,14 +164,14 @@ function UniversityCard({ university }) {
               <span>{entityLabel}</span>
               <span
                 className={`px-1.5 py-0.5 rounded text-xs font-medium ${
-                  university.isPublic
+                  university.ownership === "JAVNA"
                     ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200"
                     : "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300"
                 }`}
               >
-                {university.isPublic
-                  ? t("universitiesPage.isPublic")
-                  : t("universitiesPage.private")}
+                {university.ownership === "JAVNA"
+                  ? t(`universitiesPage.ownership.JAVNA`)
+                  : t(`universitiesPage.ownership.PRIVATNA`)}
               </span>
               {university.foundedYear && (
                 <span>

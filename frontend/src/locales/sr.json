@@ -132,7 +132,7 @@
     "publicIntro": "Javni REST endpoint-i su dostupni pod osnovnim URL-om ispod. Ovi endpoint-i ne zahtijevaju autentifikaciju.",
     "authIntro": "Autentifikovani endpoint-i su odvojeni od javnog osnovnog URL-a i koriste sesijske kolačiće plus CSRF tokene za izmjene podataka.",
     "dataObject": "Objekat univerziteta",
-    "dataObjectExample": "{\n  \"id\":          number   - jedinstveni identifikator\n  \"name\":        string   - naziv univerziteta\n  \"acronym\":     string | null\n  \"city\":        string\n  \"entity\":      \"FBIH\" | \"RS\" | \"BD\"\n  \"isPublic\":    boolean\n  \"foundedYear\": number | null\n  \"website\":     string | null\n  \"faculties\":   Faculty[]\n}",
+    "dataObjectExample": "{\n  \"id\":          number   - jedinstveni identifikator\n  \"name\":        string   - naziv univerziteta\n  \"acronym\":     string | null\n  \"city\":        string\n  \"entity\":      \"FBIH\" | \"RS\" | \"BD\"\n  \"ownership\":   \"JAVNA\" | \"PRIVATNA\"\n  \"foundedYear\": number | null\n  \"website\":     string | null\n  \"faculties\":   Faculty[]\n}",
     "endpoints": "Endpoint-i",
     "authFlowTitle": "Autentifikovani tok za doprinos podacima",
     "authFlowBody": "Ovi endpoint-i zahtijevaju autentifikovanu sesiju (credentials: include) i koriste CSRF zaštitu za zahtjeve koji mijenjaju podatke.",
@@ -220,7 +220,6 @@
       "name": "Naziv",
       "city": "Grad",
       "entity": "Entitet",
-      "isPublic": "Javni univerzitet",
       "cycle": "Studijski ciklus",
       "durationYears": "Trajanje (godine)",
       "ects": "ECTS krediti",
@@ -228,7 +227,8 @@
       "semester": "Semestar",
       "subjectType": "Tip predmeta",
       "website": "Web stranica",
-      "sourceUrl": "URL izvora"
+      "sourceUrl": "URL izvora",
+      "ownership": "Vlasništvo"
     },
     "cycles": {
       "FIRST": "PRVI — Bachelor",
@@ -325,8 +325,6 @@
       "RS": "Republika Srpska",
       "BD": "Brčko Distrikt"
     },
-    "isPublic": "Javni",
-    "private": "Privatni",
     "faculties": "Fakulteti",
     "studyPrograms": "Studijski programi",
     "subjects": "Predmeti",
@@ -346,6 +344,10 @@
     "website": "Web stranica",
     "foundedYear": "Osnovan",
     "viewDetails": "Prikaži detalje",
-    "hideDetails": "Sakrij detalje"
+    "hideDetails": "Sakrij detalje",
+    "ownership": {
+      "JAVNA": "Javna",
+      "PRIVATNA": "Privatna"
+    }
   }
 }
