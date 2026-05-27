@@ -13,8 +13,6 @@ const fullUniversityInclude = {
 };
 
 class UniversitiesModel {
-  // ── Queries ────────────────────────────────────────────────────────────────
-
   getAll() {
     return prisma.university.findMany({ orderBy: { name: "asc" } });
   }
@@ -67,8 +65,6 @@ class UniversitiesModel {
     return prisma.subject.findUnique({ where: { id } });
   }
 
-  // ── University CRUD ────────────────────────────────────────────────────────
-
   createUniversity(data) {
     return prisma.university.create({ data });
   }
@@ -80,8 +76,6 @@ class UniversitiesModel {
   deleteUniversity(id) {
     return prisma.university.delete({ where: { id } });
   }
-
-  // ── Faculty CRUD ───────────────────────────────────────────────────────────
 
   createFaculty(data) {
     return prisma.faculty.create({ data });
@@ -95,8 +89,6 @@ class UniversitiesModel {
     return prisma.faculty.delete({ where: { id } });
   }
 
-  // ── StudyProgram CRUD ──────────────────────────────────────────────────────
-
   createStudyProgram(data) {
     return prisma.studyProgram.create({ data });
   }
@@ -108,8 +100,6 @@ class UniversitiesModel {
   deleteStudyProgram(id) {
     return prisma.studyProgram.delete({ where: { id } });
   }
-
-  // ── Subject CRUD ───────────────────────────────────────────────────────────
 
   createSubject(data) {
     return prisma.subject.create({ data });

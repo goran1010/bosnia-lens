@@ -1,7 +1,7 @@
 import { Root } from "./Root";
 import { ErrorPage } from "./components/ErrorPage";
 import { Home } from "./components/Home/Home";
-import { Universities } from "./components/Universities";
+import { Universities } from "./components/Universities/Universities";
 import { LogIn } from "./components/LogIn/LogIn";
 import { SignUp } from "./components/SignUp/SignUp";
 import { ContributionDashboard } from "./components/ContributionDashboard/ContributionDashboard";

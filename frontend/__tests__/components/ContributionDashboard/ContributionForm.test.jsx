@@ -62,11 +62,11 @@ describe("ContributionForm component rendering", () => {
     expect(messageElement).toBeInTheDocument();
   });
 
-  test("renders Universities component when Universities is selected", async () => {
+  test("renders UniversityData component when Universities is selected", async () => {
     const selectElement = screen.getByLabelText(/Choose dataset/i);
     await user.selectOptions(selectElement, "Universities");
 
-    const universitiesElement = screen.getByText(/Universities placeholder/i);
-    expect(universitiesElement).toBeInTheDocument();
+    const entityTypeLabel = await screen.findByText(/Entity Type/i);
+    expect(entityTypeLabel).toBeInTheDocument();
   });
 });

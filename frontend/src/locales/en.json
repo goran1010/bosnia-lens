@@ -13,7 +13,6 @@
     "serverDown": "Server Down",
     "wakingUp": "Waking Up..."
   },
-
   "meta": {
     "home": "Free, open-source public data about Bosnia and Herzegovina. Browse universities and academic programs via REST API or interactive interface.",
     "universities": "Explore universities and academic programs in Bosnia and Herzegovina.",
@@ -21,7 +20,6 @@
     "login": "Log in to your Bosnia Lens account to contribute data and track your submissions.",
     "signup": "Create a free Bosnia Lens account to start contributing university data."
   },
-
   "nav": {
     "home": "Home",
     "apiDocs": "API Docs",
@@ -205,7 +203,49 @@
     "dataset": {
       "universities": "Universities",
       "universitiesPlaceholder": "Universities placeholder"
-    }
+    },
+    "entityTypes": {
+      "UNIVERSITY": "University",
+      "FACULTY": "Faculty",
+      "STUDY_PROGRAM": "Study Program",
+      "SUBJECT": "Subject"
+    },
+    "parentId": "Parent ID",
+    "parentIdHelp": {
+      "FACULTY": "University ID",
+      "STUDY_PROGRAM": "Faculty ID",
+      "SUBJECT": "Study Program ID"
+    },
+    "dataFields": {
+      "name": "Name",
+      "city": "City",
+      "entity": "Entity",
+      "isPublic": "Public university",
+      "cycle": "Study cycle",
+      "durationYears": "Duration (years)",
+      "ects": "ECTS credits",
+      "language": "Language",
+      "semester": "Semester",
+      "subjectType": "Subject type",
+      "website": "Website",
+      "sourceUrl": "Source URL"
+    },
+    "cycles": {
+      "FIRST": "FIRST — Bachelor",
+      "SECOND": "SECOND — Master",
+      "THIRD": "THIRD — PhD"
+    },
+    "subjectTypes": {
+      "MANDATORY": "Mandatory",
+      "ELECTIVE": "Elective"
+    },
+    "entities": {
+      "FBIH": "FBIH — Federation of B&H",
+      "RS": "RS — Republika Srpska",
+      "BD": "BD — Brčko District"
+    },
+    "submitSuggestion": "Submit Suggestion",
+    "deleteChange": "Delete"
   },
   "admin": {
     "needAdmin": "You need to be an admin to see the admin dashboard.",
@@ -262,6 +302,50 @@
       "approveError": "Error approving pending change for {{email}}.",
       "declineFailed": "Failed to decline request.",
       "declineError": "Error declining {{email}}'s request."
+    },
+    "universities": {
+      "addFailed": "Failed to submit suggestion.",
+      "addError": "Error submitting suggestion.",
+      "deleteFailed": "Failed to delete pending change.",
+      "deleteError": "Error deleting pending change."
     }
+  },
+  "universitiesPage": {
+    "browseAll": "Browse All",
+    "search": "Search",
+    "findPrograms": "Find Study Programs",
+    "searchPlaceholder": "Search by name, city, or acronym…",
+    "studyProgramsPlaceholder": "Search by study program name…",
+    "noResults": "No universities found.",
+    "noStudyProgramResults": "No study programs found.",
+    "city": "City",
+    "entity": "Entity",
+    "entities": {
+      "FBIH": "Federation of B&H",
+      "RS": "Republika Srpska",
+      "BD": "Brčko District"
+    },
+    "isPublic": "Public",
+    "private": "Private",
+    "faculties": "Faculties",
+    "studyPrograms": "Study Programs",
+    "subjects": "Subjects",
+    "cycle": "Cycle",
+    "cycles": {
+      "FIRST": "First (Bachelor)",
+      "SECOND": "Second (Master)",
+      "THIRD": "Third (PhD)"
+    },
+    "ects": "ECTS",
+    "semester": "Semester",
+    "subjectType": "Type",
+    "subjectTypes": {
+      "MANDATORY": "Mandatory",
+      "ELECTIVE": "Elective"
+    },
+    "website": "Website",
+    "foundedYear": "Founded",
+    "viewDetails": "View details",
+    "hideDetails": "Hide details"
   }
 }
