@@ -17,11 +17,23 @@ function Universities() {
         <title>{`${t("title.universities")} | ${t("title.app")}`}</title>
         <meta name="description" content={t("meta.universities")} />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://bosnia-lens.netlify.app/universities" />
-        <meta property="og:url" content="https://bosnia-lens.netlify.app/universities" />
-        <meta property="og:title" content={`${t("title.universities")} | ${t("title.app")}`} />
+        <link
+          rel="canonical"
+          href="https://bosnia-lens.netlify.app/universities"
+        />
+        <meta
+          property="og:url"
+          content="https://bosnia-lens.netlify.app/universities"
+        />
+        <meta
+          property="og:title"
+          content={`${t("title.universities")} | ${t("title.app")}`}
+        />
         <meta property="og:description" content={t("meta.universities")} />
-        <meta name="twitter:title" content={`${t("title.universities")} | ${t("title.app")}`} />
+        <meta
+          name="twitter:title"
+          content={`${t("title.universities")} | ${t("title.app")}`}
+        />
         <meta name="twitter:description" content={t("meta.universities")} />
       </Helmet>
 
@@ -30,7 +42,6 @@ function Universities() {
           {t("title.universities")}
         </h1>
 
-        {/* Tabs */}
         <div className="flex gap-1 border-b border-gray-200 dark:border-gray-700">
           {TABS.map((tab) => (
             <button
@@ -48,7 +59,6 @@ function Universities() {
           ))}
         </div>
 
-        {/* Tab content */}
         <div className="w-full">
           {activeTab === "browseAll" && <GetAllUniversities />}
           {activeTab === "search" && <SearchUniversities />}

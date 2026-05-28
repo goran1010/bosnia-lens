@@ -20,7 +20,6 @@ function PendingUniversityChangesRow({ change, index, setPendingChanges }) {
       className={`rounded-md p-2 sm:p-3 ${isEven ? "bg-white dark:bg-gray-800" : "bg-gray-50 dark:bg-gray-800/60"}`}
     >
       <div className="grid gap-2 sm:gap-1 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,2fr)_auto]">
-        {/* Type */}
         <div className="flex justify-between sm:justify-start items-center gap-2">
           <span className="sm:hidden text-xs font-semibold text-gray-500 dark:text-gray-400">
             {t("contribution.change")}
@@ -32,7 +31,6 @@ function PendingUniversityChangesRow({ change, index, setPendingChanges }) {
           </span>
         </div>
 
-        {/* Entity type */}
         <div className="flex justify-between sm:justify-start items-center gap-2">
           <span className="sm:hidden text-xs font-semibold text-gray-500 dark:text-gray-400">
             {t("contribution.entityType")}
@@ -42,7 +40,6 @@ function PendingUniversityChangesRow({ change, index, setPendingChanges }) {
           </span>
         </div>
 
-        {/* Name */}
         <div className="flex justify-between sm:justify-start items-center gap-2 min-w-0">
           <span className="sm:hidden text-xs font-semibold text-gray-500 dark:text-gray-400">
             {t("endpoint.name")}
@@ -50,7 +47,6 @@ function PendingUniversityChangesRow({ change, index, setPendingChanges }) {
           <span className="text-sm truncate">{change.data?.name ?? "—"}</span>
         </div>
 
-        {/* Delete */}
         <div className="flex justify-end items-center">
           <Button
             variant="danger"
