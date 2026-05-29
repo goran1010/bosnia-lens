@@ -31,7 +31,7 @@ function StandardMenu({ setIsMenuOpen, userData }) {
         {userData && (
           <li>
             <Link className={menuLinkClass} to="/contribution-dashboard">
-              {t("nav.contribute")}
+              {t("nav.improveData")}
             </Link>
           </li>
         )}

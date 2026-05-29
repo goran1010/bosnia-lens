@@ -49,7 +49,7 @@ function MobileMenu({ setIsMenuOpen, userData }) {
               to="/contribution-dashboard"
               onClick={() => setIsMenuOpen(false)}
             >
-              {t("nav.contribute")}
+              {t("nav.improveData")}
             </Link>
           </li>
         )}
