@@ -38,10 +38,6 @@ function Universities() {
       </Helmet>
 
       <div className="w-full mx-auto px-2 sm:px-4 max-w-5xl flex flex-col gap-4">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          {t("title.universities")}
-        </h1>
-
         <div className="flex gap-1 justify-center border-b border-gray-200 dark:border-gray-700">
           {TABS.map((tab) => (
             <button
