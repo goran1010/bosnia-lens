@@ -46,7 +46,7 @@ function MobileMenu({ setIsMenuOpen, userData }) {
           <li className="w-full">
             <Link
               className={menuItemClass}
-              to="/contribution-dashboard"
+              to="/improve-data"
               onClick={() => setIsMenuOpen(false)}
             >
               {t("nav.improveData")}

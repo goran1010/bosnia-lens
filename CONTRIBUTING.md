@@ -29,7 +29,7 @@ Contributions of any kind are welcome - bug fixes, new features, data, documenta
 If you want to contribute data through the Bosnia Lens app (instead of opening a code PR), use the current workflow below:
 
 1. Create an account and confirm your email.
-2. Log in and open `/contribution-dashboard`.
+2. Log in and open `/improve-data`.
 3. Submit a suggestion to create, edit, or delete a university entity (University, Faculty, Study Program, or Subject).
 4. Your suggestion is stored as a pending change.
 5. Admin users review pending changes and either approve or reject them.

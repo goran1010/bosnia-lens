@@ -30,7 +30,7 @@ function StandardMenu({ setIsMenuOpen, userData }) {
 
         {userData && (
           <li>
-            <Link className={menuLinkClass} to="/contribution-dashboard">
+            <Link className={menuLinkClass} to="/improve-data">
               {t("nav.improveData")}
             </Link>
           </li>

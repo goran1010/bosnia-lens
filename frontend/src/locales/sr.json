@@ -4,7 +4,7 @@
     "home": "Početna",
     "api": "API Dokumentacija",
     "universities": "Univerziteti",
-    "contribute": "Doprinesi",
+    "contribute": "Poboljšaj podatke",
     "admin": "Admin",
     "profile": "Moj profil",
     "login": "Prijava",
@@ -106,26 +106,26 @@
   "home": {
     "title": "Početna stranica",
     "heading": "Dobrodošli u Bosnia Lens",
-    "description1": "Besplatan open-source projekat koji pruža strukturirane javne podatke o Bosni i Hercegovini kroz REST API i web interfejs.",
-    "description2": "Trenutno je fokus na univerzitetima i akademskim programima - sa ciljem da bosanski javni podaci budu otvoreni, pretraživi i prilagođeni programerima.",
-    "availableData": "Dostupni podaci",
-    "availableDataUniversities": "Univerziteti - pregled institucija, fakulteta, studijskih programa i predmeta",
-    "contributing": "Doprinos",
-    "contributingReadmePrefix": "Pročitajte",
-    "contributingReadmeSuffix": "za detalje o pravilima ponašanja i postupku slanja pull request-ova.",
-    "contributingReadme": "Pročitajte CONTRIBUTING.md za detalje o pravilima ponašanja i postupku slanja pull request-ova.",
-    "contributingWelcome": "Dobrodošli su doprinosi kroz podatke, unapređenja koda, dokumentaciju i prijave grešaka.",
-    "getStarted": "Počni",
+    "intro": "Besplatan open-source projekat koji gradi strukturiranu, pretraživu bazu javnih podataka o Bosni i Hercegovini. Fokus je na univerzitetima - institucijama, fakultetima, studijskim programima i predmetima.",
+    "exploreHeading": "Istražite podatke",
+    "exploreDescription": "Pregledajte univerzitete širom Bosne i Hercegovine. Pogledajte fakultete, studijske programe i predmete. Pretražujte po nazivu, gradu ili akronimu.",
     "card": {
       "universities": {
         "title": "Univerziteti",
         "description": "Pregledajte univerzitete, fakultete, studijske programe i predmete širom Bosne i Hercegovine."
-      },
-      "restApi": {
-        "title": "REST API",
-        "description": "Uključite Bosnia Lens podatke u svoju aplikaciju preko javnog REST API-ja. Pogledajte dokumentaciju i dostupne endpoint-e."
       }
-    }
+    },
+    "improveHeading": "Unaprijedite podatke",
+    "improveDescription": "Znate nešto što nedostaje ili nije ispravno? Registrovani korisnici mogu predlagati izmjene - dodavanja, ispravke ili brisanja - koje admini pregledaju i primjenjuju.",
+    "improveStep1": "Napravite besplatan nalog i potvrdite email",
+    "improveStep2": "Idite na stranicu Poboljšaj podatke i pošaljite prijedlog",
+    "improveStep3": "Admini pregledaju prijedloge i primjenjuju odobrene izmjene na aktivni skup podataka",
+    "improveContribute": "Poboljšaj podatke",
+    "improveSignUp": "Kreirajte nalog",
+    "forDevsHeading": "Za programere",
+    "forDevsDescription": "Bosnia Lens nudi besplatan, javni REST API bez autentifikacije. Preuzmite sve univerzitete, pretražujte po nazivu ili gradu, dobijte potpune detalje za jedan univerzitet ili pretražujte studijske programe po svim institucijama.",
+    "forDevsNote": "Autentifikacija nije potrebna za javne endpoint-e.",
+    "forDevsCta": "Pogledajte API dokumentaciju"
   },
   "api": {
     "title": "REST API",

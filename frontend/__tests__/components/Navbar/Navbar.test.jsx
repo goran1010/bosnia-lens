@@ -128,7 +128,7 @@ describe("render Navbar mobile menu", () => {
     await openMobileMenu();
 
     const contributeLinks = document.querySelectorAll(
-      "#mobile-menu a[href='/contribution-dashboard']",
+      "#mobile-menu a[href='/improve-data']",
     );
     const adminLinks = document.querySelectorAll(
       "#mobile-menu a[href='/admin-dashboard']",
@@ -144,7 +144,7 @@ describe("render Navbar mobile menu", () => {
     await openMobileMenu();
 
     const contributeLinks = document.querySelectorAll(
-      "#mobile-menu a[href='/contribution-dashboard']",
+      "#mobile-menu a[href='/improve-data']",
     );
     const adminLinks = document.querySelectorAll(
       "#mobile-menu a[href='/admin-dashboard']",
@@ -160,7 +160,7 @@ describe("render Navbar mobile menu", () => {
     await openMobileMenu();
 
     const contributeLinks = document.querySelectorAll(
-      "#mobile-menu a[href='/contribution-dashboard']",
+      "#mobile-menu a[href='/improve-data']",
     );
     const adminLinks = document.querySelectorAll(
       "#mobile-menu a[href='/admin-dashboard']",

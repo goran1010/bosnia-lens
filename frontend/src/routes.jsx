@@ -33,7 +33,7 @@ const routes = [
       },
       {
         element: <ContributionDashboard />,
-        path: "contribution-dashboard",
+        path: "improve-data",
       },
       {
         element: <AdminDashboard />,

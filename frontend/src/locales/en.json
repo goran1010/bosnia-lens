@@ -4,7 +4,7 @@
     "home": "Home",
     "api": "API Docs",
     "universities": "Universities",
-    "contribute": "Contribute",
+    "contribute": "Improve Data",
     "admin": "Admin Dashboard",
     "profile": "My Profile",
     "login": "Log In",
@@ -106,26 +106,26 @@
   "home": {
     "title": "Home Page",
     "heading": "Welcome to Bosnia Lens",
-    "description1": "A free, open-source project providing structured public data about Bosnia and Herzegovina through a REST API and web interface.",
-    "description2": "Currently focused on universities and academic programs - making Bosnian public data open, searchable, and developer-friendly.",
-    "availableData": "Available data",
-    "availableDataUniversities": "Universities - browse institutions, faculties, study programs, and subjects",
-    "contributing": "Contributing",
-    "contributingReadmePrefix": "Please read",
-    "contributingReadmeSuffix": "for details on our code of conduct and the process for submitting pull requests.",
-    "contributingReadme": "Please read CONTRIBUTING.md for details on our code of conduct and the process for submitting pull requests.",
-    "contributingWelcome": "We welcome contributions of data, code improvements, documentation, and bug reports.",
-    "getStarted": "Get started",
+    "intro": "A free, open-source project building a structured, searchable database of public data about Bosnia and Herzegovina. Focused on universities - institutions, faculties, study programs, and subjects.",
+    "exploreHeading": "Explore the Data",
+    "exploreDescription": "Browse universities across Bosnia and Herzegovina. View faculties, study programs, and subjects. Search by name, city, or acronym.",
     "card": {
       "universities": {
         "title": "Universities",
         "description": "Browse universities, faculties, study programs, and subjects across Bosnia and Herzegovina."
-      },
-      "restApi": {
-        "title": "REST API",
-        "description": "Integrate Bosnia Lens data into your own app via our public REST API. View documentation and available endpoints."
       }
-    }
+    },
+    "improveHeading": "Improve the Data",
+    "improveDescription": "Know something that's missing or incorrect? Registered users can suggest changes - additions, edits, or deletions - which are reviewed and applied by admins.",
+    "improveStep1": "Create a free account and confirm your email",
+    "improveStep2": "Go to the Improve Data page and submit your suggestion",
+    "improveStep3": "Admins review submissions and apply approved changes to the live dataset",
+    "improveContribute": "Improve Data",
+    "improveSignUp": "Create an Account",
+    "forDevsHeading": "For Developers",
+    "forDevsDescription": "Bosnia Lens exposes a free, unauthenticated REST API. Fetch all universities, search by name or city, retrieve full detail for a single university, or search study programs across all institutions.",
+    "forDevsNote": "No authentication required for public endpoints.",
+    "forDevsCta": "View API Docs"
   },
   "api": {
     "title": "REST API",
