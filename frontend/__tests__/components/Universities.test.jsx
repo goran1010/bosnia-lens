@@ -25,11 +25,12 @@ function Wrapper() {
   );
 }
 
-describe("Universities page", () => {
-  test("renders tab buttons: Browse All, Search, Find Study Programs", () => {
+describe("Universities page", async () => {
+  test("renders tab buttons: Browse All, Search, Find Study Programs", async () => {
     render(<Wrapper />);
+
     expect(
-      screen.getByRole("button", { name: /Browse All/i }),
+      await screen.findByRole("button", { name: /Browse All/i }),
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Search/i })).toBeInTheDocument();
     expect(

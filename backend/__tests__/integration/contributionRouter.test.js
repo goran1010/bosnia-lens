@@ -2,128 +2,108 @@ import request from "supertest";
 import { describe, test, expect } from "vitest";
 import { app } from "../../app.js";
 import { createAndLoginUser } from "../utils/createUserAndLogin.js";
-import { postalCodesModel } from "../../models/postalCodesModel.js";
-import { pendingChangesPostalCodeModel } from "../../models/pendingChangesPostalCodeModel.js";
+import { pendingChangesUniversityModel } from "../../models/pendingChangesUniversityModel.js";
 import { usersModel } from "../../models/usersModel.js";
 
-const CREATE_PENDING_CODE = 43101;
-const EDIT_EXISTING_CODE = 43102;
-const DELETE_EXISTING_CODE = 43103;
-const DELETE_PENDING_CHANGE_CODE = 43104;
-
-describe("Contributor Router - POST /users/contribution/postal-codes", () => {
-  test("Responds with status 201 and message if pending changes created successfully", async () => {
-    await pendingChangesPostalCodeModel.delete({ code: CREATE_PENDING_CODE });
-
+describe("Contributor Router - POST /users/contribution/universities", () => {
+  test("Responds with status 201 and message if suggestion created successfully", async () => {
     const agent = request.agent(app);
     const loginResponse = await createAndLoginUser(agent);
-    const newPostalCode = {
-      city: "Test",
-      code: String(CREATE_PENDING_CODE),
-      post: "BH_POSTA",
-    };
 
-    const response = await agent
-      .post("/users/contribution/postal-codes")
-      .send(newPostalCode);
+    const response = await agent.post("/users/contribution/universities").send({
+      entityType: "UNIVERSITY",
+      data: {
+        name: "Test Integration POST University",
+        city: "Test City",
+        entity: "FBIH",
+        ownership: "JAVNA",
+      },
+    });
     const expectedResponse = {
       status: 201,
       body: expect.objectContaining({
-        message:
-          "New postal code suggested. Admin will review the suggestion and decide whether to accept it or not.",
+        message: "Suggestion submitted. An admin will review it.",
       }),
     };
 
     expect(response).toEqual(expect.objectContaining(expectedResponse));
 
-    await pendingChangesPostalCodeModel.delete({ code: CREATE_PENDING_CODE });
+    const pendingChanges = await pendingChangesUniversityModel.findMany({
+      userId: loginResponse.body.data.id,
+    });
+    for (const pc of pendingChanges) {
+      await pendingChangesUniversityModel.delete({ id: pc.id });
+    }
     await usersModel.deleteUser({ id: loginResponse.body.data.id });
   });
 });
 
-describe("Contributor Router - PUT  /users/contribution/postal-codes", () => {
-  test("Responds with status 200 and message if pending change edit added successfully", async () => {
-    await pendingChangesPostalCodeModel.delete({ code: EDIT_EXISTING_CODE });
-    await postalCodesModel.deleteCode({ code: EDIT_EXISTING_CODE });
-
+describe("Contributor Router - PUT /users/contribution/universities", () => {
+  test("Responds with status 201 and message if edit suggestion added successfully", async () => {
     const agent = request.agent(app);
     const loginResponse = await createAndLoginUser(agent);
 
-    await postalCodesModel.createNew({
-      city: "Test",
-      code: String(EDIT_EXISTING_CODE),
-      post: "BH_POSTA",
+    const response = await agent.put("/users/contribution/universities").send({
+      entityType: "UNIVERSITY",
+      targetId: 1,
+      data: { name: "Updated University Name" },
     });
-
-    const editedPostalCode = {
-      city: "Edited Test",
-      code: String(EDIT_EXISTING_CODE),
-      post: "HP_MOSTAR",
-    };
-
-    const response = await agent
-      .put("/users/contribution/postal-codes")
-      .send(editedPostalCode);
     const expectedResponse = {
-      status: 200,
+      status: 201,
       body: expect.objectContaining({
-        message:
-          "Postal code edit suggested. Admin will review the suggestion and decide whether to accept it or not.",
+        message: "Edit suggestion submitted. An admin will review it.",
       }),
     };
 
     expect(response).toEqual(expect.objectContaining(expectedResponse));
 
-    await pendingChangesPostalCodeModel.delete({ code: EDIT_EXISTING_CODE });
-    await postalCodesModel.deleteCode({ code: EDIT_EXISTING_CODE });
+    const pendingChanges = await pendingChangesUniversityModel.findMany({
+      userId: loginResponse.body.data.id,
+    });
+    for (const pc of pendingChanges) {
+      await pendingChangesUniversityModel.delete({ id: pc.id });
+    }
     await usersModel.deleteUser({ id: loginResponse.body.data.id });
   });
 });
 
-describe("Contributor Router - DELETE /users/contribution/postal-codes", () => {
-  test("Responds with status 201 and message if pending change deletion added successfully", async () => {
-    await pendingChangesPostalCodeModel.delete({ code: DELETE_EXISTING_CODE });
-    await postalCodesModel.deleteCode({ code: DELETE_EXISTING_CODE });
-
-    await postalCodesModel.createNew({
-      city: "Test",
-      code: DELETE_EXISTING_CODE,
-      post: "BH_POSTA",
-    });
-
+describe("Contributor Router - DELETE /users/contribution/universities", () => {
+  test("Responds with status 201 and message if deletion suggestion added successfully", async () => {
     const agent = request.agent(app);
     const loginResponse = await createAndLoginUser(agent);
 
     const response = await agent
-      .delete("/users/contribution/postal-codes")
+      .delete("/users/contribution/universities")
       .send({
-        code: String(DELETE_EXISTING_CODE),
-        city: "Test",
-        post: "BH_POSTA",
+        entityType: "UNIVERSITY",
+        targetId: 1,
       });
     const expectedResponse = {
       status: 201,
       body: expect.objectContaining({
-        message:
-          "Postal code deletion suggested. Admin will review the suggestion and decide whether to accept it or not.",
+        message: "Deletion suggestion submitted. An admin will review it.",
       }),
     };
 
     expect(response).toEqual(expect.objectContaining(expectedResponse));
 
-    await pendingChangesPostalCodeModel.delete({ code: DELETE_EXISTING_CODE });
-    await postalCodesModel.deleteCode({ code: DELETE_EXISTING_CODE });
+    const pendingChanges = await pendingChangesUniversityModel.findMany({
+      userId: loginResponse.body.data.id,
+    });
+    for (const pc of pendingChanges) {
+      await pendingChangesUniversityModel.delete({ id: pc.id });
+    }
     await usersModel.deleteUser({ id: loginResponse.body.data.id });
   });
 });
 
-describe("Contributor Router - GET /users/contribution/pending-changes/postal-codes", () => {
+describe("Contributor Router - GET /users/contribution/pending-changes/universities", () => {
   test("Responds with status 200 and message if pending changes retrieved successfully", async () => {
     const agent = request.agent(app);
     const loginResponse = await createAndLoginUser(agent);
 
     const response = await agent.get(
-      "/users/contribution/pending-changes/postal-codes",
+      "/users/contribution/pending-changes/universities",
     );
     const expectedResponse = {
       status: 200,
@@ -138,21 +118,25 @@ describe("Contributor Router - GET /users/contribution/pending-changes/postal-co
   });
 });
 
-describe("Contributor Router - DELETE /users/contribution/pending-changes/postal-codes", () => {
+describe("Contributor Router - DELETE /users/contribution/pending-changes/universities", () => {
   test("Responds with status 200 and message if pending change deleted successfully", async () => {
     const agent = request.agent(app);
     const loginResponse = await createAndLoginUser(agent);
 
-    const pendingChange = await pendingChangesPostalCodeModel.create({
+    const pendingChange = await pendingChangesUniversityModel.create({
       userId: loginResponse.body.data.id,
-      code: DELETE_PENDING_CHANGE_CODE,
+      entityType: "UNIVERSITY",
       typeOfChange: "CREATE",
-      city: "Test",
-      post: "BH_POSTA",
+      data: {
+        name: "Test Delete Pending University",
+        city: "Test City",
+        entity: "FBIH",
+        ownership: "JAVNA",
+      },
     });
 
     const response = await agent
-      .delete("/users/contribution/pending-changes/postal-codes")
+      .delete("/users/contribution/pending-changes/universities")
       .send({ id: pendingChange.id });
     const expectedResponse = {
       status: 200,

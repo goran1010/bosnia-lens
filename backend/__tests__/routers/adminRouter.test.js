@@ -1,7 +1,7 @@
 import request from "supertest";
 import { describe, test, expect, vi, beforeEach } from "vitest";
 import { app } from "../../app.js";
-import { pendingChangesPostalCodeModel } from "../../models/pendingChangesPostalCodeModel.js";
+import { pendingChangesUniversityModel } from "../../models/pendingChangesUniversityModel.js";
 import { transactionModel } from "../../models/transactionModel.js";
 
 let mockedUser = null;
@@ -27,7 +27,7 @@ beforeEach(() => {
 
 function mockTransactionWrapper(result = true) {
   return vi
-    .spyOn(transactionModel, "approvePendingChange")
+    .spyOn(transactionModel, "approveUniversityPendingChange")
     .mockResolvedValue(result);
 }
 
@@ -67,13 +67,13 @@ describe("Admin Router - GET /users/admin//pending-changes", () => {
   });
 
   test("Responds with status 200 and all pending changes if role ADMIN", async () => {
-    vi.spyOn(pendingChangesPostalCodeModel, "findMany").mockResolvedValueOnce([
+    vi.spyOn(pendingChangesUniversityModel, "findMany").mockResolvedValueOnce([
       {
-        id: 1,
-        city: "Pending City",
-        code: 54321,
-        post: "",
+        id: "a1b2c3d4-e5f6-4789-abcd-000000000001",
+        entityType: "UNIVERSITY",
         typeOfChange: "DELETE",
+        targetId: 1,
+        data: {},
       },
     ]);
 
@@ -91,11 +91,11 @@ describe("Admin Router - GET /users/admin//pending-changes", () => {
         message: "Pending changes retrieved successfully.",
         data: [
           {
-            id: 1,
-            city: "Pending City",
-            code: 54321,
-            post: "",
+            id: "a1b2c3d4-e5f6-4789-abcd-000000000001",
+            entityType: "UNIVERSITY",
             typeOfChange: "DELETE",
+            targetId: 1,
+            data: {},
           },
         ],
       },
@@ -145,7 +145,7 @@ describe("Admin Router - DELETE /decline-pending-change", () => {
   });
 
   test("Responds with status 200 and all pending changes if role ADMIN", async () => {
-    vi.spyOn(pendingChangesPostalCodeModel, "delete").mockResolvedValueOnce(
+    vi.spyOn(pendingChangesUniversityModel, "delete").mockResolvedValueOnce(
       "Successfully deleted pending change",
     );
 
@@ -224,6 +224,7 @@ describe("Admin Router - POST /users/admin/approve-pending-change", () => {
       .post("/users/admin/approve-pending-change")
       .send({
         id: "a1b2c3d4-e5f6-4789-abcd-000000000999",
+        entityType: "UNIVERSITY",
         typeOfChange: "CREATE",
       });
     const expectedResponse = {
@@ -252,6 +253,7 @@ describe("Admin Router - POST /users/admin/approve-pending-change", () => {
       .post("/users/admin/approve-pending-change")
       .send({
         id: "a1b2c3d4-e5f6-4789-abcd-000000000001",
+        entityType: "UNIVERSITY",
         typeOfChange: "CREATE",
       });
     const expectedResponse = {
@@ -263,8 +265,11 @@ describe("Admin Router - POST /users/admin/approve-pending-change", () => {
     };
 
     expect(response).toEqual(expect.objectContaining(expectedResponse));
-    expect(transactionModel.approvePendingChange).toHaveBeenCalledWith({
+    expect(
+      transactionModel.approveUniversityPendingChange,
+    ).toHaveBeenCalledWith({
       id: "a1b2c3d4-e5f6-4789-abcd-000000000001",
+      entityType: "UNIVERSITY",
       typeOfChange: "CREATE",
     });
   });
