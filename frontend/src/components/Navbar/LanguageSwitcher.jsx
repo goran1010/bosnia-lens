@@ -1,9 +1,8 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { RootContext } from "../../contextData/RootContext";
 import { Select } from "../sharedComponents/Select";
 
 function LanguageSwitcher({ setLanguage }) {
-  const [languageLabel, setLanguageLabel] = useState("");
   const { addNotification } = useContext(RootContext);
   const { t } = useContext(RootContext);
 
@@ -11,7 +10,6 @@ function LanguageSwitcher({ setLanguage }) {
     const nextLanguage = e.target.value;
     if (!nextLanguage) return;
     setLanguage(nextLanguage);
-    setLanguageLabel(nextLanguage);
 
     addNotification({
       type: "info",
@@ -29,7 +27,7 @@ function LanguageSwitcher({ setLanguage }) {
     <Select
       id="language-switcher"
       aria-label={t("language.switchAria")}
-      value={languageLabel}
+      value={""}
       onChange={handleLanguageChange}
     >
       <option className="font-bold" value="">

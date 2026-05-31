@@ -1,9 +1,8 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { RootContext } from "../../contextData/RootContext";
 import { Select } from "../sharedComponents/Select";
 
 function ThemeSwitcher({ setMode }) {
-  const [themeLabel, setThemeLabel] = useState("");
   const { addNotification } = useContext(RootContext);
   const { t } = useContext(RootContext);
 
@@ -11,7 +10,6 @@ function ThemeSwitcher({ setMode }) {
     if (!e.target.value) return;
     const nextTheme = e.target.value;
 
-    setThemeLabel(nextTheme);
     setMode(nextTheme);
     addNotification({
       type: "info",
@@ -22,7 +20,7 @@ function ThemeSwitcher({ setMode }) {
   return (
     <Select
       id="theme-switcher"
-      value={themeLabel}
+      value={""}
       aria-label={t("nav.toggleThemeAria")}
       onChange={handleThemeChange}
     >
