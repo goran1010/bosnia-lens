@@ -10,9 +10,6 @@ const DELAY_BETWEEN_ATTEMPTS = 2000;
 function useServerWakeUp({ addNotification, removeNotification, t }) {
   const [serverStatus, setServerStatus] = useState(SERVER_STATUS.LIVE);
   const tRef = useRef(t);
-  useEffect(() => {
-    tRef.current = t;
-  });
 
   useEffect(() => {
     // Limit the number of wake-up attempts to prevent infinite loops

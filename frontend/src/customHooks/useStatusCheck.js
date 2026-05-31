@@ -6,9 +6,6 @@ function useStatusCheck(addNotification, t, serverStatus) {
   const [userData, setUserData] = useState(null);
 
   const tRef = useRef(t);
-  useEffect(() => {
-    tRef.current = t;
-  });
 
   useEffect(() => {
     let isCancelled = false;
