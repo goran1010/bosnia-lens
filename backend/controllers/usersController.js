@@ -1,7 +1,8 @@
 import { sendError, sendSuccess } from "../utils/response.js";
 import { sanitizeUser } from "../utils/sanitizeUser.js";
+import { NODE_ENV } from "../config/env.js";
 
-const IS_PRODUCTION = process.env.NODE_ENV === "production";
+const IS_PRODUCTION = NODE_ENV === "production";
 const NUMBER_OF_DAYS = 30;
 
 class UsersController {

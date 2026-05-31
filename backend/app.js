@@ -1,8 +1,7 @@
 import express from "express";
 const app = express();
 import cors from "cors";
-
-import "./config/envCheck.js";
+import { FRONTEND_URL } from "./config/env.js";
 
 import { sessionMiddleware } from "./config/sessionMiddleware.js";
 import { passport } from "./config/passport.js";
@@ -23,8 +22,6 @@ import { sendError } from "./utils/response.js";
 import { apiRouter } from "./routes/apiRouter.js";
 import { authRouter } from "./routes/authRouter.js";
 import { usersRouter } from "./routes/usersRouter.js";
-
-const FRONTEND_URL = process.env.FRONTEND_URL;
 
 // Trust first proxy (required for Koyeb)
 app.set("trust proxy", 1);

@@ -8,9 +8,7 @@ import { matchedData } from "express-validator";
 import { sendError, sendSuccess } from "../utils/response.js";
 import { sanitizeUser } from "../utils/sanitizeUser.js";
 import { pendingUserModel } from "../models/pendingUsersModel.js";
-
-const BACKEND_URL = process.env.BACKEND_URL;
-const FRONTEND_URL = process.env.FRONTEND_URL;
+import { BACKEND_URL, FRONTEND_URL } from "../config/env.js";
 
 class AuthController {
   async signup(req, res) {
