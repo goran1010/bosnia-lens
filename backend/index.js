@@ -1,6 +1,5 @@
 import { app } from "./app.js";
-
-const PORT = process.env.PORT;
+import { PORT } from "./config/env.js";
 
 const server = app.listen(PORT, (error) => {
   if (error) throw error;

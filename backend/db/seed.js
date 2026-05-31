@@ -3,14 +3,11 @@ import fs from "node:fs";
 import path from "node:path";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/client.js";
-import "dotenv/config";
+import { DATABASE_URL, NODE_ENV, TEST_DATABASE_URL } from "../config/env.js";
 
 const __dirname = import.meta.dirname;
 
-const connectionString =
-  process.env.NODE_ENV === "test"
-    ? process.env.TEST_DATABASE_URL
-    : process.env.DATABASE_URL;
+const connectionString = NODE_ENV === "test" ? TEST_DATABASE_URL : DATABASE_URL;
 
 if (!connectionString) {
   throw new Error("Database URL not found in environment variables.");

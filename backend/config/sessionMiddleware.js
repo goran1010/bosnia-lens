@@ -1,10 +1,10 @@
-const NUMBER_OF_DAYS = 30;
-const COOKIE_SECRET = process.env.COOKIE_SECRET;
-const IS_PRODUCTION = process.env.NODE_ENV === "production";
-
 import expressSession from "express-session";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import { prisma } from "../db/prisma.js";
+import { COOKIE_SECRET, NODE_ENV } from "./env.js";
+
+const NUMBER_OF_DAYS = 30;
+const IS_PRODUCTION = NODE_ENV === "production";
 
 const sessionMiddleware = expressSession({
   name: "sessionId",
