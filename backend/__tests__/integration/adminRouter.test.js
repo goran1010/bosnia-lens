@@ -4,7 +4,8 @@ import { app } from "../../app.js";
 import { createAndLoginUser } from "../utils/createUserAndLogin.js";
 import { createNewUser } from "../utils/createNewUser.js";
 import { usersModel } from "../../models/usersModel.js";
-import { pendingChangesPostalCodeModel } from "../../models/pendingChangesPostalCodeModel.js";
+import { pendingChangesUniversityModel } from "../../models/pendingChangesUniversityModel.js";
+import { universitiesModel } from "../../models/universitiesModel.js";
 
 describe("Admin Router - GET /users/admin/pending-changes", () => {
   test("Responds with status 200 and all pending changes if role ADMIN", async () => {
@@ -14,11 +15,16 @@ describe("Admin Router - GET /users/admin/pending-changes", () => {
 
     const userInDb = await usersModel.create(userRequested);
 
-    await pendingChangesPostalCodeModel.create({
-      city: "Test City",
-      code: 1234,
+    const pendingChange = await pendingChangesUniversityModel.create({
       userId: userInDb.id,
+      entityType: "UNIVERSITY",
       typeOfChange: "CREATE",
+      data: {
+        name: "Test Admin GET University",
+        city: "Test City",
+        entity: "FBIH",
+        ownership: "JAVNA",
+      },
     });
 
     const agent = request.agent(app);
@@ -34,7 +40,7 @@ describe("Admin Router - GET /users/admin/pending-changes", () => {
 
     expect(response).toEqual(expect.objectContaining(expectedResponse));
 
-    await pendingChangesPostalCodeModel.delete({ code: 1234 });
+    await pendingChangesUniversityModel.delete({ id: pendingChange.id });
     await usersModel.deleteUser({ id: userInDb.id });
   });
 });
@@ -47,11 +53,16 @@ describe("Admin Router - DELETE /users/admin/decline-pending-change", () => {
 
     const userInDb = await usersModel.create(userRequested);
 
-    const pendingChange = await pendingChangesPostalCodeModel.create({
-      city: "Test City",
-      code: 1234,
+    const pendingChange = await pendingChangesUniversityModel.create({
       userId: userInDb.id,
+      entityType: "UNIVERSITY",
       typeOfChange: "CREATE",
+      data: {
+        name: "Test Decline University",
+        city: "Test City",
+        entity: "FBIH",
+        ownership: "JAVNA",
+      },
     });
 
     const agent = request.agent(app);
@@ -71,7 +82,6 @@ describe("Admin Router - DELETE /users/admin/decline-pending-change", () => {
 
     expect(response).toEqual(expect.objectContaining(expectedResponse));
 
-    await pendingChangesPostalCodeModel.delete({ code: 1234 });
     await usersModel.deleteUser({ id: userInDb.id });
   });
 });
@@ -84,11 +94,19 @@ describe("Admin Router - POST /users/admin/approve-pending-change", () => {
 
     const userInDb = await usersModel.create(userRequested);
 
-    const pendingChange = await pendingChangesPostalCodeModel.create({
+    const university = await universitiesModel.createUniversity({
+      name: "Test Approve University",
       city: "Test City",
-      code: 1234,
+      entity: "FBIH",
+      ownership: "JAVNA",
+    });
+
+    const pendingChange = await pendingChangesUniversityModel.create({
       userId: userInDb.id,
+      entityType: "UNIVERSITY",
       typeOfChange: "DELETE",
+      targetId: university.id,
+      data: {},
     });
 
     const agent = request.agent(app);
@@ -98,6 +116,7 @@ describe("Admin Router - POST /users/admin/approve-pending-change", () => {
       .post("/users/admin/approve-pending-change")
       .send({
         id: pendingChange.id,
+        entityType: "UNIVERSITY",
         typeOfChange: "DELETE",
       });
     const expectedResponse = {
@@ -110,7 +129,6 @@ describe("Admin Router - POST /users/admin/approve-pending-change", () => {
 
     expect(response).toEqual(expect.objectContaining(expectedResponse));
 
-    await pendingChangesPostalCodeModel.delete({ code: 1234 });
     await usersModel.deleteUser({ id: userInDb.id });
   });
 });

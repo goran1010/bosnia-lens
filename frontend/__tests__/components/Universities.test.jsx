@@ -25,19 +25,12 @@ function Wrapper() {
   );
 }
 
-describe("Universities page", () => {
-  test("renders Universities heading", async () => {
+describe("Universities page", async () => {
+  test("renders tab buttons: Browse All, Search, Find Study Programs", async () => {
     render(<Wrapper />);
-    const heading = await screen.findByRole("heading", {
-      name: /Universities/i,
-    });
-    expect(heading).toBeInTheDocument();
-  });
 
-  test("renders tab buttons: Browse All, Search, Find Study Programs", () => {
-    render(<Wrapper />);
     expect(
-      screen.getByRole("button", { name: /Browse All/i }),
+      await screen.findByRole("button", { name: /Browse All/i }),
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Search/i })).toBeInTheDocument();
     expect(

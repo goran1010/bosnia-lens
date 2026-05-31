@@ -1,8 +1,7 @@
 import request from "supertest";
 import { describe, test, expect, vi, beforeEach } from "vitest";
-import { postalCodesModel } from "../../models/postalCodesModel.js";
+import { pendingChangesUniversityModel } from "../../models/pendingChangesUniversityModel.js";
 import { app } from "../../app.js";
-import { pendingChangesPostalCodeModel } from "../../models/pendingChangesPostalCodeModel.js";
 
 let mockedUser = null;
 
@@ -25,7 +24,7 @@ beforeEach(() => {
   mockedUser = null;
 });
 
-describe("POST /users/contribution/postal-codes", () => {
+describe("POST /users/contribution/universities", () => {
   test("responds with status 401 and You need to be logged in to access this route if not logged in", async () => {
     const notLoggedInResponse = {
       error: "You are not logged in.",
@@ -33,7 +32,7 @@ describe("POST /users/contribution/postal-codes", () => {
     };
 
     const response = await request(app).post(
-      "/users/contribution/postal-codes",
+      "/users/contribution/universities",
     );
     const expectedResponse = {
       status: 401,
@@ -43,7 +42,7 @@ describe("POST /users/contribution/postal-codes", () => {
     expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
-  test("No code sent responds with status 400 and Code is required", async () => {
+  test("No entityType sent responds with status 400 and Entity type is required", async () => {
     mockedUser = {
       id: 1,
       username: "user1",
@@ -51,8 +50,8 @@ describe("POST /users/contribution/postal-codes", () => {
     };
     const agent = request.agent(app);
 
-    const expectedResponse = "Validation failed: code: Code is required";
-    const response = await agent.post("/users/contribution/postal-codes");
+    const expectedResponse = "Entity type is required";
+    const response = await agent.post("/users/contribution/universities");
     const expectedResponseData = {
       status: 400,
       body: expect.objectContaining({
@@ -65,7 +64,22 @@ describe("POST /users/contribution/postal-codes", () => {
     expect(response).toEqual(expect.objectContaining(expectedResponseData));
   });
 
-  test("Responds with status 400 and Postal codes must have 5 numbers if code sent is not 5 numbers", async () => {
+  test("Valid request responds with status 201 and Suggestion submitted", async () => {
+    const mockResult = {
+      id: "uuid-1",
+      entityType: "UNIVERSITY",
+      typeOfChange: "CREATE",
+      data: {
+        name: "TestCity University",
+        city: "TestCity",
+        entity: "FBIH",
+        ownership: "JAVNA",
+      },
+    };
+    vi.spyOn(pendingChangesUniversityModel, "create").mockResolvedValue(
+      mockResult,
+    );
+
     mockedUser = {
       id: 1,
       username: "user1",
@@ -73,87 +87,35 @@ describe("POST /users/contribution/postal-codes", () => {
     };
     const agent = request.agent(app);
 
-    const expectedResponse = "Postal codes must have 5 numbers";
-    const responseCode = await agent
-      .post("/users/contribution/postal-codes")
-      .send({ city: "TestCity", code: "1234", post: "" });
-    const expectedResponseData = {
-      status: 400,
-      body: expect.objectContaining({
-        error: expect.objectContaining({
-          message: expect.stringContaining(expectedResponse),
-        }),
-      }),
-    };
-
-    expect(responseCode).toEqual(expect.objectContaining(expectedResponseData));
-  });
-
-  test("Responds with status 400 and Must be a number if code sent is not a number", async () => {
-    mockedUser = {
-      id: 1,
-      username: "user1",
-      email: "user1@example.com",
-    };
-    const agent = request.agent(app);
-
-    const expectedResponse = "Must be a number";
-    const responseCode = await agent
-      .post("/users/contribution/postal-codes")
-      .send({ city: "TestCity", code: "abcde", post: "" });
-    const expectedResponseData = {
-      status: 400,
-      body: expect.objectContaining({
-        error: expect.objectContaining({
-          message: expect.stringContaining(expectedResponse),
-        }),
-      }),
-    };
-
-    expect(responseCode).toEqual(expect.objectContaining(expectedResponseData));
-  });
-
-  test("Valid request responds with status 201 and New postal code row created", async () => {
-    vi.spyOn(pendingChangesPostalCodeModel, "create").mockResolvedValue({
-      city: "TestCity",
-      code: "12345",
-      post: "",
+    const response = await agent.post("/users/contribution/universities").send({
+      entityType: "UNIVERSITY",
+      data: {
+        name: "TestCity University",
+        city: "TestCity",
+        entity: "FBIH",
+        ownership: "JAVNA",
+      },
     });
-
-    mockedUser = {
-      id: 1,
-      username: "user1",
-      email: "user1@example.com",
-    };
-
-    const agent = request.agent(app);
-
-    const expectedResponse = {
-      message:
-        "New postal code suggested. Admin will review the suggestion and decide whether to accept it or not.",
-      data: { city: "TestCity", code: "12345", post: "" },
-    };
-
-    const response = await agent
-      .post("/users/contribution/postal-codes")
-      .send({ city: "TestCity", code: "12345", post: "" });
     const expectedResponseData = {
       status: 201,
-      body: expectedResponse,
+      body: {
+        message: "Suggestion submitted. An admin will review it.",
+        data: mockResult,
+      },
     };
 
     expect(response).toEqual(expect.objectContaining(expectedResponseData));
   });
 });
 
-describe("PUT /users/contribution/postal-codes", () => {
+describe("PUT /users/contribution/universities", () => {
   test("responds with status 401 and You need to be logged in to access this route if not logged in", async () => {
     const notLoggedInResponse = {
       error: "You are not logged in.",
       details: [{ msg: null }],
     };
 
-    const response = await request(app).put("/users/contribution/postal-codes");
+    const response = await request(app).put("/users/contribution/universities");
     const expectedResponse = {
       status: 401,
       body: notLoggedInResponse,
@@ -162,7 +124,7 @@ describe("PUT /users/contribution/postal-codes", () => {
     expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
-  test("No code sent responds with status 400 and Code is required", async () => {
+  test("No entityType sent responds with status 400 and Entity type is required", async () => {
     mockedUser = {
       id: 1,
       username: "user1",
@@ -170,8 +132,8 @@ describe("PUT /users/contribution/postal-codes", () => {
     };
     const agent = request.agent(app);
 
-    const expectedResponse = "Code is required";
-    const responseCode = await agent.put("/users/contribution/postal-codes");
+    const expectedResponse = "Entity type is required";
+    const responseCode = await agent.put("/users/contribution/universities");
     const expectedResponseData = {
       status: 400,
       body: expect.objectContaining({
@@ -184,18 +146,17 @@ describe("PUT /users/contribution/postal-codes", () => {
     expect(responseCode).toEqual(expect.objectContaining(expectedResponseData));
   });
 
-  test("Valid request responds with status 200 and Postal code edit suggested", async () => {
-    vi.spyOn(pendingChangesPostalCodeModel, "create").mockResolvedValue({
-      city: "TestCity",
-      code: "12345",
-      post: "",
-    });
-
-    vi.spyOn(postalCodesModel, "getPostalCodeByCode").mockResolvedValue({
-      city: "TestCity",
-      code: "12345",
-      post: "",
-    });
+  test("Valid request responds with status 201 and Edit suggestion submitted", async () => {
+    const mockResult = {
+      id: "uuid-2",
+      entityType: "UNIVERSITY",
+      typeOfChange: "UPDATE",
+      targetId: 1,
+      data: { name: "Updated Name" },
+    };
+    vi.spyOn(pendingChangesUniversityModel, "create").mockResolvedValue(
+      mockResult,
+    );
 
     mockedUser = {
       id: 1,
@@ -204,25 +165,26 @@ describe("PUT /users/contribution/postal-codes", () => {
     };
     const agent = request.agent(app);
 
-    const expectedResponse = {
-      message:
-        "Postal code edit suggested. Admin will review the suggestion and decide whether to accept it or not.",
-      data: { city: "TestCity", code: "12345", post: "" },
-    };
-
     const response = await agent
-      .put("/users/contribution/postal-codes")
-      .send({ city: "TestCity", code: "12345", post: "" });
+      .put("/users/contribution/universities")
+      .send({
+        entityType: "UNIVERSITY",
+        targetId: 1,
+        data: { name: "Updated Name" },
+      });
     const expectedResponseData = {
-      status: 200,
-      body: expectedResponse,
+      status: 201,
+      body: {
+        message: "Edit suggestion submitted. An admin will review it.",
+        data: mockResult,
+      },
     };
 
     expect(response).toEqual(expect.objectContaining(expectedResponseData));
   });
 });
 
-describe("DELETE /users/contribution/postal-codes", () => {
+describe("DELETE /users/contribution/universities", () => {
   test("responds with status 401 and You need to be logged in to access this route if not logged in", async () => {
     const notLoggedInResponse = {
       error: "You are not logged in.",
@@ -230,7 +192,7 @@ describe("DELETE /users/contribution/postal-codes", () => {
     };
 
     const response = await request(app).delete(
-      "/users/contribution/postal-codes",
+      "/users/contribution/universities",
     );
     const expectedResponse = {
       status: 401,
@@ -240,7 +202,7 @@ describe("DELETE /users/contribution/postal-codes", () => {
     expect(response).toEqual(expect.objectContaining(expectedResponse));
   });
 
-  test("No code sent responds with status 400 and Code is required", async () => {
+  test("No entityType sent responds with status 400 and Entity type is required", async () => {
     mockedUser = {
       id: 1,
       username: "user1",
@@ -248,8 +210,8 @@ describe("DELETE /users/contribution/postal-codes", () => {
     };
     const agent = request.agent(app);
 
-    const expectedResponse = "Code is required";
-    const responseCode = await agent.delete("/users/contribution/postal-codes");
+    const expectedResponse = "Entity type is required";
+    const responseCode = await agent.delete("/users/contribution/universities");
     const expectedResponseData = {
       status: 400,
       body: expect.objectContaining({
@@ -262,17 +224,17 @@ describe("DELETE /users/contribution/postal-codes", () => {
     expect(responseCode).toEqual(expect.objectContaining(expectedResponseData));
   });
 
-  test("Valid request responds with status 201 and Postal code row deleted", async () => {
-    vi.spyOn(pendingChangesPostalCodeModel, "create").mockResolvedValue({
-      city: "TestCity",
-      code: "12345",
-      post: "",
-    });
-    vi.spyOn(postalCodesModel, "getPostalCodeByCode").mockResolvedValue({
-      city: "TestCity",
-      code: "12345",
-      post: "",
-    });
+  test("Valid request responds with status 201 and Deletion suggestion submitted", async () => {
+    const mockResult = {
+      id: "uuid-3",
+      entityType: "UNIVERSITY",
+      typeOfChange: "DELETE",
+      targetId: 1,
+      data: {},
+    };
+    vi.spyOn(pendingChangesUniversityModel, "create").mockResolvedValue(
+      mockResult,
+    );
 
     const agent = request.agent(app);
     mockedUser = {
@@ -281,25 +243,22 @@ describe("DELETE /users/contribution/postal-codes", () => {
       email: "user1@example.com",
     };
 
-    const expectedResponse = {
-      message:
-        "Postal code deletion suggested. Admin will review the suggestion and decide whether to accept it or not.",
-      data: { city: "TestCity", code: "12345", post: "" },
-    };
-
-    const responseCode = await agent
-      .delete("/users/contribution/postal-codes")
-      .send({ code: "12345", city: "TestCity", post: "" });
+    const response = await agent
+      .delete("/users/contribution/universities")
+      .send({ entityType: "UNIVERSITY", targetId: 1 });
     const expectedResponseData = {
       status: 201,
-      body: expectedResponse,
+      body: {
+        message: "Deletion suggestion submitted. An admin will review it.",
+        data: mockResult,
+      },
     };
 
-    expect(responseCode).toEqual(expect.objectContaining(expectedResponseData));
+    expect(response).toEqual(expect.objectContaining(expectedResponseData));
   });
 });
 
-describe("GET /users/contribution/pending-changes/postal-codes", () => {
+describe("GET /users/contribution/pending-changes/universities", () => {
   test("responds with status 401 and You need to be logged in to access this route if not logged in", async () => {
     const notLoggedInResponse = {
       error: "You are not logged in.",
@@ -307,7 +266,7 @@ describe("GET /users/contribution/pending-changes/postal-codes", () => {
     };
 
     const response = await request(app).get(
-      "/users/contribution/pending-changes/postal-codes",
+      "/users/contribution/pending-changes/universities",
     );
     const expectedResponse = {
       status: 401,
@@ -320,16 +279,15 @@ describe("GET /users/contribution/pending-changes/postal-codes", () => {
   test("Valid request responds with status 200 and Pending changes retrieved successfully", async () => {
     const pendingChanges = [
       {
-        id: 1,
-        userId: 1,
-        code: "12345",
-        post: "",
+        id: "uuid-1",
+        userId: "1",
+        entityType: "UNIVERSITY",
         typeOfChange: "CREATE",
-        city: "TestCity",
+        data: { name: "TestCity University" },
       },
     ];
 
-    vi.spyOn(pendingChangesPostalCodeModel, "findMany").mockResolvedValue(
+    vi.spyOn(pendingChangesUniversityModel, "findMany").mockResolvedValue(
       pendingChanges,
     );
 
@@ -346,7 +304,7 @@ describe("GET /users/contribution/pending-changes/postal-codes", () => {
     };
 
     const response = await agent.get(
-      "/users/contribution/pending-changes/postal-codes",
+      "/users/contribution/pending-changes/universities",
     );
     const expectedResponseData = {
       status: 200,
@@ -357,7 +315,7 @@ describe("GET /users/contribution/pending-changes/postal-codes", () => {
   });
 });
 
-describe("DELETE /users/contribution/pending-changes/postal-codes", () => {
+describe("DELETE /users/contribution/pending-changes/universities", () => {
   test("responds with status 401 and You need to be logged in to access this route if not logged in", async () => {
     const notLoggedInResponse = {
       error: "You are not logged in.",
@@ -365,7 +323,7 @@ describe("DELETE /users/contribution/pending-changes/postal-codes", () => {
     };
 
     const response = await request(app).delete(
-      "/users/contribution/pending-changes/postal-codes",
+      "/users/contribution/pending-changes/universities",
     );
     const expectedResponse = {
       status: 401,
@@ -379,15 +337,17 @@ describe("DELETE /users/contribution/pending-changes/postal-codes", () => {
     const pendingChange = {
       id: "36d5cc88-1f4d-4d8a-9e4f-8dc06f1cb001",
       userId: "1",
-      code: "12345",
-      post: "",
+      entityType: "UNIVERSITY",
       typeOfChange: "CREATE",
-      city: "TestCity",
+      data: { name: "TestCity University" },
     };
 
-    vi.spyOn(pendingChangesPostalCodeModel, "findMany").mockResolvedValue([
+    vi.spyOn(pendingChangesUniversityModel, "findMany").mockResolvedValue([
       pendingChange,
     ]);
+    vi.spyOn(pendingChangesUniversityModel, "delete").mockResolvedValue(
+      pendingChange,
+    );
 
     mockedUser = {
       id: "1",
@@ -396,6 +356,10 @@ describe("DELETE /users/contribution/pending-changes/postal-codes", () => {
     };
     const agent = request.agent(app);
 
+    const response = await agent
+      .delete("/users/contribution/pending-changes/universities")
+      .send({ id: pendingChange.id });
+
     const expectedResponse = {
       status: 200,
       body: {
@@ -403,10 +367,6 @@ describe("DELETE /users/contribution/pending-changes/postal-codes", () => {
         data: null,
       },
     };
-
-    const response = await agent
-      .delete("/users/contribution/pending-changes/postal-codes")
-      .send({ id: pendingChange.id });
 
     expect(response).toEqual(expect.objectContaining(expectedResponse));
   });

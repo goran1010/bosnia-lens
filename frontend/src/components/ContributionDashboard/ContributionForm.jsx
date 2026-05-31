@@ -10,10 +10,11 @@ const TABS = ["addNewData", "pendingChanges"];
 function ContributionForm() {
   const { t } = useContext(RootContext);
   const [activeTab, setActiveTab] = useState("addNewData");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const { pendingChanges, setPendingChanges } = useGetPendingChanges(
     setLoading,
     t,
+    activeTab === "pendingChanges",
   );
 
   return (

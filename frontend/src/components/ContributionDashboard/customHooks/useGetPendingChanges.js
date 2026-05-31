@@ -3,11 +3,12 @@ import { useContext, useEffect, useState } from "react";
 import { RootContext } from "../../../contextData/RootContext";
 import { guardedFetch } from "../../../utils/guardedFetch";
 
-function useGetPendingChanges(setLoading, t) {
+function useGetPendingChanges(setLoading, t, enabled = true) {
   const { addNotification, serverStatus } = useContext(RootContext);
   const [pendingChanges, setPendingChanges] = useState([]);
 
   useEffect(() => {
+    if (!enabled) return;
     const fetchPendingChanges = async () => {
       try {
         setLoading(true);
@@ -61,7 +62,7 @@ function useGetPendingChanges(setLoading, t) {
       }
     };
     fetchPendingChanges();
-  }, [addNotification, setLoading, serverStatus, t]);
+  }, [addNotification, enabled, setLoading, serverStatus, t]);
 
   return { pendingChanges, setPendingChanges };
 }
